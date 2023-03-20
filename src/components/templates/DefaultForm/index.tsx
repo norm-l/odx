@@ -16,8 +16,9 @@ export default function DefaultForm(props) {
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
 
   const dfChildren = arChildren.map((kid, idx) =>{
-    if(onlyOneField){
-      kid.getPConnect().setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
+    const childPConnect = kid.getPConnect();
+    if(onlyOneField && childPConnect.getConfigProps().readOnly !== true){
+      childPConnect.setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
     }
     return createElement(createPConnectComponent(), { ...kid, key: idx }) // eslint-disable-line react/no-array-index-key
   });
