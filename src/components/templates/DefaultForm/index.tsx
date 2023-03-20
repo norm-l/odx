@@ -16,7 +16,6 @@ export default function DefaultForm(props) {
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
 
   const dfChildren = arChildren.map((kid, idx) =>{
-    console.log(`${onlyOneField}`);
     if(onlyOneField){
       kid.getPConnect().setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
     }
