@@ -11,6 +11,7 @@ export default function TextInput(props) {
     if (width !== undefined || width !== null) {
       if (width >= 6 && width <= 10) return `${inputClasses} govuk-input--width-${10}`.trim();
       else if (width >= 11 && width <= 20) return `${inputClasses} govuk-input--width-${20}`.trim();
+      else if (width >= 21) return `${inputClasses}`.trim();
       else return `${inputClasses} govuk-input--width-${width}`.trim();
     } else return inputClasses;
   };
