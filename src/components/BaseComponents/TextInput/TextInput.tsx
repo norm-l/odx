@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import _uniqueId from 'lodash/uniqueId';
+import React from 'react';
 import PropTypes from 'prop-types';
 import FormGroup, { makeErrorId, makeHintId } from '../FormGroup/FormGroup';
 

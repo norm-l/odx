@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import GDSTextInput from '../../BaseComponents/TextInput/TextInput';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
@@ -24,6 +24,8 @@ export default function TextInput(props) {
   id = Math.random().toString(36).substr(2);
 
   // id  = useState(() => _uniqueId)
+
+  id = Math.floor(Math.random() * 100);
 
   // TODO consider moving this functionality 'up' especially when we add Error summary,
   // as it may be tidier to call this only once, rather than on every input

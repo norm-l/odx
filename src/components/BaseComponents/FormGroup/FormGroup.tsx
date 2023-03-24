@@ -37,15 +37,9 @@ export default function FormGroup({
           return <h1 className='govuk-label-wrapper'>{child}</h1>;
         }}
         childrenToWrap={
-          id ? (
-            <label className={labelClasses} htmlFor={id}>
-              {label}
-            </label>
-          ) : (
-            <label className={labelClasses} htmlFor={name}>
-              {label}
-            </label>
-          )
+          <label className={labelClasses} htmlFor={id || name}>
+            {label}
+          </label>
         }
       />
       {hintText && (
