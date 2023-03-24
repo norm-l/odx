@@ -64,7 +64,7 @@ export default function TextInput(props) {
         labelIsHeading={isOnlyField}
         name={propName}
         maxLength={maxLength}
-        id={`${propName}${id}`}
+        id={`${propName}-${id}`}
       />
     </>
   );
