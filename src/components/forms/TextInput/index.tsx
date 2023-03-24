@@ -21,9 +21,6 @@ export default function TextInput(props) {
   const isOnlyField = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
-  id = Math.random().toString(36).substr(2);
-
-  // id  = useState(() => _uniqueId)
 
   id = Math.floor(Math.random() * 100);
 
