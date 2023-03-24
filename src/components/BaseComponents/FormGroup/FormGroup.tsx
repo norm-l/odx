@@ -18,12 +18,16 @@ export default function FormGroup({
   errorText,
   hintText,
   name,
-  extraLabelClasses="", children
+  id,
+  extraLabelClasses = '',
+  children
 }) {
   const formGroupDivClasses = `govuk-form-group ${
     errorText ? 'govuk-form-group--error' : ''
   }`.trim();
-  const labelClasses = `govuk-label ${labelIsHeading ? 'govuk-label--l' : ''} ${extraLabelClasses}`.trim();
+  const labelClasses = `govuk-label ${
+    labelIsHeading ? 'govuk-label--l' : ''
+  } ${extraLabelClasses}`.trim();
 
   return (
     <div className={formGroupDivClasses}>
@@ -33,9 +37,15 @@ export default function FormGroup({
           return <h1 className='govuk-label-wrapper'>{child}</h1>;
         }}
         childrenToWrap={
-          <label className={labelClasses} htmlFor={name}>
-            {label}
-          </label>
+          id ? (
+            <label className={labelClasses} htmlFor={id}>
+              {label}
+            </label>
+          ) : (
+            <label className={labelClasses} htmlFor={name}>
+              {label}
+            </label>
+          )
         }
       />
       {hintText && (
@@ -61,6 +71,7 @@ FormGroup.propTypes = {
   errorText: PropTypes.string,
   children: PropTypes.node,
   extraLabelClasses: PropTypes.string,
-}
+  id: PropTypes.string
+};
 
 export { makeErrorId, makeHintId, makeItemId };

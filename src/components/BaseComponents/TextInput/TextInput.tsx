@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import _uniqueId from 'lodash/uniqueId';
 import PropTypes from 'prop-types';
 import FormGroup, { makeErrorId, makeHintId } from '../FormGroup/FormGroup';
 
 export default function TextInput(props) {
-  const { name, errorText, hintText, inputProps = {}, maxLength } = props;
+  const { name, errorText, hintText, inputProps = {}, maxLength, id } = props;
 
   const inputClasses = `govuk-input ${errorText ? 'govuk-input--error' : ''}`.trim();
 
@@ -28,7 +29,7 @@ export default function TextInput(props) {
       <input
         className={textInputClassesWithWidth(maxLength)}
         {...inputProps}
-        id={name}
+        id={id}
         name={name}
       ></input>
     </FormGroup>
@@ -39,5 +40,6 @@ TextInput.propTypes = {
   ...FormGroup.propTypes,
   name: PropTypes.string,
   maxLength: PropTypes.number,
-  inputProps: PropTypes.object
+  inputProps: PropTypes.object,
+  id: PropTypes.string
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GDSTextInput from '../../BaseComponents/TextInput/TextInput';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
@@ -14,25 +14,26 @@ export default function TextInput(props) {
     getPConnect,
     inputProps,
     fieldMetadata,
-    readOnly,
+    readOnly
   } = props;
+  let { id } = props;
 
   const isOnlyField = useIsOnlyField();
 
-
   const maxLength = fieldMetadata?.maxLength;
+  id = Math.random().toString(36).substr(2);
+
+  // id  = useState(() => _uniqueId)
 
   // TODO consider moving this functionality 'up' especially when we add Error summary,
   // as it may be tidier to call this only once, rather than on every input
   useAddErrorToPageTitle(validatemessage);
 
-  if(readOnly){
-    return <ReadOnlyDisplay label={label} value={value} />
+  if (readOnly) {
+    return <ReadOnlyDisplay label={label} value={value} />;
   }
 
   // const maxLength = fieldMetadata?.maxLength;
-
-
 
   // TODO Investigate whether or not this can be refactored out, or if a name can be injected as a prop higher up
   const thePConn = getPConnect();
@@ -64,6 +65,7 @@ export default function TextInput(props) {
         labelIsHeading={isOnlyField}
         name={propName}
         maxLength={maxLength}
+        id={`${propName}${id}`}
       />
     </>
   );
