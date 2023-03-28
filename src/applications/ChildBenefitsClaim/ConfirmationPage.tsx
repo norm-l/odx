@@ -8,7 +8,7 @@ const ConfirmationPage = () => {
 
   return (
     <div className='govuk-width-container' id='content'>
-      <main className='govuk-main-wrapper govuk-main-wrapper--l' id='main-content' role='main'>
+      <main className='govuk-main-wrapper govuk-main-wrapper--l' id='main-content-confirmation' role='main'>
         <div className='govuk-grid-row'>
           <div className='govuk-grid-column-two-thirds'>
             <div className='govuk-panel govuk-panel--confirmation'>
