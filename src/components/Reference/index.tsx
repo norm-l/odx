@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default function Reference(props) {
-  const { visibility, context, getPConnect, readOnly, displayMode } = props;
+  const { visibility, context, getPConnect, readOnly, displayMode, displayOrder } = props;
 
   const pConnect = getPConnect();
   const referenceConfig = { ...pConnect.getComponentConfig() } || {};
@@ -28,7 +28,11 @@ export default function Reference(props) {
 
   const viewComponent = pConnect.createComponent(viewObject, null, null, {
     pageReference: context,
+<<<<<<< Updated upstream
     ...pConnect.getStateProps(),
+=======
+    displayOrder,
+>>>>>>> Stashed changes
   });
 
   viewComponent.props.getPConnect().setInheritedConfig({

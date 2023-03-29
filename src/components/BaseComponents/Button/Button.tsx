@@ -8,7 +8,7 @@ export default function Button(props) {
     onClick,
     children,
     type,
-    ...attributes
+    attributes
   } = props;
 
   if (variant === 'start') {
@@ -66,5 +66,6 @@ Button.propTypes = {
   variant: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   type: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  attributes: PropTypes.object,
 };

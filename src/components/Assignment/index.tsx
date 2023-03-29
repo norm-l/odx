@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 
 import AssignmentCard from '../AssignmentCard';
@@ -29,7 +29,9 @@ export default function Assignment(props) {
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
   const [errorSummary, setErrorSummary] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessages, setErrorMessages] = useState<Array<{messages:any, displayOrder:string}>>([]);
+
+
 
 
   const isOnlyOneField = useIsOnlyField(children);
@@ -104,10 +106,28 @@ export default function Assignment(props) {
 
   }, [children]);
 
-  function showErrorSummary(message: string) {
-    setErrorMessage(message);
+  useEffect(() => {
+    console.log("using effect on assignment pconnect change)", ` errorSummary is: ${errorSummary}`);
+      let errorStateProps = [];
+      getPConnect().getContainerManager().updateContainerItem({context:"root/primary_1", containerItemID:"root/primary_1"}).then(()=>{
+        console.log(`INSIDE THE UPDATE CONTAINER PROMISE`);
+        errorStateProps = PCore.getFormUtils().getEditableFields('root/primary_1/workarea_1').reduce( (acc, o) => {
+        const fieldStateprops = o.fieldC11nEnv.getStateProps();
+        if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
+          acc.push({messages:{...fieldStateprops, value:o.fieldC11nEnv.getComponent().props.name}, displayOrder:o.fieldC11nEnv.getComponent().props.displayOrder});
+        }
+        return acc;
+      }, [] )
+      errorStateProps.sort((a:{messages:any, displayOrder:string}, b:{messages:any, displayOrder:string})=>{return a.displayOrder > b.displayOrder ? 1:-1})
+      setErrorMessages([...errorStateProps]);
+    });
+  }, [children])
+
+  function showErrorSummary() {
+    // setErrorMessages(message);
     // TODO Update the error summary component as per GDS for US-9419 in MVP1, then setErrorSummary(true)
-    setErrorSummary(false);
+    setErrorMessages([]);
+    setErrorSummary(true);
   }
 
   function onSaveActionSuccess(data) {
@@ -126,9 +146,10 @@ export default function Assignment(props) {
 
           navigatePromise
             .then(() => {
+              setErrorSummary(false);
             })
             .catch(() => {
-              showErrorSummary( `Navigation failed!`);
+              showErrorSummary();
             });
 
           break;
@@ -143,9 +164,10 @@ export default function Assignment(props) {
           .then(() => {
             const caseType = thePConn.getCaseInfo().c11nEnv.getValue(PCore.getConstants().CASE_INFO.CASE_TYPE_ID);
             onSaveActionSuccess({ caseType, caseID, assignmentID });
+            setErrorSummary(false);
           })
           .catch(() => {
-            showErrorSummary('Save failed');
+            showErrorSummary();
           });
 
           break;
@@ -161,9 +183,10 @@ export default function Assignment(props) {
             cancelPromise
               .then(data => {
                 publish(PUB_SUB_EVENTS.EVENT_CANCEL, data);
+                setErrorSummary(false);
               })
               .catch(() => {
-                showErrorSummary(`Cancel failed!`);
+                showErrorSummary();
               });
           } else {
             const cancelPromise = cancelAssignment(itemKey);
@@ -171,9 +194,10 @@ export default function Assignment(props) {
             cancelPromise
               .then(data => {
                 publish(PUB_SUB_EVENTS.EVENT_CANCEL, data);
+                setErrorSummary(false);
               })
               .catch(() => {
-                showErrorSummary(`Cancel failed!`);
+                showErrorSummary();
               });
           }
           break;
@@ -191,10 +215,11 @@ export default function Assignment(props) {
             const finishPromise = finishAssignment(itemKey);
 
             finishPromise
-              .then(() => {
-              })
+              .then(() => {() => {
+                setErrorSummary(false);
+              }})
               .catch(() => {
-                showErrorSummary( `Submit failed!`);
+                showErrorSummary();
               });
 
             break;
@@ -209,7 +234,6 @@ export default function Assignment(props) {
 
   return (
     <div id='Assignment'>
-      {errorSummary && <ErrorSummary messages={errorMessage} />}
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
@@ -228,15 +252,18 @@ export default function Assignment(props) {
         </React.Fragment>
       ) : (
         <>
+          {errorSummary && errorMessages.length > 0 && <ErrorSummary messages={errorMessages.map(item => item.messages)} />}
           {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
-          <AssignmentCard
-            getPConnect={getPConnect}
-            itemKey={itemKey}
-            actionButtons={actionButtons}
-            onButtonPress={buttonPress}
-          >
-            {children}
-          </AssignmentCard>
+          <form>
+            <AssignmentCard
+              getPConnect={getPConnect}
+              itemKey={itemKey}
+              actionButtons={actionButtons}
+              onButtonPress={buttonPress}
+            >
+              {children}
+            </AssignmentCard>
+          </form>
         </>
       )}
     </div>
