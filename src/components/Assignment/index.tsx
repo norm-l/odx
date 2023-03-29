@@ -118,6 +118,7 @@ export default function Assignment(props) {
 
   function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
+
     if (sButtonType === "secondary") {
 
       switch (sAction) {
@@ -126,6 +127,9 @@ export default function Assignment(props) {
 
           navigatePromise
             .then(() => {
+             (document.activeElement as HTMLElement).blur();
+              window.focus();
+              window.scrollTo(0,0);
             })
             .catch(() => {
               showErrorSummary( `Navigation failed!`);
@@ -213,7 +217,7 @@ export default function Assignment(props) {
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -228,7 +232,7 @@ export default function Assignment(props) {
         </React.Fragment>
       ) : (
         <>
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <AssignmentCard
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -239,6 +243,14 @@ export default function Assignment(props) {
           </AssignmentCard>
         </>
       )}
+      <a
+        href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+        className='govuk-link'
+        rel='noreferrer noopener'
+        target='_blank'
+      >
+        Ask HMRC online (opens in new tab)
+      </a>
     </div>
   );
 }
