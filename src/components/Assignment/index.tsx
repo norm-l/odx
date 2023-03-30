@@ -6,6 +6,17 @@ import MultiStep from '../MultiStep';
 import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 
+export interface ErrorMessageDetails{
+  message:string,
+  fieldId: string
+}
+
+interface OrderedErrorMessage{
+  message:ErrorMessageDetails,
+  displayOrder:string
+}
+
+
 declare const PCore: any;
 
 export default function Assignment(props) {
@@ -29,10 +40,7 @@ export default function Assignment(props) {
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
   const [errorSummary, setErrorSummary] = useState(false);
-  const [errorMessages, setErrorMessages] = useState<Array<{messages:any, displayOrder:string}>>([]);
-
-
-
+  const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
   const isOnlyOneField = useIsOnlyField(children);
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
@@ -107,25 +115,24 @@ export default function Assignment(props) {
   }, [children]);
 
   useEffect(() => {
-    console.log("using effect on assignment pconnect change)", ` errorSummary is: ${errorSummary}`);
-      let errorStateProps = [];
-      getPConnect().getContainerManager().updateContainerItem({context:"root/primary_1", containerItemID:"root/primary_1"}).then(()=>{
-        console.log(`INSIDE THE UPDATE CONTAINER PROMISE`);
-        errorStateProps = PCore.getFormUtils().getEditableFields('root/primary_1/workarea_1').reduce( (acc, o) => {
-        const fieldStateprops = o.fieldC11nEnv.getStateProps();
-        if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
-          acc.push({messages:{...fieldStateprops, value:o.fieldC11nEnv.getComponent().props.name}, displayOrder:o.fieldC11nEnv.getComponent().props.displayOrder});
-        }
+    let errorStateProps = [];
+    getPConnect().getContainerManager().updateContainerItem({context:"root/primary_1", containerItemID:"root/primary_1"}).then(()=>{
+      errorStateProps = PCore.getFormUtils().getEditableFields('root/primary_1/workarea_1').reduce( (acc, o) => {
+      const fieldC11nEnv = o.fieldC11nEnv;
+      const fieldStateprops = fieldC11nEnv.getStateProps();
+      const fieldComponent = fieldC11nEnv.getComponent();
+      if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
+        acc.push({message:{message:fieldStateprops.validatemessage, fieldId:fieldComponent.props.name}, displayOrder:fieldComponent.props.displayOrder});
+      }
         return acc;
-      }, [] )
-      errorStateProps.sort((a:{messages:any, displayOrder:string}, b:{messages:any, displayOrder:string})=>{return a.displayOrder > b.displayOrder ? 1:-1})
+      }, [] );
+
+      errorStateProps.sort((a:OrderedErrorMessage, b:OrderedErrorMessage)=>{return a.displayOrder > b.displayOrder ? 1:-1})
       setErrorMessages([...errorStateProps]);
     });
   }, [children])
 
   function showErrorSummary() {
-    // setErrorMessages(message);
-    // TODO Update the error summary component as per GDS for US-9419 in MVP1, then setErrorSummary(true)
     setErrorMessages([]);
     setErrorSummary(true);
   }
@@ -252,7 +259,7 @@ export default function Assignment(props) {
         </React.Fragment>
       ) : (
         <>
-          {errorSummary && errorMessages.length > 0 && <ErrorSummary messages={errorMessages.map(item => item.messages)} />}
+          {errorSummary && errorMessages.length > 0 && <ErrorSummary errors={errorMessages.map(item => item.message)} />}
           {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
           <form>
             <AssignmentCard

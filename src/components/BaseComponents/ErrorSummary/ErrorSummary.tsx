@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function ErrorSummary(props) {
-  const { messages } = props;
+  const { errors } = props;
 
   const errorSummaryRef = useRef<any>(null);
 
@@ -17,9 +17,9 @@ export default function ErrorSummary(props) {
         <h2 className='govuk-error-summary__title'>There is a problem</h2>
         <div className='govuk-error-summary__body'>
           <ul className='govuk-list govuk-error-summary__list'>
-              {messages.map(message => {
+              {errors.map(error => {
                 return <li>
-                  <a href={`#${message?.value.slice(1)}`}>{message.validatemessage}</a>
+                  <a href={`#${error.fieldId}`}>{error.message}</a>
                 </li>
               })}
           </ul>
@@ -30,5 +30,5 @@ export default function ErrorSummary(props) {
 }
 
 ErrorSummary.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.shape({value: PropTypes.string, validatemessage: PropTypes.string})),
+  errors: PropTypes.arrayOf(PropTypes.shape({fieldId: PropTypes.string, message: PropTypes.string})),
 };

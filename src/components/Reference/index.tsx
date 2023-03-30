@@ -28,11 +28,8 @@ export default function Reference(props) {
 
   const viewComponent = pConnect.createComponent(viewObject, null, null, {
     pageReference: context,
-<<<<<<< Updated upstream
     ...pConnect.getStateProps(),
-=======
     displayOrder,
->>>>>>> Stashed changes
   });
 
   viewComponent.props.getPConnect().setInheritedConfig({

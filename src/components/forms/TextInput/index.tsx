@@ -12,10 +12,10 @@ export default function TextInput(props) {
     validatemessage,
     onChange,
     helperText,
-    getPConnect,
     inputProps,
     fieldMetadata,
-    readOnly
+    readOnly,
+    name
   } = props;
   let { id } = props;
 
@@ -34,11 +34,6 @@ export default function TextInput(props) {
   }
 
   // const maxLength = fieldMetadata?.maxLength;
-
-  // TODO Investigate whether or not this can be refactored out, or if a name can be injected as a prop higher up
-  const thePConn = getPConnect();
-  let propName = thePConn.getStateProps().value;
-  propName = propName.indexOf('.') === 0 ? propName.substring(1) : propName;
 
   /* let testProp = {};
   testProp = {
@@ -63,9 +58,9 @@ export default function TextInput(props) {
         errorText={validatemessage}
         label={label}
         labelIsHeading={isOnlyField}
-        name={propName}
+        name={name}
         maxLength={maxLength}
-        id={`${propName}-${id}`}
+        id={name}
       />
     </>
   );
