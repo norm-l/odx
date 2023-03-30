@@ -127,8 +127,8 @@ export default function Assignment(props) {
 
           navigatePromise
             .then(() => {
+              document.getElementById('skip-link')?.focus();
              (document.activeElement as HTMLElement).blur();
-              window.focus();
               window.scrollTo(0,0);
             })
             .catch(() => {
