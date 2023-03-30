@@ -245,6 +245,10 @@ const getComponent = (c11nEnv, declarative) => {
         component = Phone;
         break;
 
+        case "HMRC_ODX_PhoneNumber":
+          component = Phone;
+          break;
+
       case "Pulse":
         component = Pulse;
         break;

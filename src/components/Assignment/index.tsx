@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
 import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
+import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 
 export interface ErrorMessageDetails{
@@ -122,7 +123,9 @@ export default function Assignment(props) {
       const fieldStateprops = fieldC11nEnv.getStateProps();
       const fieldComponent = fieldC11nEnv.getComponent();
       if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
-        acc.push({message:{message:fieldStateprops.validatemessage, fieldId:fieldComponent.props.name}, displayOrder:fieldComponent.props.displayOrder});
+        const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
+
+        acc.push({message:{message:fieldStateprops.validatemessage, fieldId}, displayOrder:fieldComponent.props.displayOrder});
       }
         return acc;
       }, [] );
@@ -131,6 +134,8 @@ export default function Assignment(props) {
       setErrorMessages([...errorStateProps]);
     });
   }, [children])
+
+  useAddErrorToPageTitle(errorMessages.length > 0);
 
   function showErrorSummary() {
     setErrorMessages([]);

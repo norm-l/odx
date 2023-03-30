@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Button from '../BaseComponents/Button/Button';
-import { Domain } from '@material-ui/icons';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress } = props;
@@ -16,8 +15,8 @@ export default function ActionButtons(props) {
         <Button
           variant='primary'
           onClick={(e) => {
-            _onButtonPress(mButton.jsAction, 'primary');
             e.target.blur();
+            _onButtonPress(mButton.jsAction, 'primary');
           }}
           key={mButton.actionID}
           attributes={{type:"button"}}

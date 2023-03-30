@@ -26,7 +26,7 @@ export default function DefaultForm(props) {
     childPConnect.setInheritedProp('displayOrder', `${props.additionalProps.displayOrder}-${idx}`);
     childPConnect.registerAdditionalProps({displayOrder: `${props.additionalProps.displayOrder}-${idx}`});
     childPConnect.registerAdditionalProps({name: `${props.context}-${childPConnect.getStateProps().value}`});
-    return createElement(createPConnectComponent(), { ...kid, key: idx }) // eslint-disable-line react/no-array-index-key
+    return createElement(createPConnectComponent(), { ...kid, key: idx, extraProps }) // eslint-disable-line react/no-array-index-key
   });
 
 

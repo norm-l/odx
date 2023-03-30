@@ -11,6 +11,15 @@ export default function ErrorSummary(props) {
       errorSummaryRef.current.focus()
     }}, [errorSummaryRef])
 
+  function onClick(e) {
+    let ref = e.target.href.indexOf("#") && e.target.href.split("#").pop();
+    let target:any = document.getElementById(ref);
+    if (!target) return !1;
+    target.focus();
+    e.preventDefault();
+  };
+
+
   return (
     <div ref={errorSummaryRef} className='govuk-error-summary' data-module='govuk-error-summary' tabIndex={-1} >
       <div role='alert'>
@@ -19,7 +28,7 @@ export default function ErrorSummary(props) {
           <ul className='govuk-list govuk-error-summary__list'>
               {errors.map(error => {
                 return <li>
-                  <a href={`#${error.fieldId}`}>{error.message}</a>
+                  <a href={`#${error.fieldId}`} onClick={onClick}>{error.message}</a>
                 </li>
               })}
           </ul>

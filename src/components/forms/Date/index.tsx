@@ -7,9 +7,8 @@ import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDispla
 declare const global;
 
 export default function Date(props) {
-  const { getPConnect, label, value = '', validatemessage, onChange, helperText, readOnly } = props;
+  const { getPConnect, label, value = '', validatemessage, onChange, helperText, readOnly, name } = props;
   const pConn = getPConnect();
-  const propName = pConn.getStateProps().value;
 
   // TODO consider refactoring out to a component higher in tree to avoid needing to define in each input component.
   useAddErrorToPagetitle(validatemessage);
@@ -47,8 +46,7 @@ export default function Date(props) {
   // TODO consider refactoring out to a component higher in tree to avoid needing to define in each input component.
 
   // TODO Investigate whether or not this can be refactored out, or if a name can be injected as a prop higher up
-  const formattedPropName = propName.indexOf('.') === 0 ? propName.substring(1) : propName;
-
+  pConn.setStateProps({fieldId: `${name}-day`});
 
   // PM - Handlers for each part of date inputs, update state for each respectively
   //      0 pad for ISOString compatibilitiy, with conditions to allow us to clear the fields
@@ -74,7 +72,7 @@ export default function Date(props) {
       onChangeMonth={handleChangeMonth}
       onChangeYear={handleChangeYear}
       value={{ day, month, year }}
-      name={formattedPropName}
+      name={name}
       errorText={validatemessage}
       hintText={helperText}
     />

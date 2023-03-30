@@ -1,5 +1,4 @@
 import React from 'react';
-import { v4 as uuid } from 'uuid';
 import GDSTextInput from '../../BaseComponents/TextInput/TextInput';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
@@ -22,8 +21,6 @@ export default function TextInput(props) {
   const isOnlyField = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
-  const uniqueId = uuid();
-  id = uniqueId.slice(0, 8);
 
   // TODO consider moving this functionality 'up' especially when we add Error summary,
   // as it may be tidier to call this only once, rather than on every input
