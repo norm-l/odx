@@ -23,8 +23,14 @@ export default function DefaultForm(props) {
       childPConnect.setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
     }
     if(readOnly) extraProps = {...extraProps, showLabel:false, labelHiddenForReadOnly:kid.showLabel};
-    childPConnect.setInheritedProp('displayOrder', `${props.additionalProps.displayOrder}-${idx}`);
-    childPConnect.registerAdditionalProps({displayOrder: `${props.additionalProps.displayOrder}-${idx}`});
+
+    let displayOrder = '';
+    if(props.additionalProps.displayOrder){
+      displayOrder= `${props.additionalProps.displayOrder}-${idx}`;
+    } else {
+      displayOrder=`${idx}`;
+    }
+    childPConnect.registerAdditionalProps({displayOrder});
 
     const formattedContext = props.context ? props.context?.split('.').pop() : '';
     const formattedPropertyName = childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
