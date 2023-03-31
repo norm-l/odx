@@ -12,8 +12,8 @@ export default function ErrorSummary(props) {
     }}, [errorSummaryRef])
 
   function onClick(e) {
-    let ref = e.target.href.indexOf("#") && e.target.href.split("#").pop();
-    let target:any = document.getElementById(ref);
+    const ref = e.target.href.indexOf("#") && e.target.href.split("#").pop();
+    const target:any = document.getElementById(ref);
     if (!target) return !1;
     target.focus();
     e.preventDefault();

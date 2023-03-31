@@ -6,8 +6,6 @@ import TopLevelApp from './applications/TopLevelApp';
 
 const outletElement = document.getElementById("outlet");
 
-console.log('rerendering inni');
-
 if (outletElement) {
   const root = createRoot(outletElement);
   root.render(

@@ -1,7 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import DateInput from '../../BaseComponents/DateInput/DateInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
-import useAddErrorToPagetitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 
 declare const global;
@@ -10,8 +9,6 @@ export default function Date(props) {
   const { getPConnect, label, value = '', validatemessage, onChange, helperText, readOnly, name } = props;
   const pConn = getPConnect();
 
-  // TODO consider refactoring out to a component higher in tree to avoid needing to define in each input component.
-  useAddErrorToPagetitle(validatemessage);
   const isOnlyField = useIsOnlyField();
 
   // PM - Set up state for each input field, either the value we received from pega, or emtpy

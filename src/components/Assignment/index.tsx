@@ -227,12 +227,10 @@ export default function Assignment(props) {
             const finishPromise = finishAssignment(itemKey);
 
             finishPromise
-              .then(() => {() => {
-                setErrorSummary(false);
-              }})
-              .catch(() => {
-                showErrorSummary();
-              });
+            .then(() => setErrorSummary(false))
+            .catch(() => {
+              showErrorSummary();
+            });
 
             break;
           }
@@ -241,7 +239,6 @@ export default function Assignment(props) {
           break;
       }
     }
-
   }
 
   return (

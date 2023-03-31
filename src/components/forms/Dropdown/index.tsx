@@ -4,7 +4,6 @@ import Utils from '../../../helpers/utils';
 import handleEvent from '../../../helpers/event-utils';
 import Select from '../../BaseComponents/Select/Select';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
-import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay'
 
 interface IOption {

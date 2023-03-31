@@ -7,7 +7,6 @@ export default function Button(props) {
     variant,
     onClick,
     children,
-    type,
     attributes
   } = props;
 
