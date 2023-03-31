@@ -40,9 +40,8 @@ export default function Date(props) {
     return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
   }
 
-  // TODO consider refactoring out to a component higher in tree to avoid needing to define in each input component.
-
-  // TODO Investigate whether or not this can be refactored out, or if a name can be injected as a prop higher up
+  // This sets a state prop to be exposed to the error summary set up in Assisgnment component - and should match the id of the first field of
+  // the date component. Will investigate better way to do this, to avoid mismatches if the Date BaseComponent changes.
   pConn.setStateProps({fieldId: `${name}-day`});
 
   // PM - Handlers for each part of date inputs, update state for each respectively

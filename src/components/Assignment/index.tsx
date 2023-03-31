@@ -115,6 +115,10 @@ export default function Assignment(props) {
 
   }, [children]);
 
+  // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
+  // Also adds the relevant fieldID for each field to allow error summary links to move focus when clicked. This process uses the
+  // name prop on the input field in most cases, however where there is a deviation (for example, in Date component, where the first field
+  // has -day appended), a fieldId stateprop will be defined and this will be used instead.
   useEffect(() => {
     let errorStateProps = [];
     getPConnect().getContainerManager().updateContainerItem({context:"root/primary_1", containerItemID:"root/primary_1"}).then(()=>{
