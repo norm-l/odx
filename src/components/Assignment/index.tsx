@@ -154,24 +154,24 @@ export default function Assignment(props) {
 
   function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
-    if (sButtonType === "secondary") {
 
+    if (sButtonType === 'secondary') {
       switch (sAction) {
-        case "navigateToStep": {
-          const navigatePromise = navigateToStep( "previous", itemKey );
+        case 'navigateToStep': {
+          const navigatePromise = navigateToStep('previous', itemKey);
 
           navigatePromise
             .then(() => {
               setErrorSummary(false);
             })
             .catch(() => {
-              showErrorSummary();
+              showErrorSummary
             });
 
           break;
         }
 
-        case "saveAssignment": {
+        case 'saveAssignment': {
           const caseID = thePConn.getCaseInfo().getKey();
           const assignmentID = thePConn.getCaseInfo().getAssignmentID();
           const savePromise = saveAssignment(itemKey);
@@ -189,7 +189,7 @@ export default function Assignment(props) {
           break;
         }
 
-        case "cancelAssignment": {
+        case 'cancelAssignment': {
           // check if create stage (modal)
           const { PUB_SUB_EVENTS } = PCore.getConstants();
           const { publish } = PCore.getPubSubUtils();
@@ -222,13 +222,11 @@ export default function Assignment(props) {
         default:
           break;
       }
-    }
-    else if (sButtonType === "primary") {
+    } else if (sButtonType === 'primary') {
       // eslint-disable-next-line sonarjs/no-small-switch
       switch (sAction) {
-        case "finishAssignment" :
-          {
-            const finishPromise = finishAssignment(itemKey);
+        case 'finishAssignment': {
+          const finishPromise = finishAssignment(itemKey);
 
             finishPromise
             .then(() => setErrorSummary(false))
@@ -236,8 +234,8 @@ export default function Assignment(props) {
               showErrorSummary();
             });
 
-            break;
-          }
+          break;
+        }
 
         default:
           break;
@@ -250,7 +248,7 @@ export default function Assignment(props) {
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -279,6 +277,14 @@ export default function Assignment(props) {
           </form>
         </>
       )}
+      <a
+        href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+        className='govuk-link'
+        rel='noreferrer noopener'
+        target='_blank'
+      >
+        Ask HMRC online (opens in new tab)
+      </a>
     </div>
   );
 }
