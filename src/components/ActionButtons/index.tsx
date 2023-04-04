@@ -15,11 +15,7 @@ export default function ActionButtons(props) {
         <Button
           variant='primary'
           onClick={(e) => {
-<<<<<<< HEAD
             e.target.blur()
-=======
-            e.target.blur();
->>>>>>> 0be7c5261cea8ff666146627a771659b48b97d50
             _onButtonPress(mButton.jsAction, 'primary');
           }}
           key={mButton.actionID}
@@ -27,7 +23,7 @@ export default function ActionButtons(props) {
         >
           {mButton.name}
         </Button>
-      ))}
+      ))}s
       {arSecondaryButtons.map(sButton => (
         <Button
           variant='secondary'
