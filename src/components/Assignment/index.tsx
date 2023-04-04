@@ -4,7 +4,19 @@ import PropTypes from "prop-types";
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
 import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
+import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
+
+export interface ErrorMessageDetails{
+  message:string,
+  fieldId: string
+}
+
+interface OrderedErrorMessage{
+  message:ErrorMessageDetails,
+  displayOrder:string
+}
+
 
 declare const PCore: any;
 
@@ -29,8 +41,7 @@ export default function Assignment(props) {
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
   const [errorSummary, setErrorSummary] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
+  const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
   const isOnlyOneField = useIsOnlyField(children);
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
@@ -104,10 +115,35 @@ export default function Assignment(props) {
 
   }, [children]);
 
-  function showErrorSummary(message: string) {
-    setErrorMessage(message);
-    // TODO Update the error summary component as per GDS for US-9419 in MVP1, then setErrorSummary(true)
-    setErrorSummary(false);
+  // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
+  // Also adds the relevant fieldID for each field to allow error summary links to move focus when clicked. This process uses the
+  // name prop on the input field in most cases, however where there is a deviation (for example, in Date component, where the first field
+  // has -day appended), a fieldId stateprop will be defined and this will be used instead.
+  useEffect(() => {
+    let errorStateProps = [];
+    getPConnect().getContainerManager().updateContainerItem({context:"root/primary_1", containerItemID:"root/primary_1"}).then(()=>{
+      errorStateProps = PCore.getFormUtils().getEditableFields('root/primary_1/workarea_1').reduce( (acc, o) => {
+      const fieldC11nEnv = o.fieldC11nEnv;
+      const fieldStateprops = fieldC11nEnv.getStateProps();
+      const fieldComponent = fieldC11nEnv.getComponent();
+      if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
+        const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
+
+        acc.push({message:{message:fieldStateprops.validatemessage, fieldId}, displayOrder:fieldComponent.props.displayOrder});
+      }
+        return acc;
+      }, [] );
+
+      errorStateProps.sort((a:OrderedErrorMessage, b:OrderedErrorMessage)=>{return a.displayOrder > b.displayOrder ? 1:-1})
+      setErrorMessages([...errorStateProps]);
+    });
+  }, [children])
+
+  useAddErrorToPageTitle(errorMessages.length > 0);
+
+  function showErrorSummary() {
+    setErrorMessages([]);
+    setErrorSummary(true);
   }
 
   function onSaveActionSuccess(data) {
@@ -118,23 +154,24 @@ export default function Assignment(props) {
 
   function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
-    if (sButtonType === "secondary") {
 
+    if (sButtonType === 'secondary') {
       switch (sAction) {
-        case "navigateToStep": {
-          const navigatePromise = navigateToStep( "previous", itemKey );
+        case 'navigateToStep': {
+          const navigatePromise = navigateToStep('previous', itemKey);
 
           navigatePromise
             .then(() => {
+              setErrorSummary(false);
             })
             .catch(() => {
-              showErrorSummary( `Navigation failed!`);
+              showErrorSummary();
             });
 
           break;
         }
 
-        case "saveAssignment": {
+        case 'saveAssignment': {
           const caseID = thePConn.getCaseInfo().getKey();
           const assignmentID = thePConn.getCaseInfo().getAssignmentID();
           const savePromise = saveAssignment(itemKey);
@@ -143,15 +180,16 @@ export default function Assignment(props) {
           .then(() => {
             const caseType = thePConn.getCaseInfo().c11nEnv.getValue(PCore.getConstants().CASE_INFO.CASE_TYPE_ID);
             onSaveActionSuccess({ caseType, caseID, assignmentID });
+            setErrorSummary(false);
           })
           .catch(() => {
-            showErrorSummary('Save failed');
+            showErrorSummary();
           });
 
           break;
         }
 
-        case "cancelAssignment": {
+        case 'cancelAssignment': {
           // check if create stage (modal)
           const { PUB_SUB_EVENTS } = PCore.getConstants();
           const { publish } = PCore.getPubSubUtils();
@@ -161,9 +199,10 @@ export default function Assignment(props) {
             cancelPromise
               .then(data => {
                 publish(PUB_SUB_EVENTS.EVENT_CANCEL, data);
+                setErrorSummary(false);
               })
               .catch(() => {
-                showErrorSummary(`Cancel failed!`);
+                showErrorSummary();
               });
           } else {
             const cancelPromise = cancelAssignment(itemKey);
@@ -171,9 +210,10 @@ export default function Assignment(props) {
             cancelPromise
               .then(data => {
                 publish(PUB_SUB_EVENTS.EVENT_CANCEL, data);
+                setErrorSummary(false);
               })
               .catch(() => {
-                showErrorSummary(`Cancel failed!`);
+                showErrorSummary();
               });
           }
           break;
@@ -182,38 +222,33 @@ export default function Assignment(props) {
         default:
           break;
       }
-    }
-    else if (sButtonType === "primary") {
+    } else if (sButtonType === 'primary') {
       // eslint-disable-next-line sonarjs/no-small-switch
       switch (sAction) {
-        case "finishAssignment" :
-          {
-            const finishPromise = finishAssignment(itemKey);
+        case 'finishAssignment': {
+          const finishPromise = finishAssignment(itemKey);
 
             finishPromise
-              .then(() => {
-              })
-              .catch(() => {
-                showErrorSummary( `Submit failed!`);
-              });
+            .then(() => setErrorSummary(false))
+            .catch(() => {
+              showErrorSummary();
+            });
 
-            break;
-          }
+          break;
+        }
 
         default:
           break;
       }
     }
-
   }
 
   return (
     <div id='Assignment'>
-      {errorSummary && <ErrorSummary messages={errorMessage} />}
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -228,17 +263,28 @@ export default function Assignment(props) {
         </React.Fragment>
       ) : (
         <>
+          {errorSummary && errorMessages.length > 0 && <ErrorSummary errors={errorMessages.map(item => item.message)} />}
           {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
-          <AssignmentCard
-            getPConnect={getPConnect}
-            itemKey={itemKey}
-            actionButtons={actionButtons}
-            onButtonPress={buttonPress}
-          >
-            {children}
-          </AssignmentCard>
+          <form>
+            <AssignmentCard
+              getPConnect={getPConnect}
+              itemKey={itemKey}
+              actionButtons={actionButtons}
+              onButtonPress={buttonPress}
+            >
+              {children}
+            </AssignmentCard>
+          </form>
         </>
       )}
+      <a
+        href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+        className='govuk-link'
+        rel='noreferrer noopener'
+        target='_blank'
+      >
+        Ask HMRC online (opens in new tab)
+      </a>
     </div>
   );
 }
