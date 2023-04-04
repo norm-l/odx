@@ -14,6 +14,8 @@ export default function Checkboxes(props) {
 
   const checkboxClasses = `govuk-checkboxes`; // ${isSmall ? 'govuk-checkboxes--small' : ''}
 
+  console.log(props);
+
   return (
     <FieldSet {...props}>
       <div className={checkboxClasses}>

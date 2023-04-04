@@ -10,6 +10,7 @@ export default function Checkbox({ item, index, name, inputProps= {}, onChange, 
   const describedbyIds = `${item.hintText?makeHintId(name):""}`.trim()
   inputProps['aria-describedby'] = item.hintText ? describedbyIds : ''
 
+
   return (
     <div className={itemClasses} key={makeItemId(index, name)}>
       <input
