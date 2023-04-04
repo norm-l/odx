@@ -36,6 +36,10 @@ export default function DefaultForm(props) {
     const formattedPropertyName = childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
     const generatedName = props.context ? `${formattedContext}-${formattedPropertyName}`:`${formattedPropertyName}`;
     childPConnect.registerAdditionalProps({name: generatedName});
+<<<<<<< HEAD
+=======
+    if(additionalProps.hasBeenWrapped) childPConnect.setStateProps({'hasBeenWrapped': true});
+>>>>>>> main
     return createElement(createPConnectComponent(), { ...kid, key: idx, extraProps }) // eslint-disable-line react/no-array-index-key
   });
 
