@@ -24,7 +24,7 @@ export default function Checkbox({ item, index, name, inputProps= {}, onChange, 
         onBlur={!item.readOnly ? onBlur : () => {}}
         checked={item.checked}
       ></input>
-      <label className={labelClasses}>{item.label}</label>
+      <label className={labelClasses} htmlFor={makeItemId(index, name)}>{item.label}</label>
       {item.hintText ? (
         <div id={makeItemId(index, `${name}-item-hint`)} className={hintTextClasses}>
           {item.hintText}

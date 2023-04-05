@@ -23,7 +23,7 @@ export default function ActionButtons(props) {
         >
           {mButton.name}
         </Button>
-      ))}s
+      ))}
       {arSecondaryButtons.map(sButton => (
         <Button
           variant='secondary'
