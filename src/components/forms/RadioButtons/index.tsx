@@ -25,8 +25,6 @@ export default function RadioButtons(props) {
   //  Ex: [ {key: "Basic", value: "Basic"} ]
   const theOptions = Utils.getOptionList(theConfigProps, thePConn.getDataObject());
   const selectedOption = theOptions.find(option => option.key === value);
-  // const instructionText ="testing text"
-
 
   let displayValue = null;
   if(selectedOption && selectedOption.value){
