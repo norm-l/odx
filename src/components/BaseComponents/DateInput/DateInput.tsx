@@ -5,11 +5,15 @@ import FieldSet from '../FormGroup/FieldSet'
 
 export default function DateInput(props){
 
-  const {name, errorText, hintText, value ,onChangeDay, onChangeMonth, onChangeYear, inputProps={}} = props;
+  const {name, errorText, hintText, value ,onChangeDay, onChangeMonth, onChangeYear, inputProps={}, errorProps={specificError:{day:true, month:true, year:true}}} = props;
 
-  const inputClasses = `govuk-input ${errorText?'govuk-input--error':""} ${inputProps.className}`.trim();
-  const dateInputClassesWithWidth = (width: number) => {
-    return `${inputClasses} govuk-input--width-${width}`.trim();
+  const inputClasses = `govuk-input ${inputProps.className}`.trim();
+  const widthClass= (width: number) => {
+    return `govuk-input--width-${width}`;
+  }
+
+  const errorClass= (targetOfError: boolean) => {
+    return `${targetOfError?'govuk-input--error':null}`;
   }
 
   // NOTE - Calculating outside of JSX incase of future translation requirements
@@ -27,7 +31,7 @@ export default function DateInput(props){
       <div className="govuk-date-input" id={name}>
         <div className="govuk-date-input__item">
           <FormGroup name={`${name}-day`} label={dayLabel} labelIsHeading={false} extraLabelClasses="govuk-date-input__label">
-            <input className={dateInputClassesWithWidth(2)}
+            <input className={[inputClasses, widthClass(2), errorClass(errorProps?.specificError?.day)].join(' ')}
               id={`${name}-day`} name={`${name}-day`} type="text"
               inputMode="numeric" value={value?.day}
               onChange={onChangeDay} />
@@ -35,7 +39,7 @@ export default function DateInput(props){
         </div>
         <div className="govuk-date-input__item">
           <FormGroup name={`${name}-month`} label={monthLabel} labelIsHeading={false} extraLabelClasses="govuk-date-input__label">
-            <input className={dateInputClassesWithWidth(2)}
+            <input className={[inputClasses, widthClass(2), errorClass(errorProps?.specificError?.month)].join(' ')}
               id={`${name}-month`} name={`${name}-month`} type="text"
               inputMode="numeric" value={value?.month}
               onChange={onChangeMonth}
@@ -44,7 +48,7 @@ export default function DateInput(props){
         </div>
         <div className="govuk-date-input__item">
           <FormGroup name={`${name}-year`} label={yearLabel} labelIsHeading={false} extraLabelClasses="govuk-date-input__label"></FormGroup>
-          <input className={dateInputClassesWithWidth(4)}
+          <input className={[inputClasses, widthClass(4), errorClass(errorProps?.specificError?.year)].join(' ')}
             id={`${name}-year`} name={`${name}-year`} type="text"
             inputMode="numeric" value={value?.year}
             onChange={onChangeYear}
@@ -62,5 +66,6 @@ DateInput.propTypes = {
   onChangeDay: PropTypes.func,
   onChangeMonth: PropTypes.func,
   onChangeYear: PropTypes.func,
-  value: PropTypes.shape({day:PropTypes.string, month:PropTypes.string, year:PropTypes.string})
+  value: PropTypes.shape({day:PropTypes.string, month:PropTypes.string, year:PropTypes.string}),
+  errorProps: PropTypes.shape({specificError:PropTypes.shape({day:PropTypes.bool, month:PropTypes.bool, year:PropTypes.bool})}),
 }
