@@ -39,10 +39,6 @@ export default function Date(props) {
     handleDateChange();
   }, [day, month, year]);
 
-  if (readOnly) {
-    return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
-  }
-
   useEffect(()=>{
     if(validatemessage){
       setEditedValidateMessage(DateErrorFormatter(validatemessage, getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label));

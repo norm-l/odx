@@ -129,7 +129,7 @@ export default function Assignment(props) {
       const fieldComponent = fieldC11nEnv.getComponent();
       if(fieldStateprops && fieldStateprops.validatemessage && fieldStateprops.validatemessage !== ''){
         const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
-        let validatemessage = fieldC11nEnv.getMetadata().type === 'Date' ? DateErrorFormatter(fieldStateprops.validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label) : fieldStateprops.validatemessage
+        const validatemessage = fieldC11nEnv.getMetadata().type === 'Date' ? DateErrorFormatter(fieldStateprops.validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label) : fieldStateprops.validatemessage
         acc.push({message:{message:validatemessage, fieldId}, displayOrder:fieldComponent.props.displayOrder});
       }
         return acc;

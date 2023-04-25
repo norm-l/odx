@@ -2,15 +2,12 @@
 const _DateErrorFormatter = (message, propertyName) => {
 
   const dateRegExp = /(\d*-\d*-\d*)/;
-  const originalDate = message.match(dateRegExp)[0];
-  let correctedDate;
-  let targets = []
-
-  let newMessage = message;
+  const matchedDates = message.match(dateRegExp);
+  const originalDate = (matchedDates?.length > 0) ? matchedDates[0] : null;
+  const targets = []
 
   if(originalDate){
      const [year, month, day] = originalDate.split('-');
-     correctedDate = `${day}/${month}/${year}`;
 
     // When some 'parts' are missing
     let missingPartMessage = ''
@@ -19,23 +16,25 @@ const _DateErrorFormatter = (message, propertyName) => {
       targets.push('day');
     }
     if(month === ''){
-      missingPartMessage.length > 0 ? missingPartMessage+=' and a month' : missingPartMessage+='a month';
+      if(missingPartMessage.length > 0)  missingPartMessage+=' and a month';
+      else missingPartMessage+='a month';
       targets.push('month');
     }
     if(year === ''){
-      missingPartMessage.length > 0 ? missingPartMessage+=' and a year' : missingPartMessage+='a year';
+      if(missingPartMessage.length > 0) missingPartMessage+=' and a year'
+      else missingPartMessage+='a year';
       targets.push('year');
     }
     if(missingPartMessage.length > 0){
-      return {message: `${propertyName} must include ${missingPartMessage}`, targets:targets};
+      return {message: `${propertyName} must include ${missingPartMessage}`, targets};
     }
 
-    if(message.find('is not a valid date')){
-      return {message: `${propertyName} must include ${missingPartMessage}` `${propertyName} must be a real date`, targets};
+    if(message.search('is not a valid date')){
+      return {message: `${propertyName} must be a real date`, targets};
     }
 
   }
-  return {message:message, targets:targets};
+  return {message, targets};
 }
 
 export const DateErrorFormatter = (message, propertyName) => {

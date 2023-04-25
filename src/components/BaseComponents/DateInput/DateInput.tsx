@@ -5,15 +5,25 @@ import FieldSet from '../FormGroup/FieldSet'
 
 export default function DateInput(props){
 
-  const {name, errorText, hintText, value ,onChangeDay, onChangeMonth, onChangeYear, inputProps={}, errorProps={specificError:{day:true, month:true, year:true}}} = props;
+  const {name, errorText, hintText, value ,onChangeDay, onChangeMonth, onChangeYear, inputProps={}} = props;
+  let {errorProps} = props;
 
-  const inputClasses = `govuk-input ${inputProps.className}`.trim();
+  if(!errorProps){
+    errorProps = {};
+    if(!errorProps.specificError){
+      errorProps.specificError={day:true, month:true, year:true};
+    }
+  }
+
+  const inputClasses = `govuk-input ${inputProps.className?inputProps.className:''}`.trim();
   const widthClass= (width: number) => {
     return `govuk-input--width-${width}`;
   }
 
   const errorClass= (targetOfError: boolean) => {
-    return `${targetOfError?'govuk-input--error':null}`;
+    if(errorText){
+      return `${targetOfError?'govuk-input--error':null}`;
+    }
   }
 
   // NOTE - Calculating outside of JSX incase of future translation requirements
