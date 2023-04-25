@@ -15,7 +15,8 @@ export default function DateInput(props){
     }
   }
 
-  const inputClasses = `govuk-input ${inputProps.className?inputProps.className:''}`.trim();
+  const inputClasses = `govuk-input ${inputProps.className?inputProps.className:''
+}`.trim();
   const widthClass= (width: number) => {
     return `govuk-input--width-${width}`;
   }
