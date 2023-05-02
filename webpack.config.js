@@ -43,10 +43,8 @@ module.exports = (env, argv) => {
           to: 'assets/fonts/'
         },
         {
-          from: './assets/icons/*',
-          to() {
-            return Promise.resolve('constellation/icons/[name].[ext]');
-          }
+          from: './assets/nuance/*',
+          to: './'
         },
         {
           from: './assets/css/*',
