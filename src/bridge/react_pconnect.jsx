@@ -53,6 +53,7 @@ import DataReference from '../components/templates/DataReference';
 import SemanticLink from '../components/forms/SemanticLink';
 import UserReference from '../components/forms/UserReference';
 import ChangeLink from '../components/forms/ChangeLink';
+import Group from '../components/forms/Group'
 
 const connectRedux = (component, c11nEnv) => {
 
@@ -337,6 +338,10 @@ const getComponent = (c11nEnv, declarative) => {
 
       case 'HMRC_ODX_PhoneNumber':
         component = Phone;
+        break;
+
+      case 'Group':
+        component = Group;
         break;
 
       default:
