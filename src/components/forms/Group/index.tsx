@@ -23,7 +23,6 @@ export default function Group(props){
 
   if(children.length > 0){
     const handleChange = (event, propName) => {
-      console.log('cally wally group');
       handleEvent(actionsApi, 'changeNblur', propName, event.target.checked);
       setStateChanged(true);
     };
@@ -63,6 +62,7 @@ export default function Group(props){
             onChange: event => handleChange(event, childPConnect.getStateProps().value),
         }
       })
+
       return (<>
         <CheckBoxes
         optionsList={optionsList}

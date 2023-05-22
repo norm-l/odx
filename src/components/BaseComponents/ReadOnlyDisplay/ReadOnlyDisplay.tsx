@@ -12,7 +12,7 @@ export default function ReadOnlyDisplay(props){
       <dd className="govuk-summary-list__value">
       { Array.isArray(value) ?
         <ul className="govuk-list">
-          {value.map( value => <li>{value}</li>)}
+          {value.map( valueItem => <li>{valueItem}</li>)}
         </ul>
         :
         value
