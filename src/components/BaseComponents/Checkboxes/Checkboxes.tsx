@@ -5,7 +5,6 @@ import GDSCheckbox from './Checkbox'
 
 export default function Checkboxes(props) {
   const {
-    name,
     optionsList,
     onBlur,
     inputProps,
@@ -21,10 +20,11 @@ export default function Checkboxes(props) {
           <GDSCheckbox
             item={item}
             index={index}
-            name={name}
+            name={item.name}
             inputProps={...inputProps}
             onChange={item.onChange}
             onBlur={onBlur}
+            key={item.name}
           />
         ))}
       </div>

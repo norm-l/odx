@@ -33,7 +33,7 @@ export default function CheckboxComponent(props) {
     handleEvent(actionsApi, 'changeNblur', propName, event.target.checked);
   };
 
-  const optionsList = [{checked: value, label: caption, hintText: " ", readOnly:false, onChange:handleChange}]
+  const optionsList = [{checked: value, label: caption, hintText: " ", readOnly:false, name, onChange:handleChange}]
 
   const extraProps= {testProps:{'data-test-id':testId}};
 

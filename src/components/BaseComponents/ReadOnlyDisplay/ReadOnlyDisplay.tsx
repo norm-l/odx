@@ -12,7 +12,7 @@ export default function ReadOnlyDisplay(props){
       <dd className="govuk-summary-list__value">
       { Array.isArray(value) ?
         <ul className="govuk-list">
-          {value.map( valueItem => <li>{valueItem}</li>)}
+          {value.map( valueItem => <li key={valueItem}>{valueItem}</li>)}
         </ul>
         :
         value
@@ -24,5 +24,5 @@ export default function ReadOnlyDisplay(props){
 
 ReadOnlyDisplay.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string || PropTypes.arrayOf(PropTypes.string),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 }

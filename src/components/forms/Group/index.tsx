@@ -5,13 +5,15 @@ import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 
 export default function Group(props){
-  const { children, name, heading, instructions, readOnly, getPConnect } = props;
+  const { children, heading, instructions, readOnly, getPConnect } = props;
 
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
   const [stateChanged, setStateChanged] = useState(false);
 
   const isOnlyField = useIsOnlyField();
+
+  const formattedContext = thePConn.options.pageReference ? thePConn.options.pageReference.split('.').pop() : '';
 
   // Doesn't seem that state change on children (checkboxes) causes refresh on the containing group,
   // working around with this for now
@@ -44,6 +46,7 @@ export default function Group(props){
         return (<ReadOnlyDisplay value={valuesList} label={heading}/>)
       }
 
+      let firstOptionPropertyName = null
 
       const optionsList = children.map( child => {
         const childPConnect = child.props.getPConnect();
@@ -51,14 +54,20 @@ export default function Group(props){
         childPConnect.populateAdditionalProps(childPConnect.getConfigProps());
         errors.push(childPConnect.getStateProps().validatemessage)
 
+        const formattedPropertyName = childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
+        const optionName = `${formattedContext}-${formattedPropertyName}`
+
         // Points error summary link to first checkbox in group
-        childPConnect.setStateProps({fieldId: `${name}`});
+        if(!firstOptionPropertyName) {firstOptionPropertyName = formattedPropertyName}
+        const fieldId = `${formattedContext}-${firstOptionPropertyName}`
+        childPConnect.setStateProps({fieldId});
 
         return {
             checked: resolvedProps.value,
             label: resolvedProps.caption,
-            hintText: " ",
+            hintText: resolvedProps.helperText,
             readOnly: resolvedProps.readOnly,
+            name: optionName,
             onChange: event => handleChange(event, childPConnect.getStateProps().value),
         }
       })
@@ -66,7 +75,7 @@ export default function Group(props){
       return (<>
         <CheckBoxes
         optionsList={optionsList}
-        name={name}
+        name={`${formattedContext}-group`}
         onChange={handleChange}
         label={heading}
         instructionText={instructions}
