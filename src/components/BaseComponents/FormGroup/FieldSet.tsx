@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InstructionComp from './HtmlToText';
-import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
-
 
 export default function FieldSet({legendIsHeading=true, label, name, errorText, hintText, instructionText, children, fieldsetElementProps, testProps}){
 
   const formGroupDivClasses = `govuk-form-group ${errorText?'govuk-form-group--error':""}`.trim();
-  const legendClasses = `govuk-fieldset__legend`.trim(); //${legendIsHeading?"govuk-fieldset__legend--l":""}
+  const legendClasses = `govuk-fieldset__legend`;
 
   // TODO Reconsider how to generate hintID and errorID for aria-described by
   const describedByIDs : Array<string> = [];
@@ -21,16 +18,6 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
     <div className={formGroupDivClasses} {...testProps}>
       <fieldset className="govuk-fieldset" aria-describedby={describedByIDs.join(' ')} {...fieldsetElementProps}>
         <legend className={legendClasses}>
-          {/* <ConditionalWrapper
-            condition={legendIsHeading}
-            wrapper={ child => {
-                      return (
-                      <h1 className="govuk-fieldset__heading">
-                        {child}
-                      </h1>)}
-                    }
-            childrenToWrap={label}
-          /> */}
           {label}
         </legend>
         {hintText && <div id={hintID} className="govuk-hint">{hintText}</div>}

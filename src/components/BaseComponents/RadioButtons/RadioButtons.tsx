@@ -22,10 +22,7 @@ export default function RadioButtons(props){
               <label className="govuk-label govuk-radios__label" htmlFor={itemId}>
                 {option.label}
               </label>
-              {option.hintText && <div id={itemHintId} className="govuk-hint govuk-radios__hint">
-                                    {option.hintText}
-                                  </div>
-              }
+              {option.hintText && <div id={itemHintId} className="govuk-hint govuk-radios__hint">{option.hintText}</div>}
             </div>
           )
         })}

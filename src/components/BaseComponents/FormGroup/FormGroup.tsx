@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 
 function makeHintId(identifier) {
   return `${identifier}-hint`;
@@ -32,17 +31,6 @@ export default function FormGroup({
 
   return (
     <div className={formGroupDivClasses} {...testProps}>
-      {/* <ConditionalWrapper
-        condition={labelIsHeading}
-        wrapper={child => {
-          return <h1 className='govuk-label-wrapper'>{child}</h1>;
-        }}
-        childrenToWrap={
-          <label className={labelClasses} htmlFor={id || name}>
-            {label}
-          </label>
-        }
-      /> */}
       {<label className={labelClasses} htmlFor={id || name}>
             {label}
           </label>}
