@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
-// import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter';
@@ -43,7 +42,6 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
-  const isOnlyOneField = false;//useIsOnlyField(children);
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
 
   function findCurrentIndicies(arStepperSteps: Array<any>, arIndicies: Array<number>, depth: number) : Array<number> {
@@ -263,7 +261,7 @@ export default function Assignment(props) {
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
-          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
+          <h1 className='govuk-heading-l'>{containerName}</h1>
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
