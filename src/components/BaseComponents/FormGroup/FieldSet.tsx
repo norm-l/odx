@@ -1,19 +1,13 @@
 import React from 'react';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
+import InstructionComp from './HtmlToText';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 
-function InstructionComp({htmlString}) {
-  const cleanHTML = DOMPurify.sanitize(htmlString,
-    { USE_PROFILES: { html: true } });
-  return <>{parse(cleanHTML)}</>;
-}
 
 export default function FieldSet({legendIsHeading=true, label, name, errorText, hintText, instructionText, children, fieldsetElementProps, testProps}){
 
   const formGroupDivClasses = `govuk-form-group ${errorText?'govuk-form-group--error':""}`.trim();
-  const legendClasses = `govuk-fieldset__legend ${legendIsHeading?"govuk-fieldset__legend--l":""}`.trim();
+  const legendClasses = `govuk-fieldset__legend`.trim(); //${legendIsHeading?"govuk-fieldset__legend--l":""}
 
   // TODO Reconsider how to generate hintID and errorID for aria-described by
   const describedByIDs : Array<string> = [];
@@ -27,7 +21,7 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
     <div className={formGroupDivClasses} {...testProps}>
       <fieldset className="govuk-fieldset" aria-describedby={describedByIDs.join(' ')} {...fieldsetElementProps}>
         <legend className={legendClasses}>
-          <ConditionalWrapper
+          {/* <ConditionalWrapper
             condition={legendIsHeading}
             wrapper={ child => {
                       return (
@@ -36,9 +30,9 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
                       </h1>)}
                     }
             childrenToWrap={label}
-          />
+          /> */}
+          {label}
         </legend>
-        {instructionText && <div id='instructions' className='govuk-hint'><InstructionComp htmlString={instructionText}/></div>}
         {hintText && <div id={hintID} className="govuk-hint">{hintText}</div>}
         {errorText  && <p id={errorID} className="govuk-error-message"><span className="govuk-visually-hidden">Error:</span>{errorText}</p> }
         {children}

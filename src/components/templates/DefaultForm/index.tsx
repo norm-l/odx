@@ -1,14 +1,12 @@
 import React, { createElement } from "react";
 
 import createPConnectComponent from '../../../bridge/react_pconnect';
-import isOnlyOneField from '../../../helpers/hooks/QuestionDisplayHooks';
-
+import InstructionComp from '../../BaseComponents/FormGroup/HtmlToText';
 import './DefaultForm.css';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps } = props;
 
-  const onlyOneField = isOnlyOneField();
 
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
@@ -20,9 +18,6 @@ export default function DefaultForm(props) {
   const dfChildren = arChildren.map((kid, idx) =>{
     let extraProps = {};
     const childPConnect = kid.getPConnect();
-    if(onlyOneField && childPConnect.getConfigProps().readOnly !== true && idx === 0){
-      childPConnect.setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
-    }
     if(readOnly) extraProps = {...extraProps, showLabel:false, labelHiddenForReadOnly:kid.showLabel};
 
     let displayOrder = '';
@@ -99,5 +94,5 @@ export default function DefaultForm(props) {
     }))
   }
 
-  return <>{dfChildren}</>;
+  return <>{instructionText && instructionText !== 'none' && <div id='instructions' className='govuk-hint'><InstructionComp htmlString={instructionText.replaceAll('\n<p>&nbsp;</p>\n', '')}/></div>}{dfChildren}</>;
 }

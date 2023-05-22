@@ -27,13 +27,12 @@ export default function FormGroup({
   const formGroupDivClasses = `govuk-form-group ${
     errorText ? 'govuk-form-group--error' : ''
   }`.trim();
-  const labelClasses = `govuk-label ${
-    labelIsHeading ? 'govuk-label--l' : ''
-  } ${extraLabelClasses}`.trim();
+  const labelClasses = `govuk-label ${extraLabelClasses}`.trim();
+
 
   return (
     <div className={formGroupDivClasses} {...testProps}>
-      <ConditionalWrapper
+      {/* <ConditionalWrapper
         condition={labelIsHeading}
         wrapper={child => {
           return <h1 className='govuk-label-wrapper'>{child}</h1>;
@@ -43,7 +42,10 @@ export default function FormGroup({
             {label}
           </label>
         }
-      />
+      /> */}
+      {<label className={labelClasses} htmlFor={id || name}>
+            {label}
+          </label>}
       {hintText && (
         <div id={makeHintId(name)} className='govuk-hint'>
           {hintText}

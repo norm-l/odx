@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
-import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
+// import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter';
@@ -44,7 +43,7 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
-  const isOnlyOneField = useIsOnlyField(children);
+  const isOnlyOneField = false;//useIsOnlyField(children);
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
 
   function findCurrentIndicies(arStepperSteps: Array<any>, arIndicies: Array<number>, depth: number) : Array<number> {
@@ -79,8 +78,6 @@ export default function Assignment(props) {
 
     if (children && children.length > 0) {
 
-      // debugger;
-
       const oWorkItem = children[0].props.getPConnect();
       const oWorkData = oWorkItem.getDataObject();
       const oData = thePConn.getDataObject();
@@ -110,10 +107,7 @@ export default function Assignment(props) {
 
         }
       }
-
     }
-
-
   }, [children]);
 
   // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
@@ -285,7 +279,7 @@ export default function Assignment(props) {
       ) : (
         <>
           {errorSummary && errorMessages.length > 0 && <ErrorSummary errors={errorMessages.map(item => item.message)} />}
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {<h1 className="govuk-heading-l">{containerName}</h1>}
           <form>
             <AssignmentCard
               getPConnect={getPConnect}
@@ -310,42 +304,15 @@ export default function Assignment(props) {
   );
 }
 
-// From WC SDK
-// const aHtml = html`
-// ${this.bHasNavigation?
-//   html`
-//     <div class="psdk-stepper">
-//     <multi-step-component .pConn=${this.pConn} .arChildren=${this.arChildren} itemKey=${this.itemKey}
-//         .arMainButtons=${this.arMainButtons} .arSecondaryButtons=${this.arSecondaryButtons}
-//         .bIsVertical=${this.bIsVertical} .arCurrentStepIndicies=${this.arCurrentStepIndicies}
-//         .arNavigationSteps=${this.arNavigationSteps}
-//         @MultiStepActionButtonClick="${this._onActionButtonClick}">
-//     </multi-step-component>
-//     <lit-toast></lit-toast>
-//     </div>`
-//     :
-//   html`
-//     <div>
-//         <assignment-card-component .pConn=${this.pConn} .arChildren=${this.arChildren} itemKey=${this.itemKey}
-//           .arMainButtons=${this.arMainButtons} .arSecondaryButtons=${this.arSecondaryButtons}
-//           @AssignmentActionButtonClick="${this._onActionButtonClick}">
-//         </assignment-card-component>
-//         <lit-toast></lit-toast>
-//     </div>`}
-// `;
-
 
 Assignment.propTypes = {
   children: PropTypes.node.isRequired,
   getPConnect: PropTypes.func.isRequired,
   itemKey: PropTypes.string,
   isCreateStage: PropTypes.bool
-  // actionButtons: PropTypes.object
-  // buildName: PropTypes.string
 };
 
 Assignment.defaultProps = {
   itemKey: null,
   isCreateStage: false
-  // buildName: null
 };
