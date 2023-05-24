@@ -50,12 +50,17 @@ export default function ChildBenefitsClaim() {
     setShowTriplePlayOptions(false);
     setShowPega(false);
     setShowResolutionScreen(true);
+
+    PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+
   }
 
   function cancelAssignment() {
     setShowTriplePlayOptions(true);
     setShowPega(false);
     setShowResolutionScreen(false);
+
+    PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
   }
 
   function establishPCoreSubscriptions() {
@@ -74,6 +79,26 @@ export default function ChildBenefitsClaim() {
       },
       'cancelAssignment'
     );
+
+    PCore.getPubSubUtils().subscribe(
+      PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
+      () => {
+        console.log("assignment opened");
+        setShowTriplePlayOptions(false);
+        setShowPega(true);
+      },
+      'continueAssignment'
+    );
+
+    PCore.getPubSubUtils().subscribe(
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
+      () => {
+        console.log("case opened");
+        setShowTriplePlayOptions(false);
+        setShowPega(true);
+      },
+      'continueCase'
+    );
   }
 
   useEffect(() => {
@@ -84,7 +109,7 @@ export default function ChildBenefitsClaim() {
       if (bShowPega) {
         thePegaPartEl.style.display = 'block';
       } else {
-        thePegaPartEl.style.display = 'none';
+        thePegaPartEl.style.display = 'block';
       }
     }
   }, [bShowPega]);
@@ -185,7 +210,8 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
       initialRender(renderObj);
-    });
+      PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+       });
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
@@ -239,6 +265,14 @@ export default function ChildBenefitsClaim() {
         PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
         'cancelAssignment'
       );
+      PCore?.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
+        'continueAssignment'
+      );
+      PCore?.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
+        'continueCase'
+      );
 
       PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
     };
@@ -246,11 +280,16 @@ export default function ChildBenefitsClaim() {
 
   return (
     <>
-      {bShowTriplePlayOptions && <StartPage onStart={startNow} />}
-      {bShowResolutionScreen && <ConfirmationPage />}
-      <div id='pega-part-of-page'>
-        <div id='pega-root'></div>
+      <div className="govuk-grid-column-two-thirds">
+        <div id='pega-part-of-page'>
+          <div id='pega-root'></div>
+        </div>
       </div>
+      <div className="govuk-grid-column-one-third">
+        {bShowTriplePlayOptions && <StartPage onStart={startNow} />}
+      </div>
+      {bShowResolutionScreen && <ConfirmationPage />}
+
     </>
   );
 }
