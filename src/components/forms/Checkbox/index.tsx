@@ -1,6 +1,6 @@
 import React from 'react';
 import GDSCheckboxes from '../../BaseComponents/Checkboxes/Checkboxes';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
+import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks'
 import handleEvent from '../../../helpers/event-utils';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 

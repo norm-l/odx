@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Utils from '../../../helpers/utils';
 import handleEvent from '../../../helpers/event-utils';
 import Select from '../../BaseComponents/Select/Select';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
+import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay'
 
 interface IOption {

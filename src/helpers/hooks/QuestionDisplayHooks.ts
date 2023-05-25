@@ -8,7 +8,7 @@ declare const PCore;
 */
 
 
-export default function useIsOnlyField(effectTrigger = null){
+export function useIsOnlyField(effectTrigger = null){
   const [isOnlyField, setisOnlyField] = useState(PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1").length === 1
   && PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1")[0].fieldC11nEnv.getComponent().props.displayOrder.split('-')[0] !== '0');
 
@@ -18,4 +18,12 @@ export default function useIsOnlyField(effectTrigger = null){
   }, [effectTrigger])
 
   return isOnlyField;
+}
+
+export function useInstructionText(text = undefined){
+  const [instructionText, setInstructionText] = useState(text);
+  useEffect(()=>{
+    setInstructionText(text)
+  }, [text])
+  return instructionText;
 }

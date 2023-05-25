@@ -1,6 +1,6 @@
 import React  from 'react';
 import GDSRadioButtons from '../../BaseComponents/RadioButtons/RadioButtons';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
+import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks'
 import Utils from '../../../helpers/utils';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 

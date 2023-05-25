@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
-import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
+import {useInstructionText, useIsOnlyField} from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter';
@@ -45,7 +45,10 @@ export default function Assignment(props) {
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
   const isOnlyOneField = useIsOnlyField(children);
-  const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
+  const instructions = useInstructionText();
+  const containerName = thePConn.getDataObject().caseInfo.assignments[0].name;
+  console.log(isOnlyOneField, instructions);
+
 
   function findCurrentIndicies(arStepperSteps: Array<any>, arIndicies: Array<number>, depth: number) : Array<number> {
 
@@ -270,6 +273,7 @@ export default function Assignment(props) {
         <React.Fragment>
           <div>has Nav</div>
           {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
+          {isOnlyOneField && instructions && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -286,6 +290,7 @@ export default function Assignment(props) {
         <>
           {errorSummary && errorMessages.length > 0 && <ErrorSummary errors={errorMessages.map(item => item.message)} />}
           {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {isOnlyOneField && instructions && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <form>
             <AssignmentCard
               getPConnect={getPConnect}
