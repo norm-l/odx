@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from 'react';
 import DateInput from '../../BaseComponents/DateInput/DateInput';
-import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks';
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import {DateErrorFormatter, DateErrorTargetFields} from '../../../helpers/formatters/DateErrorFormatter';
 

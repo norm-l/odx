@@ -1,7 +1,7 @@
 import React, { createElement } from "react";
 
 import createPConnectComponent from '../../../bridge/react_pconnect';
-import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks';
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 import './DefaultForm.css';
 

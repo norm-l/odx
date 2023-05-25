@@ -1,6 +1,4 @@
 import React from 'react';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 
@@ -32,7 +30,6 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
             childrenToWrap={label}
           />
         </legend>
-        {/* {instructionText && <div id='instructions' className='govuk-hint'><InstructionComp htmlString={instructionText}/></div>} */}
         {hintText && <div id={hintID} className="govuk-hint">{hintText}</div>}
         {errorText  && <p id={errorID} className="govuk-error-message"><span className="govuk-visually-hidden">Error:</span>{errorText}</p> }
         {children}
