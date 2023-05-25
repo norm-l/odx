@@ -19,11 +19,3 @@ export function useIsOnlyField(effectTrigger = null){
 
   return isOnlyField;
 }
-
-export function useInstructionText(text = undefined){
-  const [instructionText, setInstructionText] = useState(text);
-  useEffect(()=>{
-    setInstructionText(text)
-  }, [text])
-  return instructionText;
-}

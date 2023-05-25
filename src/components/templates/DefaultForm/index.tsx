@@ -1,7 +1,7 @@
 import React, { createElement } from "react";
 
 import createPConnectComponent from '../../../bridge/react_pconnect';
-import {useIsOnlyField, useInstructionText} from '../../../helpers/hooks/QuestionDisplayHooks';
+import {useIsOnlyField} from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 import './DefaultForm.css';
 
@@ -17,7 +17,6 @@ export default function DefaultForm(props) {
   let hasSingleChildWhichIsReference = false;
   const instructionText = props.instructions === 'none'? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
-  if(instructionExists){useInstructionText(instructionText);}
 
   const dfChildren = arChildren.map((kid, idx) =>{
     let extraProps = {};
