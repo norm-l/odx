@@ -164,7 +164,7 @@ export default function Assignment(props) {
   }
 
   function scrollToTop(){
-    const position = document.querySelector('h1')?.offsetTop || 0;
+    const position = document.querySelector('a')?.offsetTop || 0;
     document.body.scrollTop = position;
     document.documentElement.scrollTop = position;
   }
