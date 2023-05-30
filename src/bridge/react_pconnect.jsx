@@ -41,6 +41,7 @@ import Stages from '../components/Stages';
 import TextArea from '../components/forms/TextArea';
 import TextContent from '../components/forms/TextContent';
 import TextInput from '../components/forms/TextInput';
+import BackLink from '../components/BaseComponents/BackLink/BackLink';
 import Time from '../components/forms/Time';
 import ToDo from '../components/ToDo';
 import URLComponent from '../components/forms/URL';
@@ -53,6 +54,7 @@ import DataReference from '../components/templates/DataReference';
 import SemanticLink from '../components/forms/SemanticLink';
 import UserReference from '../components/forms/UserReference';
 import ChangeLink from '../components/forms/ChangeLink';
+import Group from '../components/forms/Group'
 
 const connectRedux = (component, c11nEnv) => {
 
@@ -298,6 +300,11 @@ const getComponent = (c11nEnv, declarative) => {
         component = TextContent;
         break;
 
+      case 'BackLink':
+        component = BackLink;
+        break;
+
+
       case 'TextInput':
         component = TextInput;
         break;
@@ -337,6 +344,10 @@ const getComponent = (c11nEnv, declarative) => {
 
       case 'HMRC_ODX_PhoneNumber':
         component = Phone;
+        break;
+
+      case 'Group':
+        component = Group;
         break;
 
       default:
