@@ -36,6 +36,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Radio } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import { filterData } from '../../templates/SimpleTable/helpers';
+import DateTimeFormatter from '../../../helpers/formatters/Date';
 import './ListView.css';
 
 const SELECTION_MODE = { SINGLE: 'single', MULTI: 'multi' };
@@ -938,8 +939,8 @@ export default function ListView(props) {
       <tbody>
       {arRows.map(row => {
         return (
-          <tr>
-            <td>
+          <tr className='govuk-summary-list__row'>
+            <td className='govuk-summary-card__content'>
               <div className='govuk-card govuk-grid-row'>
                 <div className='govuk-grid-column-two-thirds' >
                   {preset.children[0].children.map((child) => {
@@ -964,7 +965,12 @@ export default function ListView(props) {
                     }
                     //All other fields except for case status
                     if(child.config.name !== 'pyStatusWork' && !child.config.name.includes('FirstName') && !child.config.name.includes('LastName')){
-                      return (<div>{value}</div>)
+                      if(child.type === 'Date'){
+                        return (<div>{DateTimeFormatter['DateTime-Long'](value)}</div>)
+                      }
+                      else {
+                        return (<div>{value}</div>)
+                      }
                     }
                   })}
                 </div>
