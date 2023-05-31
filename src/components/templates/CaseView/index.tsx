@@ -60,6 +60,11 @@ export default function CaseView(props) {
 
   const classes = useStyles();
 
+  const hidePageLabel = props.caseInfo.content.HidePageLabel;
+
+  console.log('View',props.caseInfo.content.HidePageLabel);
+
+
 
   /**
    *

@@ -33,7 +33,7 @@ export default function TextInput(props) {
     }
   };
 
-  const isOnlyField = useIsOnlyField();
+  const hidePageLabel = useIsOnlyField(thePConn);
 
   const maxLength = fieldMetadata?.maxLength;
 
@@ -62,7 +62,7 @@ export default function TextInput(props) {
         hintText={helperText}
         errorText={validatemessage}
         label={label}
-        labelIsHeading={isOnlyField}
+        labelIsHeading={hidePageLabel}
         name={name}
         maxLength={maxLength}
         id={name}

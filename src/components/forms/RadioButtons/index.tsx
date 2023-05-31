@@ -18,7 +18,6 @@ export default function RadioButtons(props) {
     testId
   } = props;
 
-  const isOnlyField = useIsOnlyField();
 
   const thePConn = getPConnect();
   const theConfigProps = thePConn.getConfigProps();
@@ -26,6 +25,8 @@ export default function RadioButtons(props) {
   //  Ex: [ {key: "Basic", value: "Basic"} ]
   const theOptions = Utils.getOptionList(theConfigProps, thePConn.getDataObject());
   const selectedOption = theOptions.find(option => option.key === value);
+  const hidePageLabel = useIsOnlyField(thePConn);
+
 
   let displayValue = null;
   if(selectedOption && selectedOption.value){
@@ -43,7 +44,7 @@ export default function RadioButtons(props) {
       {...props}
       name={name}
       label={label}
-      legendIsHeading={isOnlyField}
+      legendIsHeading={hidePageLabel}
       options={theOptions.map(option => {return {value:option.key, label:option.value}})}
       displayInline={theOptions.length === 2}
       hintText={helperText}

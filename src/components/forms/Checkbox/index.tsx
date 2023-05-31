@@ -17,13 +17,14 @@ export default function CheckboxComponent(props) {
     testId,
   } = props;
 
-  const isOnlyField = useIsOnlyField();
+
 
   const thePConn = getPConnect();
   const theConfigProps = thePConn.getConfigProps();
   const { caption } = theConfigProps;
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
+  const hidePageLabel = useIsOnlyField(thePConn);
 
   if(readOnly){
       return (<ReadOnlyDisplay value={value?props.trueLabel:props.falseLabel} label={caption}/>)
@@ -44,7 +45,7 @@ export default function CheckboxComponent(props) {
         name={name}
         label={label}
         optionsList={optionsList}
-        legendIsHeading={isOnlyField}
+        legendIsHeading={hidePageLabel}
         errorText={validatemessage}
         hintText={hintText}
         onChange={handleChange}

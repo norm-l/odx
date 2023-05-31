@@ -8,14 +8,16 @@ declare const PCore;
 */
 
 
-export default function useIsOnlyField(effectTrigger = null){
-  const [isOnlyField, setisOnlyField] = useState(PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1").length === 1
-  && PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1")[0].fieldC11nEnv.getComponent().props.displayOrder.split('-')[0] !== '0');
+export default function useIsOnlyField(thePConn, effectTriger = null){
+  // const [hidePageLabel, setHidePageLabel] = useState(thePConn.getDataObject().caseInfo.content.HidePageLabel === undefined? false : true);
 
-  useEffect ( () => {
-    setisOnlyField(PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1").length === 1
-    && PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1")[0].fieldC11nEnv.getComponent().props.displayOrder.split('-')[0] === '0');
-  }, [effectTrigger])
+  // useEffect(()=>{
+  //   setHidePageLabel(thePConn.getDataObject().caseInfo.content.HidePageLabel === undefined? false : true);
+  // },[effectTriger])
+  if(thePConn.getDataObject().caseInfo.content.HidePageLabel === undefined){
+    return false;
+  }else{
+    return true;
+  }
 
-  return isOnlyField;
 }

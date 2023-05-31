@@ -8,7 +8,8 @@ import './DefaultForm.css';
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps } = props;
 
-  const isOnlyField = useIsOnlyField();
+  const hidePageLabel = useIsOnlyField(getPConnect());
+  console.log(hidePageLabel);
 
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
@@ -21,7 +22,7 @@ export default function DefaultForm(props) {
   const dfChildren = arChildren.map((kid, idx) =>{
     let extraProps = {};
     const childPConnect = kid.getPConnect();
-    if(isOnlyField && !instructionExists && childPConnect.getConfigProps().readOnly !== true && idx === 0){
+    if(hidePageLabel && !instructionExists && childPConnect.getConfigProps().readOnly !== true && idx === 0){
       childPConnect.setInheritedProp('label', getPConnect().getDataObject().caseInfo.assignments[0].name);
     }
     if(readOnly) extraProps = {...extraProps, showLabel:false, labelHiddenForReadOnly:kid.showLabel};
@@ -39,7 +40,7 @@ export default function DefaultForm(props) {
     const generatedName = props.context ? `${formattedContext}-${formattedPropertyName}`:`${formattedPropertyName}`;
     childPConnect.registerAdditionalProps({name: generatedName});
     if(additionalProps.hasBeenWrapped) childPConnect.setStateProps({'hasBeenWrapped': true});
-    return createElement(createPConnectComponent(), { ...kid, key: idx, extraProps, instructionText, instructionExists }) // eslint-disable-line react/no-array-index-key
+    return createElement(createPConnectComponent(), { ...kid, key: idx, extraProps, instructionText, hidePageLabel }) // eslint-disable-line react/no-array-index-key
   });
 
 

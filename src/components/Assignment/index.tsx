@@ -45,7 +45,7 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
-  const isOnlyOneField = useIsOnlyField(children);
+  const hidePageLabel = useIsOnlyField(thePConn, children);
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name;
 
 
@@ -279,7 +279,7 @@ export default function Assignment(props) {
       {bHasNavigation ? (
         <React.Fragment>
           <div>has Nav</div>
-          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
+          {!hidePageLabel && <h1 className='govuk-heading-l'>{containerName}</h1>}
           <MultiStep
             getPConnect={getPConnect}
             itemKey={itemKey}
@@ -309,7 +309,7 @@ export default function Assignment(props) {
             ) : null
           )}
           {errorSummary && errorMessages.length > 0 && <ErrorSummary errors={errorMessages.map(item => item.message)} />}
-          {!isOnlyOneField && <h1 className="govuk-heading-l">{containerName}</h1>}
+          {!hidePageLabel && <h1 className="govuk-heading-l">{containerName}</h1>}
           <form>
             <AssignmentCard
               getPConnect={getPConnect}
