@@ -946,12 +946,13 @@ export default function ListView(props) {
 
                     const value = row[child.config.name];
                     //Handle Name concatenation
-                    if(child.config.name.contains('FirstName')){
+                    if(child.config.name.includes('FirstName')){
                       let response = value;
 
-                      const lastNameResults = preset.children[0].children.filter(child => child.config.name.contains('LastName'))
+                      const lastNameResults = preset.children[0].children.filter(child => child.config.name.includes('LastName'))
                       if(lastNameResults.length > 0){
-                        response.concat(row[lastNameResults[0]]);
+                        const lastName = row[lastNameResults[0].config.name]
+                        response = response.concat(` ${lastName}`);
                       }
 
                       //placehodler for making name clickable link logic
@@ -962,8 +963,7 @@ export default function ListView(props) {
                       }
                     }
                     //All other fields except for case status
-                    if(child.config.name !== 'pyStatusWork' || !child.config.name.contains('FirstName') || !child.config.name.contains('LirstName')){
-
+                    if(child.config.name !== 'pyStatusWork' && !child.config.name.includes('FirstName') && !child.config.name.includes('LastName')){
                       return (<div>{value}</div>)
                     }
                   })}
