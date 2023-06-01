@@ -30,7 +30,7 @@ export default function Dropdown(props) {
 
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
-  const hidePageLabel = useIsOnlyField(thePConn);
+  const hidePageLabel = useIsOnlyField();
 
   const propName = thePConn.getStateProps().value;
 

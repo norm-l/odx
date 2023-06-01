@@ -33,7 +33,7 @@ export default function TextInput(props) {
     }
   };
 
-  const hidePageLabel = useIsOnlyField(thePConn);
+  const hidePageLabel = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
 

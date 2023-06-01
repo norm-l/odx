@@ -24,7 +24,7 @@ export default function CheckboxComponent(props) {
   const { caption } = theConfigProps;
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
-  const hidePageLabel = useIsOnlyField(thePConn);
+  const hidePageLabel = useIsOnlyField();
 
   if(readOnly){
       return (<ReadOnlyDisplay value={value?props.trueLabel:props.falseLabel} label={caption}/>)

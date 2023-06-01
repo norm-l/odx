@@ -11,7 +11,7 @@ export default function Group(props){
   const actionsApi = thePConn.getActionsApi();
   const [stateChanged, setStateChanged] = useState(false);
 
-  const hidePageLabel = useIsOnlyField(thePConn);
+  const hidePageLabel = useIsOnlyField();
 
   const formattedContext = thePConn.options.pageReference ? thePConn.options.pageReference.split('.').pop() : '';
 

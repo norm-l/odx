@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
 import StoreContext from "../../../bridge/Context/StoreContext";
 import CaseViewActionsMenu from "./CaseViewActionsMenu";
 import VerticalTabs from '../../VerticalTabs';
@@ -59,12 +58,6 @@ export default function CaseView(props) {
   const thePConn = getPConnect();
 
   const classes = useStyles();
-
-  const hidePageLabel = props.caseInfo.content.HidePageLabel;
-
-  console.log('View',props.caseInfo.content.HidePageLabel);
-
-
 
   /**
    *
