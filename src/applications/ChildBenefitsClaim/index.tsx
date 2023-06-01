@@ -10,6 +10,7 @@ import { compareSdkPCoreVersions } from '../../helpers/versionHelpers';
 import { getSdkConfig } from '../../helpers/config_access';
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
+import ClaimsList from '../../components/templates/ClaimsList';
 
 // declare var gbLoggedIn: boolean;
 // declare var login: Function;
@@ -24,6 +25,8 @@ export default function ChildBenefitsClaim() {
   const [bShowTriplePlayOptions, setShowTriplePlayOptions] = useState(false);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
+  const [submittedClaims, setSubmittedClaims] = useState([]);
+  const [inprogressClaims, setInprogressClaims] = useState([]);
 
   function createCase() {
     setShowTriplePlayOptions(false);
@@ -51,7 +54,7 @@ export default function ChildBenefitsClaim() {
     setShowPega(false);
     setShowResolutionScreen(true);
 
-    PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+    //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
 
   }
 
@@ -60,7 +63,7 @@ export default function ChildBenefitsClaim() {
     setShowPega(false);
     setShowResolutionScreen(false);
 
-    PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+    //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
   }
 
   function establishPCoreSubscriptions() {
@@ -109,7 +112,7 @@ export default function ChildBenefitsClaim() {
       if (bShowPega) {
         thePegaPartEl.style.display = 'block';
       } else {
-        thePegaPartEl.style.display = 'block';
+        thePegaPartEl.style.display = 'none';
       }
     }
   }, [bShowPega]);
@@ -210,13 +213,19 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
       initialRender(renderObj);
-      PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+      //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+
+      PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root/primary_1', {OperatorId:'peter.maloney1@hmrc.gov.uk'} ).then(resp => setSubmittedClaims(resp.data.slice(0,10)))
+      PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignments', 'root/primary_1', {OperatorId:'peter.maloney1@hmrc.gov.uk'} ).then(resp => setInprogressClaims(resp.data.slice(0,10)))
+
+
        });
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
 
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
+
   }
 
   // One time (initialization) subscriptions and related unsubscribe
@@ -280,14 +289,22 @@ export default function ChildBenefitsClaim() {
 
   return (
     <>
-      <div className="govuk-grid-column-two-thirds">
-        <div id='pega-part-of-page'>
-          <div id='pega-root'></div>
+      <div id='pega-part-of-page'>
+            <div id='pega-root'></div>
+      </div>
+      { bShowTriplePlayOptions && (
+      <>
+        <div className="govuk-grid-column-two-thirds">
+            <h1 className='govuk-heading-l'>Your claim applications</h1>
+            <p className='govuk-body'>We're only listing your cases that need completing for information claims or applications that have been submitted. Use the contact information to speak with a Benefits Officer</p>
+            <ClaimsList data={inprogressClaims} title={'Claims In Progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
+            <ClaimsList data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
         </div>
-      </div>
-      <div className="govuk-grid-column-one-third">
-        {bShowTriplePlayOptions && <StartPage onStart={startNow} />}
-      </div>
+        <div className="govuk-grid-column-one-third">
+          <StartPage onStart={startNow} />
+        </div>
+      </>)
+      }
       {bShowResolutionScreen && <ConfirmationPage />}
 
     </>
