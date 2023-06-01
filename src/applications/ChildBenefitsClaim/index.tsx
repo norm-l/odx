@@ -10,6 +10,7 @@ import { compareSdkPCoreVersions } from '../../helpers/versionHelpers';
 import { getSdkConfig } from '../../helpers/config_access';
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
+import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
 
 // declare var gbLoggedIn: boolean;
@@ -19,17 +20,20 @@ import ClaimsList from '../../components/templates/ClaimsList';
 declare const PCore: any;
 declare const myLoadMashup: any;
 
+
 export default function ChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
-  const [bShowTriplePlayOptions, setShowTriplePlayOptions] = useState(false);
+  const [showStartPage, setShowStartPage] = useState(false);
+  const [showUserPortal, setShowUserPortal] = useState(true);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
-  const [submittedClaims, setSubmittedClaims] = useState([]);
+
   const [inprogressClaims, setInprogressClaims] = useState([]);
+  const [submittedClaims, setSubmittedClaims] = useState([]);
 
   function createCase() {
-    setShowTriplePlayOptions(false);
+    setShowStartPage(false);
     setShowPega(true);
 
     const actionsApi = pConn.getActionsApi();
@@ -49,8 +53,13 @@ export default function ChildBenefitsClaim() {
     }
   }
 
+  function beginClaim() {
+    setShowStartPage(true);
+    setShowUserPortal(false);
+  }
+
   function assignmentFinished() {
-    setShowTriplePlayOptions(false);
+    setShowStartPage(false);
     setShowPega(false);
     setShowResolutionScreen(true);
 
@@ -59,7 +68,7 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
-    setShowTriplePlayOptions(true);
+    setShowStartPage(true);
     setShowPega(false);
     setShowResolutionScreen(false);
 
@@ -87,7 +96,7 @@ export default function ChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
       () => {
         console.log("assignment opened");
-        setShowTriplePlayOptions(false);
+        setShowStartPage(false);
         setShowPega(true);
       },
       'continueAssignment'
@@ -97,7 +106,7 @@ export default function ChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
       () => {
         console.log("case opened");
-        setShowTriplePlayOptions(false);
+        setShowStartPage(false);
         setShowPega(true);
       },
       'continueCase'
@@ -125,7 +134,7 @@ export default function ChildBenefitsClaim() {
     if (!gbLoggedIn) {
       // login();     // Login now handled at TopLevelApp
     } else {
-      setShowTriplePlayOptions(true);
+      setShowUserPortal(true);
     }
   }, [bShowAppName]);
 
@@ -139,6 +148,7 @@ export default function ChildBenefitsClaim() {
     //     <PegaConnectObj {...props} />
     //   </Provider>
     // );
+
 
     const thePConnObj = <PegaConnectObj {...props} />;
 
@@ -292,19 +302,11 @@ export default function ChildBenefitsClaim() {
       <div id='pega-part-of-page'>
             <div id='pega-root'></div>
       </div>
-      { bShowTriplePlayOptions && (
-      <>
-        <div className="govuk-grid-column-two-thirds">
-            <h1 className='govuk-heading-l'>Your claim applications</h1>
-            <p className='govuk-body'>We're only listing your cases that need completing for information claims or applications that have been submitted. Use the contact information to speak with a Benefits Officer</p>
-            <ClaimsList data={inprogressClaims} title={'Claims In Progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
-            <ClaimsList data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
-        </div>
-        <div className="govuk-grid-column-one-third">
-          <StartPage onStart={startNow} />
-        </div>
-      </>)
-      }
+      { showStartPage && <StartPage onStart={startNow} />  }
+      { showUserPortal && <UserPortal beginClaim={beginClaim}>
+          <ClaimsList data={inprogressClaims} title={'Claims In Progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
+          <ClaimsList data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
+    </UserPortal>}
       {bShowResolutionScreen && <ConfirmationPage />}
 
     </>
