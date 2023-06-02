@@ -1,9 +1,11 @@
 import React from 'react';
 import DateFormatter from '../../../helpers/formatters/Date';
 
-export default function ClaimsList(props){
+declare const PCore: any;
 
-  const {data, options, title} = props;
+export default function ClaimsList(props){
+  console.log('props', props);
+  const { thePConn, data, options, title, rowClickAction } = props;
   const arRows = [];
 
   /* Property Resolver */
@@ -27,7 +29,6 @@ export default function ClaimsList(props){
 
   }
 
-  []
   const statusMapping = (status) => {
     switch(status){
       case 'Open-InProgress':
@@ -39,6 +40,37 @@ export default function ClaimsList(props){
       default:
         return {text:status, tagColour:'grey'};
     }
+  }
+
+  function openAssignment(row) {
+    const { pxRefObjectClass, pzInsKey } = row;
+    const sTarget = thePConn.getContainerName();
+
+    const options = { containerName: sTarget };
+    console.log("openAssignment");
+    thePConn
+      .getActionsApi()
+      .openAssignment(pzInsKey, pxRefObjectClass, options)
+      .then(() => {
+        console.log("openAssignment successful");
+      })
+      .catch(() => {
+        // console.log("openAssignment failed!");
+      });
+  }
+
+  function _rowClick(row: any) {
+    console.log(rowClickAction);
+    // eslint-disable-next-line sonarjs/no-small-switch
+    switch (rowClickAction) {
+      case 'openAssignment':
+        openAssignment(row);
+        break;
+
+      default:
+        break;
+    }
+    PCore.getMashupApi().openCase(row.pzInsKey, 'root/primary_1');
   }
 
 
@@ -55,49 +87,68 @@ export default function ClaimsList(props){
           <tr className='govuk-summary-list__row' key={row.pyID}>
             <td className='govuk-summary-card__content'>
               <div className='govuk-card govuk-grid-row'>
-                <div className='govuk-grid-column-two-thirds govuk-!-padding-0' >
-                  {options.map((field) => {
-
+                <div className='govuk-grid-column-two-thirds govuk-!-padding-0'>
+                  {options.map(field => {
                     const value = resolveProperty(row, field.name);
                     //Handle Name concatenation
-                    if(field.name.includes('FirstName')){
-                      let response = value? value : '';
+                    if (field.name.includes('FirstName')) {
+                      let response = value ? value : '';
 
-                      const lastNameResults = options.filter(field => field.name.includes('LastName'))
-                      if(lastNameResults.length > 0){
+                      const lastNameResults = options.filter(field =>
+                        field.name.includes('LastName')
+                      );
+                      if (lastNameResults.length > 0) {
                         const lastName = resolveProperty(row, lastNameResults[0].name);
                         response = response.concat(` ${lastName}`);
                       }
 
                       //placehodler for making name clickable link logic
-                      if(1){
-                        return (<div className='govuk-heading-m'><a>{response}</a></div>)
+                      if (1) {
+                        return (
+                          <div className='govuk-heading-m'>
+                            <a>{response}</a>
+                          </div>
+                        );
                       } else {
-                        return (<div>{response}</div>)
+                        return <div>{response}</div>;
                       }
                     }
                     //All other fields except for case status
-                    if(field.name !== 'pyStatusWork' && !field.name.includes('FirstName') && !field.name.includes('LastName')){
-                      if(field.type === 'Date'){
-                        return (<div>{DateFormatter.Date(value, {format:"DD MMMM YYYY"})}</div>)
-                      }
-                      else {
-                        return (<div>{value}</div>)
+                    if (
+                      field.name !== 'pyStatusWork' &&
+                      !field.name.includes('FirstName') &&
+                      !field.name.includes('LastName')
+                    ) {
+                      if (field.type === 'Date') {
+                        return <div>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
+                      } else {
+                        return <div>{value}</div>;
                       }
                     }
                   })}
+                  <button
+                    className='govuk-button govuk-button--secondary'
+                    data-module='govuk-button'
+                    type='button'
+                    onClick={() => {
+                      _rowClick(row);
+                    }}
+                  >
+                    View Claim
+                  </button>
                 </div>
                 <div className='govuk-grid-column-one-third govuk-!-padding-0'>
                   {/*Displays Case status*/}
-                  <strong className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour}`}>
+                  <strong
+                    className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour}`}
+                  >
                     {statusMapping(row.pyStatusWork).text}
                   </strong>
                 </div>
-
               </div>
             </td>
           </tr>
-        )
+        );
       })}
       </tbody>
     </table>

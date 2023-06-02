@@ -65,7 +65,7 @@ export default function ChildBenefitsClaim() {
 
     //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
 
-  }
+  }f
 
   function cancelAssignment() {
     setShowStartPage(true);
@@ -300,7 +300,7 @@ export default function ChildBenefitsClaim() {
   return (
     <>
       <div id='pega-part-of-page'>
-            <div id='pega-root'></div>
+        <div id='pega-root'></div>
       </div>
       { showStartPage && <StartPage onStart={startNow} />  }
       { showUserPortal && <UserPortal beginClaim={beginClaim}>
@@ -308,7 +308,6 @@ export default function ChildBenefitsClaim() {
           <ClaimsList data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
     </UserPortal>}
       {bShowResolutionScreen && <ConfirmationPage />}
-
     </>
   );
 }
