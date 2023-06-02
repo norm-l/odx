@@ -65,7 +65,7 @@ export default function ChildBenefitsClaim() {
 
     //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
 
-  }f
+  }
 
   function cancelAssignment() {
     setShowStartPage(true);
