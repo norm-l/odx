@@ -36,7 +36,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Radio } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import { filterData } from '../../templates/SimpleTable/helpers';
-import DateTimeFormatter from '../../../helpers/formatters/Date';
 import './ListView.css';
 
 const SELECTION_MODE = { SINGLE: 'single', MULTI: 'multi' };
@@ -60,7 +59,7 @@ const filterByColumns: Array<any> = [];
 
 export default function ListView(props) {
   const { getPConnect, bInForm } = props;
-  const { globalSearch, presets, referenceList, rowClickAction, selectionMode, referenceType, payload, parameters, compositeKeys, title } = props;
+  const { globalSearch, presets, referenceList, rowClickAction, selectionMode, referenceType, payload, parameters, compositeKeys } = props;
 
   const thePConn = getPConnect();
   const componentConfig = thePConn.getComponentConfig();
@@ -98,23 +97,6 @@ export default function ListView(props) {
   // dataview parameters coming from the ListPage
   // This constant will also be used for parameters coming from from other components/utility fnctions in future
   const dataViewParameters = parameters;
-
-
-
-  /* Property Resolver */
-  const resolveProperty = (source, propertyName) => {
-    if (!propertyName) { return '' };
-
-    let resolvedProperty = source;
-    const propertyNameSplit = propertyName.split('.');
-    propertyNameSplit.forEach(property => {
-      if(resolvedProperty){
-        resolvedProperty = resolvedProperty[property];
-      }
-    });
-    return resolvedProperty;
-
-  }
 
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -199,7 +181,6 @@ export default function ListView(props) {
       : (a, b) => -descendingComparator(a, b, orderedBy);
   }
 
-
   // eslint-disable-next-line no-unused-vars
   function stableSort<T>(array: Array<T>, comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
@@ -282,7 +263,7 @@ export default function ListView(props) {
       const row: any = {};
 
       theColumns.forEach(col => {
-        row[col.id] = resolveProperty(data, col.id);
+        row[col.id] = data[col.id];
       });
       row[rowID] = data[rowID];
       // for (const field of theColumns) {
@@ -323,7 +304,9 @@ export default function ListView(props) {
             if (!myFormat) {
               myFormat = 'Date';
             }
-            formattedDate = Utils.generateDate(rowData[fieldName], myFormat);
+            if(rowData[fieldName]){
+              formattedDate = Utils.generateDate(rowData[fieldName], myFormat);
+            }
 
             rowData[fieldName] = formattedDate;
             break;
@@ -634,7 +617,6 @@ export default function ListView(props) {
   }
 
   function _rowClick(row: any) {
-    console.log(rowClickAction);
     // eslint-disable-next-line sonarjs/no-small-switch
     switch (rowClickAction) {
       case 'openAssignment':
@@ -644,7 +626,6 @@ export default function ListView(props) {
       default:
         break;
     }
-    PCore.getMashupApi().openCase(row.pzInsKey, 'root/primary_1');
   }
 
   function openWork(row) {
@@ -865,12 +846,6 @@ export default function ListView(props) {
         }
         break;
 
-      case 'pyID':
-        if (pxRefObjectClass !== '' && pxRefObjectKey !== '') {
-          bReturn = true;
-        }
-        break;
-
       default:
         break;
     }
@@ -927,70 +902,6 @@ export default function ListView(props) {
       ?.getListActions()
       ?.setSelectedRows([{ [rowID]: value, $selected: checked }]);
   };
-
-   /* GALLERY VIEW CONFIG
-  */
- if(presets[0] && presets[0].template === 'Gallery'){
-   const preset = presets[0];
-  return (
-    <>
-    <h2 className='govuk-heading-l'>{title}</h2>
-    <table className='govuk-summary-list'>
-      <tbody>
-      {arRows.map(row => {
-        return (
-          <tr className='govuk-summary-list__row'>
-            <td className='govuk-summary-card__content'>
-              <div className='govuk-card govuk-grid-row'>
-                <div className='govuk-grid-column-two-thirds' >
-                  {preset.children[0].children.map((child) => {
-
-                    const value = row[child.config.name];
-                    //Handle Name concatenation
-                    if(child.config.name.includes('FirstName')){
-                      let response = value;
-
-                      const lastNameResults = preset.children[0].children.filter(child => child.config.name.includes('LastName'))
-                      if(lastNameResults.length > 0){
-                        const lastName = row[lastNameResults[0].config.name]
-                        response = response.concat(` ${lastName}`);
-                      }
-
-                      //placehodler for making name clickable link logic
-                      if(1){
-                        return (<div className='govuk-heading-m'><a>{response}</a></div>)
-                      } else {
-                        return (<div>{response}</div>)
-                      }
-                    }
-                    //All other fields except for case status
-                    if(child.config.name !== 'pyStatusWork' && !child.config.name.includes('FirstName') && !child.config.name.includes('LastName')){
-                      if(child.type === 'Date'){
-                        return (<div>{DateTimeFormatter['DateTime-Long'](value)}</div>)
-                      }
-                      else {
-                        return (<div>{value}</div>)
-                      }
-                    }
-                  })}
-                </div>
-                <div className='govuk-grid-column-one-third'>
-                  {/*Displays Case status*/}
-                  <strong className="govuk-tag govuk-tag--grey">
-                    {row.pyStatusWork}
-                  </strong>
-                </div>
-
-              </div>
-            </td>
-          </tr>
-        )
-      })}
-      </tbody>
-    </table>
-    </>
-  )
- }
 
   return (
     <>

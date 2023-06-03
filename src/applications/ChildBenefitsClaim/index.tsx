@@ -63,16 +63,17 @@ export default function ChildBenefitsClaim() {
     setShowPega(false);
     setShowResolutionScreen(true);
 
-    //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+    // PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
 
   }
 
   function cancelAssignment() {
-    setShowStartPage(true);
+    setShowStartPage(false);
+    setShowUserPortal(true);
     setShowPega(false);
     setShowResolutionScreen(false);
 
-    //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+    // PCore.getMashupApi().openPage('InProgressClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
   }
 
   function establishPCoreSubscriptions() {
@@ -93,20 +94,30 @@ export default function ChildBenefitsClaim() {
     );
 
     PCore.getPubSubUtils().subscribe(
-      PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
       () => {
-        console.log("assignment opened");
         setShowStartPage(false);
+        setShowUserPortal(false);
         setShowPega(true);
       },
       'continueAssignment'
     );
 
     PCore.getPubSubUtils().subscribe(
-      PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
       () => {
-        console.log("case opened");
         setShowStartPage(false);
+        setShowUserPortal(false);
+        setShowPega(true);
+      },
+      'continueAssignment'
+    );
+
+    PCore.getPubSubUtils().subscribe(
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
+      () => {
+        setShowStartPage(false);
+        setShowUserPortal(false);
         setShowPega(true);
       },
       'continueCase'
@@ -223,20 +234,30 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
       initialRender(renderObj);
-      //PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
+      const operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
+      PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root/primary', {OperatorId: operatorId} ).then(resp => setSubmittedClaims(resp.data.slice(0,10)))
 
-      PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root/primary_1', {OperatorId:'peter.maloney1@hmrc.gov.uk'} ).then(resp => setSubmittedClaims(resp.data.slice(0,10)))
-      PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignments', 'root/primary_1', {OperatorId:'peter.maloney1@hmrc.gov.uk'} ).then(resp => setInprogressClaims(resp.data.slice(0,10)))
+      let inProgressClaimsData : any = [];
+      PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root/primary', {OperatorId: operatorId} ).then(resp => {
+        resp = resp.data.slice(0,10);
+        inProgressClaimsData = resp;
+        Promise.all(resp.map((responseItem, index) => {
+          return PCore.getDataPageUtils().getPageDataAsync('D_Claim', 'root/primary', {pyID: responseItem.pxRefObjectInsName} ).then( caseData => {
 
+            const claimData =  inProgressClaimsData[index]
+            inProgressClaimsData[index] = { ...caseData, ...claimData }
+          })
 
-       });
+        })).then( () => setInprogressClaims(inProgressClaimsData)
+      )});
+    });
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
 
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
 
-  }
+    }
 
   // One time (initialization) subscriptions and related unsubscribe
   useEffect(() => {
@@ -304,8 +325,8 @@ export default function ChildBenefitsClaim() {
       </div>
       { showStartPage && <StartPage onStart={startNow} />  }
       { showUserPortal && <UserPortal beginClaim={beginClaim}>
-          <ClaimsList data={inprogressClaims} title={'Claims In Progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
-          <ClaimsList data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
+          <ClaimsList thePConn={pConn} data={inprogressClaims} title={'Claims In Progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
+          <ClaimsList thePConn={pConn} data={submittedClaims} title={'Submitted Claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]}/>
     </UserPortal>}
       {bShowResolutionScreen && <ConfirmationPage />}
     </>

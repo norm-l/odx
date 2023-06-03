@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Button from '../../components/BaseComponents/Button/Button';
 
 export default function UserPortal(props){
@@ -9,14 +9,14 @@ export default function UserPortal(props){
     <>
       <div className="govuk-grid-column-two-thirds">
           <h1 className='govuk-heading-l'>Your claim applications</h1>
-          <p className='govuk-body'>We're only listing your cases that need completing for information claims or applications that have been submitted. Use the contact information to speak with a Benefits Officer</p>
+          <p className='govuk-body'>We&apos;re only listing your cases that need completing for information claims or applications that have been submitted. Use the contact information to speak with a Benefits Officer</p>
           {children}
       </div>
       <div className="govuk-grid-column-one-third">
         <p className='govuk-body'>
           Call the Child Benefit helpline if you need to speak with us or use the chat
           <br/><br/>
-          You'll need:
+          You&apos;ll need:
           <li> National Insurance Number</li>
           <br/>
           <div className='govuk-details__text'>

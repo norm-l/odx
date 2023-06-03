@@ -4,9 +4,7 @@ import DateFormatter from '../../../helpers/formatters/Date';
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  console.log('props', props);
   const { thePConn, data, options, title, rowClickAction } = props;
-  const arRows = [];
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
@@ -44,14 +42,14 @@ export default function ClaimsList(props){
 
   function openAssignment(row) {
     const { pxRefObjectClass, pzInsKey } = row;
-    const sTarget = thePConn.getContainerName();
+    const sTarget = thePConn().getContainerName();
 
     const options = { containerName: sTarget };
-    console.log("openAssignment");
     thePConn
       .getActionsApi()
       .openAssignment(pzInsKey, pxRefObjectClass, options)
       .then(() => {
+        // eslint-disable-next-line no-console
         console.log("openAssignment successful");
       })
       .catch(() => {
@@ -60,7 +58,7 @@ export default function ClaimsList(props){
   }
 
   function _rowClick(row: any) {
-    console.log(rowClickAction);
+
     // eslint-disable-next-line sonarjs/no-small-switch
     switch (rowClickAction) {
       case 'openAssignment':
@@ -70,7 +68,13 @@ export default function ClaimsList(props){
       default:
         break;
     }
-    PCore.getMashupApi().openCase(row.pzInsKey, 'root/primary_1');
+    if(title === 'Submitted Claims'){
+      PCore.getMashupApi().openCase(row.pzInsKey, 'root/primary_1');
+
+    }
+    else {
+      PCore.getMashupApi().openAssignment(`${row.pzInsKey}`, "root");
+    }
   }
 
 
@@ -90,7 +94,7 @@ export default function ClaimsList(props){
                 <div className='govuk-grid-column-two-thirds govuk-!-padding-0'>
                   {options.map(field => {
                     const value = resolveProperty(row, field.name);
-                    //Handle Name concatenation
+                    // Handle Name concatenation
                     if (field.name.includes('FirstName')) {
                       let response = value ? value : '';
 
@@ -102,7 +106,7 @@ export default function ClaimsList(props){
                         response = response.concat(` ${lastName}`);
                       }
 
-                      //placehodler for making name clickable link logic
+                      // placehodler for making name clickable link logic
                       if (1) {
                         return (
                           <div className='govuk-heading-m'>
@@ -110,10 +114,10 @@ export default function ClaimsList(props){
                           </div>
                         );
                       } else {
-                        return <div>{response}</div>;
+                      return <div>{response}</div>;
                       }
                     }
-                    //All other fields except for case status
+                    // All other fields except for case status
                     if (
                       field.name !== 'pyStatusWork' &&
                       !field.name.includes('FirstName') &&
@@ -138,7 +142,7 @@ export default function ClaimsList(props){
                   </button>
                 </div>
                 <div className='govuk-grid-column-one-third govuk-!-padding-0'>
-                  {/*Displays Case status*/}
+                  {/* Displays Case status */}
                   <strong
                     className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour}`}
                   >
