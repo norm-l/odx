@@ -13,7 +13,7 @@ export default function UserPortal(props){
           {children}
       </div>
       <div className="govuk-grid-column-one-third">
-        <p className='govuk-body'>
+        <div className='govuk-body'>
           Call the Child Benefit helpline if you need to speak with us or use the chat
           <br/><br/>
           You&apos;ll need:
@@ -31,7 +31,7 @@ export default function UserPortal(props){
           <span className='govuk-heading-m'>Online</span>
           <a className='govuk-link'>Ask HMRC online</a>
 
-        </p>
+        </div>
         <Button onClick={beginClaim} variant={'start'}>Begin New Claim</Button>
       </div>
     </>)

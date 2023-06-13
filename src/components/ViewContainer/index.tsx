@@ -4,7 +4,7 @@ import { Box, CircularProgress } from "@material-ui/core";
 import createPConnectComponent from "../../bridge/react_pconnect";
 import StoreContext from "../../bridge/Context/StoreContext";
 import Utils from '../../helpers/utils';
-
+import BackLink from '../../components/BaseComponents/BackLink/BackLink';
 // ViewContainer can emit View
 // import View from '../View';
 
@@ -180,6 +180,17 @@ export default function ViewContainer(props) {
         setRootComponent(configObject);
         return (
           <React.Fragment key={theBuildName}>
+           {!PCore.getStore().getState().data[routingInfo.accessedOrder[0]].caseInfo.status.startsWith('Open') &&
+            <BackLink
+              onClick={e => {
+                        PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemName(`${pConn.getContextName()}/${pConn.getContainerName()}`));
+
+                      }}
+                      key={'closePreview'}
+                      attributes={{ type: 'link' }}
+                    >
+            </BackLink>
+      }
             {componentVisible && root}
             {loadingInfo && <Box textAlign="center"><CircularProgress /></Box>}
           </React.Fragment>

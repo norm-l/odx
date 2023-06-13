@@ -4,7 +4,7 @@ import DateFormatter from '../../../helpers/formatters/Date';
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, options, title, rowClickAction } = props;
+  const { thePConn, data, options, title, rowClickAction, loading } = props;
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
@@ -30,7 +30,7 @@ export default function ClaimsList(props){
   const statusMapping = (status) => {
     switch(status){
       case 'Open-InProgress':
-        return {text:'Incomplete', tagColour:'grey'};
+        return {text:'In Progress', tagColour:'grey'};
       case 'Pending-CBS':
         return {text:'Claim Received', tagColour:'blue'};
       case 'Resolved-Completed':
@@ -58,35 +58,37 @@ export default function ClaimsList(props){
   }
 
   function _rowClick(row: any) {
-
     // eslint-disable-next-line sonarjs/no-small-switch
-    switch (rowClickAction) {
-      case 'openAssignment':
-        openAssignment(row);
-        break;
+    const {pzInsKey} = row;
 
-      default:
-        break;
-    }
-    if(title === 'Submitted Claims'){
-      PCore.getMashupApi().openCase(row.pzInsKey, 'root/primary_1');
+    const container = thePConn.getContainerName();
+    const target = `root/${container}`;
+
+    const options = { containerName: container};
+
+    if(title === 'Submitted claims'){
+      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'});
 
     }
     else {
-      PCore.getMashupApi().openAssignment(`${row.pzInsKey}`, "root");
+      PCore.getMashupApi().openAssignment(pzInsKey, target, options);
     }
   }
 
 
   return (
     <>
-
     <table className='govuk-summary-list'>
       <thead>
-        <tr className='govuk-summary-list__row'><h2 className='govuk-heading-m'>{title}</h2></tr>
+        <tr className='govuk-summary-list__row govuk-table__cell, govuk-table__header'><th className='govuk-heading-m'>{title}</th></tr>
       </thead>
       <tbody>
-      {data.map(row => {
+
+      {loading ?
+        <h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2>
+      :
+      data.length > 0 ?
+      data.map(row => {
         return (
           <tr className='govuk-summary-list__row' key={row.pyID}>
             <td className='govuk-summary-card__content'>
@@ -105,17 +107,12 @@ export default function ClaimsList(props){
                         const lastName = resolveProperty(row, lastNameResults[0].name);
                         response = response.concat(` ${lastName}`);
                       }
-
-                      // placehodler for making name clickable link logic
-                      if (1) {
-                        return (
-                          <div className='govuk-heading-m'>
+                      return (
+                          <div className='govuk-heading-m' key={field.name}>
                             <a>{response}</a>
                           </div>
-                        );
-                      } else {
-                      return <div>{response}</div>;
-                      }
+                      );
+
                     }
                     // All other fields except for case status
                     if (
@@ -124,9 +121,9 @@ export default function ClaimsList(props){
                       !field.name.includes('LastName')
                     ) {
                       if (field.type === 'Date') {
-                        return <div>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
+                        return <div key={field.name}>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
                       } else {
-                        return <div>{value}</div>;
+                        return <div key={field.name}>{value}</div>;
                       }
                     }
                   })}
@@ -153,7 +150,7 @@ export default function ClaimsList(props){
             </td>
           </tr>
         );
-      })}
+      }) : <div className='govuk-body'>No {title.toLowerCase()}</div> }
       </tbody>
     </table>
     </>
