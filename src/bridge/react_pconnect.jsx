@@ -58,7 +58,7 @@ import ChangeLink from '../components/forms/ChangeLink';
 import Group from '../components/forms/Group';
 
 const connectRedux = (component, c11nEnv) => {
-  // console.log(`in connectRedux: ${component.name}`);
+
 
   return connect(
     (state, ownProps) => {
@@ -115,6 +115,7 @@ const connectRedux = (component, c11nEnv) => {
           // eslint-disable-next-line no-undef
           if (
             !shallowEqual(next[key], prev[key]) ||
+              // eslint-disable-next-line no-undef
             (next.routingInfo && !PCore.isDeepEqual(next.routingInfo, prev.routingInfo))
           ) {
             return false;
@@ -125,6 +126,7 @@ const connectRedux = (component, c11nEnv) => {
         if (
           'routingInfo' in next &&
           (!shallowEqual(next.routingInfo, prev.routingInfo) ||
+            // eslint-disable-next-line no-undef
             !PCore.isDeepEqual(next.routingInfo, prev.routingInfo))
         ) {
           return false;
