@@ -70,9 +70,9 @@ export default function ChildBenefitsClaim() {
 
   }
 
-  function mergeCaseData(inprogressClaims: any, data){
-    inprogressClaims.forEach( (claim, index)  => {
-      inprogressClaims[index] = { ...data[index], ...claim  };
+  function mergeCaseData(claimsData: any, data){
+    claimsData.forEach( (claim, index)  => {
+      claimsData[index] = { ...data[index], ...claim  };
     })
   };
 
@@ -87,21 +87,19 @@ export default function ChildBenefitsClaim() {
       let inProgressClaimsData : any = [];
       setLoadingInProgressClaims(true);
       PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root', {OperatorId: operatorId} ).then(resp => {
-        resp = resp.data.slice(0,10);
+        resp = resp.data.slice(0, 10);
         inProgressClaimsData = resp;
         Promise.all(resp.map((responseItem, index) => {
           return PCore.getDataPageUtils().getPageDataAsync('D_Claim', 'root', {pyID: responseItem.pxRefObjectInsName} ).then( caseData => {
             const claimData =  inProgressClaimsData[index]
             inProgressClaimsData[index] = { ...caseData, ...claimData }
           })
-
         })).then( () => setInprogressClaims(inProgressClaimsData)).finally(() => setLoadingInProgressClaims(false))
       });
   }
 
   function cancelAssignment() {
     PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
-    const operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
     let inProgressClaimsData : any = [];
       PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root', {OperatorId: operatorId} ).then(resp => {
         resp = resp.data.slice(0,10);
@@ -372,9 +370,11 @@ export default function ChildBenefitsClaim() {
       </div>
       { showStartPage && <StartPage onStart={startNow} />  }
       { showUserPortal && <UserPortal beginClaim={beginClaim}>
+        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        <ClaimsList thePConn={pConn} data={inprogressClaims} title='Claims in progress' options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]} loading={loadinginProgressClaims}/>
 
-          <ClaimsList thePConn={pConn} data={inprogressClaims} title={'Claims in progress'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]} loading={loadinginProgressClaims}/>
-          <ClaimsList thePConn={pConn} data={submittedClaims} title={'Submitted claims'} options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]} loading={loadingsubmittedClaims}/>
+        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        <ClaimsList thePConn={pConn} data={submittedClaims} title='Submitted claims' options={[{name:'Claim.Child.pyFirstName'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date'}, {name:'pyID'}]} loading={loadingsubmittedClaims}/>
 
     </UserPortal>}
       {bShowResolutionScreen && <ConfirmationPage />}

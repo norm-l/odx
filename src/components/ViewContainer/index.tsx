@@ -183,10 +183,11 @@ export default function ViewContainer(props) {
            {!PCore.getStore().getState().data[routingInfo.accessedOrder[0]].caseInfo.status.startsWith('Open') &&
             <BackLink
               onClick={e => {
+                        e.preventDefault();
                         PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemName(`${pConn.getContextName()}/${pConn.getContainerName()}`));
 
                       }}
-                      key={'closePreview'}
+                      key='closePreview'
                       attributes={{ type: 'link' }}
                     >
             </BackLink>

@@ -4,7 +4,11 @@ import DateFormatter from '../../../helpers/formatters/Date';
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, options, title, rowClickAction, loading } = props;
+  const { thePConn, data, options, title, loading } = props;
+
+  function isSubmittedClaim(){
+    return title==='Submitted claim';
+  }
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
@@ -40,38 +44,21 @@ export default function ClaimsList(props){
     }
   }
 
-  function openAssignment(row) {
-    const { pxRefObjectClass, pzInsKey } = row;
-    const sTarget = thePConn().getContainerName();
-
-    const options = { containerName: sTarget };
-    thePConn
-      .getActionsApi()
-      .openAssignment(pzInsKey, pxRefObjectClass, options)
-      .then(() => {
-        // eslint-disable-next-line no-console
-        console.log("openAssignment successful");
-      })
-      .catch(() => {
-        // console.log("openAssignment failed!");
-      });
-  }
 
   function _rowClick(row: any) {
-    // eslint-disable-next-line sonarjs/no-small-switch
     const {pzInsKey} = row;
 
     const container = thePConn.getContainerName();
     const target = `root/${container}`;
 
-    const options = { containerName: container};
 
-    if(title === 'Submitted claims'){
+    if(isSubmittedClaim()){
       PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'});
 
     }
     else {
-      PCore.getMashupApi().openAssignment(pzInsKey, target, options);
+      const openAssignmentOptions = { containerName: container};
+      PCore.getMashupApi().openAssignment(pzInsKey, target, openAssignmentOptions);
     }
   }
 
@@ -79,14 +66,11 @@ export default function ClaimsList(props){
   return (
     <>
     <table className='govuk-summary-list'>
-      <thead>
-        <tr className='govuk-summary-list__row govuk-table__cell, govuk-table__header'><th className='govuk-heading-m'>{title}</th></tr>
-      </thead>
+      <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
       <tbody>
 
-      {loading ?
-        <h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2>
-      :
+      {loading && <h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2>}
+      {!loading &&
       data.length > 0 ?
       data.map(row => {
         return (
@@ -98,10 +82,10 @@ export default function ClaimsList(props){
                     const value = resolveProperty(row, field.name);
                     // Handle Name concatenation
                     if (field.name.includes('FirstName')) {
-                      let response = value ? value : '';
+                      let response = value;
 
-                      const lastNameResults = options.filter(field =>
-                        field.name.includes('LastName')
+                      const lastNameResults = options.filter(_field =>
+                        _field.name.includes('LastName')
                       );
                       if (lastNameResults.length > 0) {
                         const lastName = resolveProperty(row, lastNameResults[0].name);
@@ -126,6 +110,7 @@ export default function ClaimsList(props){
                         return <div key={field.name}>{value}</div>;
                       }
                     }
+                    return null;
                   })}
                   <button
                     className='govuk-button govuk-button--secondary'
@@ -135,7 +120,7 @@ export default function ClaimsList(props){
                       _rowClick(row);
                     }}
                   >
-                    View Claim
+                    { isSubmittedClaim() ? <>View claim</> : <>Continue claim <span className="govuk-visually-hidden"> for {}</span></>}
                   </button>
                 </div>
                 <div className='govuk-grid-column-one-third govuk-!-padding-0'>
@@ -150,7 +135,12 @@ export default function ClaimsList(props){
             </td>
           </tr>
         );
-      }) : <div className='govuk-body'>No {title.toLowerCase()}</div> }
+      }) : <tr className="govuk-table__row">
+              <td>
+                No {title.toLowerCase()}
+              </td>
+            </tr>
+      }
       </tbody>
     </table>
     </>

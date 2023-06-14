@@ -6,7 +6,6 @@ import MultiStep from '../MultiStep';
 import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
-import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter';
 import BackLink from '../BaseComponents/BackLink/BackLink';
 
 export interface ErrorMessageDetails{
