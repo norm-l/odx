@@ -41,8 +41,6 @@ import Stages from '../components/Stages';
 import TextArea from '../components/forms/TextArea';
 import TextContent from '../components/forms/TextContent';
 import TextInput from '../components/forms/TextInput';
-import BackLink from '../components/BaseComponents/BackLink/BackLink';
-import Link from '../components/BaseComponents/Link/Link';
 import Time from '../components/forms/Time';
 import ToDo from '../components/ToDo';
 import URLComponent from '../components/forms/URL';
@@ -306,13 +304,7 @@ const getComponent = (c11nEnv, declarative) => {
         component = TextContent;
         break;
 
-      case 'BackLink':
-        component = BackLink;
-        break;
 
-      case 'Link':
-        component = Link;
-        break;
 
       case 'TextInput':
         component = TextInput;

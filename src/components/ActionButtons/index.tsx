@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../BaseComponents/Button/Button';
-import Link from '../BaseComponents/Link/Link';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress } = props;
@@ -13,8 +12,8 @@ export default function ActionButtons(props) {
   return (
     <>
       <div className='govuk-button-group govuk-!-padding-top-4'>
-        {arMainButtons.map(mButton => {
-          return mButton.name !== 'Hidden' ? (
+        {arMainButtons.map(mButton =>
+           mButton.name !== 'Hidden' ? (
             <Button
               variant='primary'
               onClick={e => {
@@ -26,8 +25,8 @@ export default function ActionButtons(props) {
             >
               {mButton.name}
             </Button>
-          ) : null;
-        })}
+          ) : null
+        )}
         {arSecondaryButtons.map(sButton =>
           sButton.actionID !== 'back' &&
           sButton.name !== 'Hidden' &&
@@ -51,16 +50,18 @@ export default function ActionButtons(props) {
           sButton.actionID !== 'back' &&
           sButton.name !== 'Hidden' &&
           sButton.name.indexOf('Save') !== -1 ? (
-            <div className='govuk-!-padding-top-4'> <Link
+            <Button
+            variant='link'
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(sButton.jsAction, 'secondary');
               }}
               key={sButton.actionID}
               attributes={{ type: 'link' }}
-            ></Link> </div>
+            >{sButton.name}</Button>
           ) : null
         )}
+
 
     </>
   );
