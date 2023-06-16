@@ -36,6 +36,25 @@ export default function Button(props) {
         </svg>
       </a>
     );
+  } else if (variant === 'link') {
+    return (
+      <div className='govuk-button-group'>
+        <a className='govuk-link govuk-!-padding-top-4' href='#' onClick={onClick} {...attributes}>
+          {children}
+        </a>
+      </div>
+    );
+  } else if (variant === 'backlink') {
+    return (
+      <a
+        href='#'
+        onClick={onClick}
+        {...attributes}
+        className='govuk-back-link govuk-!-margin-top-0 govuk-!-margin-bottom-8'
+      >
+        Back{children}
+      </a>
+    );
   }
 
   let buttonAttributes = {
@@ -57,7 +76,9 @@ export default function Button(props) {
 
   return (
     // eslint-disable-next-line react/button-has-type
-    <button {...buttonAttributes} onClick={onClick}>{children}</button>
+    <button {...buttonAttributes} onClick={onClick}>
+      {children}
+    </button>
   );
 }
 
@@ -68,5 +89,5 @@ Button.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   type: PropTypes.string,
   onClick: PropTypes.func,
-  attributes: PropTypes.object,
+  attributes: PropTypes.object
 };
