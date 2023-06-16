@@ -45,8 +45,9 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
-  const isOnlyOneField = useIsOnlyField(children);
-  const containerName = thePConn.getDataObject().caseInfo.assignments[0].name
+  const isOnlyOneField = useIsOnlyField();
+  const containerName = thePConn.getDataObject().caseInfo.assignments[0].name;
+
 
   function findCurrentIndicies(arStepperSteps: Array<any>, arIndicies: Array<number>, depth: number) : Array<number> {
 
@@ -183,7 +184,7 @@ export default function Assignment(props) {
   }
 
   function scrollToTop(){
-    const position = document.querySelector('h1')?.offsetTop || 0;
+    const position = document.getElementById('#main-content')?.offsetTop || 0;
     document.body.scrollTop = position;
     document.documentElement.scrollTop = position;
   }
@@ -352,30 +353,6 @@ export default function Assignment(props) {
     </div>
   );
 }
-
-// From WC SDK
-// const aHtml = html`
-// ${this.bHasNavigation?
-//   html`
-//     <div class="psdk-stepper">
-//     <multi-step-component .pConn=${this.pConn} .arChildren=${this.arChildren} itemKey=${this.itemKey}
-//         .arMainButtons=${this.arMainButtons} .arSecondaryButtons=${this.arSecondaryButtons}
-//         .bIsVertical=${this.bIsVertical} .arCurrentStepIndicies=${this.arCurrentStepIndicies}
-//         .arNavigationSteps=${this.arNavigationSteps}
-//         @MultiStepActionButtonClick="${this._onActionButtonClick}">
-//     </multi-step-component>
-//     <lit-toast></lit-toast>
-//     </div>`
-//     :
-//   html`
-//     <div>
-//         <assignment-card-component .pConn=${this.pConn} .arChildren=${this.arChildren} itemKey=${this.itemKey}
-//           .arMainButtons=${this.arMainButtons} .arSecondaryButtons=${this.arSecondaryButtons}
-//           @AssignmentActionButtonClick="${this._onActionButtonClick}">
-//         </assignment-card-component>
-//         <lit-toast></lit-toast>
-//     </div>`}
-// `;
 
 
 Assignment.propTypes = {

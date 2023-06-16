@@ -111,8 +111,9 @@ export default function ChildBenefitsClaim() {
   }
 
   function establishPCoreSubscriptions() {
+
     PCore.getPubSubUtils().subscribe(
-      'assignmentFinished',
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
       () => {
         assignmentFinished();
       },
@@ -345,7 +346,11 @@ export default function ChildBenefitsClaim() {
         'continueCase'
       );
 
-      PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished', 'closeContainer');
+      PCore?.getPubSubUtils().unsubscribe('closeContainer');
+      PCore?.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
+        'assignmentFinished'
+      );
     };
   }, []);
 
