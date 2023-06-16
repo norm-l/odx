@@ -8,7 +8,9 @@ export default function UserPortal(props){
   return (
     <>
       <div className="govuk-grid-column-two-thirds">
-          <h1 className='govuk-heading-l'>Your claim applications</h1>
+          <h1 className='govuk-heading-xl'>Your claim applications</h1>
+      </div>
+      <div className="govuk-grid-column-two-thirds">
           <p className='govuk-body'>We&apos;re only listing your cases that need completing for information claims or applications that have been submitted. Use the contact information to speak with a Benefits Officer</p>
           {children}
       </div>
@@ -33,7 +35,7 @@ export default function UserPortal(props){
 
         <span className='govuk-heading-m'>Online</span>
         <a className='govuk-link'>Ask HMRC online</a>
-        <Button onClick={beginClaim} variant='start'>Begin New Claim</Button>
+        <Button attributes={{className:'govuk-!-margin-top-4'}} onClick={beginClaim} variant='start'>Begin New Claim</Button>
       </div>
     </>)
 }

@@ -7,6 +7,7 @@ import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 import BackLink from '../BaseComponents/BackLink/BackLink';
+import {DateErrorFormatter} from '../../helpers/formatters/DateErrorFormatter';
 
 export interface ErrorMessageDetails{
   message:string,
@@ -127,7 +128,7 @@ export default function Assignment(props) {
     const fieldC11nEnv = o.fieldC11nEnv;
     const fieldStateProps = fieldC11nEnv.getStateProps();
     const fieldComponent = fieldC11nEnv.getComponent();
-    const validatemessage = PCore.getMessageManager().getMessages({
+    let validatemessage = PCore.getMessageManager().getMessages({
       property: fieldStateProps.value,
       pageReference: fieldC11nEnv.getPageReference(),
       context: containerID,
@@ -135,6 +136,8 @@ export default function Assignment(props) {
       })[0]?.message;
     if(validatemessage){
       const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
+      if(fieldC11nEnv.meta.type === 'Date')
+      validatemessage = DateErrorFormatter(validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label);
     acc.push({message:{
       message: validatemessage,
       fieldId},

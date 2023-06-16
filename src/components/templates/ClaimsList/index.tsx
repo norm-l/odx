@@ -1,14 +1,12 @@
 import React from 'react';
 import DateFormatter from '../../../helpers/formatters/Date';
+import Button from '../../../components/BaseComponents/Button/Button';
+import PropTypes from "prop-types";
 
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, options, title, loading } = props;
-
-  function isSubmittedClaim(){
-    return title==='Submitted claim';
-  }
+  const { thePConn, data, options, title, loading, rowClickAction, buttonContent} = props;
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
@@ -51,15 +49,93 @@ export default function ClaimsList(props){
     const container = thePConn.getContainerName();
     const target = `root/${container}`;
 
-
-    if(isSubmittedClaim()){
-      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'});
-
-    }
-    else {
+    if( rowClickAction === 'OpenAssignment'){
       const openAssignmentOptions = { containerName: container};
       PCore.getMashupApi().openAssignment(pzInsKey, target, openAssignmentOptions);
+    } else if ( rowClickAction === 'OpenCase'){
+      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'});
     }
+  }
+
+
+
+  let tableContent = <></>;
+
+  if(loading){
+    tableContent = <tr><td><h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2></td></tr>
+  }
+  else if( data.length > 0 ) {
+    tableContent = data.map(row => {
+      return (
+        <tr className='govuk-summary-list__row' key={row.pyID}>
+          <td className='govuk-card '>
+            <div className='govuk-summary-card__content govuk-grid-row'>
+              <div className='govuk-grid-column-two-thirds govuk-!-padding-0'>
+                {options.map(field => {
+                  const value = resolveProperty(row, field.name);
+                  // Handle Name concatenation
+                  if (field.name.includes('FirstName')) {
+                    let response = value;
+
+                    const lastNameResults = options.filter(_field =>
+                      _field.name.includes('LastName')
+                    );
+                    if (lastNameResults.length > 0) {
+                      const lastName = resolveProperty(row, lastNameResults[0].name);
+                      response = response.concat(` ${lastName}`);
+                    }
+                    return (
+                        <div className='govuk-heading-m' key={field.name} aria-label={field.label}>
+                          <a>{response}</a>
+                        </div>
+                    );
+
+                  }
+                  // All other fields except for case status
+                  if (
+                    field.name !== 'pyStatusWork' &&
+                    !field.name.includes('FirstName') &&
+                    !field.name.includes('LastName')
+                  ) {
+                    if (field.type === 'Date') {
+                      return <div key={field.name} aria-label={field.label}>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
+                    } else {
+                      return <div key={field.name} aria-label={field.label}>{value}</div>;
+                    }
+                  }
+                  return null;
+                })}
+              </div>
+              <div className='govuk-grid-column-one-third govuk-!-padding-0'>
+                {/* Displays Case status */}
+                <strong
+                  className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour} app-claimslist-tag`}
+                >
+                  {statusMapping(row.pyStatusWork).text}
+                </strong>
+              </div>
+              <div className='govuk-grid-column-two-thirds  govuk-!-padding-0'>
+              <Button
+                  attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
+                  variant='secondary'
+                  onClick={() => {
+                    _rowClick(row);
+                  }}
+                >
+                {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
+                </Button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      )})
+  }
+  else {
+    tableContent = <tr className="govuk-table__row">
+      <td>
+      <div  role="alert">No {title.toLowerCase()}</div>
+      </td>
+    </tr>
   }
 
 
@@ -68,82 +144,19 @@ export default function ClaimsList(props){
     <table className='govuk-summary-list'>
       <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
       <tbody>
-
-      {loading && <h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2>}
-      {!loading &&
-      data.length > 0 ?
-      data.map(row => {
-        return (
-          <tr className='govuk-summary-list__row' key={row.pyID}>
-            <td className='govuk-summary-card__content'>
-              <div className='govuk-card govuk-grid-row'>
-                <div className='govuk-grid-column-two-thirds govuk-!-padding-0'>
-                  {options.map(field => {
-                    const value = resolveProperty(row, field.name);
-                    // Handle Name concatenation
-                    if (field.name.includes('FirstName')) {
-                      let response = value;
-
-                      const lastNameResults = options.filter(_field =>
-                        _field.name.includes('LastName')
-                      );
-                      if (lastNameResults.length > 0) {
-                        const lastName = resolveProperty(row, lastNameResults[0].name);
-                        response = response.concat(` ${lastName}`);
-                      }
-                      return (
-                          <div className='govuk-heading-m' key={field.name}>
-                            <a>{response}</a>
-                          </div>
-                      );
-
-                    }
-                    // All other fields except for case status
-                    if (
-                      field.name !== 'pyStatusWork' &&
-                      !field.name.includes('FirstName') &&
-                      !field.name.includes('LastName')
-                    ) {
-                      if (field.type === 'Date') {
-                        return <div key={field.name}>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
-                      } else {
-                        return <div key={field.name}>{value}</div>;
-                      }
-                    }
-                    return null;
-                  })}
-                  <button
-                    className='govuk-button govuk-button--secondary'
-                    data-module='govuk-button'
-                    type='button'
-                    onClick={() => {
-                      _rowClick(row);
-                    }}
-                  >
-                    { isSubmittedClaim() ? <>View claim</> : <>Continue claim <span className="govuk-visually-hidden"> for {}</span></>}
-                  </button>
-                </div>
-                <div className='govuk-grid-column-one-third govuk-!-padding-0'>
-                  {/* Displays Case status */}
-                  <strong
-                    className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour}`}
-                  >
-                    {statusMapping(row.pyStatusWork).text}
-                  </strong>
-                </div>
-              </div>
-            </td>
-          </tr>
-        );
-      }) : <tr className="govuk-table__row">
-              <td>
-                No {title.toLowerCase()}
-              </td>
-            </tr>
-      }
+        {tableContent}
       </tbody>
     </table>
     </>
   )
+}
 
+ClaimsList.propTypes = {
+  thePConn: PropTypes.object,
+  data: PropTypes.array,
+  options: PropTypes.array,
+  title: PropTypes.string,
+  loading: PropTypes.bool,
+  rowClickAction: PropTypes.oneOf(["OpenCase","OpenAssignment"]),
+  buttonContent: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
 }

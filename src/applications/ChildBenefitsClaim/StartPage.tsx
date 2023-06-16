@@ -1,8 +1,13 @@
 import React from 'react'
 import Button from '../../components/BaseComponents/Button/Button'
+import BackLink from '../../components/BaseComponents/BackLink/BackLink'
 
-const StartPage: React.FC<{onStart: React.MouseEventHandler}> = ({onStart}) => {
+const StartPage: React.FC<{onStart: React.MouseEventHandler, onBack: any}> = ({onStart, onBack}) => {
   return (
+    <>
+      <div className='govuk-grid-column-two-thirds'>
+        <BackLink onClick={onBack}></BackLink>
+      </div>
       <div className='govuk-grid-column-two-thirds'>
         <h1 className='govuk-heading-xl'>Claim Child Benefit</h1>
         <p className='govuk-body'>
@@ -81,6 +86,8 @@ const StartPage: React.FC<{onStart: React.MouseEventHandler}> = ({onStart}) => {
           </a>
         </div>
       </div>
+
+      </>
   );
 }
 
