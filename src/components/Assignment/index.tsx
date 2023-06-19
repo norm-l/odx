@@ -118,6 +118,7 @@ export default function Assignment(props) {
 
   const _containerName =  getPConnect().getContainerName();
   function checkErrorMessages() {
+    let errorStateProps = [];
     const context = getPConnect().getContextName();
     const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
     errorStateProps = PCore.getFormUtils().getEditableFields(containerID).reduce( (acc, o) => {
@@ -284,7 +285,7 @@ export default function Assignment(props) {
         default:
           break;
       }
-      
+
     }
   }
   function _onButtonPress(sAction: string, sButtonType: string) {
