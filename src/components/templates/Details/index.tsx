@@ -16,7 +16,7 @@ export default function Details(props) {
 
   return( <>
     {label && context && <h1 className='govuk-heading-l'>{label}</h1>}
-     <DetailsFields fields={arFields[0]} />;
+     <DetailsFields fields={arFields[0]}/>
   </>)
 }
 

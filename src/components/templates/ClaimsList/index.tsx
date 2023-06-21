@@ -62,7 +62,7 @@ export default function ClaimsList(props){
   let tableContent = <></>;
 
   if(loading){
-    tableContent = <tr><td><h2 className='govuk-heading-m' aria-live="polite" role="status">Checking for claims...</h2></td></tr>
+    tableContent = <tr><td><h2 className='govuk-heading-m'>Checking for claims...</h2></td></tr>
   }
   else if( data.length > 0 ) {
     tableContent = data.map(row => {
@@ -141,7 +141,7 @@ export default function ClaimsList(props){
 
   return (
     <>
-    <table className='govuk-summary-list'>
+    <table className='govuk-summary-list' aria-live="polite" aria-busy={loading}>
       <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
       <tbody>
         {tableContent}
