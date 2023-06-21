@@ -141,7 +141,7 @@ export default function ClaimsList(props){
 
   return (
     <>
-    <table className='govuk-summary-list' aria-live="polite" aria-busy={loading}>
+    <table className='govuk-summary-list app-claimslist' aria-live="polite" aria-busy={loading}>
       <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
       <tbody>
         {tableContent}

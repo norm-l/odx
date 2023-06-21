@@ -6,3 +6,7 @@
     float:right;
   }
 }
+
+.app-claimslist .govuk-summary-list__row:last-child{
+  border-bottom: 0;
+}
