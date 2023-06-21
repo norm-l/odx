@@ -102,7 +102,7 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
-    //PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
+    // PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
