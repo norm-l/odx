@@ -102,7 +102,7 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
-    // PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
+    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
@@ -362,6 +362,7 @@ export default function ChildBenefitsClaim() {
       { showStartPage && <StartPage onStart={startNow} onBack={closeContainer}/>  }
       { showUserPortal && <UserPortal beginClaim={beginClaim}>
         <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        {/* !! NEEDS TRANSLATING  -- title & button content*/}
         <ClaimsList thePConn={pConn}
          data={inprogressClaims}
          title='Claims in progress'
@@ -381,13 +382,23 @@ export default function ChildBenefitsClaim() {
           }}
         />
         <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        {/* !! NEEDS TRANSLATING  -- title & button content */}
         <ClaimsList thePConn={pConn}
           data={submittedClaims}
           title='Submitted claims'
           options={[{name:'Claim.Child.pyFirstName', label:'Child\'s name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
           loading={loadingsubmittedClaims}
           rowClickAction="OpenCase"
-          buttonContent={<>View claim</>}
+          buttonContent={(rowData) => {
+            let buttonMetadata;
+            const firstName = rowData?.Claim?.Child?.pyFirstName;
+            const lastName = rowData?.Claim?.Child?.pyLastName;
+            if(firstName){
+              buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
+            }
+            return <>View claim {buttonMetadata && <span className="govuk-visually-hidden"> for {buttonMetadata}</span>}</>
+          }
+          }
         />
 
     </UserPortal>}
