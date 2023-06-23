@@ -80,7 +80,6 @@ export default function ChildBenefitsClaim() {
   // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
   // This funtion also sets 'isloading' value to true before making d_page calls, and sets it back to false after data claimed.
   function fetchInProgressClaimsData(){
-
     setLoadingInProgressClaims(true);
     let inProgressClaimsData : any = [];
     PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root', {OperatorId: operatorId} ).then(resp => {
@@ -102,7 +101,7 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
-    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'))
+    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'));
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
@@ -155,6 +154,15 @@ export default function ChildBenefitsClaim() {
       },
       'continueCase'
     );
+
+    PCore.getPubSubUtils().subscribe(
+      PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
+      () => {
+        cancelAssignment()
+      },
+      'savedCase'
+    );
+
 
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
