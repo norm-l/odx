@@ -2,6 +2,7 @@ import React from 'react';
 import DateFormatter from '../../../helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
+import { Utils } from '../../../helpers/utils';
 
 declare const PCore: any;
 
@@ -40,12 +41,6 @@ export default function ClaimsList(props){
       default:
         return {text:status, tagColour:'grey'};
     }
-  }
-
-  function scrollToTop() {
-    const position = document.getElementById('#main-content')?.offsetTop || 0;
-    document.body.scrollTop = position;
-    document.documentElement.scrollTop = position;
   }
 
   function _rowClick(row: any) {
@@ -125,7 +120,7 @@ export default function ClaimsList(props){
                   variant='secondary'
                   onClick={() => {
                     _rowClick(row);
-                    scrollToTop();
+                    Utils.scrollToTop();
                   }}
                 >
                 {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
