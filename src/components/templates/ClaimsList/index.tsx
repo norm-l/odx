@@ -42,6 +42,11 @@ export default function ClaimsList(props){
     }
   }
 
+  function scrollToTop() {
+    const position = document.getElementById('#main-content')?.offsetTop || 0;
+    document.body.scrollTop = position;
+    document.documentElement.scrollTop = position;
+  }
 
   function _rowClick(row: any) {
     const {pzInsKey} = row;
@@ -120,6 +125,7 @@ export default function ClaimsList(props){
                   variant='secondary'
                   onClick={() => {
                     _rowClick(row);
+                    scrollToTop();
                   }}
                 >
                 {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
