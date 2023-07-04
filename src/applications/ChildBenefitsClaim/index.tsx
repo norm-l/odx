@@ -82,22 +82,12 @@ export default function ChildBenefitsClaim() {
   function fetchInProgressClaimsData(){
     setLoadingInProgressClaims(true);
     let inProgressClaimsData : any = [];
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root', {OperatorId: operatorId} ).then(resp => {
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root').then(resp => {
       resp = resp.data.slice(0,10);
       inProgressClaimsData = resp;
-
-
-      const allclaimDetails = Promise.all(resp.map((responseItem) => {
-        return PCore.getDataPageUtils().getPageDataAsync('D_Claim', 'root', {pyID: responseItem.pxRefObjectInsName}, {
-          invalidateCache: true
-         })})).then(data => data);
-
-      allclaimDetails.then( (claims) => {
-        mergeCaseData(inProgressClaimsData, claims);
-        setInprogressClaims(inProgressClaimsData);
-        setLoadingInProgressClaims(false);
-      }
-    )});
+      setInprogressClaims(inProgressClaimsData);
+      setLoadingInProgressClaims(false);
+    });
   }
 
   function cancelAssignment() {
