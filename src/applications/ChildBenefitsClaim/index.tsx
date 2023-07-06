@@ -62,12 +62,6 @@ export default function ChildBenefitsClaim() {
 
   }
 
-  function mergeCaseData(claimsData: any, data){
-    claimsData.forEach( (claim, index)  => {
-      claimsData[index] = { ...data[index], ...claim  };
-    })
-  };
-
   function closeContainer(){
     setShowPega(false);
     setShowStartPage(false);
