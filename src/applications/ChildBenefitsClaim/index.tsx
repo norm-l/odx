@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import StoreContext from "../../bridge/Context/StoreContext";
-import createPConnectComponent from "../../bridge/react_pconnect";
+import StoreContext from '../../bridge/Context/StoreContext';
+import createPConnectComponent from '../../bridge/react_pconnect';
 
-import { gbLoggedIn, loginIfNecessary, sdkSetAuthHeader } from '../../helpers/authManager';
+import { gbLoggedIn, loginIfNecessary, logout, sdkSetAuthHeader } from '../../helpers/authManager';
 
 import { compareSdkPCoreVersions } from '../../helpers/versionHelpers';
 import { getSdkConfig } from '../../helpers/config_access';
@@ -12,7 +12,7 @@ import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
-
+import LogoutPopup from '../../components/forms/LogoutPopup';
 // declare var gbLoggedIn: boolean;
 // declare var login: Function;
 // declare var logout: Function;
@@ -20,12 +20,12 @@ import ClaimsList from '../../components/templates/ClaimsList';
 declare const PCore: any;
 declare const myLoadMashup: any;
 
-
 export default function ChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
   const [showStartPage, setShowStartPage] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(true);
+  const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
@@ -59,49 +59,70 @@ export default function ChildBenefitsClaim() {
     setShowResolutionScreen(true);
 
     // PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
-
   }
 
-  function mergeCaseData(claimsData: any, data){
-    claimsData.forEach( (claim, index)  => {
-      claimsData[index] = { ...data[index], ...claim  };
-    })
-  };
+  function mergeCaseData(claimsData: any, data) {
+    claimsData.forEach((claim, index) => {
+      claimsData[index] = { ...data[index], ...claim };
+    });
+  }
 
-  function closeContainer(){
+  function closeContainer() {
     setShowPega(false);
     setShowStartPage(false);
     setShowUserPortal(true);
     setShowResolutionScreen(false);
   }
+  let el: any = document.getElementById('signout-btn');
+  el.onclick = handleSignout;
 
+  function handleSignout() {
+    if (bShowPega) {
+      console.log('setshowmodal');
+      setShowSignoutModal(true);
+      console.log('setShowSignoutModal', showSignoutModal);
+    } else {
+      logout();
+    }
+  }
 
   // Calls data page to fetch in progress claims, then for each result (limited to first 10), calls D_Claim to get extra details about each 'assignment'
   // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
   // This funtion also sets 'isloading' value to true before making d_page calls, and sets it back to false after data claimed.
-  function fetchInProgressClaimsData(){
+  function fetchInProgressClaimsData() {
     setLoadingInProgressClaims(true);
-    let inProgressClaimsData : any = [];
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantChBAssignmentList', 'root', {OperatorId: operatorId} ).then(resp => {
-      resp = resp.data.slice(0,10);
-      inProgressClaimsData = resp;
+    let inProgressClaimsData: any = [];
+    PCore.getDataPageUtils()
+      .getDataAsync('D_ClaimantChBAssignmentList', 'root', { OperatorId: operatorId })
+      .then(resp => {
+        resp = resp.data.slice(0, 10);
+        inProgressClaimsData = resp;
 
+        const allclaimDetails = Promise.all(
+          resp.map(responseItem => {
+            return PCore.getDataPageUtils().getPageDataAsync(
+              'D_Claim',
+              'root',
+              { pyID: responseItem.pxRefObjectInsName },
+              {
+                invalidateCache: true
+              }
+            );
+          })
+        ).then(data => data);
 
-      const allclaimDetails = Promise.all(resp.map((responseItem) => {
-        return PCore.getDataPageUtils().getPageDataAsync('D_Claim', 'root', {pyID: responseItem.pxRefObjectInsName}, {
-          invalidateCache: true
-         })})).then(data => data);
-
-      allclaimDetails.then( (claims) => {
-        mergeCaseData(inProgressClaimsData, claims);
-        setInprogressClaims(inProgressClaimsData);
-        setLoadingInProgressClaims(false);
-      }
-    )});
+        allclaimDetails.then(claims => {
+          mergeCaseData(inProgressClaimsData, claims);
+          setInprogressClaims(inProgressClaimsData);
+          setLoadingInProgressClaims(false);
+        });
+      });
   }
 
   function cancelAssignment() {
-    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'));
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('root/primary')
+    );
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
@@ -110,7 +131,6 @@ export default function ChildBenefitsClaim() {
   }
 
   function establishPCoreSubscriptions() {
-
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
       () => {
@@ -158,11 +178,10 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
       () => {
-        cancelAssignment()
+        cancelAssignment();
       },
       'savedCase'
     );
-
 
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
@@ -210,7 +229,6 @@ export default function ChildBenefitsClaim() {
     //     <PegaConnectObj {...props} />
     //   </Provider>
     // );
-
 
     const thePConnObj = <PegaConnectObj {...props} />;
 
@@ -285,19 +303,20 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
       initialRender(renderObj);
-      operatorId = (PCore.getEnvironmentInfo().getOperatorIdentifier());
+      operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
       setLoadingSubmittedClaims(true);
-      PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root', {OperatorId: operatorId} ).then(resp => setSubmittedClaims(resp.data.slice(0,10))).finally(()=>setLoadingSubmittedClaims(false));
+      PCore.getDataPageUtils()
+        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
+        .then(resp => setSubmittedClaims(resp.data.slice(0, 10)))
+        .finally(() => setLoadingSubmittedClaims(false));
       fetchInProgressClaimsData();
-
     });
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
 
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
-
-    }
+  }
 
   // One time (initialization) subscriptions and related unsubscribe
   useEffect(() => {
@@ -367,49 +386,74 @@ export default function ChildBenefitsClaim() {
       <div id='pega-part-of-page'>
         <div id='pega-root'></div>
       </div>
-      { showStartPage && <StartPage onStart={startNow} onBack={closeContainer}/>  }
-      { showUserPortal && <UserPortal beginClaim={beginClaim}>
-        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
-        { /* !! NEEDS TRANSLATING  -- title & button content */ }
-        <ClaimsList thePConn={pConn}
-         data={inprogressClaims}
-         title='Claims in progress'
-         options={[{name:'Claim.Child.pyFirstName', label:'Childs\' name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
-         loading={loadinginProgressClaims}
-         rowClickAction="OpenAssignment"
-         buttonContent={(rowData) => {
-          let buttonMetadata = 'a new child';
-          const firstName = rowData?.Claim?.Child?.pyFirstName;
-          const lastName = rowData?.Claim?.Child?.pyLastName;
-          if(firstName){
-            buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-          }
-          return (
-           <>Continue claim <span className="govuk-visually-hidden"> for {buttonMetadata}</span></>
-           )
-          }}
-        />
-        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
-        {/* !! NEEDS TRANSLATING  -- title & button content */}
-        <ClaimsList thePConn={pConn}
-          data={submittedClaims}
-          title='Submitted claims'
-          options={[{name:'Claim.Child.pyFirstName', label:'Child\'s name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
-          loading={loadingsubmittedClaims}
-          rowClickAction="OpenCase"
-          buttonContent={(rowData) => {
-            let buttonMetadata;
-            const firstName = rowData?.Claim?.Child?.pyFirstName;
-            const lastName = rowData?.Claim?.Child?.pyLastName;
-            if(firstName){
-              buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-            }
-            return <>View claim {buttonMetadata && <span className="govuk-visually-hidden"> for {buttonMetadata}</span>}</>
-          }
-          }
-        />
-
-    </UserPortal>}
+      <LogoutPopup show={showSignoutModal} hideModal={() => setShowSignoutModal(false)} />
+      {showStartPage && <StartPage onStart={startNow} onBack={closeContainer} />}
+      {showUserPortal && (
+        <UserPortal beginClaim={beginClaim}>
+          <hr className='govuk-section-break govuk-section-break--m govuk-section-break--visible'></hr>
+          {/* !! NEEDS TRANSLATING  -- title & button content */}
+          <ClaimsList
+            thePConn={pConn}
+            data={inprogressClaims}
+            title='Claims in progress'
+            options={[
+              { name: 'Claim.Child.pyFirstName', label: "Childs' name" },
+              { name: 'Claim.Child.pyLastName' },
+              { name: 'pyStatusWork' },
+              { name: 'pxCreateDateTime', type: 'Date', label: 'claim created date' },
+              { name: 'pyID', label: 'claim reference' }
+            ]}
+            loading={loadinginProgressClaims}
+            rowClickAction='OpenAssignment'
+            buttonContent={rowData => {
+              let buttonMetadata = 'a new child';
+              const firstName = rowData?.Claim?.Child?.pyFirstName;
+              const lastName = rowData?.Claim?.Child?.pyLastName;
+              if (firstName) {
+                buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
+              }
+              return (
+                <>
+                  Continue claim{' '}
+                  <span className='govuk-visually-hidden'> for {buttonMetadata}</span>
+                </>
+              );
+            }}
+          />
+          <hr className='govuk-section-break govuk-section-break--m govuk-section-break--visible'></hr>
+          {/* !! NEEDS TRANSLATING  -- title & button content */}
+          <ClaimsList
+            thePConn={pConn}
+            data={submittedClaims}
+            title='Submitted claims'
+            options={[
+              { name: 'Claim.Child.pyFirstName', label: "Child's name" },
+              { name: 'Claim.Child.pyLastName' },
+              { name: 'pyStatusWork' },
+              { name: 'pxCreateDateTime', type: 'Date', label: 'claim created date' },
+              { name: 'pyID', label: 'claim reference' }
+            ]}
+            loading={loadingsubmittedClaims}
+            rowClickAction='OpenCase'
+            buttonContent={rowData => {
+              let buttonMetadata;
+              const firstName = rowData?.Claim?.Child?.pyFirstName;
+              const lastName = rowData?.Claim?.Child?.pyLastName;
+              if (firstName) {
+                buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
+              }
+              return (
+                <>
+                  View claim{' '}
+                  {buttonMetadata && (
+                    <span className='govuk-visually-hidden'> for {buttonMetadata}</span>
+                  )}
+                </>
+              );
+            }}
+          />
+        </UserPortal>
+      )}
       {bShowResolutionScreen && <ConfirmationPage />}
     </>
   );

@@ -583,6 +583,9 @@ export const logout = () => {
   });
 };
 
+// let el = document.getElementById('signout-btn');
+// el.onclick = logout;
+
 // Callback routine for custom event to ask for updated tokens
 export const authUpdateTokens = (token) => {
   processTokenOnLogin( token );
