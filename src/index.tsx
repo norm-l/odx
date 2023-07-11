@@ -12,10 +12,14 @@ if (outletElement) {
   const root = createRoot(outletElement);
   root.render(
     <>
-    <LanguageToggle />
-    <BrowserRouter>
-      <TopLevelApp />
-      </BrowserRouter>
+      <LanguageToggle />
+      <main className="govuk-main-wrapper " id="main-content" role="main">
+        <div className="govuk-grid-row">
+          <BrowserRouter>
+            <TopLevelApp />
+          </BrowserRouter>
+        </div>
+      </main>
     </>
   );
 }

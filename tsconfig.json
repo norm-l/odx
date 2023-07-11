@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "experimentalDecorators": true,
-    "strict": true,
+    "strict": false,
     "sourceMap": true,
     "module": "es2020",
     "target": "es2020",
@@ -12,6 +12,13 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/i18next/index.d.ts"
+  ]
 }
