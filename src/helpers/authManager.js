@@ -585,7 +585,6 @@ export const logout = () => {
 
 const signOutAndRedirect = () => {
   logout().then(()=> {
-    console.log('logging out');
     window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
   })
 }
