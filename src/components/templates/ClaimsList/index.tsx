@@ -52,12 +52,16 @@ export default function ClaimsList(props){
     if( rowClickAction === 'OpenAssignment'){
       const openAssignmentOptions = { containerName: container};
       PCore.getMashupApi().openAssignment(pyAssignmentID, target, openAssignmentOptions);
+      .then(()=>{
+        Utils.scrollToTop();
+      });
     } else if ( rowClickAction === 'OpenCase'){
-      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'});
+      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'})
+      .then(()=>{
+        Utils.scrollToTop();
+      });
     }
   }
-
-
 
   let tableContent = <></>;
 
@@ -120,7 +124,6 @@ export default function ClaimsList(props){
                   variant='secondary'
                   onClick={() => {
                     _rowClick(row);
-                    Utils.scrollToTop();
                   }}
                 >
                 {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
