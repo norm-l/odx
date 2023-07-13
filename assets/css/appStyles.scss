@@ -1,7 +1,7 @@
-@import "node_modules/govuk-frontend/govuk/settings/_media-queries";
-@import "node_modules/govuk-frontend/govuk/helpers/_media-queries";
+@import "../../node_modules/govuk-frontend/govuk/all";
+@import "../../node_modules/hmrc-frontend/hmrc/hmrc-frontend-5.39.0.min.css";
 
-.app-claimslist-tag{
+.app-claimslist-tag {
   @include govuk-media-query($from: tablet){
     float:right;
   }
