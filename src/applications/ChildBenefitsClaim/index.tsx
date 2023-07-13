@@ -73,7 +73,8 @@ export default function ChildBenefitsClaim() {
     });
   }
 
-  function closeContainer() {
+
+  function closeContainer(){
     setShowPega(false);
     setShowStartPage(false);
     setShowUserPortal(true);
@@ -106,7 +107,7 @@ export default function ChildBenefitsClaim() {
   // This funtion also sets 'isloading' value to true before making d_page calls, and sets it back to false after data claimed.
   function fetchInProgressClaimsData() {
     setLoadingInProgressClaims(true);
-    let inProgressClaimsData: any = [];
+   // let inProgressClaimsData: any = [];
     PCore.getDataPageUtils()
       .getDataAsync('D_ClaimantChBAssignmentList', 'root', { OperatorId: operatorId })
       .then(resp => {
@@ -132,6 +133,13 @@ export default function ChildBenefitsClaim() {
           setLoadingInProgressClaims(false);
         });
       });
+    let inProgressClaimsData : any = [];
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root').then(resp => {
+      resp = resp.data.slice(0,10);
+      inProgressClaimsData = resp;
+      setInprogressClaims(inProgressClaimsData);
+      setLoadingInProgressClaims(false);
+    });
   }
 
   function cancelAssignment() {
