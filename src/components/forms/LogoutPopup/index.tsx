@@ -9,7 +9,7 @@ export default function LogoutPopup(props) {
   return (
     <Modal show={props.show} handleClose={hideModal}>
       <div>
-        <h1 id='govuk-timeout-heading'>You’re about to signed out</h1>
+        <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>You’re about to signed out</h1>
         <p className='govuk-body' aria-hidden='true'>
           You still need to save your progress. If you sign out without saving, your progress will
           be lost.
