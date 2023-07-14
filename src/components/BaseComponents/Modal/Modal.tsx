@@ -15,7 +15,7 @@ export default function Modal(props) {
         <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true'>
           <section>
             <a
-              className='govuk-link modal'
+              className='govuk-link signout-modal'
               href='#'
               onClick={handleClose}
 
