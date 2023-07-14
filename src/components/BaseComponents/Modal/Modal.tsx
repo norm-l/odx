@@ -11,9 +11,8 @@ export default function Modal(props) {
     show && (
       <>
         <div className='hmrc-timeout-overlay'></div>
-        <div className={showHideClassName} tabIndex={-1} role="dialog" aria-modal="true" >
+        <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true'>
           <section>
-            {' '}
             <a
               className='govuk-link '
               href='#'
