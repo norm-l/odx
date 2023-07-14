@@ -268,6 +268,7 @@ const constellationInit = (authConfig, tokenInfo, authTokenUpdated, fnReauth) =>
     window.myLoadMashup = bootstrapShell.loadMashup;
     window.myLoadPortal = bootstrapShell.loadPortal;
     window.myLoadDefaultPortal = bootstrapShell.loadDefaultPortal;
+    window.myUpdateLocale = bootstrapShell.updateLocale;
 
     bootstrapShell.bootstrapWithAuthHeader(constellationBootConfig, 'shell').then(() => {
       // eslint-disable-next-line no-console

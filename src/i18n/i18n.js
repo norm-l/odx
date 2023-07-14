@@ -16,12 +16,12 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    lng: 'en',
+    lng: sessionStorage.getItem('rsdk_locale') || 'en-GB',
     backend: {
       /* translation file path */
       loadPath: '/assets/i18n/{{lng}}.json'
     },
-    fallbackLng: 'en',
+    fallbackLng: 'en-GB',
     debug: true,
     /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
     /* ns: ['ChB'],
