@@ -584,6 +584,15 @@ export const logout = () => {
   });
 };
 
+const signOutAndRedirect = () => {
+  logout().then(()=> {
+    window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+  })
+}
+
+const el = document.getElementById('signout-btn');
+el.onclick = signOutAndRedirect;
+
 // Callback routine for custom event to ask for updated tokens
 export const authUpdateTokens = (token) => {
   processTokenOnLogin( token );
