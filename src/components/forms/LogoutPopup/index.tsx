@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from '../../BaseComponents/Modal/Modal';
+import Button from '../../BaseComponents/Button/Button';
 
 export default function LogoutPopup(props) {
   const { hideModal, handleSignoutModal, handleStaySignIn } = props;
@@ -19,14 +20,14 @@ export default function LogoutPopup(props) {
           To save your progress, select the &apos;Save and come back later&apos; link.
         </p>
         <div className='govuk-button-group govuk-!-padding-top-4'>
-          <button
+          <Button
             type="button"
             id='modal-signout-btn'
-            className='govuk-button govuk-button--warning'
+            attributes={{className:'govuk-button govuk-button--warning'}}
             onClick={handleSignoutModal}
           >
             Sign out
-          </button>
+          </Button>
 
           <a id='modal-staysignin-btn' className='govuk-link ' href='#' onClick={handleStaySignIn}>
             Stay signed in

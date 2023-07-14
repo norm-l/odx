@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../../../../assets/css/appStyles.scss';
 
 export default function Modal(props) {
   const { handleClose, show, children } = props;
@@ -14,14 +15,10 @@ export default function Modal(props) {
         <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true'>
           <section>
             <a
-              className='govuk-link '
+              className='govuk-link modal'
               href='#'
               onClick={handleClose}
-              style={{
-                position: 'absolute',
-                top: '10%',
-                left: '88%'
-              }}
+
             >
               Close
             </a>
