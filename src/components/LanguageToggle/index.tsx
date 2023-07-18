@@ -18,7 +18,7 @@ const LanguageToggle = () => {
   };
 
   return (
-    <nav className='hmrc-language-select' aria-label='Language switcher'>
+    <nav id='hmrc-language-toggle' className='hmrc-language-select' aria-label='Language switcher'>
       <ul className='hmrc-language-select__list'>
         <li className='hmrc-language-select__list-item'>
           {selectedLang === 'en' ? (
