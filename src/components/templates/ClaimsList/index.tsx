@@ -4,12 +4,12 @@ import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
 import { Utils } from '../../../helpers/utils';
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
 
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, options, title, loading, rowClickAction, buttonContent} = props;
+  const { thePConn, data, options, title, loading, rowClickAction, buttonContent } = props;
+  const { t } = useTranslation();
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {

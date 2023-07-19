@@ -1,12 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
 
 const ConfirmationPage = () => {
   // const getPConnect = props;
   // const pConn = getPConnect();
   // const caseId = pConn.getCaseInfo().getID();
   // const caseId = PCore.caseId
+
+  const { t } = useTranslation();
 
   return (
     <div className='govuk-grid-column-two-thirds'>

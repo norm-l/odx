@@ -37,7 +37,7 @@ export default function UserPortal(props) {
           onClick={beginClaim}
           variant='start'
         >
-          {t('BEGIN_NEW_CLAIM')}{' '}
+          {t('BEGIN_NEW_CLAIM')}
         </Button>
       </div>
     </>

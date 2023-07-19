@@ -15,8 +15,6 @@ import ClaimsList from '../../components/templates/ClaimsList';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
 import LogoutPopup from '../../components/forms/LogoutPopup';
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
-
 
 // declare var gbLoggedIn: boolean;
 // declare var login: Function;
@@ -24,7 +22,6 @@ const { t } = useTranslation();
 
 declare const PCore: any;
 declare const myLoadMashup: any;
-
 
 export default function ChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -36,6 +33,7 @@ export default function ChildBenefitsClaim() {
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const { t } = useTranslation();
   let operatorId = '';
 
   useEffect(()=> {
