@@ -53,5 +53,13 @@
   "YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS": "You still need to save your progress. If you sign out without saving, your progress will be lost.",
   "TO_SAVE_YOUR_PROGRESS": "To save your progress, select the 'Save and come back later' link.",
   "SIGN-OUT": "Sign out",
-  "STAY_siGNED_IN": "Stay signed in"
+  "STAY_siGNED_IN": "Stay signed in",
+  "A_DAY": "a day",
+  "AND_A_MONTH": "and a month",
+  "A_MONTH": "a month",
+  "AND_A_YEAR": "and a year",
+  "A_YEAR":"a year",
+  "MUST_INCLUDE": "must include",
+  "MUST_BE_A_REAL_DATE": "must be a real date",
+  "IS_NOT_A_VALID_DATE": "is not a valid date"
 }

@@ -10,6 +10,8 @@ import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
 import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter';
 import Button from '../BaseComponents/Button/Button';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
+import { useTranslation } from 'react-i18next';
+const { t } = useTranslation();
 
 export interface ErrorMessageDetails {
   message: string;
@@ -143,7 +145,7 @@ export default function Assignment(props) {
       const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
       if(fieldC11nEnv.meta.type === 'Date')
       validatemessage = DateErrorFormatter(validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label);
-    acc.push({message:{
+      acc.push({message:{
       message: validatemessage,
       fieldId},
       displayOrder:fieldComponent.props.displayOrder});

@@ -17,7 +17,7 @@ export default function LogoutPopup(props) {
         {t("YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS")}
         </p>
         <p className='govuk-body' aria-hidden='true'>
-        {t("TO_SAVE_YOUR_PROGRESS")} "TO_SAVE_YOUR_PROGRESS"
+        {t("TO_SAVE_YOUR_PROGRESS")}
         </p>
         <div className='govuk-button-group govuk-!-padding-top-4'>
           <Button
