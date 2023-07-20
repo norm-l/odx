@@ -30,7 +30,7 @@ export default function LogoutPopup(props) {
           </Button>
 
           <a id='modal-staysignin-btn' className='govuk-link ' href='#' onClick={handleStaySignIn}>
-            {t("STAY_siGNED_IN")}
+            {t("STAY_SIGNED_IN")}
           </a>
         </div>
       </div>
