@@ -38,6 +38,6 @@ export const DateErrorFormatter = (t,message, propertyName) => {
   return _DateErrorFormattert(t,message, propertyName).message;
 };
 
-export const DateErrorTargetFields = message => {
-  return _DateErrorFormatter(message, null).targets;
+export const DateErrorTargetFields = (t,message) => {
+  return _DateErrorFormatter(t,message, null).targets;
 };

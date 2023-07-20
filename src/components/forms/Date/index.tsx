@@ -6,6 +6,7 @@ import {
   DateErrorFormatter,
   DateErrorTargetFields
 } from '../../../helpers/formatters/DateErrorFormatter';
+import { useTranslation } from 'react-i18next';
 import handleEvent from '../../../helpers/event-utils';
 
 declare const global;
@@ -22,6 +23,7 @@ export default function Date(props) {
     testId
   } = props;
   const pConn = getPConnect();
+  const { t } = useTranslation();
 
   const isOnlyField = useIsOnlyField();
 
@@ -66,7 +68,7 @@ export default function Date(props) {
         )
       );
 
-      const errorTargets = DateErrorTargetFields(validatemessage);
+      const errorTargets = DateErrorTargetFields(t,validatemessage);
       let specificError: any = null;
       if (errorTargets.length > 0)
         specificError = {

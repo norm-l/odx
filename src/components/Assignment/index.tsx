@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import AssignmentCard from '../AssignmentCard';
 import MultiStep from '../MultiStep';
-import {Utils} from '../../helpers/utils';
+import { Utils } from '../../helpers/utils';
 import useIsOnlyField from '../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../BaseComponents/ErrorSummary/ErrorSummary';
@@ -11,7 +11,6 @@ import { DateErrorFormatter } from '../../helpers/formatters/DateErrorFormatter'
 import Button from '../BaseComponents/Button/Button';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
 
 export interface ErrorMessageDetails {
   message: string;
@@ -50,10 +49,11 @@ export default function Assignment(props) {
 
   const isOnlyOneField = useIsOnlyField();
   const containerName = thePConn.getDataObject().caseInfo.assignments[0].name;
+  const { t } = useTranslation();
 
   useEffect(() => {
     setPageTitle();
-  },[children])
+  }, [children]);
 
   function findCurrentIndicies(
     arStepperSteps: Array<any>,
@@ -124,36 +124,47 @@ export default function Assignment(props) {
     }
   }, [children]);
 
-  const _containerName =  getPConnect().getContainerName();
+  const _containerName = getPConnect().getContainerName();
   function checkErrorMessages() {
     let errorStateProps = [];
     const context = getPConnect().getContextName();
-    const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
-    errorStateProps = PCore.getFormUtils().getEditableFields(containerID).reduce( (acc, o) => {
+    const containerID = PCore.getContainerUtils()
+      .getContainerAccessOrder(`${context}/${_containerName}`)
+      .at(-1);
+    errorStateProps = PCore.getFormUtils()
+      .getEditableFields(containerID)
+      .reduce((acc, o) => {
+        const fieldC11nEnv = o.fieldC11nEnv;
+        const fieldStateProps = fieldC11nEnv.getStateProps();
+        const fieldComponent = fieldC11nEnv.getComponent();
+        let validatemessage = PCore.getMessageManager().getMessages({
+          property: fieldStateProps.value,
+          pageReference: fieldC11nEnv.getPageReference(),
+          context: containerID,
+          type: 'error'
+        })[0]?.message;
+        if (validatemessage) {
+          const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
+          if (fieldC11nEnv.meta.type === 'Date')
+            validatemessage = DateErrorFormatter(
+              t,
+              validatemessage,
+              fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label
+            );
+          acc.push({
+            message: {
+              message: validatemessage,
+              fieldId
+            },
+            displayOrder: fieldComponent.props.displayOrder
+          });
+        }
+        return acc;
+      }, []);
 
-
-    const fieldC11nEnv = o.fieldC11nEnv;
-    const fieldStateProps = fieldC11nEnv.getStateProps();
-    const fieldComponent = fieldC11nEnv.getComponent();
-    let validatemessage = PCore.getMessageManager().getMessages({
-      property: fieldStateProps.value,
-      pageReference: fieldC11nEnv.getPageReference(),
-      context: containerID,
-      type: 'error'
-      })[0]?.message;
-    if(validatemessage){
-      const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
-      if(fieldC11nEnv.meta.type === 'Date')
-      validatemessage = DateErrorFormatter(validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label);
-      acc.push({message:{
-      message: validatemessage,
-      fieldId},
-      displayOrder:fieldComponent.props.displayOrder});
-    }
-    return acc;
-  }, [] );
-
-    errorStateProps.sort((a:OrderedErrorMessage, b:OrderedErrorMessage)=>{return a.displayOrder > b.displayOrder ? 1:-1})
+    errorStateProps.sort((a: OrderedErrorMessage, b: OrderedErrorMessage) => {
+      return a.displayOrder > b.displayOrder ? 1 : -1;
+    });
     setErrorMessages([...errorStateProps]);
   }
 
@@ -164,7 +175,7 @@ export default function Assignment(props) {
   useEffect(() => {
     checkErrorMessages();
     //
-  }, [children])
+  }, [children]);
 
   useEffect(() => {
     if (!errorSummary) {
@@ -176,7 +187,6 @@ export default function Assignment(props) {
   useAddErrorToPageTitle(errorMessages.length > 0);
 
   function showErrorSummary() {
-
     setErrorMessages([]);
     checkErrorMessages();
     setErrorSummary(true);
@@ -190,8 +200,6 @@ export default function Assignment(props) {
       );
     });
   }
-
-
 
   function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
@@ -289,7 +297,6 @@ export default function Assignment(props) {
         default:
           break;
       }
-
     }
   }
   function _onButtonPress(sAction: string, sButtonType: string) {
