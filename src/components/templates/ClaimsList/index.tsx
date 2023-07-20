@@ -68,7 +68,7 @@ export default function ClaimsList(props){
   let tableContent = <></>;
 
   if(loading){
-    tableContent = <tr><td><h2 className='govuk-heading-m'>   {t("CHECKING_FOR_CLAIMS")}  </h2></td></tr>
+    tableContent = <tr><td><h2 className='govuk-heading-m'>{t("CHECKING_FOR_CLAIMS")}</h2></td></tr>
   }
   else if( data.length > 0 ) {
     tableContent = data.map(row => {
