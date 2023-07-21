@@ -4,13 +4,14 @@ import Modal from '../../BaseComponents/Modal/Modal';
 import Button from '../../BaseComponents/Button/Button';
 
 export default function LogoutPopup(props) {
-  const { hideModal, handleSignoutModal, handleStaySignIn } = props;
+  const { hideModal, handleSignoutModal, handleStaySignIn,id } = props;
+
 
   return (
-    <Modal show={props.show} handleClose={hideModal}>
+    <Modal show={props.show} handleClose={hideModal}  aria-live="assertive" id={id}>
       <div>
         <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
-          You’re about to signed out
+          You’re about to be signed out
         </h1>
         <p className='govuk-body' aria-hidden='true'>
           You still need to save your progress. If you sign out without saving, your progress will
@@ -25,6 +26,7 @@ export default function LogoutPopup(props) {
             id='modal-signout-btn'
             attributes={{className:'govuk-button govuk-button--warning'}}
             onClick={handleSignoutModal}
+
           >
             Sign out
           </Button>
@@ -39,6 +41,7 @@ export default function LogoutPopup(props) {
 }
 
 LogoutPopup.propTypes = {
+  id:PropTypes.string,
   show: PropTypes.bool,
   hideModal: PropTypes.func,
   handleSignoutModal: PropTypes.func,

@@ -361,17 +361,26 @@ export default function ChildBenefitsClaim() {
       window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
     });
   }
+
+  const mainSignoutlink: any = document.getElementById('signout-btn');
+  mainSignoutlink.onclick = handleSignout;
+
   function handleSignout() {
+
+    a.focus();
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
       signOutAndRedirect();
     }
   }
-  const mainSignoutlink: any = document.getElementById('signout-btn');
-  mainSignoutlink.onclick = handleSignout;
 
+  useEffect(() => {
 
+    const a:any = document.getElementById('modal-id');
+      a.focus();
+
+  }, []);
 
   const handleStaySignIn = e => {
     e.preventDefault();

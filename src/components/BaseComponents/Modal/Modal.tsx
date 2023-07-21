@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import '../../../../assets/css/appStyles.scss';
 
 export default function Modal(props) {
-  const { handleClose, show, children } = props;
+  const { handleClose, show, children,id} = props;
   const showHideClassName = show
     ? 'govuk-!-display-block hmrc-timeout-dialog'
     : 'govuk-!-display-none';
@@ -11,7 +11,7 @@ export default function Modal(props) {
   return (
     show && (
       <>
-        <div className='hmrc-timeout-overlay'></div>
+        <div className='hmrc-timeout-overlay' id='modal-id'></div>
         <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true'>
           <section>
             <a
@@ -31,6 +31,7 @@ export default function Modal(props) {
 }
 
 Modal.propTypes = {
+  id:PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   handleClose: PropTypes.func
