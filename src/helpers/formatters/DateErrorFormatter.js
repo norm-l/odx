@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 const _DateErrorFormatter = (message, propertyName) => {
   const dateRegExp = /(\d*-\d*-\d*)/;
   const matchedDates = message.match(dateRegExp);
   const originalDate = matchedDates?.length > 0 ? matchedDates[0] : null;
   const targets = [];
+  const { t } = useTranslation();
 
   if (originalDate) {
     const [year, month, day] = originalDate.split('-');
@@ -34,10 +37,10 @@ const _DateErrorFormatter = (message, propertyName) => {
   return { message, targets };
 };
 
-export const DateErrorFormatter = (t,message, propertyName) => {
-  return _DateErrorFormattert(t,message, propertyName).message;
+export const DateErrorFormatter = (t, message, propertyName) => {
+  return _DateErrorFormatter(t(t, message, propertyName).message);
 };
 
-export const DateErrorTargetFields = (t,message) => {
-  return _DateErrorFormatter(t,message, null).targets;
+export const DateErrorTargetFields = (t, message) => {
+  return _DateErrorFormatter(t(t, message, null).targets);
 };
