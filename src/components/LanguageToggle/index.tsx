@@ -8,7 +8,7 @@ const LanguageToggle = () => {
   const [selectedLang, setSelectedLang] = useState(lang);
   // i18n.changeLanguage(lang);
 
-  const changeLanguage = (e) => {
+  const changeLanguage = e => {
     e.preventDefault();
     lang = e.currentTarget.getAttribute('lang');
     setSelectedLang(lang);
