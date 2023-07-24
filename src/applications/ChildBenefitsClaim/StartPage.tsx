@@ -67,7 +67,7 @@ const StartPage: React.FC<{onStart: React.MouseEventHandler, onBack: any}> = ({o
             !
           </span>
           <strong className='govuk-warning-text__text'>
-            <span className='govuk-warning-text__assistive'></span>
+            <span className='govuk-warning-text__assistive'>Warning</span>
             Do not delay making your claim as Child Benefit can only be backdated up to 3 months.
           </strong>
         </div>
