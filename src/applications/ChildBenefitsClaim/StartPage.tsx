@@ -1,21 +1,21 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import Button from '../../components/BaseComponents/Button/Button';
+import { useTranslation } from 'react-i18next';
 
 const StartPage: React.FC<{onStart: React.MouseEventHandler, onBack: any}> = ({onStart, onBack}) => {
   const { t } = useTranslation();
   return (
     <>
       <div className='govuk-grid-column-two-thirds'>
-        <Button
-          variant='backlink'
-          onClick={onBack}
-          key='StartPageBacklink'
-          attributes={{ type: 'link' }}
+      <Button
+            variant='backlink'
+            onClick={onBack}
+            key='StartPageBacklink'
+            attributes={{ type: 'link' }}
         />
       </div>
       <div className='govuk-grid-column-two-thirds'>
-        <h1 className='govuk-heading-xl'>{t('CLAIM_CHILD_BENEFIT')}</h1>
+        <h1 className='govuk-heading-xl'>Claim Child Benefit</h1>
         <p className='govuk-body'>
         {t('USE_THIS_FORM_TO_CLAIM')}
           <a
@@ -96,7 +96,8 @@ const StartPage: React.FC<{onStart: React.MouseEventHandler, onBack: any}> = ({o
           </a>
         </div>
       </div>
-    </>
+
+      </>
   );
 }
 
