@@ -1,7 +1,9 @@
-import React from 'react'
-import Button from '../../components/BaseComponents/Button/Button'
+import React from 'react';
+import Button from '../../components/BaseComponents/Button/Button';
+import { useTranslation } from 'react-i18next';
 
 const StartPage: React.FC<{onStart: React.MouseEventHandler, onBack: any}> = ({onStart, onBack}) => {
+  const { t } = useTranslation();
   return (
     <>
       <div className='govuk-grid-column-two-thirds'>
