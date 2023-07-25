@@ -12,7 +12,7 @@ i18n
       loadPath: '/assets/i18n/{{lng}}.json'
     },
     fallbackLng: 'en',
-    debug: false,
+    debug: true,
     keySeparator: false,
     interpolation: {
       escapeValue: false,

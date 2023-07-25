@@ -147,7 +147,6 @@ export default function Assignment(props) {
           const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
           if (fieldC11nEnv.meta.type === 'Date')
             validatemessage = DateErrorFormatter(
-              t,
               validatemessage,
               fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label
             );
