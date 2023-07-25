@@ -2,8 +2,7 @@ import React from 'react';
 import Button from '../../components/BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 
-export default function UserPortal(props){
-
+export default function UserPortal(props) {
   const { beginClaim, children } = props;
   const { t } = useTranslation();
 
@@ -21,30 +20,28 @@ export default function UserPortal(props){
         {children}
       </div>
       <div className='govuk-grid-column-one-third'>
-        <p className='govuk-body'>
-          Call the Child Benefit helpline if you need to speak with us or use the chat
-        </p>
-        <p className='govuk-body'>You&apos;ll need:</p>
+        <p className='govuk-body'>{t('CALL_THE_CHB_HELPLINE')}</p>
+        <p className='govuk-body'>{t('YOU_WILL_NEED')}</p>
         <ul className='govuk-list govuk-list--bullet'>
-          <li>National Insurance number</li>
+          <li> {t('NINUMBER')} </li>
         </ul>
         <ul className='govuk-details__text govuk-list'>
-          <li>Child Benefit helpline</li>
-          <li>Telephone: 0300 200 3100</li>
-          <li>Welsh language: 0300 200 1900</li>
-          <li>Textphone: 0300 200 3103 </li>
-          <li>Outside UK: +44 161 210 3086</li>
-          <li>Monday to Friday, 8am to 6pm</li>
+          <li> {t('CHB_HELPLINE')}  </li>
+          <li> {t('TELEPHONE')} : 0300 200 3100</li>
+          <li> {t('WELSH_LANGUAGE')}: 0300 200 1900</li>
+          <li> {t('TEXTPHONE')}  : 0300 200 3103 </li>
+          <li> {t('OUTSIDE_UK')} : +44 161 210 3086</li>
+          <li> {t('MONDAY_TO_FRIDAY_8AM_TO_6PM')}, 8am to 6pm</li>
         </ul>
 
-        <span className='govuk-heading-m'>Online</span>
-        <a className='govuk-link'>Ask HMRC online</a>
+        <span className='govuk-heading-m'> {t('ONLINE')}</span>
+        <a className='govuk-link'> {t('ASK_HMRC_ONLINE')}</a>
         <Button
           attributes={{ className: 'govuk-!-margin-top-4' }}
           onClick={beginClaim}
           variant='start'
         >
-          Begin New Claim
+          {t('BEGIN_NEW_CLAIM')}
         </Button>
       </div>
     </>
