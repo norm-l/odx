@@ -37,9 +37,9 @@ export default function ClaimsList(props){
       case 'Open-InProgress':
         return { text: t('IN_PROGRESS'), tagColour: 'grey' };
       case 'Pending-CBS':
-        return { text: `${t("CLAIM_RECEIVED")}`, tagColour:'blue'};
+        return {text: t("CLAIM_RECEIVED"), tagColour:'blue'};
       case 'Resolved-Completed':
-        return {text: `${t("COMPLETED")}`, tagColour:''};
+        return {text: t("COMPLETED"), tagColour:''};
       default:
         return {text:status, tagColour:'grey'};
     }
