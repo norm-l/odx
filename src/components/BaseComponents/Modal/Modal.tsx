@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import '../../../../assets/css/appStyles.scss';
 
 export default function Modal(props) {
@@ -7,6 +8,7 @@ export default function Modal(props) {
   const showHideClassName = show
     ? 'govuk-!-display-block hmrc-timeout-dialog'
     : 'govuk-!-display-none';
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (show) {
@@ -19,16 +21,10 @@ export default function Modal(props) {
     show && (
       <>
         <div className='hmrc-timeout-overlay'></div>
-        <div
-          className={showHideClassName}
-          tabIndex={-1}
-          role='dialog'
-          aria-modal='true'
-          id={id}
-        >
+        <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true' id={id}>
           <section>
             <a className='govuk-link signout-modal' href='#' onClick={handleClose}>
-              Close
+              {t('Close')}
             </a>
             {children}
           </section>

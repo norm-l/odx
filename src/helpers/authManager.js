@@ -273,6 +273,9 @@ const constellationInit = (authConfig, tokenInfo, authTokenUpdated, fnReauth) =>
       // eslint-disable-next-line no-console
       console.log('Bootstrap successful!');
       gbC11NBootstrapInProgress = false;
+      const locale = sessionStorage.getItem('rsdk_locale') || 'en-GB';
+      // eslint-disable-next-line no-undef
+      window.PCore.getEnvironmentInfo().setLocale(locale);
 
       // Setup listener for the reauth event
       if( tokenInfo ) {
@@ -539,7 +542,9 @@ export const authIsMainRedirect = () => {
 
 // Passive update where just session storage is updated so can be used on a window refresh
 export const authTokenUpdated = (tokenInfo ) => {
-  sessionStorage.setItem("rsdk_TI", JSON.stringify(tokenInfo));
+  sessionStorage.setItem('rsdk_TI', JSON.stringify(tokenInfo));
+  // Set default language as english on login
+  sessionStorage.setItem('rsdk_locale', 'en-GB');
 };
 
 export const logout = () => {

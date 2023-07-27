@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { useTranslation } from 'react-i18next';
 
 import StoreContext from '../../bridge/Context/StoreContext';
 import createPConnectComponent from '../../bridge/react_pconnect';
@@ -32,6 +33,7 @@ export default function ChildBenefitsClaim() {
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const { t } = useTranslation();
   let operatorId = '';
 
   useEffect(() => {
@@ -168,12 +170,15 @@ export default function ChildBenefitsClaim() {
   useEffect(() => {
     // Update visibility of UI when bShowPega changes
     const thePegaPartEl = document.getElementById('pega-part-of-page');
+    const languageToggle = document.getElementById('hmrc-language-toggle');
 
     if (thePegaPartEl) {
       if (bShowPega) {
         thePegaPartEl.style.display = 'block';
+        languageToggle.style.display = 'none';
       } else {
         thePegaPartEl.style.display = 'none';
+        languageToggle.style.display = 'block';
       }
     }
   }, [bShowPega]);
@@ -383,73 +388,49 @@ export default function ChildBenefitsClaim() {
         handleSignoutModal={signOutAndRedirect}
         handleStaySignIn={handleStaySignIn}
       />
-      {showStartPage && <StartPage onStart={startNow} onBack={closeContainer} />}
-      {showUserPortal && (
-        <UserPortal beginClaim={beginClaim}>
-          <hr className='govuk-section-break govuk-section-break--m govuk-section-break--visible'></hr>
-          {/* !! NEEDS TRANSLATING  -- title & button content */}
-          <ClaimsList
-            thePConn={pConn}
-            data={inprogressClaims}
-            title='Claims in progress'
-            options={[
-              { name: 'Claim.Child.pyFirstName', label: "Childs' name" },
-              { name: 'Claim.Child.pyLastName' },
-              { name: 'pyStatusWork' },
-              { name: 'pxCreateDateTime', type: 'Date', label: 'claim created date' },
-              { name: 'pyID', label: 'claim reference' }
-            ]}
-            loading={loadinginProgressClaims}
-            rowClickAction='OpenAssignment'
-            buttonContent={rowData => {
-              let buttonMetadata = 'a new child';
-              const firstName = rowData?.Claim?.Child?.pyFirstName;
-              const lastName = rowData?.Claim?.Child?.pyLastName;
-              if (firstName) {
-                buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-              }
-              return (
-                <>
-                  Continue claim{' '}
-                  <span className='govuk-visually-hidden'> for {buttonMetadata}</span>
-                </>
-              );
-            }}
-          />
-          <hr className='govuk-section-break govuk-section-break--m govuk-section-break--visible'></hr>
-          {/* !! NEEDS TRANSLATING  -- title & button content */}
-          <ClaimsList
-            thePConn={pConn}
-            data={submittedClaims}
-            title='Submitted claims'
-            options={[
-              { name: 'Claim.Child.pyFirstName', label: "Child's name" },
-              { name: 'Claim.Child.pyLastName' },
-              { name: 'pyStatusWork' },
-              { name: 'pxCreateDateTime', type: 'Date', label: 'claim created date' },
-              { name: 'pyID', label: 'claim reference' }
-            ]}
-            loading={loadingsubmittedClaims}
-            rowClickAction='OpenCase'
-            buttonContent={rowData => {
-              let buttonMetadata;
-              const firstName = rowData?.Claim?.Child?.pyFirstName;
-              const lastName = rowData?.Claim?.Child?.pyLastName;
-              if (firstName) {
-                buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-              }
-              return (
-                <>
-                  View claim{' '}
-                  {buttonMetadata && (
-                    <span className='govuk-visually-hidden'> for {buttonMetadata}</span>
-                  )}
-                </>
-              );
-            }}
-          />
-        </UserPortal>
-      )}
+      { showStartPage && <StartPage onStart={startNow} onBack={closeContainer}/>  }
+      { showUserPortal && <UserPortal beginClaim={beginClaim}>
+        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        { /* !! NEEDS TRANSLATING  -- title & button content */ }
+        <ClaimsList thePConn={pConn}
+         data={inprogressClaims}
+         title=  {t("CLAIMS_IN_PROGRESS")}
+         options={[{name:'Claim.Child.pyFirstName', label:'Childs\' name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
+         loading={loadinginProgressClaims}
+         rowClickAction="OpenAssignment"
+         buttonContent={(rowData) => {
+          let buttonMetadata = 'a new child';
+          const firstName = rowData?.Claim?.Child?.pyFirstName;
+          const lastName = rowData?.Claim?.Child?.pyLastName;
+          if(firstName){
+            buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
+          }
+          return (
+           <>  {t("CONTINUE_CLAIM")} <span className="govuk-visually-hidden"> for {buttonMetadata}</span></>
+           )
+          }}
+        />
+        <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>
+        {/* !! NEEDS TRANSLATING  -- title & button content */}
+        <ClaimsList thePConn={pConn}
+          data={submittedClaims}
+          title=  {t("SUBMITTED_CLAIMS")}
+          options={[{name:'Claim.Child.pyFirstName', label:'Child\'s name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
+          loading={loadingsubmittedClaims}
+          rowClickAction="OpenCase"
+          buttonContent={(rowData) => {
+            let buttonMetadata;
+            const firstName = rowData?.Claim?.Child?.pyFirstName;
+            const lastName = rowData?.Claim?.Child?.pyLastName;
+            if(firstName){
+              buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
+            }
+            return <>   {t("VIEW_CLAIM")}  {buttonMetadata && <span className="govuk-visually-hidden"> for {buttonMetadata}</span>}</>
+          }
+          }
+        />
+
+    </UserPortal>}
       {bShowResolutionScreen && <ConfirmationPage />}
     </>
   );
