@@ -68,5 +68,6 @@
   "WARNING": "RHYBUDD",
   "Day": "Day",
   "Month": "Month",
-  "Year": "year"
+  "Year": "year",
+  "Close": "Close"
 }

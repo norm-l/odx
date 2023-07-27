@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { useTranslation } from 'react-i18next';
 
-import StoreContext from "../../bridge/Context/StoreContext";
-import createPConnectComponent from "../../bridge/react_pconnect";
+import StoreContext from '../../bridge/Context/StoreContext';
+import createPConnectComponent from '../../bridge/react_pconnect';
 
 import { gbLoggedIn, loginIfNecessary, logout, sdkSetAuthHeader } from '../../helpers/authManager';
 
@@ -14,7 +15,6 @@ import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
 import LogoutPopup from '../../components/forms/LogoutPopup';
-import { useTranslation } from 'react-i18next';
 
 // declare var gbLoggedIn: boolean;
 // declare var login: Function;
@@ -36,7 +36,7 @@ export default function ChildBenefitsClaim() {
   const { t } = useTranslation();
   let operatorId = '';
 
-  useEffect(()=> {
+  useEffect(() => {
     setPageTitle();
   }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen]);
 
@@ -67,33 +67,35 @@ export default function ChildBenefitsClaim() {
     setShowResolutionScreen(true);
 
     // PCore.getMashupApi().openPage('SubmittedClaims', 'HMRC-Chb-UIPages', 'root/primary_1');
-
   }
 
-  function closeContainer(){
+  function closeContainer() {
     setShowPega(false);
     setShowStartPage(false);
     setShowUserPortal(true);
     setShowResolutionScreen(false);
   }
 
-
   // Calls data page to fetch in progress claims, then for each result (limited to first 10), calls D_Claim to get extra details about each 'assignment'
   // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
   // This funtion also sets 'isloading' value to true before making d_page calls, and sets it back to false after data claimed.
-  function fetchInProgressClaimsData(){
+  function fetchInProgressClaimsData() {
     setLoadingInProgressClaims(true);
-    let inProgressClaimsData : any = [];
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root').then(resp => {
-      resp = resp.data.slice(0,10);
-      inProgressClaimsData = resp;
-      setInprogressClaims(inProgressClaimsData);
-      setLoadingInProgressClaims(false);
-    });
+    let inProgressClaimsData: any = [];
+    PCore.getDataPageUtils()
+      .getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root')
+      .then(resp => {
+        resp = resp.data.slice(0, 10);
+        inProgressClaimsData = resp;
+        setInprogressClaims(inProgressClaimsData);
+        setLoadingInProgressClaims(false);
+      });
   }
 
   function cancelAssignment() {
-    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'));
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('root/primary')
+    );
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
@@ -102,7 +104,6 @@ export default function ChildBenefitsClaim() {
   }
 
   function establishPCoreSubscriptions() {
-
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
       () => {
@@ -150,11 +151,10 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
       () => {
-        cancelAssignment()
+        cancelAssignment();
       },
       'savedCase'
     );
-
 
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
@@ -205,7 +205,6 @@ export default function ChildBenefitsClaim() {
     //     <PegaConnectObj {...props} />
     //   </Provider>
     // );
-
 
     const thePConnObj = <PegaConnectObj {...props} />;
 
@@ -280,19 +279,20 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
       initialRender(renderObj);
-      operatorId = (PCore.getEnvironmentInfo().getOperatorIdentifier());
+      operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
       setLoadingSubmittedClaims(true);
-      PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root', {OperatorId: operatorId} ).then(resp => setSubmittedClaims(resp.data.slice(0,10))).finally(()=>setLoadingSubmittedClaims(false));
+      PCore.getDataPageUtils()
+        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
+        .then(resp => setSubmittedClaims(resp.data.slice(0, 10)))
+        .finally(() => setLoadingSubmittedClaims(false));
       fetchInProgressClaimsData();
-
     });
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
 
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
-
-    }
+  }
 
   // One time (initialization) subscriptions and related unsubscribe
   useEffect(() => {
@@ -357,7 +357,7 @@ export default function ChildBenefitsClaim() {
     };
   }, []);
 
- function signOutAndRedirect() {
+  function signOutAndRedirect() {
     logout().then(() => {
       window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
     });
@@ -372,13 +372,10 @@ export default function ChildBenefitsClaim() {
   const mainSignoutlink: any = document.getElementById('signout-btn');
   mainSignoutlink.onclick = handleSignout;
 
-
-
   const handleStaySignIn = e => {
     e.preventDefault();
     setShowSignoutModal(false);
   };
-
 
   return (
     <>
