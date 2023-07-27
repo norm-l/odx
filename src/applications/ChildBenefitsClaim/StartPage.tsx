@@ -18,7 +18,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
         />
       </div>
       <div className='govuk-grid-column-two-thirds'>
-        <h1 className='govuk-heading-xl'>Claim Child Benefit</h1>
+        <h1 className='govuk-heading-xl'>{t('CLAIM_CHILD_BENEFIT')}</h1>
         <p className='govuk-body'>
           {t('USE_THIS_FORM_TO_CLAIM')}
           <a
@@ -56,7 +56,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
             !
           </span>
           <strong className='govuk-warning-text__text'>
-            <span className='govuk-warning-text__assistive'></span>
+            <span className='govuk-warning-text__assistive'>{t('WARNING')}</span>
             {t('DO_NOT_DELAY_MAKING')}
           </strong>
         </div>
@@ -71,7 +71,6 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
           >
             {t('CONTACT_THE_CHILD_BENEFIT_HELPLINE')}
           </a>
-          .
         </p>
         <div className='govuk-!-margin-top-8'>
           <a
@@ -81,7 +80,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
             target='_blank'
             href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
           >
-            {t('OPENS_IN_NEW_TAB')}
+            {t('PAGE_NOT_WORKING_PROPERLY')}
           </a>
         </div>
       </div>

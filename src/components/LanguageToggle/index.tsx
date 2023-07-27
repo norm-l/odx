@@ -24,7 +24,7 @@ const LanguageToggle = () => {
           {selectedLang === 'en' ? (
             <span aria-current='true'>English</span>
           ) : (
-            <a onClick={changeLanguage} lang='en' rel='alternate' className='govuk-link'>
+            <a href='#' onClick={changeLanguage} lang='en' rel='alternate' className='govuk-link'>
               <span className='govuk-visually-hidden'>Change the language to English</span>
               <span aria-hidden='true'>English</span>
             </a>
@@ -34,7 +34,7 @@ const LanguageToggle = () => {
           {selectedLang === 'cy' ? (
             <span aria-current='true'>Cymraeg</span>
           ) : (
-            <a onClick={changeLanguage} lang='cy' rel='alternate' className='govuk-link'>
+            <a href='#' onClick={changeLanguage} lang='cy' rel='alternate' className='govuk-link'>
               <span className='govuk-visually-hidden'>Newid yr iaith ir Gymraeg</span>
               <span aria-hidden='true'>Cymraeg</span>
             </a>
