@@ -17,7 +17,14 @@ export default function UserPortal(props) {
       </div>
       <div className='govuk-grid-column-one-third'>
         <span className='govuk-heading-m'> {t('ONLINE')}</span>
-        <a className='govuk-link'> {t('ASK_HMRC_ONLINE')}</a>
+        <a
+          href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+          className='govuk-link'
+          rel='noreferrer noopener'
+          target='_blank'
+        >
+          {t('ASK_HMRC_ONLINE')}
+        </a>
         <Button
           attributes={{ className: 'govuk-!-margin-top-4' }}
           onClick={beginClaim}
