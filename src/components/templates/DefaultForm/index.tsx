@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React, { createElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import createPConnectComponent from '../../../bridge/react_pconnect';
@@ -19,8 +19,21 @@ export default function DefaultForm(props) {
   let hasSingleChildWhichIsReference = false;
   const instructionText = props.instructions === 'none' ? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
+
+  const settingTargetForAnchorTag = () => {
+    const instructionDiv = document.getElementById('instructions');
+    const keyText = '(opens in same tab)';
+    const elementsArr = instructionDiv.querySelectorAll('a');
+    for(let ele of elementsArr){
+      if(ele.innerHTML.indexOf(keyText) !== -1){
+        ele.setAttribute('target', '_blank');
+      }
+    }
+  }
+
   const getFormattedInstructionText = () => {
     let text = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
+
     const warning  = t('WARNING');
     if (text.indexOf(`${warning}!!`) !== -1) {
     // If there is a Warning Text
@@ -45,6 +58,7 @@ export default function DefaultForm(props) {
 
     return text;
   };
+
 
   const dfChildren = arChildren?.map((kid, idx) => {
     let extraProps = {};
@@ -153,6 +167,12 @@ export default function DefaultForm(props) {
       );
     });
   }
+
+  useEffect(()=>{
+    if(instructionExists){
+      settingTargetForAnchorTag();
+    }
+  },[instructionExists])
 
   return (
     <>
