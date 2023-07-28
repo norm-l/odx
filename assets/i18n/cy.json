@@ -66,8 +66,8 @@
   "MUST_BE_A_REAL_DATE": "Must be a real date",
   "IS_NOT_A_VALID_DATE": "is not a valid date",
   "WARNING": "RHYBUDD",
-  "Day": "Day",
-  "Month": "Month",
-  "Year": "year",
+  "Day": "Diwrnod",
+  "Month": "Mis",
+  "Year": "Blwyddyn",
   "Close": "Close"
 }
