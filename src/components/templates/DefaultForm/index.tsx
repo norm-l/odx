@@ -24,12 +24,18 @@ export default function DefaultForm(props) {
     const instructionDiv = document.getElementById('instructions');
     const keyText = '(opens in same tab)';
     const elementsArr = instructionDiv.querySelectorAll('a');
-    for(let ele of elementsArr){
-      if(ele.innerHTML.indexOf(keyText) !== -1){
+    for(const ele of elementsArr){
+      if(ele.innerHTML.includes(keyText)){
         ele.setAttribute('target', '_blank');
       }
     }
   }
+
+  useEffect(()=>{
+    if(instructionExists){
+      settingTargetForAnchorTag();
+    }
+  },[instructionExists])
 
   const getFormattedInstructionText = () => {
     let text = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
@@ -167,12 +173,6 @@ export default function DefaultForm(props) {
       );
     });
   }
-
-  useEffect(()=>{
-    if(instructionExists){
-      settingTargetForAnchorTag();
-    }
-  },[instructionExists])
 
   return (
     <>

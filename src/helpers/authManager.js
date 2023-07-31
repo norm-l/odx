@@ -274,7 +274,6 @@ const constellationInit = (authConfig, tokenInfo, authTokenUpdated, fnReauth) =>
       console.log('Bootstrap successful!');
       gbC11NBootstrapInProgress = false;
       const locale = sessionStorage.getItem('rsdk_locale') || 'en-GB';
-      // eslint-disable-next-line no-undef
       window.PCore.getEnvironmentInfo().setLocale(locale);
 
       // Setup listener for the reauth event

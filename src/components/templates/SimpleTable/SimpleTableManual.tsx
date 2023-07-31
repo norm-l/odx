@@ -476,7 +476,6 @@ export default function SimpleTableManual(props) {
   function _showFilteredIcon(columnId) {
     for (const filterObj of filterByColumns) {
       if (filterObj['ref'] === columnId) {
-        // eslint-disable-next-line sonarjs/prefer-single-boolean-return
         if (filterObj['containsFilterValue'] !== '') {
           return true;
         }
