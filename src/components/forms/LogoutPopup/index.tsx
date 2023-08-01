@@ -9,7 +9,7 @@ export default function LogoutPopup(props) {
   const { t } = useTranslation();
 
   return (
-    <Modal show={props.show} handleClose={hideModal} aria-live='assertive' id={id}>
+    <Modal show={props.show} handleClose={hideModal} id={id}>
       <div>
         <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
           {t('YOU_ARE_ABOUT_TO_SIGNOUT')}
