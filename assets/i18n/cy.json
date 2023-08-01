@@ -70,5 +70,5 @@
   "Month": "Month",
   "Year": "year",
   "Close": "Close",
-  "OPENS_IN_SAME_TAB" : "(CY opens in same tab)"
+  "OPENS_IN_NEW_TAB" : "(yn agor tab newydd)"
 }

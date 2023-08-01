@@ -22,7 +22,7 @@ export default function DefaultForm(props) {
 
   const settingTargetForAnchorTag = () => {
     const instructionDiv = document.getElementById('instructions');
-    const keyText = t('OPENS_IN_SAME_TAB');
+    const keyText = t('OPENS_IN_NEW_TAB');
     const elementsArr = instructionDiv.querySelectorAll('a');
     for(const ele of elementsArr){
       if(ele.innerHTML.includes(keyText)){
