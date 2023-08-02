@@ -69,5 +69,6 @@
   "Day": "Day",
   "Month": "Month",
   "Year": "year",
-  "Close": "Close"
+  "Close": "Close",
+  "SIGN_OUT_MESSAGE":"this sign out message"
 }

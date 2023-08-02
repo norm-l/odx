@@ -23,21 +23,13 @@ export default function Modal(props) {
       <>
         <div className='hmrc-timeout-overlay'></div>
         <FocusTrap>
-          <div
-            className={showHideClassName}
-            // tabIndex={-1}
-            role='dialog'
-            aria-live='assertive'
-            aria-modal='true'
-            id={id}
-          >
+          <div className={showHideClassName} tabIndex={-1} role='dialog' aria-modal='true' id={id}>
             <section>
+              {children}
               <a className='govuk-link signout-modal' href='#' onClick={handleClose}>
                 {t('Close')}
-                <span className='govuk-visually-hidden'> this sign out message</span>
+                <span className='govuk-visually-hidden'> {t('SIGN_OUT_MESSAGE')}</span>
               </a>
-
-              {children}
             </section>
           </div>
         </FocusTrap>

@@ -11,14 +11,16 @@ export default function LogoutPopup(props) {
   return (
     <Modal show={props.show} handleClose={hideModal} id={id}>
       <div>
-        <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
+        <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top' >
           {t('YOU_ARE_ABOUT_TO_SIGNOUT')}
         </h1>
-        <p className='govuk-body' aria-hidden='true'>
+        <p className='govuk-body'>
           {t('YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS')}
+
         </p>
-        <p className='govuk-body' aria-hidden='true'>
+        <p className='govuk-body'>
           {t('TO_SAVE_YOUR_PROGRESS')}
+
         </p>
         <div className='govuk-button-group govuk-!-padding-top-4'>
           <Button
