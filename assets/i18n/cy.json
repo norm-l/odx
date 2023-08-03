@@ -69,5 +69,6 @@
   "Day": "Diwrnod",
   "Month": "Mis",
   "Year": "Blwyddyn",
-  "Close": "Close"
+  "Close": "Close",
+  "SIGN_OUT_MESSAGE":"this sign out message"
 }
