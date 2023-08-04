@@ -6,6 +6,7 @@ import HintTextComponent from '../../../helpers/formatters/ParsedHtml';
 export default function TextInput(props) {
   const { name, errorText, hintText, inputProps = {}, maxLength, id, onBlur, disabled } = props;
 
+
   if (disabled) {
     return (
       <>
@@ -19,7 +20,7 @@ export default function TextInput(props) {
     );
   }
 
-  const inputClasses = `govuk-input ${errorText ? 'govuk-input--error' : ''}`.trim();
+ const inputClasses = `govuk-input ${errorText ? 'govuk-input--error' : ''}`.trim();
 
   const textInputClassesWithWidth = (width: number) => {
     if (width !== undefined || width !== null) {

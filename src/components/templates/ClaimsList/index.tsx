@@ -1,76 +1,89 @@
 import React from 'react';
 import DateFormatter from '../../../helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { Utils } from '../../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
 
-export default function ClaimsList(props){
+export default function ClaimsList(props) {
   const { thePConn, data, options, title, loading, rowClickAction, buttonContent } = props;
   const { t } = useTranslation();
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
-    if (!propertyName) { return '' };
+    if (!propertyName) {
+      return '';
+    }
 
-    if(source[propertyName]){ return source[propertyName]};
+    if (source[propertyName]) {
+      return source[propertyName];
+    }
 
     let resolvedProperty = source;
     const propertyNameSplit = propertyName.split('.');
     propertyNameSplit.forEach(property => {
-      if(resolvedProperty){
+      if (resolvedProperty) {
         resolvedProperty = resolvedProperty[property];
       }
     });
 
-    if(resolvedProperty){
+    if (resolvedProperty) {
       return resolvedProperty;
     }
     return '';
+  };
 
-  }
-
-  const statusMapping = (status) => {
-    switch(status){
+  const statusMapping = status => {
+    switch (status) {
       case 'Open-InProgress':
         return { text: t('IN_PROGRESS'), tagColour: 'grey' };
       case 'Pending-CBS':
-        return {text: t("CLAIM_RECEIVED"), tagColour:'blue'};
+        return { text: t('CLAIM_RECEIVED'), tagColour: 'blue' };
       case 'Resolved-Completed':
-        return {text: t("COMPLETED"), tagColour:''};
+        return { text: t('COMPLETED'), tagColour: '' };
+      case 'Pending-ManualInvestigation':
+        return { text: t('COMPLETED'), tagColour: '' };
+
       default:
-        return {text:status, tagColour:'grey'};
+        return { text: status, tagColour: 'grey' };
     }
-  }
+  };
 
   function _rowClick(row: any) {
-    const {pzInsKey, pyAssignmentID} = row;
+    const { pzInsKey, pyAssignmentID } = row;
 
     const container = thePConn.getContainerName();
     const target = `root/${container}`;
 
-    if( rowClickAction === 'OpenAssignment'){
-      const openAssignmentOptions = { containerName: container};
-      PCore.getMashupApi().openAssignment(pyAssignmentID, target, openAssignmentOptions)
-      .then(()=>{
-        Utils.scrollToTop();
-      });
-    } else if ( rowClickAction === 'OpenCase'){
-      PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'})
-      .then(()=>{
-        Utils.scrollToTop();
-      });
+    if (rowClickAction === 'OpenAssignment') {
+      const openAssignmentOptions = { containerName: container };
+      PCore.getMashupApi()
+        .openAssignment(pyAssignmentID, target, openAssignmentOptions)
+        .then(() => {
+          Utils.scrollToTop();
+        });
+    } else if (rowClickAction === 'OpenCase') {
+      PCore.getMashupApi()
+        .openCase(pzInsKey, target, { pageName: 'SummaryClaim' })
+        .then(() => {
+          Utils.scrollToTop();
+        });
     }
   }
 
   let tableContent = <></>;
 
-  if(loading){
-    tableContent = <tr><td><h2 className='govuk-heading-m'>{t("CHECKING_FOR_CLAIMS")}</h2></td></tr>
-  }
-  else if( data.length > 0 ) {
+  if (loading) {
+    tableContent = (
+      <tr>
+        <td>
+          <h2 className='govuk-heading-m'>{t('CHECKING_FOR_CLAIMS')}</h2>
+        </td>
+      </tr>
+    );
+  } else if (data.length > 0) {
     tableContent = data.map(row => {
       return (
         <tr className='govuk-summary-list__row' key={row.pyID}>
@@ -91,11 +104,10 @@ export default function ClaimsList(props){
                       response = response.concat(` ${lastName}`);
                     }
                     return (
-                        <div className='govuk-heading-m' key={field.name} aria-label={field.label}>
-                          <a>{response}</a>
-                        </div>
+                      <div className='govuk-heading-m' key={field.name} aria-label={field.label}>
+                        {response}
+                      </div>
                     );
-
                   }
                   // All other fields except for case status
                   if (
@@ -104,9 +116,17 @@ export default function ClaimsList(props){
                     !field.name.includes('LastName')
                   ) {
                     if (field.type === 'Date') {
-                      return <div key={field.name} aria-label={field.label}>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
+                      return (
+                        <div key={field.name} aria-label={field.label}>
+                          {DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}
+                        </div>
+                      );
                     } else {
-                      return <div key={field.name} aria-label={field.label}>{value}</div>;
+                      return (
+                        <div key={field.name} aria-label={field.label}>
+                          {value}
+                        </div>
+                      );
                     }
                   }
                   return null;
@@ -115,46 +135,47 @@ export default function ClaimsList(props){
               <div className='govuk-grid-column-one-third govuk-!-padding-0'>
                 {/* Displays Case status */}
                 <strong
-                  className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour} app-claimslist-tag`}
+                  className={`govuk-tag govuk-tag--${
+                    statusMapping(row.pyStatusWork).tagColour
+                  } app-claimslist-tag`}
                 >
                   {statusMapping(row.pyStatusWork).text}
                 </strong>
               </div>
               <div className='govuk-grid-column-two-thirds  govuk-!-padding-0'>
-              <Button
-                  attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
+                <Button
+                  attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
                   variant='secondary'
                   onClick={() => {
                     _rowClick(row);
                   }}
                 >
-                {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
+                  {typeof buttonContent === 'function' ? buttonContent(row) : buttonContent}
                 </Button>
               </div>
             </div>
           </td>
         </tr>
-      )})
+      );
+    });
+  } else {
+    tableContent = (
+      <tr className='govuk-table__row'>
+        <td>
+          <div role='alert'>No {title.toLowerCase()}</div>
+        </td>
+      </tr>
+    );
   }
-  else {
-    tableContent = <tr className="govuk-table__row">
-      <td>
-      <div  role="alert">No {title.toLowerCase()}</div>
-      </td>
-    </tr>
-  }
-
 
   return (
     <>
-    <table className='govuk-summary-list app-claimslist' aria-live="polite" aria-busy={loading}>
-      <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
-      <tbody>
-        {tableContent}
-      </tbody>
-    </table>
+      <table className='govuk-summary-list app-claimslist' aria-live='polite' aria-busy={loading}>
+        <caption className='govuk-table__caption govuk-table__caption--m'>{title}</caption>
+        <tbody>{tableContent}</tbody>
+      </table>
     </>
-  )
+  );
 }
 
 ClaimsList.propTypes = {
@@ -163,6 +184,6 @@ ClaimsList.propTypes = {
   options: PropTypes.array,
   title: PropTypes.string,
   loading: PropTypes.bool,
-  rowClickAction: PropTypes.oneOf(["OpenCase","OpenAssignment"]),
+  rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
   buttonContent: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-}
+};
