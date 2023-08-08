@@ -54,7 +54,6 @@ export default function MultiStep(props) {
       }
 
       function _showHLine(index: number): boolean {
-        // eslint-disable-next-line sonarjs/prefer-single-boolean-return
         if (index < arNavigationSteps.length - 1) {
           return true;
         }
