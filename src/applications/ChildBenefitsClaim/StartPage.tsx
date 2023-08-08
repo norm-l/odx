@@ -17,6 +17,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
           attributes={{ type: 'link' }}
         />
       </div>
+      <div id='main-content'>
       <div className='govuk-grid-column-two-thirds'>
         <h1 className='govuk-heading-xl'>{t('CLAIM_CHILD_BENEFIT')}</h1>
         <p className='govuk-body'>
@@ -83,6 +84,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
             {t('PAGE_NOT_WORKING_PROPERLY')}
           </a>
         </div>
+      </div>
       </div>
     </>
   );

@@ -8,6 +8,7 @@ export default function UserPortal(props) {
 
   return (
     <>
+     <div id='main-content'>
       <div className='govuk-grid-column-two-thirds'>
         <h1 className='govuk-heading-xl'>{t('YOUR_CLAIM_APPLICATIONS')}</h1>
       </div>
@@ -32,6 +33,7 @@ export default function UserPortal(props) {
         >
           {t('BEGIN_NEW_CLAIM')}
         </Button>
+      </div>
       </div>
     </>
   );

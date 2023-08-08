@@ -306,6 +306,21 @@ export default function Assignment(props) {
   }, [actionButtons]);
 
   return (
+    <>
+    {arSecondaryButtons?.map(sButton =>
+      sButton['name'] === 'Previous' ? (
+        <Button
+          variant='backlink'
+          onClick={e => {
+            e.target.blur();
+            _onButtonPress(sButton['jsAction'], 'secondary');
+          }}
+          key={sButton['actionID']}
+          attributes={{ type: 'link' }}
+        ></Button>
+      ) : null
+    )}
+    <div id='main-content'>
     <div id='Assignment'>
       {bHasNavigation ? (
         <React.Fragment>
@@ -325,19 +340,7 @@ export default function Assignment(props) {
         </React.Fragment>
       ) : (
         <>
-          {arSecondaryButtons?.map(sButton =>
-            sButton['name'] === 'Previous' ? (
-              <Button
-                variant='backlink'
-                onClick={e => {
-                  e.target.blur();
-                  _onButtonPress(sButton['jsAction'], 'secondary');
-                }}
-                key={sButton['actionID']}
-                attributes={{ type: 'link' }}
-              ></Button>
-            ) : null
-          )}
+
           {errorSummary && errorMessages.length > 0 && (
             <ErrorSummary errors={errorMessages.map(item => item.message)} />
           )}
@@ -363,6 +366,8 @@ export default function Assignment(props) {
         Ask HMRC online (opens in new tab)
       </a>
     </div>
+    </div>
+    </>
   );
 }
 

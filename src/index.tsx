@@ -13,7 +13,7 @@ if (outletElement) {
   root.render(
     <>
       <LanguageToggle />
-      <main className='govuk-main-wrapper ' id='main-content' role='main'>
+      <main className='govuk-main-wrapper '  role='main'>
         <div className='govuk-grid-row'>
           <BrowserRouter>
             <TopLevelApp />
