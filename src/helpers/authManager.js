@@ -64,6 +64,7 @@ const clearAuthMgr = (bFullReauth=false) => {
   sessionStorage.removeItem("rsdk_TI");
   sessionStorage.removeItem("rsdk_UI");
   sessionStorage.removeItem("rsdk_loggingIn");
+  sessionStorage.removeItem('rsdk_locale');
   gbLoggedIn = false;
   gbLoginInProgress = false;
   forcePopupForReauths(bFullReauth);
