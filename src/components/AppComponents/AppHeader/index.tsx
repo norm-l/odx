@@ -39,10 +39,10 @@ export default function AppHeader(props) {
         <div className="govuk-phase-banner">
           <p className="govuk-phase-banner__content">
             <strong className="govuk-tag govuk-phase-banner__content__tag">
-              beta
+              {t("BETA")}
             </strong>
             <span className="govuk-phase-banner__text">
-              This is a new service
+              {t("NEW_SERVICE")}
             </span>
           </p>
         </div>

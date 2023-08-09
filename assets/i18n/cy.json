@@ -72,5 +72,11 @@
   "Close": "Close",
   "OPENS_IN_NEW_TAB" : "(yn agor tab newydd)",
   "SIGN_OUT_MESSAGE":"this sign out message",
-  "SKIP_TO_MAIN": "Skip to main content"
+  "SKIP_TO_MAIN": "Skip to main content",
+  "BETA":"beta",
+  "NEW_SERVICE":"This is a new service",
+  "NEW_CHILD": "a new child",
+  "CHILDS_NAME": "Child's name",
+  "CLAIMS_CREATED_DATE": "claim created date",
+  "CLAIMS_REFERENCE": "claim reference"
 }

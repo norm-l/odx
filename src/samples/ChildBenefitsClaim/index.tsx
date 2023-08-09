@@ -433,11 +433,11 @@ export default function ChildBenefitsClaim() {
           <ClaimsList thePConn={pConn}
           data={inprogressClaims}
           title=  {t("CLAIMS_IN_PROGRESS")}
-          options={[{name:'Claim.Child.pyFirstName', label:'Childs\' name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
+          options={[{name:'Claim.Child.pyFirstName', label:t("CHILDS_NAME")}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:t("CLAIMS_CREATED_DATE")}, {name:'pyID', label:t("CLAIMS_REFERENCE")}]}
           loading={loadinginProgressClaims}
           rowClickAction="OpenAssignment"
           buttonContent={(rowData) => {
-            let buttonMetadata = 'a new child';
+            let buttonMetadata = t("NEW_CHILD");
             const firstName = rowData?.Claim?.Child?.pyFirstName;
             const lastName = rowData?.Claim?.Child?.pyLastName;
             if(firstName){
@@ -453,7 +453,7 @@ export default function ChildBenefitsClaim() {
           <ClaimsList thePConn={pConn}
             data={submittedClaims}
             title=  {t("SUBMITTED_CLAIMS")}
-            options={[{name:'Claim.Child.pyFirstName', label:'Child\'s name'}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:'claim created date'}, {name:'pyID', label:'claim reference'}]}
+            options={[{name:'Claim.Child.pyFirstName', label:t("CHILDS_NAME")}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:t("CLAIMS_CREATED_DATE")}, {name:'pyID', label:t("CLAIMS_REFERENCE")}]}
             loading={loadingsubmittedClaims}
             rowClickAction="OpenCase"
             buttonContent={(rowData) => {
