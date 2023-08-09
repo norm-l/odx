@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // import AssignmentCard from '../AssignmentCard';
 import MultiStep from '@pega/react-sdk-components/lib/components/infra/MultiStep';
@@ -23,7 +24,6 @@ interface OrderedErrorMessage {
 }
 
 declare const PCore: any;
-
 export default function Assignment(props) {
   const { getPConnect, children, itemKey, isCreateStage } = props;
   const thePConn = getPConnect();
@@ -33,6 +33,7 @@ export default function Assignment(props) {
   const [bIsVertical, setIsVertical] = useState(false);
   const [arCurrentStepIndicies, setArCurrentStepIndicies] = useState<Array<any>>([]);
   const [arNavigationSteps, setArNavigationSteps] = useState<Array<any>>([]);
+  const { t } = useTranslation();
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard'] ? SdkComponentMap.getLocalComponentMap()['AssignmentCard'] : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
@@ -135,7 +136,6 @@ export default function Assignment(props) {
     const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
     errorStateProps = PCore.getFormUtils().getEditableFields(containerID).reduce( (acc, o) => {
 
-
     const fieldC11nEnv = o.fieldC11nEnv;
     const fieldStateProps = fieldC11nEnv.getStateProps();
     const fieldComponent = fieldC11nEnv.getComponent();
@@ -180,7 +180,6 @@ export default function Assignment(props) {
   useAddErrorToPageTitle(errorMessages.length > 0);
 
   function showErrorSummary() {
-
     setErrorMessages([]);
     checkErrorMessages();
     setErrorSummary(true);
@@ -194,8 +193,6 @@ export default function Assignment(props) {
       );
     });
   }
-
-
 
   function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
@@ -307,37 +304,22 @@ export default function Assignment(props) {
 
   return (
     <div id='Assignment'>
-      {bHasNavigation ? (
-        <React.Fragment>
-          <div>has Nav</div>
-          {!isOnlyOneField && <h1 className='govuk-heading-l'>{containerName}</h1>}
-          <MultiStep
-            getPConnect={getPConnect}
-            itemKey={itemKey}
-            actionButtons={actionButtons}
-            onButtonPress={buttonPress}
-            bIsVertical={bIsVertical}
-            arCurrentStepIndicies={arCurrentStepIndicies}
-            arNavigationSteps={arNavigationSteps}
-          >
-            {children}
-          </MultiStep>
-        </React.Fragment>
-      ) : (
-        <>
-          {arSecondaryButtons?.map(sButton =>
-            sButton['name'] === 'Previous' ? (
-              <Button
-                variant='backlink'
-                onClick={e => {
-                  e.target.blur();
-                  _onButtonPress(sButton['jsAction'], 'secondary');
-                }}
-                key={sButton['actionID']}
-                attributes={{ type: 'link' }}
-              ></Button>
-            ) : null
-          )}
+      {arSecondaryButtons?.map(sButton =>
+        sButton['name'] === 'Previous' ? (
+          <Button
+            variant='backlink'
+            onClick={e => {
+              e.target.blur();
+              _onButtonPress(sButton['jsAction'], 'secondary');
+            }}
+            key={sButton['actionID']}
+            attributes={{ type: 'link' }}
+          ></Button>
+        ) : null
+        )}
+      <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-two-thirds">
           {errorSummary && errorMessages.length > 0 && (
             <ErrorSummary errors={errorMessages.map(item => item.message)} />
           )}
@@ -352,16 +334,17 @@ export default function Assignment(props) {
               {children}
             </AssignmentCard>
           </form>
-        </>
-      )}
-      <a
-        href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-        className='govuk-link'
-        rel='noreferrer noopener'
-        target='_blank'
-      >
-        Ask HMRC online (opens in new tab)
-      </a>
+          <a
+            href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+            className='govuk-link'
+            rel='noreferrer noopener'
+            target='_blank'
+          >
+            {`${t("ASK_HMRC_ONLINE")} ${t("OPENS_IN_NEW_TAB")}`}
+          </a>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

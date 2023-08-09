@@ -71,5 +71,6 @@
   "Year": "year",
   "Close": "Close",
   "OPENS_IN_NEW_TAB" : "(opens in new tab)",
-  "SIGN_OUT_MESSAGE":"this sign out message"
+  "SIGN_OUT_MESSAGE":"this sign out message",
+  "SKIP_TO_MAIN": "Skip to main content"
 }
