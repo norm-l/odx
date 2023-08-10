@@ -444,7 +444,7 @@ export default function ChildBenefitsClaim() {
               buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
             }
             return (
-            <>{t("CONTINUE_CLAIM")} <span className="govuk-visually-hidden"> for {buttonMetadata}</span></>
+            <>{t("CONTINUE_CLAIM")} <span className="govuk-visually-hidden"> {t("FOR")} {buttonMetadata}</span></>
             )
             }}
           />
@@ -463,7 +463,7 @@ export default function ChildBenefitsClaim() {
               if(firstName){
                 buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
               }
-              return <>{t("VIEW_CLAIM")}  {buttonMetadata && <span className="govuk-visually-hidden"> for {buttonMetadata}</span>}</>
+              return <>{t("VIEW_CLAIM")}  {buttonMetadata && <span className="govuk-visually-hidden"> {t("FOR")} {buttonMetadata}</span>}</>
             }
             }
           />
