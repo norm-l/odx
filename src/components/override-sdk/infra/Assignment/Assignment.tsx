@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-// import AssignmentCard from '../AssignmentCard';
-import MultiStep from '@pega/react-sdk-components/lib/components/infra/MultiStep';
 import {Utils} from '../../../helpers/utils';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
@@ -28,11 +26,7 @@ export default function Assignment(props) {
   const { getPConnect, children, itemKey, isCreateStage } = props;
   const thePConn = getPConnect();
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
-  const [bHasNavigation, setHasNavigation] = useState(false);
   const [actionButtons, setActionButtons] = useState<any>({});
-  const [bIsVertical, setIsVertical] = useState(false);
-  const [arCurrentStepIndicies, setArCurrentStepIndicies] = useState<Array<any>>([]);
-  const [arNavigationSteps, setArNavigationSteps] = useState<Array<any>>([]);
   const { t } = useTranslation();
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard'] ? SdkComponentMap.getLocalComponentMap()['AssignmentCard'] : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
@@ -60,34 +54,6 @@ export default function Assignment(props) {
     setPageTitle();
   },[children])
 
-  function findCurrentIndicies(
-    arStepperSteps: Array<any>,
-    arIndicies: Array<number>,
-    depth: number
-  ): Array<number> {
-    let count = 0;
-    arStepperSteps.forEach(step => {
-      if (step.visited_status === 'current') {
-        arIndicies[depth] = count;
-
-        // add in
-        step['step_status'] = '';
-      } else if (step.visited_status === 'success') {
-        count += 1;
-        step.step_status = 'completed';
-      } else {
-        count += 1;
-        step.step_status = '';
-      }
-
-      if (step.steps) {
-        arIndicies = findCurrentIndicies(step.steps, arIndicies, depth + 1);
-      }
-    });
-
-    return arIndicies;
-  }
-
   useEffect(() => {
     if (children && children.length > 0) {
       // debugger;
@@ -101,29 +67,6 @@ export default function Assignment(props) {
 
         if (oCaseInfo && oCaseInfo.actionButtons) {
           setActionButtons(oCaseInfo.actionButtons);
-        }
-
-        if (oCaseInfo?.navigation /* was oCaseInfo.navigation != null */) {
-          setHasNavigation(true);
-
-          if (
-            oCaseInfo.navigation.template &&
-            oCaseInfo.navigation.template.toLowerCase() === 'standard'
-          ) {
-            setHasNavigation(false);
-          } else if (
-            oCaseInfo.navigation.template &&
-            oCaseInfo.navigation.template.toLowerCase() === 'vertical'
-          ) {
-            setIsVertical(true);
-          } else {
-            setIsVertical(false);
-          }
-
-          setArNavigationSteps(JSON.parse(JSON.stringify(oCaseInfo.navigation.steps)));
-          setArCurrentStepIndicies(
-            findCurrentIndicies(arNavigationSteps, arCurrentStepIndicies, 0)
-          );
         }
       }
     }
