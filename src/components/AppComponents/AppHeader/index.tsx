@@ -24,14 +24,15 @@ export default function AppHeader(props) {
             </a>
           </div>
           <div className="govuk-header__content">
-            <a href="#" className="hmrc-header__service-name hmrc-header__service-name--linked" id="service-header">
+            <a href="/" className="hmrc-header__service-name hmrc-header__service-name--linked" id="service-header">
               {appname}
             </a>
-
-            <nav className="hmrc-sign-out-nav">
-                  <a className="govuk-link hmrc-sign-out-nav__link" id="signout-btn" href="#" onClick={handleSignout}>
-                {t("SIGN-OUT")} </a>
-            </nav>
+            {handleSignout &&
+              <nav className="hmrc-sign-out-nav">
+                <a className="govuk-link hmrc-sign-out-nav__link" id="signout-btn" href="#" onClick={handleSignout}>
+                  {t("SIGN-OUT")} </a>
+              </nav>
+            }
           </div>
         </div>
       </div>
