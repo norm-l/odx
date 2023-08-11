@@ -24,6 +24,8 @@ export default function TextInput(props) {
 
   const[ErrorMessage] = useState(validatemessage)
   const thePConn = getPConnect();
+  const hidePageLabel = useIsOnlyField(thePConn);
+
   const actionsApi = thePConn.getActionsApi();
 
   const propName = thePConn.getStateProps().value;
@@ -35,7 +37,6 @@ export default function TextInput(props) {
     }
   };
 
-  const isOnlyField = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
 
@@ -62,7 +63,7 @@ export default function TextInput(props) {
         hintText={helperText}
         errorText={ErrorMessage}
         label={label}
-        labelIsHeading={isOnlyField}
+        labelIsHeading={hidePageLabel}
         name={name}
         maxLength={maxLength}
         id={name}

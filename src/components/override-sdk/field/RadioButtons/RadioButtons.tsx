@@ -18,9 +18,9 @@ export default function RadioButtons(props) {
     testId
   } = props;
 
-  const isOnlyField = useIsOnlyField();
   const[ErrorMessage] = useState(validatemessage)
   const thePConn = getPConnect();
+  const hidePageLabel = useIsOnlyField(thePConn);
   const theConfigProps = thePConn.getConfigProps();
   // theOptions will be an array of JSON objects that are literally key/value pairs.
   //  Ex: [ {key: "Basic", value: "Basic"} ]
@@ -43,7 +43,7 @@ export default function RadioButtons(props) {
       {...props}
       name={name}
       label={label}
-      legendIsHeading={isOnlyField}
+      legendIsHeading={hidePageLabel}
       options={theOptions.map(option => {return {value:option.key, label:option.value}})}
       displayInline={theOptions.length === 2}
       hintText={helperText}

@@ -26,10 +26,11 @@ export default function Dropdown(props) {
 
   const [options, setOptions] = useState<Array<IOption>>([]);
   const [displayValue, setDisplayValue] = useState();
-  const isOnlyField = useIsOnlyField();
   const[ErrorMessage] = useState(validatemessage)
 
   const thePConn = getPConnect();
+  const hidePageLabel = useIsOnlyField(thePConn);
+
   const actionsApi = thePConn.getActionsApi();
 
   const propName = thePConn.getStateProps().value;
@@ -58,7 +59,7 @@ export default function Dropdown(props) {
         label={label}
         hintText={helperText}
         errorText={ErrorMessage}
-        labelIsHeading={isOnlyField}
+        labelIsHeading={hidePageLabel}
         onChange={handleChange}
         value={value}
         name={name}
