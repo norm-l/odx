@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import FieldSet from '../FormGroup/FieldSet';
 import GDSCheckbox from './Checkbox'
@@ -10,13 +10,36 @@ export default function Checkboxes(props) {
     inputProps,
   } = props;
 
+
   const checkboxClasses = `govuk-checkboxes`;
+  const [optionsListToRender, setOptionsList] = useState(optionsList);
+  const [exclusiveOption, setExclusiveOption] = useState<any>({})
+
+  const exclusiveInputProps = {...inputProps, ['data-behaviour']:'exclusive'};
+
+
+  useEffect(()=>{
+    if(optionsList.length !== 0){
+      let exclusiveIndex : number;
+      let localExclusiveOption : {};
+      optionsList.forEach((option, idx) => {
+        if(option.label.toLowerCase().includes('none')){
+          localExclusiveOption = option;
+          exclusiveIndex = idx;
+        }
+      })
+      optionsList.splice(exclusiveIndex, 1);
+      setOptionsList(optionsList);
+      setExclusiveOption(localExclusiveOption);
+    }
+  },[])
+
 
 
   return (
     <FieldSet {...props}>
       <div className={checkboxClasses}>
-        {optionsList.map((item, index) => (
+        {optionsListToRender.map((item, index) => (
           <GDSCheckbox
             item={item}
             index={index}
@@ -27,6 +50,16 @@ export default function Checkboxes(props) {
             key={item.name}
           />
         ))}
+        <div className="govuk-checkboxes__divider">or</div>
+        <GDSCheckbox
+          item={exclusiveOption}
+          index={optionsListToRender.length}
+          name={exclusiveOption.name}
+          inputProps={...exclusiveInputProps}
+          onChange={exclusiveOption.onChange}
+          onBlur={onBlur}
+          key={exclusiveOption.name}
+        />
       </div>
     </FieldSet>
   );
