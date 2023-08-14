@@ -40,7 +40,6 @@ export default function DefaultForm(props) {
     PCore.getPubSubUtils().subscribe(
       'expressLocalActionSubmit',
       () => {
-        console.log('changing HPL to false');
         getPConnect().setValue('.HidePageLabel', false);
       },
       'actionSubmit'
