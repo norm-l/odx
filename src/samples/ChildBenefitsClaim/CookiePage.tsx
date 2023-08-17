@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
+import CookiePageTable from './CookiePageTable';
 
 export default function CookiePage() {
   const { t } = useTranslation();
@@ -15,8 +15,28 @@ export default function CookiePage() {
         <LanguageToggle />
         <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
           <div className="govuk-grid-row">
-            <div className='govuk-grid-column-two-thirds'>
-              <h1 className=''> {t('COOKIES')}</h1>
+            <div className="govuk-grid-column-two-thirds">
+              <h1 className="govuk-heading-xl">
+                {t('COOKIES')}
+              </h1>
+              <p className='govuk-body'>
+                {t('COOKIES_PAGE_P1')}
+              </p>
+              <p className='govuk-body'>
+                {t('COOKIES_PAGE_P2')}
+              </p>
+              <h2 className="govuk-heading-m">
+                {t('ESSENTIAL_COOKIES')}
+              </h2>
+              <p className='govuk-body'>
+                {t('ESSENTIAL_COOKIES_P1')}
+              </p>
+              <CookiePageTable />
+              <p className="govuk-body">
+                <a href="#" className="govuk-link govuk-link--no-visited-state">
+                  {t('COOKIE_FIND_OUT_MORE')}
+                </a>
+              </p>
             </div>
           </div>
         </main>
