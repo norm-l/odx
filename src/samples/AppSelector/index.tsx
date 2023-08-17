@@ -11,7 +11,7 @@ const AppSelector = () => {
   return (
     <>
       <Switch>
-        <Route exact path={`${baseURL}`} component={ChildBenefitsClaim} />
+        <Route exact path={baseURL} component={ChildBenefitsClaim} />
         <Route path="/cookies" component={CookiePage} />
         <Route path="*" component={ChildBenefitsClaim} />
       </Switch>
