@@ -26,7 +26,16 @@ export default function Dropdown(props) {
 
   const [options, setOptions] = useState<Array<IOption>>([]);
   const [displayValue, setDisplayValue] = useState();
-  const[ErrorMessage] = useState(validatemessage)
+  const isOnlyField = useIsOnlyField();
+  const[errorMessage,setErrorMessage] = useState(validatemessage);
+
+  useEffect(()=>{
+
+    if(validatemessage){
+    setErrorMessage(validatemessage)
+    }
+
+  },[validatemessage])
 
   const thePConn = getPConnect();
   const hidePageLabel = useIsOnlyField(thePConn);
@@ -58,8 +67,8 @@ export default function Dropdown(props) {
       <Select
         label={label}
         hintText={helperText}
-        errorText={ErrorMessage}
         labelIsHeading={hidePageLabel}
+        errorText={errorMessage}
         onChange={handleChange}
         value={value}
         name={name}

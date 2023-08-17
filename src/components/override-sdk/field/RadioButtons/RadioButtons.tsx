@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
@@ -18,7 +18,16 @@ export default function RadioButtons(props) {
     testId
   } = props;
 
-  const[ErrorMessage] = useState(validatemessage)
+  const isOnlyField = useIsOnlyField();
+  const[errorMessage,setErrorMessage] = useState(validatemessage);
+
+  useEffect(()=>{
+
+    if(validatemessage){
+    setErrorMessage(validatemessage)
+    }
+
+  },[validatemessage])
   const thePConn = getPConnect();
   const hidePageLabel = useIsOnlyField(thePConn);
   const theConfigProps = thePConn.getConfigProps();
@@ -48,7 +57,7 @@ export default function RadioButtons(props) {
       displayInline={theOptions.length === 2}
       hintText={helperText}
       instructionText={instructionText}
-      errorText={ErrorMessage}
+      errorText={errorMessage}
       {...extraProps}
     />
   );
