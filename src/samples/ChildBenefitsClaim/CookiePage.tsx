@@ -5,6 +5,8 @@ import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import CookiePageTable from './CookiePageTable';
 
+const FIND_OUT_MORE_URL = "https://www.tax.service.gov.uk/help/cookie-details";
+
 export default function CookiePage() {
   const { t } = useTranslation();
 
@@ -33,7 +35,7 @@ export default function CookiePage() {
               </p>
               <CookiePageTable />
               <p className="govuk-body">
-                <a href="#" className="govuk-link govuk-link--no-visited-state">
+                <a href={FIND_OUT_MORE_URL} className="govuk-link govuk-link--no-visited-state">
                   {t('COOKIE_FIND_OUT_MORE')}
                 </a>
               </p>
