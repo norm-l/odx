@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GDSTextInput from '../../../BaseComponents/TextInput/TextInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
@@ -22,8 +22,18 @@ export default function TextInput(props) {
     testId
   } = props;
 
-  const[ErrorMessage] = useState(validatemessage)
+  const[errorMessage,setErrorMessage] = useState(validatemessage);
+
+  useEffect(()=>{
+
+    if(validatemessage){
+    setErrorMessage(validatemessage)
+    }
+
+  },[validatemessage])
   const thePConn = getPConnect();
+  const hidePageLabel = useIsOnlyField(thePConn);
+
   const actionsApi = thePConn.getActionsApi();
 
   const propName = thePConn.getStateProps().value;
@@ -35,7 +45,6 @@ export default function TextInput(props) {
     }
   };
 
-  const isOnlyField = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
 
@@ -60,9 +69,9 @@ export default function TextInput(props) {
           ...extraInputProps
         }}
         hintText={helperText}
-        errorText={ErrorMessage}
+        errorText={errorMessage}
         label={label}
-        labelIsHeading={isOnlyField}
+        labelIsHeading={hidePageLabel}
         name={name}
         maxLength={maxLength}
         id={name}
