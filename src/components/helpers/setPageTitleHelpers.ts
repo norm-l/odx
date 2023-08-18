@@ -25,7 +25,7 @@ export default function setPageTitle(){
 
     // Scope to fetch serviceName dynamically from here
     // TODO fetch serviceName dynamically
-    const serviceName = 'Child benefit claim';
+    const serviceName = i18n.t("CLAIM_CHILD_BENEFIT");
 
   if(pageHeading){
   document.title = `${pageHeading} - ${serviceName} - GOV.UK`
