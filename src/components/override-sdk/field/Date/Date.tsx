@@ -23,7 +23,7 @@ export default function Date(props) {
   } = props;
   const pConn = getPConnect();
 
-  const isOnlyField = useIsOnlyField();
+  const hidePageLabel = useIsOnlyField(pConn);
 
   // PM - Set up state for each input field, either the value we received from pega, or emtpy
   const [day, setDay] = useState(value ? value.split('-')[2] : '');
@@ -91,15 +91,20 @@ export default function Date(props) {
 
   // PM - Handlers for each part of date inputs, update state for each respectively
   //      0 pad for ISOString compatibilitiy, with conditions to allow us to clear the fields
-  const handleChangeDay = dayChange => {
+
+
+ const  handleChangeDay = dayChange => {
     setDay(dayChange.target.value);
   };
+
   const handleChangeMonth = monthChange => {
     setMonth(monthChange.target.value);
-  };
-  const handleChangeYear = yearChange => {
+  }
+
+  const  handleChangeYear = yearChange => {
     setYear(yearChange.target.value);
   };
+
 
   if (readOnly) {
     return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
@@ -110,7 +115,7 @@ export default function Date(props) {
   return (
     <DateInput
       label={label}
-      legendIsHeading={isOnlyField}
+      legendIsHeading={hidePageLabel}
       onChangeDay={handleChangeDay}
       onChangeMonth={handleChangeMonth}
       onChangeYear={handleChangeYear}

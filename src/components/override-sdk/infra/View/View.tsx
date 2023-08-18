@@ -8,9 +8,6 @@ import ErrorBoundary from '@pega/react-sdk-components/lib/components/infra/Error
 
 import { getAllFields } from '@pega/react-sdk-components/lib/components/helpers/template-utils';
 
-// Need to import any templates that we might render
-
-import './View.css';
 //
 // WARNING:  It is not expected that this file should be modified.  It is part of infrastructure code that works with
 // Redux and creation/update of Redux containers and PConnect.  Modifying this code could have undesireable results and
@@ -63,8 +60,6 @@ export default function View(props) {
       // This is the node_modules version of react_pconnect!
       const theLocalComponent = SdkComponentMap.getLocalComponentMap()[template];
       if (theLocalComponent !== undefined) {
-        // eslint-disable-next-line no-console
-        console.log(`View component found ${template}: Local`);
         ViewTemplate = theLocalComponent;
       } else {
         const thePegaProvidedComponent = SdkComponentMap.getPegaProvidedComponentMap()[template];
