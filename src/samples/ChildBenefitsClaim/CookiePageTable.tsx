@@ -23,7 +23,7 @@ export default function CookiePageTable() {
       <tbody className="govuk-table__body">
         <tr className="govuk-table__row">
           <td className="govuk-table__cell">
-            {t('COOKIE_AWSALB')}
+            AWSALB
           </td>
           <td className="govuk-table__cell">
             {t('COOKIE_AWSALB_DESCRIPTION')}
@@ -34,7 +34,7 @@ export default function CookiePageTable() {
         </tr>
         <tr className="govuk-table__row">
           <td className="govuk-table__cell">
-            {t('COOKIE_AWSALBCORS')}
+            AWSALBCORS
           </td>
           <td className="govuk-table__cell">
             {t('COOKIE_AWSALBCORS_DESCRIPTION')}
@@ -45,7 +45,7 @@ export default function CookiePageTable() {
         </tr>
         <tr className="govuk-table__row">
           <td className="govuk-table__cell">
-            {t('COOKIE_JSESSIONID')}
+            JSESSIONID
           </td>
           <td className="govuk-table__cell">
             {t('COOKIE_JSESSIONID_DESCRIPTION')}

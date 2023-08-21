@@ -103,11 +103,8 @@
   "COOKIE_NAME": "Name",
   "COOKIE_PURPOSE": "Purpose",
   "COOKIE_EXPIRES": "Expires",
-  "COOKIE_AWSALB": "AWSALB",
   "COOKIE_AWSALB_DESCRIPTION": "Used to help manage web traffic between a visitors web browser and the application servers that host HMRC services.",
-  "COOKIE_AWSALBCORS": "AWSALBCORS",
   "COOKIE_AWSALBCORS_DESCRIPTION": "Used to help manage web traffic between a visitors web browser and the application servers that host HMRC services.",
-  "COOKIE_JSESSIONID": "JSESSIONID",
   "COOKIE_JSESSIONID_DESCRIPTION": "Used to identify the visitor’s session information related to the HMRC service being accessed.",
   "COOKIE_FIND_OUT_MORE": "Find out more about cookies on HMRC services"
 }
