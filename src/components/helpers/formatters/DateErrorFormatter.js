@@ -19,7 +19,7 @@ const _DateErrorFormatter = (message, propertyName) => {
     }
     if(month === ''){
       if(missingPartMessage.length > 0)  missingPartMessage += t('AND_A_MONTH');
-      else missingPartMessage+=t('A_MONTH');
+      else missingPartMessage += t('A_MONTH');
       targets.push('month');
     }
     if (year === '') {
