@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import AppHeader from '../../components/AppComponents/AppHeader';
-import AppFooter from '../../components/AppComponents/AppFooter';
-import LanguageToggle from '../../components/AppComponents/LanguageToggle';
+import AppHeader from '../../../components/AppComponents/AppHeader';
+import AppFooter from '../../../components/AppComponents/AppFooter';
+import LanguageToggle from '../../../components/AppComponents/LanguageToggle';
 import CookiePageTable from './CookiePageTable';
 
 const FIND_OUT_MORE_URL = "https://www.tax.service.gov.uk/help/cookie-details";
