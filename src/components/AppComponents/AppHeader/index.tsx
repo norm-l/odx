@@ -24,7 +24,7 @@ export default function AppHeader(props) {
             </a>
           </div>
           <div className="govuk-header__content">
-            <a href="#" className="hmrc-header__service-name hmrc-header__service-name--linked" id="service-header">
+            <a href="/" className="hmrc-header__service-name hmrc-header__service-name--linked" id="service-header">
               {appname}
             </a>
             {handleSignout &&
