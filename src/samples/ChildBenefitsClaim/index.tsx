@@ -58,7 +58,7 @@ export default function ChildBenefitsClaim() {
   function createCase() {
     setShowStartPage(false);
     setShowPega(true);
-    PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', 'root');
+    PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
   }
 
   function startNow() {
@@ -107,7 +107,8 @@ export default function ChildBenefitsClaim() {
 
 
   function cancelAssignment() {
-    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('root/primary'));
+    // PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext(`${PCore.getConstants().APP.APP}/primary`), {skipDirtyCheck :true});
+
     fetchInProgressClaimsData();
     setShowStartPage(false);
     setShowUserPortal(true);
