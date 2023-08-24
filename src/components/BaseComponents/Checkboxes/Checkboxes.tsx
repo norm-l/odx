@@ -12,53 +12,71 @@ export default function Checkboxes(props) {
 
 
   const checkboxClasses = `govuk-checkboxes`;
-  const [optionsListToRender, setOptionsList] = useState(optionsList);
-  const [exclusiveOption, setExclusiveOption] = useState<any>({})
+  // const [optionsListToRender, setOptionsList] = useState(optionsList);
+  // const [exclusiveOption, setExclusiveOption] = useState<any>({})
 
   const exclusiveInputProps = {...inputProps, ['data-behaviour']:'exclusive'};
 
 
-  useEffect(()=>{
-    if(optionsList.length !== 0){
-      let exclusiveIndex : number;
-      let localExclusiveOption : {};
-      optionsList.forEach((option, idx) => {
-        if(option.label.toLowerCase().includes('none')){
-          localExclusiveOption = option;
-          exclusiveIndex = idx;
-        }
-      })
-      optionsList.splice(exclusiveIndex, 1);
-      setOptionsList(optionsList);
-      setExclusiveOption(localExclusiveOption);
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(optionsList.length !== 0){
+  //     let exclusiveIndex : number;
+  //     let localExclusiveOption : {};
+  //     optionsList.forEach((option, idx) => {
+  //       if(option.label.toLowerCase().includes('none')){
+  //         localExclusiveOption = option;
+  //         exclusiveIndex = idx;
+  //       }
+  //     })
+  //     optionsList.splice(exclusiveIndex, 1);
+  //     setOptionsList(optionsList);
+  //     setExclusiveOption(localExclusiveOption);
+  //   }
+
+  //   console.log(optionsListToRender)
+  // },[])
 
 
 
   return (
     <FieldSet {...props}>
       <div className={checkboxClasses}>
-        {optionsListToRender.map((item, index) => (
-          <GDSCheckbox
-            item={item}
-            index={index}
-            name={item.name}
-            inputProps={...inputProps}
-            onChange={item.onChange}
-            onBlur={onBlur}
-            key={item.name}
-          />
-        ))}
+      {/* {optionsList.map((item, index) => {
+          if(true){
+            return (<GDSCheckbox
+              item={item}
+              index={index}
+              name={item.name}
+              inputProps={...inputProps}
+              onChange={item.onChange}
+              onBlur={onBlur}
+              key={item.name}
+            />)
+          }})
+        } */}
+        {optionsList.map((item, index) => {
+          if(index !== optionsList.length-1){
+            return (<GDSCheckbox
+              item={item}
+              index={index}
+              name={item.name}
+              inputProps={...inputProps}
+              onChange={item.onChange}
+              onBlur={onBlur}
+              key={item.name}
+            />)
+          }})
+        }
+        
         <div className="govuk-checkboxes__divider">or</div>
         <GDSCheckbox
-          item={exclusiveOption}
-          index={optionsListToRender.length}
-          name={exclusiveOption.name}
+          item={optionsList[optionsList.length - 1]}
+          index={optionsList.length - 1}
+          name={optionsList[optionsList.length - 1].name}
           inputProps={...exclusiveInputProps}
-          onChange={exclusiveOption.onChange}
+          onChange={optionsList[optionsList.length - 1].onChange}
           onBlur={onBlur}
-          key={exclusiveOption.name}
+          key={optionsList[optionsList.length - 1].name}
         />
       </div>
     </FieldSet>
