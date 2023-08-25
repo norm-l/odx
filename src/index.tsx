@@ -11,7 +11,7 @@ if (outletElement) {
   // const root = render(outletElement);
   render(
     <>
-    <BrowserRouter>
+    <BrowserRouter basename={window.location.pathname}>
       <TopLevelApp />
     </BrowserRouter>
     </>, outletElement
