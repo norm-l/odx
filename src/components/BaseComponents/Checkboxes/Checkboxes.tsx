@@ -36,6 +36,13 @@ export default function Checkboxes(props) {
   //   console.log(optionsListToRender)
   // },[])
 
+  // const handleExclusiveSelector = (onChange) => {
+  //   onChange();
+  //   optionsList.forEach(option => {
+  //     if(option.)
+  //   })
+  // }
+
 
 
   return (

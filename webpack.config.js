@@ -48,6 +48,10 @@ module.exports = (env, argv) => {
           to: 'assets/fonts/'
         },
         {
+          from: './node_modules/govuk-frontend/govuk/all.js',
+          to: 'assets/js/govuk.js'
+        },
+        {
           from: './assets/icons/*',
           to() {
             return Promise.resolve('constellation/icons/[name].[ext]');
