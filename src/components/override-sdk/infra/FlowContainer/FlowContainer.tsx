@@ -424,8 +424,7 @@ export default function FlowContainer(props) {
   return (
     <div id={buildName}>
       {!bShowConfirm &&
-        (!todo_showTodo ? (
-          !displayOnlyFA ? (
+        !displayOnlyFA ? (
             <Card className={classes.root}>
               <CardHeader
                 title={<Typography variant='h6'>{containerName}</Typography>}
@@ -451,21 +450,7 @@ export default function FlowContainer(props) {
                 </Assignment>
             </div>
           )
-        ) : (
-          <div>
-            <ToDo
-              key={Math.random()}
-              getPConnect={getPConnect}
-              caseInfoID={todo_caseInfoID}
-              datasource={todo_datasource}
-              showTodoList={todo_showTodoList}
-              headerText={todo_headerText}
-              type={TODO}
-              context={todo_context}
-              itemKey={itemKey}
-            ></ToDo>
-          </div>
-        ))}
+      }
       {bHasCaseMessages && (
         <div className={classes.alert}>
           <Alert severity='success'>{caseMessages}</Alert>
