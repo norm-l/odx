@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
+import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+
 
 
 export default function RadioButtons(props) {
@@ -21,12 +23,13 @@ export default function RadioButtons(props) {
   const[errorMessage,setErrorMessage] = useState(validatemessage);
 
   useEffect(()=>{
-
     if(validatemessage){
     setErrorMessage(validatemessage)
     }
 
   },[validatemessage])
+
+
   const thePConn = getPConnect();
   const hidePageLabel = useIsOnlyField(thePConn);
   const theConfigProps = thePConn.getConfigProps();
@@ -44,6 +47,17 @@ export default function RadioButtons(props) {
     return <ReadOnlyDisplay label={label} value={displayValue} />
   }
 
+  const actionsApi = thePConn.getActionsApi();
+  const propName = thePConn.getStateProps().value;
+
+  const handleChange = event => {
+    handleEvent(actionsApi, 'changeNblur', propName, event.target.value);
+  };
+  const handleBlur = event => {
+      thePConn.getValidationApi().validate(event.target.value);
+  };
+
+
   const extraProps= {testProps:{'data-test-id':testId}};
 
   return (
@@ -51,6 +65,7 @@ export default function RadioButtons(props) {
       {...props}
       name={name}
       label={label}
+      onChange={handleChange}
       legendIsHeading={hidePageLabel}
       options={theOptions.map(option => {return {value:option.key, label:option.value}})}
       displayInline={theOptions.length === 2}
