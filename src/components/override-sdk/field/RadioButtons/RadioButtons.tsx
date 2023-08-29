@@ -53,10 +53,6 @@ export default function RadioButtons(props) {
   const handleChange = event => {
     handleEvent(actionsApi, 'changeNblur', propName, event.target.value);
   };
-  const handleBlur = event => {
-      thePConn.getValidationApi().validate(event.target.value);
-  };
-
 
   const extraProps= {testProps:{'data-test-id':testId}};
 
