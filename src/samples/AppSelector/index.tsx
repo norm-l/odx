@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Switch, Route } from 'react-router-dom';
 // import EmbeddedTopLevel from "../Embedded/EmbeddedTopLevel";
 import EmbeddedTopLevel from '../ChildBenefitsClaim/index';
+import { getDeviceId } from "../../components/Utils/cookie";
 
 // NOTE: You should update this to be the same value that's in
 //  the src/index.html <base href="value"> to allow the React Router
@@ -14,6 +15,10 @@ const baseURL = "/";
 // with /roster or /schedule. The / route will only match
 // when the pathname is exactly the string "/"
 const AppSelector = () => {
+
+  useEffect(() => {
+    getDeviceId()
+  }, [])
 
   return (
     <>
