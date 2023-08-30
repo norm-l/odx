@@ -10,12 +10,41 @@ export default function Checkboxes(props) {
     inputProps,
   } = props;
 
+  const [noneSelected, setNoneSelected] = useState(false);
+
 
   const checkboxClasses = `govuk-checkboxes`;
   // const [optionsListToRender, setOptionsList] = useState(optionsList);
   // const [exclusiveOption, setExclusiveOption] = useState<any>({})
 
   const exclusiveInputProps = {...inputProps, ['data-behaviour']:'exclusive'};
+  const handleExclusiveBehaviour = () => {
+    const selectCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input:not([data-behaviour="exclusive"])');
+    const deselectCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('[data-behaviour="exclusive"]');
+
+    console.log(selectCheckboxes, deselectCheckboxes);
+    for (const selectedElement of selectCheckboxes) {
+        selectedElement.addEventListener('click', () => {
+            for (const elementToDeselect of deselectCheckboxes) {
+                elementToDeselect.checked = false;
+                console.log('deselected');
+            }
+        }, false);
+    }
+
+    for (const selectedElement of deselectCheckboxes) {
+        selectedElement.addEventListener('click', () => {
+            for (const elementToDeselect of selectCheckboxes) {
+                elementToDeselect.checked = false;
+                console.log('selected');
+            }
+        }, false);
+    }
+  }
+
+  useEffect(()=>{
+    handleExclusiveBehaviour();
+  },[noneSelected])
 
 
   // useEffect(()=>{
@@ -68,20 +97,20 @@ export default function Checkboxes(props) {
               index={index}
               name={item.name}
               inputProps={...inputProps}
-              onChange={item.onChange}
+              onChange={(e)=>{item.onChange(e); setNoneSelected(false);}}
               onBlur={onBlur}
               key={item.name}
             />)
           }})
         }
-        
+
         <div className="govuk-checkboxes__divider">or</div>
         <GDSCheckbox
           item={optionsList[optionsList.length - 1]}
           index={optionsList.length - 1}
           name={optionsList[optionsList.length - 1].name}
           inputProps={...exclusiveInputProps}
-          onChange={optionsList[optionsList.length - 1].onChange}
+          onChange={(e)=>{optionsList[optionsList.length - 1].onChange(e); setNoneSelected(true);}}
           onBlur={onBlur}
           key={optionsList[optionsList.length - 1].name}
         />
