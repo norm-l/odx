@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import FieldSet from '../FormGroup/FieldSet';
 import GDSCheckbox from './Checkbox'
+import { Checkboxes as govukCheckbox} from 'govuk-frontend/govuk/all';
 
 export default function Checkboxes(props) {
   const {
@@ -10,7 +11,29 @@ export default function Checkboxes(props) {
     inputProps,
   } = props;
 
-  const [noneSelected, setNoneSelected] = useState(false);
+
+  // This snippet works to get the govuk-frontend code working BUT it doesn't allow any extension for
+  // calling the on change handlers of each check box, therefore the 'behind the scenes' values are not
+  // updated and the unchecking of checkboxes doesn't actually get applied
+  // (The govuk-frontend changes the checked attribute of each checkbox, this doesn't trigger an onchange)
+
+    const checkboxElement = useRef(null);
+
+  /*
+    useEffect( () => {
+    const govukCb = new govukCheckbox(checkboxElement.current);
+    govukCb.init();
+    }, []);
+  */
+
+  function exclusive(indexToIgnore){
+    optionsList.forEach((element, index) => {
+      if(index != indexToIgnore){
+        element.onChange({target: { checked :false}});
+      }
+    });
+
+  }
 
 
   const checkboxClasses = `govuk-checkboxes`;
@@ -44,7 +67,7 @@ export default function Checkboxes(props) {
 
   useEffect(()=>{
     handleExclusiveBehaviour();
-  },[noneSelected])
+  },[])
 
 
   // useEffect(()=>{
@@ -76,7 +99,7 @@ export default function Checkboxes(props) {
 
   return (
     <FieldSet {...props}>
-      <div className={checkboxClasses}>
+      <div className={checkboxClasses} data-module="govuk-checkboxes"  ref={checkboxElement}>
       {/* {optionsList.map((item, index) => {
           if(true){
             return (<GDSCheckbox
@@ -97,7 +120,10 @@ export default function Checkboxes(props) {
               index={index}
               name={item.name}
               inputProps={...inputProps}
-              onChange={(e)=>{item.onChange(e); setNoneSelected(false);}}
+              onChange={(evt) => {
+                item.onChange(evt);
+                optionsList[optionsList.length - 1].onChange({target: { checked: false}});
+              }}
               onBlur={onBlur}
               key={item.name}
             />)
@@ -110,7 +136,10 @@ export default function Checkboxes(props) {
           index={optionsList.length - 1}
           name={optionsList[optionsList.length - 1].name}
           inputProps={...exclusiveInputProps}
-          onChange={(e)=>{optionsList[optionsList.length - 1].onChange(e); setNoneSelected(true);}}
+          onChange={(evt) => {
+            optionsList[optionsList.length - 1].onChange(evt);
+            exclusive(optionsList.length - 1);
+          }}
           onBlur={onBlur}
           key={optionsList[optionsList.length - 1].name}
         />

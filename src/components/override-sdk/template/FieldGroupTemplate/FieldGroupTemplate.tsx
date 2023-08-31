@@ -72,7 +72,7 @@ export default function Group(props){
         );
 
         const formattedPropertyName = childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
-        const optionName = `${formattedContext}-${formattedPropertyName}`
+        const optionName = `${formattedContext}` /*-${formattedPropertyName}`*/
 
         // Points error summary link to first checkbox in group
         if(!firstOptionPropertyName) {firstOptionPropertyName = formattedPropertyName}
