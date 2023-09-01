@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
+import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 
 
@@ -18,6 +19,7 @@ export default function RadioButtons(props) {
     testId
   } = props;
 
+  const isOnlyField = useIsOnlyField();
   const[errorMessage,setErrorMessage] = useState(validatemessage);
 
   useEffect(()=>{
@@ -28,7 +30,6 @@ export default function RadioButtons(props) {
 
   },[validatemessage])
   const thePConn = getPConnect();
-  const hidePageLabel = useIsOnlyField(thePConn);
   const theConfigProps = thePConn.getConfigProps();
   // theOptions will be an array of JSON objects that are literally key/value pairs.
   //  Ex: [ {key: "Basic", value: "Basic"} ]
@@ -45,13 +46,20 @@ export default function RadioButtons(props) {
   }
 
   const extraProps= {testProps:{'data-test-id':testId}};
+  const actionsApi = thePConn.getActionsApi();
+  const propName = thePConn.getStateProps().value;
+
+  const handleChange = event => {
+    handleEvent(actionsApi, 'changeNblur', propName, event.target.value);
+  };
 
   return (
     <GDSRadioButtons
       {...props}
       name={name}
       label={label}
-      legendIsHeading={hidePageLabel}
+      onChange={handleChange}
+      legendIsHeading={isOnlyField}
       options={theOptions.map(option => {return {value:option.key, label:option.value}})}
       displayInline={theOptions.length === 2}
       hintText={helperText}

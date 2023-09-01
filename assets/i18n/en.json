@@ -62,8 +62,8 @@
   "A_MONTH": "a month",
   "AND_A_YEAR": "and a year",
   "A_YEAR": "a year",
-  "MUST_INCLUDE": "Must include",
-  "MUST_BE_A_REAL_DATE": "Must be a real date",
+  "MUST_INCLUDE": "Date of birth must include",
+  "MUST_BE_A_REAL_DATE": "Date of birth must be a real date",
   "IS_NOT_A_VALID_DATE": "is not a valid date",
   "WARNING": "WARNING",
   "Day": "Day",
@@ -106,5 +106,11 @@
   "COOKIE_AWSALB_DESCRIPTION": "Used to help manage web traffic between a visitors web browser and the application servers that host HMRC services.",
   "COOKIE_AWSALBCORS_DESCRIPTION": "Used to help manage web traffic between a visitors web browser and the application servers that host HMRC services.",
   "COOKIE_JSESSIONID_DESCRIPTION": "Used to identify the visitor’s session information related to the HMRC service being accessed.",
-  "COOKIE_FIND_OUT_MORE": "Find out more about cookies on HMRC services"
+  "COOKIE_FIND_OUT_MORE": "Find out more about cookies on HMRC services",
+
+  "GDS_INFO_INFORMATION": "Information",
+  "GDS_INFO_SUCCESS": "Success",
+  "GDS_INFO_WARNING": "Warning",
+  "GDS_INFO_INFO_UNVERIFIED_CHILD_HEADER": "We were unable to verify your child's details",
+  "GDS_INFO_INFO_UNVERIFIED_CHILD": "Check that the details you entered match their birth certificate. If you've just registered their birth, try again in 24 hours"
 }
