@@ -56,7 +56,7 @@ const Accessibility: React.FC = () => {
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_P_7")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_8")} <a href="">{t("ACCESSIBILITY_ANCHOR_2")}</a>.</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_8")} <a href="https://www.w3.org/TR/WCAG21/">{t("ACCESSIBILITY_ANCHOR_2")}</a>.</p>
                             <p className='govuk-body'>{t("ACCESSIBILITY_P_9")}</p>
                             <ul className="govuk-list govuk-list--bullet">
                                 {makeList(2, 27)}
@@ -64,48 +64,57 @@ const Accessibility: React.FC = () => {
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_4")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_10")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_10")} <a href="https://www.gov.uk/get-help-hmrc-extra-support">{t("ACCESSIBILITY_ANCHOR_3")}</a> {t("ACCESSIBILITY_P_11")}</p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_5")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_11")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")} <a href="https://www.tax.service.gov.uk/contact/accessibility?service=claim-child-benefit&referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2Frecently-claimed-child-benefit%3F_ga%3D2.37580512.170046323.1692877957-1346543562.1678892511">{t("ACCESSIBILITY_ANCHOR_4")}</a>.</p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_6")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")}</p>
+                            <p className='govuk-body'>
+                                {t("ACCESSIBILITY_P_13")}
+                                <a href="https://www.equalityadvisoryservice.com/">{t("ACCESSIBILITY_ANCHOR_5")}</a>
+                                {t("ACCESSIBILITY_P_14")}
+                                <a href="https://www.equalityni.org/Home">{t("ACCESSIBILITY_ANCHOR_6")}</a>
+                                {t("ACCESSIBILITY_P_15")}
+                            </p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_7")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_13")}</p>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_14")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_16")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_17")}</p>
                             <p className='govuk-body'>
-                                {t("ACCESSIBILITY_P_15")}
-                                <a href=""></a>
+                                {t("ACCESSIBILITY_P_18")}
+                                <a href="https://www.gov.uk/get-help-hmrc-extra-support">{t("ACCESSIBILITY_ANCHOR_7")}</a>
                             </p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_8")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_15")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_19")}</p>
                             <p className='govuk-body'>
-                                {t("ACCESSIBILITY_P_16")}
-                                <a href=""></a>
-                                {t("ACCESSIBILITY_P_17")}
+                                {t("ACCESSIBILITY_P_20")}
+                                <a href="https://www.w3.org/TR/WCAG21/">{t("ACCESSIBILITY_ANCHOR_8")}</a>
+                                {t("ACCESSIBILITY_P_21")}
                             </p>
                             <ol className="govuk-list govuk-list--number">
-                                {makeList(3, 27)}
+                                {makeList(3, 26)}
                             </ol>
+
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_9")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_18")}</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_22")}</p>
                             <p className='govuk-body'>
-                                {t("ACCESSIBILITY_P_19")}
-                                <a href=""></a>
-                                {t("ACCESSIBILITY_P_20")}
-                                {t("ACCESSIBILITY_P_21")}
+                                {t("ACCESSIBILITY_P_23")}
+                                <a href="https://www.digitalaccessibilitycentre.org/">{t("ACCESSIBILITY_ANCHOR_9")}</a>
+                                {t("ACCESSIBILITY_P_24")}
                             </p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_25")}</p>
                             <p className="govuk-body">
-                                <a href="#" className="govuk-link" rel="noreferrer noopener" target="_blank">Is this page not working properly? (opens in new tab)</a>
+                                <a href="https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&service=accessibility-statement&referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Faccessibility-statement%2Fclaim-child-benefit%3FreferrerUrl%3Dhttps%253A%252F%252Fwww.tax.service.gov.uk%252Ffill-online%252Fclaim-child-benefit%252Frecently-claimed-child-benefit%253F_ga%253D2.37580512.170046323.1692877957-1346543562.1678892511" className="govuk-link" rel="noreferrer noopener" target="_blank">
+                                    {t("ACCESSIBILITY_ANCHOR_10")}
+                                </a>
                             </p>
                         </div>
                     </div>
