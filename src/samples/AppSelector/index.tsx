@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from 'react-router-dom';
 // import EmbeddedTopLevel from "../Embedded/EmbeddedTopLevel";
 import EmbeddedTopLevel from '../ChildBenefitsClaim/index';
+import Accessibility from "../AccessibilityPage/Accessibility";
 
 // NOTE: You should update this to be the same value that's in
 //  the src/index.html <base href="value"> to allow the React Router
@@ -19,6 +20,7 @@ const AppSelector = () => {
     <>
       <Switch>
         <Route exact path={baseURL} component={EmbeddedTopLevel} />
+        <Route path={`${baseURL}accessibility`} component={Accessibility} />
         <Route path="*" component={EmbeddedTopLevel} />
       </Switch>
     </>

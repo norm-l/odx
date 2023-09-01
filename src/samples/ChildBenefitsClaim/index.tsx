@@ -25,6 +25,7 @@ import signoutHandler from '../../components/helpers/signout';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
+import appFooterDefaultLinks from '../../components/AppComponents/AppFooter/appFooterDefaultLinks';
 
 
 // declare var gbLoggedIn: boolean;
@@ -476,7 +477,7 @@ export default function ChildBenefitsClaim() {
         handleSignoutModal={signoutHandler}
         handleStaySignIn={handleStaySignIn}
       />
-      <AppFooter/>
+      <AppFooter links={appFooterDefaultLinks}/>
     </>
   );
 }
