@@ -71,7 +71,7 @@ export const pyReviewRaw = {
     ],
     classID: 'OM5W9U-SampleApp-Work-Test'
   };
-  
+
   export const regionChildrenResolved = [
     {
       readOnly: undefined,
@@ -128,5 +128,5 @@ export const pyReviewRaw = {
       label: 'Service Date',
       hasSuggestions: false
     }
+
   ];
-  

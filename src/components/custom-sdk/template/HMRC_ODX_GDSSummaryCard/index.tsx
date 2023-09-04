@@ -43,14 +43,49 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
  return (
   <StyledHmrcOdxGdsSummaryCardWrapper>
-   <Grid container spacing={1}>
+   {/* <Grid container spacing={1}>
      <Grid item xs={12} md={aSize} className={classes.colStyles}>
        {children[0]}
      </Grid>
      <Grid item xs={12} md={bSize} className={classes.colStyles}>
        {children[1]}
      </Grid>
-   </Grid>
+   </Grid> */}
+   <div class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">University of Gloucestershire</h2>
+    <ul class="govuk-summary-card__actions">
+      <li class="govuk-summary-card__action"> <a class="govuk-link" href="#">
+          Delete choice<span class="govuk-visually-hidden"> of University of Gloucestershire</span>
+        </a>
+      </li>
+      <li class="govuk-summary-card__action"> <a class="govuk-link" href="#">
+          Withdraw<span class="govuk-visually-hidden"> from University of Gloucestershire</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Course
+        </dt>
+        <dd class="govuk-summary-list__value">
+          English (3DMD)<br/>PGCE with QTS full time
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Location
+        </dt>
+        <dd class="govuk-summary-list__value">
+          School name<br/>Road, City, SW1 1AA
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
    </StyledHmrcOdxGdsSummaryCardWrapper>
  )
 
