@@ -24,9 +24,11 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const classNamees = useStyles();
 
   const {getPConnect, templateCol} = props;
-  getPConnect().setInheritedProp("displayMode", "LABELS_LEFT");
-  getPConnect().setInheritedProp("readOnly", true);
+ 
+
+ 
   const children = getPConnect()
+
     .getChildren()
     .map((configObject, index) =>
       createElement(createPConnectComponent(), {
@@ -35,23 +37,8 @@ export default function HmrcOdxGdsSummaryCard(props) {
         key: index.toString(),
       })
     );
-
-  if (children.length !== 2) {
-    // eslint-disable-next-line no-console
-    console.error( `TwoColumn template sees more than 2 columns: ${children.length}`);
-  }
-
-  // Calculate the size
-  //  Default to assume the 2 columns are evenly split. However, override if templateCol
-  //  (example value: "1fr 1fr")
-  let aSize: GridSize = 6;
-  let bSize: GridSize = 6;
-
-  const colAArray = templateCol.replaceAll(/[a-z]+/g, "").split(/\s/).map(itm => Number(itm));
-  const totalCols = colAArray.reduce((v, itm) => itm + v, 0);
-  const ratio = 12 / totalCols;
-  aSize = (ratio * colAArray[0]) as GridSize;
-  bSize = (ratio * colAArray[1]) as GridSize;
+   
+console.log("children",children[0].props.children)
 
  return (
   <>
@@ -64,11 +51,11 @@ export default function HmrcOdxGdsSummaryCard(props) {
        {children[1]}
      </Grid>
    </Grid> */}
-    {children.map((child, i) => (
+     {children[0].props.children.map((child, i) => ( 
        <StyledHmrcOdxGdsSummaryCardWrapper>
    <div className="govuk-summary-card">
   <div className="govuk-summary-card__title-wrapper">
-    <h2 className="govuk-summary-card__title">Child {i}</h2>
+    <h2 key={child} className="govuk-summary-card__title">Child {i+1}</h2>
     <ul className="govuk-summary-card__actions">
       <li className="govuk-summary-card__action"> <a className="govuk-link" href="#">
           Remove<span className="govuk-visually-hidden"> of University of Gloucestershire</span>
@@ -84,10 +71,10 @@ export default function HmrcOdxGdsSummaryCard(props) {
     <dl className="govuk-summary-list">
       <div className="govuk-summary-list__row">
         <dt className="govuk-summary-list__key">
-        {child.props.value}
+      First name
         </dt>
         <dd className="govuk-summary-list__value">
-          English (3DMD)<br/>PGCE with QTS full time
+      {child.config.value}
         </dd>
       </div>
       <div className="govuk-summary-list__row">
@@ -95,14 +82,14 @@ export default function HmrcOdxGdsSummaryCard(props) {
           Date of birth
         </dt>
         <dd className="govuk-summary-list__value">
-          School name<br/>Road, City, SW1 1AA
+        {child.config.value}
         </dd>
       </div>
     </dl>
   </div>
 </div>
    </StyledHmrcOdxGdsSummaryCardWrapper>
-   ))}
+   ))}  
    <button className="govuk-button govuk-button--secondary" data-module="govuk-button">
    Add another child
  </button>
@@ -111,14 +98,10 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
 }
 
-HmrcOdxGdsSummaryCard.defaultProps = {
-  templateCol: "1fr 1fr",
-  // icon: ""
-};
+
 
 HmrcOdxGdsSummaryCard.propTypes = {
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
   // title: PropTypes.string,
-  templateCol: PropTypes.string,
-  // icon: PropTypes.string
+ 
 };

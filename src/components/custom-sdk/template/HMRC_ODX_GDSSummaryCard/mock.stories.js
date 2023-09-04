@@ -9,25 +9,28 @@ export const pyReviewRaw = {
     },
     children: [
       {
+        name: 'A',
+        type: 'Region',
         children: [
           {
             type: 'TextInput',
             config: {
-              value: '@P .FirstName',
+              value: 'Joe',
               label: '@L First Name'
             }
           },
           {
-          type: 'TextInput',
-          config: {
-            value: '@P .FirstName',
-            label: '@L First Name'
-          }
-        },
-
+            type: 'TextInput',
+            config: {
+              value: '01/01/2023',
+              label: '@L Date of Birth'
+            }
+          },
+        
+        
         ]
       },
-
+     
     ],
     classID: 'OM5W9U-SampleApp-Work-Test'
   };
@@ -36,14 +39,14 @@ export const pyReviewRaw = {
     {
       readOnly: undefined,
       value: 'John',
-      label: 'First name',
+      label: 'First Name',
       hasSuggestions: false
     },
-
+  
     {
       readOnly: undefined,
       value: '2023-01-25',
-      label: 'Date of birth',
+      label: 'Date of Birth',
       hasSuggestions: false
     }
 

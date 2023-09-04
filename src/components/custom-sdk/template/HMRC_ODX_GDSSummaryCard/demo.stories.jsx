@@ -10,7 +10,6 @@ export default {
   title: 'HmrcOdxGdsSummaryCard',
   component: HmrcOdxGdsSummaryCard
 };
-
 const renderField = resolvedProps => {
   const { displayMode, value = '', label = '', onChange} = resolvedProps;
 
@@ -49,13 +48,12 @@ const renderField = resolvedProps => {
   return val;
 };
 
+ 
 export const BaseHmrcOdxGdsSummaryCard = () => {
   const [firstName, setFirstName] = useState('John');
-//  const [middleName, setMiddleName] = useState('');
-//  const [lastName, setLastName] = useState('Joe');
-//  const [phone, setPhone] = useState('+16397975093');
-  const [birthDate, setBirthDate] = useState('2023-01-25');
-//  const [email, setEmail] = useState('john@doe.com');
+
+  const [dateOfBirth, setBirthDate] = useState('2023-01-25');
+
   const regionChildrenResolved = [
     {
       readOnly: undefined,
@@ -66,69 +64,16 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
         setFirstName(val.target.value);
       }
     },
-   // {
-    //   readOnly: undefined,
-    //   value: middleName,
-    //   label: 'Middle Name',
-    //   hasSuggestions: false,
-    //   onChange: val => {
-    //     setMiddleName(val.target.value);
-    //   }
-    // },
-    // {
-    //   readOnly: undefined,
-    //   value: lastName,
-    //   label: 'Last Name',
-    //   hasSuggestions: false,
-    //   onChange: val => {
-    //     setLastName(val.target.value);
-    //   }
-    // },
-    // {
-    //   readOnly: undefined,
-    //   value: email,
-    //   label: 'Email',
-    //   hasSuggestions: false,
-    //   onChange: val => {
-    //     setEmail(val.target.value);
-    //   }
-    // },
-    // {
-    //   readOnly: undefined,
-    //   value: phone,
-    //   label: 'Phone Number',
-    //   datasource: {
-    //     fields: {
-    //       value: undefined
-    //     },
-    //     source: [
-    //       {
-    //         value: '+1'
-    //       },
-    //       {
-    //         value: '+91'
-    //       },
-    //       {
-    //         value: '+48'
-    //       },
-    //       {
-    //         value: '+44'
-    //       }
-    //     ]
-    //   },
-    //   hasSuggestions: false,
-    //   onChange: val => {
-    //     setPhone(val);
-    //   }
-    // },
+ 
+ 
      {
       readOnly: undefined,
-      value: serviceDate,
-      label: 'Service Date',
+      value: dateOfBirth,
+      label: 'Date of birth',
       hasSuggestions: false,
       onChange: date => {
         const changeValue = date && date.isValid() ? date.toISOString() : null;
-        setServiceDate(changeValue);
+        setBirthDate(changeValue);
       }
 
     }
@@ -140,20 +85,28 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
         getChildren: () => {
           return pyReviewRaw.children;
         },
+       
+        getRawMetadata: () => {
+          return pyReviewRaw;
+        },
+        getInheritedProps: () => {
+          return pyReviewRaw.config.inheritedProps;
+        },
+        setInheritedProp: () => {
+          /* nothing */
+        },
+        resolveConfigProps: () => {
+          /* nothing */
+        },
         createComponent: config => {
           switch (config.config.value) {
             case '@P .FirstName':
               return renderField(regionChildrenResolved[0]);
-            // case '@P .MiddleName':
-            //   return renderField(regionChildrenResolved[1]);
-            // case '@P .LastName':
-            //   return renderField(regionChildrenResolved[2]);
-            // case '@P .Email':
-            //   return renderField(regionChildrenResolved[3]);
-            // case '@P .PhoneNumber':
-            //   return renderField(regionChildrenResolved[4]);
-            case '@P .ServiceDate':
+           
+           
+            case '@P .dateOfBirth':
               return renderField(regionChildrenResolved[1]);
+            
             default:
               break;
           }
@@ -162,18 +115,17 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
     }
   };
 
-  const regionAChildren = pyReviewRaw.children[0].children.map(child => {
+
+  const regionAChildren = pyReviewRaw.children[0].children.map((child,i) => {
     return props.getPConnect().createComponent(child);
   });
-  const regionBChildren = pyReviewRaw.children[1].children.map(child => {
-    return props.getPConnect().createComponent(child);
-  });
+
 
   return (
     <>
       <HmrcOdxGdsSummaryCard {...props}>
-        {regionAChildren}
-        {regionBChildren}
+         {regionAChildren} 
+      
       </HmrcOdxGdsSummaryCard>
     </>
   );
