@@ -7,10 +7,7 @@ import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
 
-const baseURL = "/";
-
 const AppSelector = () => {
-
   i18n
     .use(Backend)
     .use(initReactI18next)
@@ -29,15 +26,11 @@ const AppSelector = () => {
     });
 
   return (
-    <>
-      <Switch>
-          <Route exact path={baseURL} component={ChildBenefitsClaim} />
-          <Route path={`${baseURL}index.html`} component={ChildBenefitsClaim} />
-          <Route path={`${baseURL}cookies`} component={CookiePage} />
-          <Route path="*" component={ChildBenefitsClaim} />
-        </Switch>
-    </>
-  )
+    <Switch>
+      <Route exact path='/' component={ChildBenefitsClaim} />
+      <Route path='/cookies' component={CookiePage} />
+    </Switch>
+  );
 
 };
 
