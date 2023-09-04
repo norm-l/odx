@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 // import EmbeddedTopLevel from "../Embedded/EmbeddedTopLevel";
 import EmbeddedTopLevel from '../ChildBenefitsClaim/index';
 import Accessibility from "../AccessibilityPage/Accessibility";
@@ -18,11 +18,11 @@ const AppSelector = () => {
 
   return (
     <>
-      <Switch>
-        <Route exact path={baseURL} component={EmbeddedTopLevel} />
-        <Route path={`${baseURL}accessibility`} component={Accessibility} />
-        <Route path="*" component={EmbeddedTopLevel} />
-      </Switch>
+      <Routes>
+        <Route path={baseURL} element={<EmbeddedTopLevel />} />
+        <Route path={`${baseURL}accessibility`} element={<Accessibility />} />
+        <Route path="*" element={<EmbeddedTopLevel />} />
+      </Routes>
     </>
   )
 

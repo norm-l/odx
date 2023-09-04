@@ -4,9 +4,12 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import signoutHandler from '../../components/helpers/signout';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/BaseComponents/Button/Button';
 
 const Accessibility: React.FC<{}> = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate()
     const [isSignoutModal, setIsSignoutModal] = useState<boolean>(null);
 
     const makeList = (listNumber: number, entries: number) => {
@@ -17,10 +20,18 @@ const Accessibility: React.FC<{}> = () => {
         return output;
     };
 
+    const goBackHandler = () => navigate(-1);
+
     return (
         <>
             <AppHeader handleSignout={() => setIsSignoutModal(false)} appname={t("CLAIM_CHILD_BENEFIT")} />
             <div className="govuk-width-container">
+                <Button
+                    variant='backlink'
+                    onClick={goBackHandler}
+                    key='StartPageBacklink'
+                    attributes={{ type: 'link' }}
+                />
                 <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
                     <div className="govuk-grid-row">
                         <div className='govuk-grid-column-two-thirds'>

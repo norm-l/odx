@@ -18,7 +18,7 @@ const AppFooter: React.FC<{}> = () => {
               </a>
             </li>
             <li className="govuk-footer__inline-list-item">
-              <NavLink className="govuk-footer__link" to="/#">
+              <NavLink className="govuk-footer__link" to="/accessibility">
                 {t("ACCESSIBILITY")}
               </NavLink>
             </li>
