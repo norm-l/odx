@@ -5,15 +5,7 @@ import AppFooter from '../../components/AppComponents/AppFooter';
 import signoutHandler from '../../components/helpers/signout';
 import { useTranslation } from 'react-i18next';
 
-const linkContent = [
-    {
-        linkText: "CLEAR_DATA",
-        href: "/",
-        isNavLink: false,
-    },
-];
-
-const Accessibility: React.FC = () => {
+const Accessibility: React.FC<{}> = () => {
     const { t } = useTranslation();
     const [isSignoutModal, setIsSignoutModal] = useState<boolean>(null);
 
@@ -126,7 +118,7 @@ const Accessibility: React.FC = () => {
                 handleSignoutModal={signoutHandler}
                 handleStaySignIn={() => setIsSignoutModal(true)}
             />
-            <AppFooter links={linkContent}/>
+            <AppFooter />
         </>
     )
 };
