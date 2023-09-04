@@ -68,7 +68,7 @@ const Accessibility: React.FC = () => {
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_5")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")} <a href="https://www.tax.service.gov.uk/contact/accessibility?service=claim-child-benefit&referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2Frecently-claimed-child-benefit%3F_ga%3D2.37580512.170046323.1692877957-1346543562.1678892511">{t("ACCESSIBILITY_ANCHOR_4")}</a>.</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")} <a href="https://www.staging.tax.service.gov.uk/contact/accessibility?service=$463&referrerUrl=$www.account-np.hmrc.gov.uk/child-benefit/make_a_claim">{t("ACCESSIBILITY_ANCHOR_4")}</a>.</p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_6")}
                             </h1>
