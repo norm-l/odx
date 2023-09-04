@@ -302,6 +302,9 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
 
+      //Register our deviceID header
+      PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', 'PLACEHOLDER_DEVICEID');
+
       /* const locale = sessionStorage.getItem('rsdk_locale') || 'en-GB';
       // eslint-disable-next-line no-undef
       PCore.getEnvironmentInfo().setLocale(locale);
