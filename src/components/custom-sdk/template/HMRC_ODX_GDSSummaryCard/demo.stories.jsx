@@ -51,77 +51,77 @@ const renderField = resolvedProps => {
 
 export const BaseHmrcOdxGdsSummaryCard = () => {
   const [firstName, setFirstName] = useState('John');
-  const [middleName, setMiddleName] = useState('');
-  const [lastName, setLastName] = useState('Joe');
-  const [phone, setPhone] = useState('+16397975093');
-  const [serviceDate, setServiceDate] = useState('2023-01-25');
-  const [email, setEmail] = useState('john@doe.com');
+//  const [middleName, setMiddleName] = useState('');
+//  const [lastName, setLastName] = useState('Joe');
+//  const [phone, setPhone] = useState('+16397975093');
+  const [birthDate, setBirthDate] = useState('2023-01-25');
+//  const [email, setEmail] = useState('john@doe.com');
   const regionChildrenResolved = [
     {
       readOnly: undefined,
       value: firstName,
-      label: 'First Name',
+      label: 'First name',
       hasSuggestions: false,
       onChange: val => {
         setFirstName(val.target.value);
       }
     },
-    {
-      readOnly: undefined,
-      value: middleName,
-      label: 'Middle Name',
-      hasSuggestions: false,
-      onChange: val => {
-        setMiddleName(val.target.value);
-      }
-    },
-    {
-      readOnly: undefined,
-      value: lastName,
-      label: 'Last Name',
-      hasSuggestions: false,
-      onChange: val => {
-        setLastName(val.target.value);
-      }
-    },
-    {
-      readOnly: undefined,
-      value: email,
-      label: 'Email',
-      hasSuggestions: false,
-      onChange: val => {
-        setEmail(val.target.value);
-      }
-    },
-    {
-      readOnly: undefined,
-      value: phone,
-      label: 'Phone Number',
-      datasource: {
-        fields: {
-          value: undefined
-        },
-        source: [
-          {
-            value: '+1'
-          },
-          {
-            value: '+91'
-          },
-          {
-            value: '+48'
-          },
-          {
-            value: '+44'
-          }
-        ]
-      },
-      hasSuggestions: false,
-      onChange: val => {
-        setPhone(val);
-      }
-    },
-    {
+   // {
+    //   readOnly: undefined,
+    //   value: middleName,
+    //   label: 'Middle Name',
+    //   hasSuggestions: false,
+    //   onChange: val => {
+    //     setMiddleName(val.target.value);
+    //   }
+    // },
+    // {
+    //   readOnly: undefined,
+    //   value: lastName,
+    //   label: 'Last Name',
+    //   hasSuggestions: false,
+    //   onChange: val => {
+    //     setLastName(val.target.value);
+    //   }
+    // },
+    // {
+    //   readOnly: undefined,
+    //   value: email,
+    //   label: 'Email',
+    //   hasSuggestions: false,
+    //   onChange: val => {
+    //     setEmail(val.target.value);
+    //   }
+    // },
+    // {
+    //   readOnly: undefined,
+    //   value: phone,
+    //   label: 'Phone Number',
+    //   datasource: {
+    //     fields: {
+    //       value: undefined
+    //     },
+    //     source: [
+    //       {
+    //         value: '+1'
+    //       },
+    //       {
+    //         value: '+91'
+    //       },
+    //       {
+    //         value: '+48'
+    //       },
+    //       {
+    //         value: '+44'
+    //       }
+    //     ]
+    //   },
+    //   hasSuggestions: false,
+    //   onChange: val => {
+    //     setPhone(val);
+    //   }
+    // },
+     {
       readOnly: undefined,
       value: serviceDate,
       label: 'Service Date',
@@ -144,16 +144,16 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
           switch (config.config.value) {
             case '@P .FirstName':
               return renderField(regionChildrenResolved[0]);
-            case '@P .MiddleName':
-              return renderField(regionChildrenResolved[1]);
-            case '@P .LastName':
-              return renderField(regionChildrenResolved[2]);
-            case '@P .Email':
-              return renderField(regionChildrenResolved[3]);
-            case '@P .PhoneNumber':
-              return renderField(regionChildrenResolved[4]);
+            // case '@P .MiddleName':
+            //   return renderField(regionChildrenResolved[1]);
+            // case '@P .LastName':
+            //   return renderField(regionChildrenResolved[2]);
+            // case '@P .Email':
+            //   return renderField(regionChildrenResolved[3]);
+            // case '@P .PhoneNumber':
+            //   return renderField(regionChildrenResolved[4]);
             case '@P .ServiceDate':
-              return renderField(regionChildrenResolved[5]);
+              return renderField(regionChildrenResolved[1]);
             default:
               break;
           }

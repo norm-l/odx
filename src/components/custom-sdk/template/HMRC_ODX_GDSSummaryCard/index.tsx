@@ -1,10 +1,11 @@
 
-import React from "react";
+import React, {createElement}from "react";
 import PropTypes from "prop-types";
 import { Grid, GridSize } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
 import StyledHmrcOdxGdsSummaryCardWrapper from './styles';
+import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
 const useStyles = makeStyles(() => ({
   colStyles: {
@@ -20,9 +21,20 @@ const useStyles = makeStyles(() => ({
 // props passed in combination of props from property panel (config.json) and run time props from Constellation
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function HmrcOdxGdsSummaryCard(props) {
-  const classes = useStyles();
+  const classNamees = useStyles();
 
-  const {children, templateCol} = props;
+  const {getPConnect, templateCol} = props;
+  getPConnect().setInheritedProp("displayMode", "LABELS_LEFT");
+  getPConnect().setInheritedProp("readOnly", true);
+  const children = getPConnect()
+    .getChildren()
+    .map((configObject, index) =>
+      createElement(createPConnectComponent(), {
+        ...configObject,
+        // eslint-disable-next-line react/no-array-index-key
+        key: index.toString(),
+      })
+    );
 
   if (children.length !== 2) {
     // eslint-disable-next-line no-console
@@ -42,44 +54,47 @@ export default function HmrcOdxGdsSummaryCard(props) {
   bSize = (ratio * colAArray[1]) as GridSize;
 
  return (
-  <StyledHmrcOdxGdsSummaryCardWrapper>
+  <>
+
    {/* <Grid container spacing={1}>
-     <Grid item xs={12} md={aSize} className={classes.colStyles}>
+     <Grid item xs={12} md={aSize} classNameName={classNamees.colStyles}>
        {children[0]}
      </Grid>
-     <Grid item xs={12} md={bSize} className={classes.colStyles}>
+     <Grid item xs={12} md={bSize} classNameName={classNamees.colStyles}>
        {children[1]}
      </Grid>
    </Grid> */}
-   <div class="govuk-summary-card">
-  <div class="govuk-summary-card__title-wrapper">
-    <h2 class="govuk-summary-card__title">University of Gloucestershire</h2>
-    <ul class="govuk-summary-card__actions">
-      <li class="govuk-summary-card__action"> <a class="govuk-link" href="#">
-          Delete choice<span class="govuk-visually-hidden"> of University of Gloucestershire</span>
+    {children.map((child, i) => (
+       <StyledHmrcOdxGdsSummaryCardWrapper>
+   <div className="govuk-summary-card">
+  <div className="govuk-summary-card__title-wrapper">
+    <h2 className="govuk-summary-card__title">Child {i}</h2>
+    <ul className="govuk-summary-card__actions">
+      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#">
+          Remove<span className="govuk-visually-hidden"> of University of Gloucestershire</span>
         </a>
       </li>
-      <li class="govuk-summary-card__action"> <a class="govuk-link" href="#">
-          Withdraw<span class="govuk-visually-hidden"> from University of Gloucestershire</span>
+      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#">
+          Change<span className="govuk-visually-hidden"> from University of Gloucestershire</span>
         </a>
       </li>
     </ul>
   </div>
-  <div class="govuk-summary-card__content">
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Course
+  <div className="govuk-summary-card__content">
+    <dl className="govuk-summary-list">
+      <div className="govuk-summary-list__row">
+        <dt className="govuk-summary-list__key">
+        {child.props.value}
         </dt>
-        <dd class="govuk-summary-list__value">
+        <dd className="govuk-summary-list__value">
           English (3DMD)<br/>PGCE with QTS full time
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Location
+      <div className="govuk-summary-list__row">
+        <dt className="govuk-summary-list__key">
+          Date of birth
         </dt>
-        <dd class="govuk-summary-list__value">
+        <dd className="govuk-summary-list__value">
           School name<br/>Road, City, SW1 1AA
         </dd>
       </div>
@@ -87,6 +102,11 @@ export default function HmrcOdxGdsSummaryCard(props) {
   </div>
 </div>
    </StyledHmrcOdxGdsSummaryCardWrapper>
+   ))}
+   <button className="govuk-button govuk-button--secondary" data-module="govuk-button">
+   Add another child
+ </button>
+ </>
  )
 
 }
