@@ -44,6 +44,16 @@
           "saveToReference": true
         }
       ]
+    },
+    {
+      "format": "SELECT",
+      "name": "useType",
+      "label": "Use Type",
+      "defaultValue": "1",
+      "source": [
+        { "key": "1", "value": "Multi Child List" }
+       
+      ]
     }
   ]
 }

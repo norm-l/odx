@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 export default function HmrcOdxGdsSummaryCard(props) {
   const classNamees = useStyles();
 
-  const {getPConnect, templateCol} = props;
+  const {getPConnect,useType} = props;
  
 
  
@@ -38,7 +38,12 @@ export default function HmrcOdxGdsSummaryCard(props) {
       })
     );
    
-
+    switch (useType) {
+      case '1':
+       console.log("Multichild")
+        break;
+     
+    }
 
  return (
   <>

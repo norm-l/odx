@@ -72,6 +72,7 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
   ];
   const props = {
     template: 'DefaultForm',
+    useType: "1",
     getPConnect: () => {
       return {
         getChildren: () => {
