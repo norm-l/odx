@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 const AppFooter: React.FC<{}> = () => {
   const { t } = useTranslation();
