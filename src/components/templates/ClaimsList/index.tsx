@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
@@ -8,8 +8,10 @@ import { useTranslation } from 'react-i18next';
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, options, title, loading, rowClickAction, buttonContent} = props;
+  const { thePConn, data, title, loading, rowClickAction, buttonContent} = props;
   const { t } = useTranslation();
+  // const childrenJSON = Claim.Claim.childrenJSON;
+  const [claims, setClaims] = useState([]);
 
   /* Property Resolver */
   const resolveProperty = (source, propertyName) => {
@@ -37,11 +39,9 @@ export default function ClaimsList(props){
       case 'Open-InProgress':
         return { text: t('IN_PROGRESS'), tagColour: 'grey' };
       case 'Pending-CBS':
-        return {text: t("CLAIM_RECEIVED"), tagColour:'blue'};
       case 'Resolved-Completed':
-        return {text: t("COMPLETED"), tagColour:''};
       case 'Pending-ManualInvestigation':
-        return { text: t('COMPLETED'), tagColour: '' };
+        return {text: t("CLAIM_RECEIVED"), tagColour:'blue'};
       default:
         return {text:status, tagColour:'grey'};
     }
@@ -67,94 +67,69 @@ export default function ClaimsList(props){
     }
   }
 
-  let tableContent = <></>;
-
-  if(loading){
-    tableContent = <tr><td><h2 className='govuk-heading-m'>{t("CHECKING_FOR_CLAIMS")}</h2></td></tr>
+  function _setClaims() {
+    const claimsData = [];
+    data.forEach(item => {
+      console.log('data loaded')
+      const claimItem = {
+        claimRef : item.pyID,
+        children : {
+          firstName : item.Claim.Child.pyFirstName,
+          lastName : item.Claim.Child.pyLastName,
+          dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD MMMM YYYY' })
+        },
+        actionButton :
+          (<Button
+            attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
+            variant='secondary'
+            onClick={() => {
+              _rowClick(item);
+            }}
+          >
+            {typeof(buttonContent) === 'function' ? buttonContent(item) : buttonContent}
+          </Button>) ,
+        status : statusMapping(item.pyStatusWork)
+      };
+      // if(item.Claim.childrenJSON !== null){
+      //   // extract children from this json and add it to the
+      //   // item.Claim.childrenJSON.
+      // }
+      claimsData.push(claimItem);
+    })
+    setClaims(claimsData);
   }
-  else if( data.length > 0 ) {
-    tableContent = data.map(row => {
-      return (
-        <tr className='govuk-summary-list__row' key={row.pyID}>
-          <td className='govuk-card '>
-            <div className='govuk-summary-card__content govuk-grid-row'>
-              <div className='govuk-grid-column-two-thirds govuk-!-padding-0'>
-                {options.map(field => {
-                  const value = resolveProperty(row, field.name);
-                  // Handle Name concatenation
-                  if (field.name.includes('FirstName')) {
-                    let response = value;
 
-                    const lastNameResults = options.filter(_field =>
-                      _field.name.includes('LastName')
-                    );
-                    if (lastNameResults.length > 0) {
-                      const lastName = resolveProperty(row, lastNameResults[0].name);
-                      response = response.concat(` ${lastName}`);
-                    }
-                    return (
-                        <div className='govuk-heading-m' key={field.name} aria-label={field.label}>
-                          {response}
-                        </div>
-                    );
+  useEffect(() => {
+    console.log('called it');
+    _setClaims();
+  },[data, loading])
 
-                  }
-                  // All other fields except for case status
-                  if (
-                    field.name !== 'pyStatusWork' &&
-                    !field.name.includes('FirstName') &&
-                    !field.name.includes('LastName')
-                  ) {
-                    if (field.type === 'Date') {
-                      return <div key={field.name} aria-label={field.label}>{DateFormatter.Date(value, { format: 'DD MMMM YYYY' })}</div>;
-                    } else {
-                      return <div key={field.name} aria-label={field.label}>{value}</div>;
-                    }
-                  }
-                  return null;
-                })}
-              </div>
-              <div className='govuk-grid-column-one-third govuk-!-padding-0'>
-                {/* Displays Case status */}
-                <strong
-                  className={`govuk-tag govuk-tag--${statusMapping(row.pyStatusWork).tagColour} app-claimslist-tag`}
-                >
-                  {statusMapping(row.pyStatusWork).text}
-                </strong>
-              </div>
-              <div className='govuk-grid-column-two-thirds  govuk-!-padding-0'>
-              <Button
-                  attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
-                  variant='secondary'
-                  onClick={() => {
-                    _rowClick(row);
-                  }}
-                >
-                {typeof(buttonContent) === 'function' ? buttonContent(row) : buttonContent}
-                </Button>
-              </div>
-            </div>
-          </td>
-        </tr>
-      )})
-  }
-  else {
-    tableContent = <tr className="govuk-table__row">
-      <td>
-      <div  role="alert">No {title.toLowerCase()}</div>
-      </td>
-    </tr>
-  }
 
 
   return (
     <>
-    <table className='govuk-summary-list app-claimslist' aria-live="polite" aria-busy={loading}>
-      <caption className="govuk-table__caption govuk-table__caption--m">{title}</caption>
-      <tbody>
-        {tableContent}
-      </tbody>
-    </table>
+      {claims.length !== 0 && (
+        <h2 className='govuk-heading-m'>{title}</h2>
+      )}
+      {claims.length > 1 && <h3 className='govuk-heading-s'>Children added</h3>}
+      {/* <h5>{claims[0].children.firstName}</h5> */}
+      {claims.map(claimItem => {
+      <dl className='govuk-summary-list'>
+        <div className='govuk-summary-list__row'>
+          <dt className='govuk-summary-list__key'>
+            <a href='#'>{`${claimItem.children.firstName} ${claimItem.children.lastName}`}</a>
+            <p className='govuk-!-font-weight-regular'>{claimItem.children.dob}</p>
+            {claimItem.actionButton}
+          </dt>
+          <dd className='govuk-summary-list__value'></dd>
+          <dd className='govuk-summary-list__actions govuk-!-width-one-half'>
+            <a href='#' className='govuk-link'>
+              <strong className='govuk-tag govuk-tag--blue'>{claimItem.status.text}</strong>
+            </a>
+          </dd>
+        </div>
+      </dl>
+    })}
     </>
   )
 }
