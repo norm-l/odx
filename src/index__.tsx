@@ -7,16 +7,9 @@ import TopLevelApp from '../src/samples/TopLevelApp';
 const outletElement = document.getElementById("outlet");
 
 if(outletElement){
-  try {
   render((
     <BrowserRouter>
       <TopLevelApp />
     </BrowserRouter>
   ), document.getElementById("outlet"));
-  } catch (e) {
-    render
-      (
-      <div> There has been a problem : {e}</div>
-      , document.getElementById("outlet"));
-  }
 }
