@@ -15,15 +15,15 @@ export const pyReviewRaw = {
           {
             type: 'TextInput',
             config: {
-              value: 'Joe',
+              value: '@P .FirstName',
               label: '@L First Name'
             }
           },
           {
             type: 'TextInput',
             config: {
-              value: '01/01/2023',
-              label: '@L Date of Birth'
+              value: '@P .dateOfBirth',
+              label: '@L Date of birth'
             }
           },
         
@@ -46,7 +46,7 @@ export const pyReviewRaw = {
     {
       readOnly: undefined,
       value: '2023-01-25',
-      label: 'Date of Birth',
+      label: 'Date of birth',
       hasSuggestions: false
     }
 

@@ -31,19 +31,11 @@ const renderField = resolvedProps => {
     </MuiPickersUtilsProvider>
 
 
-  if (label === 'Email')
-    val = <TextField type='email' value={value} size='small' variant='outlined' style={{ fontSize: '14px' }} label={label} onChange={onChange}></TextField>;
 
-  if (label === 'First Name' || label === 'Last Name' || label === 'Middle Name')
+  if (label === 'First Name' || label === 'Date of birth')
     val = <TextField value={value} size='small' variant='outlined' style={{ fontSize: '14px' }} label={label} onChange={onChange}></TextField>;
 
-  if (label === 'Phone Number')
-    val = <MuiPhoneNumber value={value} variant='outlined' size='small' style={{ fontSize: '14px' }} defaultCountry='us' label={label} onChange={onChange}></MuiPhoneNumber>;
-
-
-  if (variant === 'inline') {
-    val = value || <span aria-hidden='true'>&ndash;&ndash;</span>;
-  }
+ 
 
   return val;
 };
@@ -58,7 +50,7 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
     {
       readOnly: undefined,
       value: firstName,
-      label: 'First name',
+      label: 'First Name',
       hasSuggestions: false,
       onChange: val => {
         setFirstName(val.target.value);

@@ -38,19 +38,10 @@ export default function HmrcOdxGdsSummaryCard(props) {
       })
     );
    
-console.log("children",children[0].props.children)
+
 
  return (
   <>
-
-   {/* <Grid container spacing={1}>
-     <Grid item xs={12} md={aSize} classNameName={classNamees.colStyles}>
-       {children[0]}
-     </Grid>
-     <Grid item xs={12} md={bSize} classNameName={classNamees.colStyles}>
-       {children[1]}
-     </Grid>
-   </Grid> */}
      {children[0].props.children.map((child, i) => ( 
        <StyledHmrcOdxGdsSummaryCardWrapper>
    <div className="govuk-summary-card">
