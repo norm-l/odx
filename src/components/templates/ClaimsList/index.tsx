@@ -8,40 +8,18 @@ import { useTranslation } from 'react-i18next';
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, title, loading, rowClickAction, buttonContent} = props;
+  const { thePConn, data, title, rowClickAction, buttonContent} = props;
   const { t } = useTranslation();
-  // const childrenJSON = Claim.Claim.childrenJSON;
   const [claims, setClaims] = useState([]);
-
-  /* Property Resolver */
-  const resolveProperty = (source, propertyName) => {
-    if (!propertyName) { return '' };
-
-    if(source[propertyName]){ return source[propertyName]};
-
-    let resolvedProperty = source;
-    const propertyNameSplit = propertyName.split('.');
-    propertyNameSplit.forEach(property => {
-      if(resolvedProperty){
-        resolvedProperty = resolvedProperty[property];
-      }
-    });
-
-    if(resolvedProperty){
-      return resolvedProperty;
-    }
-    return '';
-
-  }
 
   const statusMapping = (status) => {
     switch(status){
       case 'Open-InProgress':
-        return { text: t('IN_PROGRESS'), tagColour: 'grey' };
+        return { text: t('IN_PROGRESS'), tagColour: 'blue' };
       case 'Pending-CBS':
       case 'Resolved-Completed':
       case 'Pending-ManualInvestigation':
-        return {text: t("CLAIM_RECEIVED"), tagColour:'blue'};
+        return {text: t("RECEIVED"), tagColour:'purple'};
       default:
         return {text:status, tagColour:'grey'};
     }
@@ -67,69 +45,82 @@ export default function ClaimsList(props){
     }
   }
 
-  function _setClaims() {
+  function extractChildren(childrenJSON : string) {
+    return JSON.parse(childrenJSON.slice(childrenJSON.indexOf(':') + 1));
+  }
+
+  function getClaims() {
     const claimsData = [];
     data.forEach(item => {
-      console.log('data loaded')
       const claimItem = {
         claimRef : item.pyID,
-        children : {
+        dateCreated : DateFormatter.Date(item.pxCreateDateTime, { format: 'DD MMMM YYYY' }),
+        children : [],
+        actionButton :
+          (<Button
+              attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
+              variant='secondary'
+              onClick={() => {
+                _rowClick(item);
+              }}
+            >
+              {buttonContent}
+            </Button>),
+        status : statusMapping(item.pyStatusWork)
+      };
+      if(item.Claim.ChildrenJSON){
+        const additionalChildren = extractChildren(item.Claim.ChildrenJSON);
+        additionalChildren.forEach(child =>{
+          const newChild = {
+            firstName : child.name,
+            lastName : item.Claim.Child.pyLastName,
+            dob : DateFormatter.Date(child.dob, { format: 'DD MMMM YYYY' })
+          }
+          claimItem.children.push(newChild);
+        })
+      }else{
+        claimItem.children.push({
           firstName : item.Claim.Child.pyFirstName,
           lastName : item.Claim.Child.pyLastName,
           dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD MMMM YYYY' })
-        },
-        actionButton :
-          (<Button
-            attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
-            variant='secondary'
-            onClick={() => {
-              _rowClick(item);
-            }}
-          >
-            {typeof(buttonContent) === 'function' ? buttonContent(item) : buttonContent}
-          </Button>) ,
-        status : statusMapping(item.pyStatusWork)
-      };
-      // if(item.Claim.childrenJSON !== null){
-      //   // extract children from this json and add it to the
-      //   // item.Claim.childrenJSON.
-      // }
+        });
+      }
       claimsData.push(claimItem);
     })
-    setClaims(claimsData);
+    return claimsData;
   }
 
   useEffect(() => {
-    console.log('called it');
-    _setClaims();
-  },[data, loading])
-
+    setClaims([...getClaims()]);
+  },[data])
 
 
   return (
     <>
-      {claims.length !== 0 && (
-        <h2 className='govuk-heading-m'>{title}</h2>
+      {claims.length !== 0 && <h2 className='govuk-heading-m'>{title}</h2>}
+      {claims.length > 1 && <h3 className='govuk-heading-s'>{t('CHILDREN_ADDED')}</h3>}
+      {claims.map(claimItem =>
+        <dl className='govuk-summary-list'>
+          <div className='govuk-summary-list__row'>
+            <dt className='govuk-summary-list__key'>
+              {claimItem.children.map(child =>
+                <p><a href='#'>{`${child.firstName} ${child.lastName}`}</a><br/>
+                <span className='govuk-!-font-weight-regular'>{t('DATE_OF_BIRTH')}</span><br/>
+                <span className='govuk-!-font-weight-regular'>{child.dob}</span><br/>
+                <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')}</span><br/>
+                <span className='govuk-!-font-weight-regular'>{claimItem.dateCreated}</span>
+                </p>
+              )}
+              {claimItem.actionButton}
+            </dt>
+            <dd className='govuk-summary-list__actions govuk-!-width-one-half'>
+              <a href='#' className='govuk-link'>
+                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>{claimItem.status.text}</strong>
+              </a>
+            </dd>
+          </div>
+        </dl>
       )}
-      {claims.length > 1 && <h3 className='govuk-heading-s'>Children added</h3>}
-      {/* <h5>{claims[0].children.firstName}</h5> */}
-      {claims.map(claimItem => {
-      <dl className='govuk-summary-list'>
-        <div className='govuk-summary-list__row'>
-          <dt className='govuk-summary-list__key'>
-            <a href='#'>{`${claimItem.children.firstName} ${claimItem.children.lastName}`}</a>
-            <p className='govuk-!-font-weight-regular'>{claimItem.children.dob}</p>
-            {claimItem.actionButton}
-          </dt>
-          <dd className='govuk-summary-list__value'></dd>
-          <dd className='govuk-summary-list__actions govuk-!-width-one-half'>
-            <a href='#' className='govuk-link'>
-              <strong className='govuk-tag govuk-tag--blue'>{claimItem.status.text}</strong>
-            </a>
-          </dd>
-        </div>
-      </dl>
-    })}
     </>
   )
 }
@@ -137,9 +128,7 @@ export default function ClaimsList(props){
 ClaimsList.propTypes = {
   thePConn: PropTypes.object,
   data: PropTypes.array,
-  options: PropTypes.array,
   title: PropTypes.string,
-  loading: PropTypes.bool,
   rowClickAction: PropTypes.oneOf(["OpenCase","OpenAssignment"]),
-  buttonContent: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+  buttonContent: PropTypes.string
 }

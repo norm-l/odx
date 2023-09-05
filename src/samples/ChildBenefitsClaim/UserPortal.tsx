@@ -16,10 +16,10 @@ export default function UserPortal(props) {
         </div>
         <div className="govuk-grid-row">
           <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body'>
-            <p className='govuk-body'>This page shows two groups of claims:</p>
+            <p className='govuk-body'>{t('THIS_PAGE_SHOWS')}</p>
             <ul className='govuk-list govuk-list--bullet'>
-              <li><span className='govuk-body'>claims that are in progress</span></li>
-              <li><span className='govuk-body'>claims that have already been submitted</span></li>
+              <li><span className='govuk-body'>{t('CLAIMS_THAT_ARE_IN_PROGRESS')}</span></li>
+              <li><span className='govuk-body'>{t('CLAIMS_THAT_ARE_SUBMITTED')}</span></li>
             </ul>
             <hr className="govuk-section-break govuk-section-break--xl govuk-section-break--visible"></hr>
 
@@ -27,8 +27,8 @@ export default function UserPortal(props) {
             <div className='govuk-grid-column-two-thirds'>
               <>{children}</>
               <>
-                <p className='govuk-heading-m'>Make a claim</p>
-                <p className='govuk-body'>Use this service to make a new claim for Child Benefit.</p>
+                <p className='govuk-heading-m'>{t('MAKE_A_CLAIM')}</p>
+                <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
                 <Button
                   attributes={{ className: 'govuk' }}
                   onClick={beginClaim}
@@ -45,11 +45,11 @@ export default function UserPortal(props) {
                 >
                   {t('ASK_HMRC_ONLINE')} {t('OPENS_IN_NEW_TAB')}
                 </a></p>
-                <p className='govuk-body'>Ask HMRC’s digital assistant to find information about:</p>
+                <p className='govuk-body'>{t('ASK_HMRC_DIGITAL')}</p>
                 <ul className="govuk-list govuk-list--bullet">
-                  <li><span className='govuk-body'>claiming Child Benefit</span></li>
-                  <li><span className='govuk-body'>the High Income Child Benefit Tax Charge</span></li>
-                  <li><span className='govuk-body'>any change of circumstances for you or your child which may affect your claim</span></li>
+                  <li><span className='govuk-body'>{t('CLAIMING_CHILD_BENEFIT')}</span></li>
+                  <li><span className='govuk-body'>{t('THE_HIGH_INCOME_CHB_TAX_CHARGE')}</span></li>
+                  <li><span className='govuk-body'>{t('ANY_CHANGE_OF_CIRCUMSTANCE')}</span></li>
                 </ul>
               </>
             </div>

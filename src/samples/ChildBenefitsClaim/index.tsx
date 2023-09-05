@@ -433,53 +433,21 @@ export default function ChildBenefitsClaim() {
 
         {showUserPortal && <UserPortal beginClaim={beginClaim}>
 
-          { /* !! NEEDS TRANSLATING  -- title & button content */ }
-          {inprogressClaims.length === 0 ? (<></>)  : (
+          {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
             <ClaimsList
               thePConn={pConn}
               data={inprogressClaims}
               title={t("CLAIMS_IN_PROGRESS")}
-              // options={[{name:'Claim.Child.pyFirstName', label:t("CHILDS_NAME")},
-              //           {name:'Claim.Child.pyLastName'},
-              //           {name:'pyStatusWork'},
-              //           {name:'pxCreateDateTime', type:'Date', label:t("CLAIMS_CREATED_DATE")},
-              //           {name:'pyID', label:t("CLAIMS_REFERENCE")}]}
-              loading={loadinginProgressClaims}
               rowClickAction="OpenAssignment"
-              buttonContent={(rowData) => {
-                let buttonMetadata = t("NEW_CHILD");
-                const firstName = rowData?.Claim?.Child?.pyFirstName;
-                const lastName = rowData?.Claim?.Child?.pyLastName;
-                if(firstName){
-                  buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-                }
-                return (
-                <>{t("CONTINUE_CLAIM")} <span className="govuk-visually-hidden"> {t("FOR")} {buttonMetadata}</span></>
-                )
-                }}
-          />
-          )}
+              buttonContent={t("CONTINUE_CLAIM")}
+          />)}
 
-          {inprogressClaims.length === 0 ? (<></>)  : (<hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible"></hr>)}
-
-
-          {/* !! NEEDS TRANSLATING  -- title & button content */}
-          {submittedClaims.length === 0 ? (<></>)  : (<ClaimsList thePConn={pConn}
-            data={submittedClaims}
-            title=  {t("SUBMITTED_CLAIMS")}
-            options={[{name:'Claim.Child.pyFirstName', label:t("CHILDS_NAME")}, {name:'Claim.Child.pyLastName'}, {name:'pyStatusWork'}, {name:'pxCreateDateTime', type:'Date', label:t("CLAIMS_CREATED_DATE")}, {name:'pyID', label:t("CLAIMS_REFERENCE")}]}
-            loading={loadingsubmittedClaims}
-            rowClickAction="OpenCase"
-            buttonContent={(rowData) => {
-              let buttonMetadata;
-              const firstName = rowData?.Claim?.Child?.pyFirstName;
-              const lastName = rowData?.Claim?.Child?.pyLastName;
-              if(firstName){
-                buttonMetadata = lastName ? `${firstName} ${lastName}` : firstName;
-              }
-              return <>{t("VIEW_CLAIM")}  {buttonMetadata && <span className="govuk-visually-hidden"> {t("FOR")} {buttonMetadata}</span>}</>
-            }
-            }
+          {!loadingsubmittedClaims && submittedClaims.length !== 0 && (
+            <ClaimsList thePConn={pConn}
+              data={submittedClaims}
+              title=  {t("SUBMITTED_CLAIMS")}
+              rowClickAction="OpenCase"
+              buttonContent={t("VIEW_CLAIM")}
           />)}
 
       </UserPortal>}
