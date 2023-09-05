@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext, createElement } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, Avatar, Typography } from '@material-ui/core';
 import { Utils } from '@pega/react-sdk-components/lib/components/helpers/utils';
-import AppUtils from '../../../helpers/utils';
 import { Alert } from '@material-ui/lab';
 
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
@@ -12,6 +11,8 @@ import DayjsUtils from '@date-io/dayjs';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { addContainerItem, showBanner } from '@pega/react-sdk-components/lib/components/infra/Containers/FlowContainer/helpers';
+
+import { getComponentFromMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 // import { isEmptyObject } from '@pega/react-sdk-components/lib/components/helpers/common-utils'
 
 // Remove this and use "real" PCore type once .d.ts is fixed (currently shows 3 errors)
@@ -27,7 +28,7 @@ declare const PCore: any;
 export default function FlowContainer(props) {
   const pCoreConstants = PCore.getConstants();
 
-  const Assignment = AppUtils.getComponentFromComponentMap('Assignment');
+  const Assignment =  getComponentFromMap("Assignment");
 
   const { getPConnect, routingInfo } = props;
 
