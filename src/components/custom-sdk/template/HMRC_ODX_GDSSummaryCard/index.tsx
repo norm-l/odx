@@ -44,10 +44,10 @@ export default function HmrcOdxGdsSummaryCard(props) {
         break;
      
     }
-
+console.log("children",children)
  return (
   <>
-     {children[0].props.children.map((child, i) => ( 
+     {children.map((child, i) => (
        <StyledHmrcOdxGdsSummaryCardWrapper>
    <div className="govuk-summary-card">
   <div className="govuk-summary-card__title-wrapper">
@@ -70,7 +70,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
       First name
         </dt>
         <dd className="govuk-summary-list__value">
-      {child.config.value}
+        {child.props.children[0].config.value}
         </dd>
       </div>
       <div className="govuk-summary-list__row">
@@ -78,7 +78,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
           Date of birth
         </dt>
         <dd className="govuk-summary-list__value">
-        {child.config.value}
+        {child.props.children[1].config.value}
         </dd>
       </div>
     </dl>

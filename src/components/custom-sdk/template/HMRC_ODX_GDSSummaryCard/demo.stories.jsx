@@ -31,15 +31,18 @@ const renderField = resolvedProps => {
     </MuiPickersUtilsProvider>
 
 
-
-  if (label === 'First Name' || label === 'Date of birth')
-    val = <TextField value={value} size='small' variant='outlined' style={{ fontSize: '14px' }} label={label} onChange={onChange}></TextField>;
-
  
+  if (label === 'First Name' || label ==='Date Of Birth')
+  {
+    val = <TextField value={value} size='small' variant='outlined' style={{ fontSize: '14px' }} label={label} onChange={onChange}></TextField>;
+  }
+
+  if (variant === 'inline') {
+    val = value || <span aria-hidden='true'>&ndash;&ndash;</span>;
+  }
 
   return val;
 };
-
  
 export const BaseHmrcOdxGdsSummaryCard = () => {
   const [firstName, setFirstName] = useState('John');
@@ -61,7 +64,7 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
      {
       readOnly: undefined,
       value: dateOfBirth,
-      label: 'Date of birth',
+      label: 'Date Of Birth',
       hasSuggestions: false,
       onChange: date => {
         const changeValue = date && date.isValid() ? date.toISOString() : null;
@@ -97,7 +100,7 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
               return renderField(regionChildrenResolved[0]);
            
            
-            case '@P .dateOfBirth':
+            case '@P .DateOfBirth':
               return renderField(regionChildrenResolved[1]);
             
             default:
@@ -109,7 +112,7 @@ export const BaseHmrcOdxGdsSummaryCard = () => {
   };
 
 
-  const regionAChildren = pyReviewRaw.children[0].children.map((child,i) => {
+  const regionAChildren = pyReviewRaw.children[0].children.map(child => {
     return props.getPConnect().createComponent(child);
   });
 
