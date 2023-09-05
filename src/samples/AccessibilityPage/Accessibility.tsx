@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 import AppFooter from '../../components/AppComponents/AppFooter';
@@ -9,8 +10,18 @@ import Button from '../../components/BaseComponents/Button/Button';
 
 const Accessibility: React.FC<{}> = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     const [isSignoutModal, setIsSignoutModal] = useState<boolean>(null);
+    const [referrerURL, setReferrerURL] = useState<string>(null);
+
+    useEffect(() => {
+        const getReferrerURL = async () => {
+            const { serverConfig: { sdkContentServerUrl } } = await getSdkConfig();
+            setReferrerURL(sdkContentServerUrl);
+        }
+        getReferrerURL();
+    }, []);
 
     const makeList = (listNumber: number, entries: number) => {
         const output = [];
@@ -20,15 +31,13 @@ const Accessibility: React.FC<{}> = () => {
         return output;
     };
 
-    const goBackHandler = () => navigate(-1);
-
     return (
         <>
             <AppHeader handleSignout={() => setIsSignoutModal(false)} appname={t("CLAIM_CHILD_BENEFIT")} />
             <div className="govuk-width-container">
                 <Button
                     variant='backlink'
-                    onClick={goBackHandler}
+                    onClick={() => navigate(-1)}
                     key='StartPageBacklink'
                     attributes={{ type: 'link' }}
                 />
@@ -71,7 +80,7 @@ const Accessibility: React.FC<{}> = () => {
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_5")}
                             </h1>
-                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")} <a href="https://www.staging.tax.service.gov.uk/contact/accessibility?service=$463&referrerUrl=$www.account-np.hmrc.gov.uk/child-benefit/make_a_claim">{t("ACCESSIBILITY_ANCHOR_4")}</a>.</p>
+                            <p className='govuk-body'>{t("ACCESSIBILITY_P_12")} <a href={`${referrerURL}?service=$463&referrerUrl=$www.account-np.hmrc.gov.uk/child-benefit/make_a_claim`}>{t("ACCESSIBILITY_ANCHOR_4")}</a>.</p>
                             <h1 className="govuk-heading-l">
                                 {t("ACCESSIBILITY_HEADING_6")}
                             </h1>
