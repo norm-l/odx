@@ -19,7 +19,7 @@ export default function ClaimsList(props){
       case 'Pending-CBS':
       case 'Resolved-Completed':
       case 'Pending-ManualInvestigation':
-        return {text: t("RECEIVED"), tagColour:'purple'};
+        return {text: t('RECEIVED'), tagColour:'purple'};
       default:
         return {text:status, tagColour:'grey'};
     }
