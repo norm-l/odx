@@ -54,7 +54,7 @@ export default function ClaimsList(props){
     data.forEach(item => {
       const claimItem = {
         claimRef : item.pyID,
-        dateCreated : DateFormatter.Date(item.pxCreateDateTime, { format: 'DD MMMM YYYY' }),
+        dateCreated : DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
         children : [],
         actionButton :
           (<Button
@@ -74,7 +74,7 @@ export default function ClaimsList(props){
           const newChild = {
             firstName : child.name,
             lastName : item.Claim.Child.pyLastName,
-            dob : DateFormatter.Date(child.dob, { format: 'DD MMMM YYYY' })
+            dob : DateFormatter.Date(child.dob, { format: 'DD/MM/YYYY' })
           }
           claimItem.children.push(newChild);
         })
@@ -82,7 +82,7 @@ export default function ClaimsList(props){
         claimItem.children.push({
           firstName : item.Claim.Child.pyFirstName,
           lastName : item.Claim.Child.pyLastName,
-          dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD MMMM YYYY' })
+          dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD/MM/YYYY' })
         });
       }
       claimsData.push(claimItem);
@@ -103,11 +103,10 @@ export default function ClaimsList(props){
           <div className='govuk-summary-list__row'>
             <dt className='govuk-summary-list__key'>
               {claimItem.children.map(child =>
-                <p key={child.firstName}>{`${child.firstName} ${child.lastName}`}<br/>
-                <span className='govuk-!-font-weight-regular'>{t('DATE_OF_BIRTH')}</span><br/>
-                <span className='govuk-!-font-weight-regular'>{child.dob}</span><br/>
-                <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')}</span><br/>
-                <span className='govuk-!-font-weight-regular'>{claimItem.dateCreated}</span>
+                <p key={child.firstName}>
+                  {child.firstName && child.lastName && `${child.firstName} ${child.lastName}`}
+                  {child.dob && <><br/><span className='govuk-!-font-weight-regular'>{`${t('DATE_OF_BIRTH')} ${child.dob}`}</span><br/></>}
+                  <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')} {claimItem.dateCreated}</span>
                 </p>
               )}
               {claimItem.actionButton}
