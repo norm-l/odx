@@ -15,20 +15,24 @@ export const pyReviewRaw = {
         {
           type: 'TextInput',
           config: {
-            value: '@P .FirstName',
+            value: 'John',
             label: '@L First Name'
           }
         },
         {
           type: 'TextInput',
           config: {
-            value: '@P .DateOfBirth',
+            value: '2023-01-25',
             label: '@L Date Of Birth',
             
           }
         }
+        
     
-      ]
+      ],
+      
+
+
     },
   
   ],

@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import StyledHmrcOdxGdsSummaryCardWrapper from './styles';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
+import { handleChange } from "@pega/pcore-pconnect-typedefs/types/pcore/expression/expression-engine";
 
 const useStyles = makeStyles(() => ({
   colStyles: {
@@ -37,14 +38,21 @@ export default function HmrcOdxGdsSummaryCard(props) {
         key: index.toString(),
       })
     );
-   
+  
+    let useTitle;
     switch (useType) {
-      case '1':
-       console.log("Multichild")
+      case '1': 
+        useTitle = "Multichildren";
         break;
      
     }
-console.log("children",children)
+    const handleChange = event => {
+     getPConnect.setInheritedProp("UserActions", "Amend")
+    };
+    const handleRemove = event =>{
+      getPConnect.setInheritedProp("UserActions", "Remove")
+    }
+  
  return (
   <>
      {children.map((child, i) => (
@@ -53,12 +61,12 @@ console.log("children",children)
   <div className="govuk-summary-card__title-wrapper">
     <h2 key={child} className="govuk-summary-card__title">Child {i+1}</h2>
     <ul className="govuk-summary-card__actions">
-      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#">
-          Remove<span className="govuk-visually-hidden"> of University of Gloucestershire</span>
+      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#"  onClick={handleRemove}>
+          Remove
         </a>
       </li>
-      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#">
-          Change<span className="govuk-visually-hidden"> from University of Gloucestershire</span>
+      <li className="govuk-summary-card__action"> <a className="govuk-link" href="#" onClick={handleChange}>
+          Change
         </a>
       </li>
     </ul>
