@@ -94,17 +94,16 @@ export default function ClaimsList(props){
     setClaims([...getClaims()]);
   },[data])
 
-
   return (
     <>
       {claims.length !== 0 && <h2 className='govuk-heading-m'>{title}</h2>}
       {claims.length > 1 && <h3 className='govuk-heading-s'>{t('CHILDREN_ADDED')}</h3>}
       {claims.map(claimItem =>
-        <dl className='govuk-summary-list'>
+        <dl className='govuk-summary-list' key={claimItem.claimRef}>
           <div className='govuk-summary-list__row'>
             <dt className='govuk-summary-list__key'>
               {claimItem.children.map(child =>
-                <p><a href='#'>{`${child.firstName} ${child.lastName}`}</a><br/>
+                <p key={child.firstName}>{`${child.firstName} ${child.lastName}`}<br/>
                 <span className='govuk-!-font-weight-regular'>{t('DATE_OF_BIRTH')}</span><br/>
                 <span className='govuk-!-font-weight-regular'>{child.dob}</span><br/>
                 <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')}</span><br/>
