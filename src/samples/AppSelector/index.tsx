@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from 'react-router-dom';
 // import EmbeddedTopLevel from "../Embedded/EmbeddedTopLevel";
 import EmbeddedTopLevel from '../ChildBenefitsClaim/index';
-import Accessibility from "../AccessibilityPage/Accessibility";
+import Accessibility from "../ChildBenefitsClaim/AccessibilityPage/index";
 import CookiePage from '../ChildBenefitsClaim/cookiePage/index';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';

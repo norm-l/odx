@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
-import AppHeader from '../../components/AppComponents/AppHeader';
-import LogoutPopup from '../../components/AppComponents/LogoutPopup';
-import AppFooter from '../../components/AppComponents/AppFooter';
-import signoutHandler from '../../components/helpers/signout';
+import AppHeader from '../../../components/AppComponents/AppHeader';
+import LogoutPopup from '../../../components/AppComponents/LogoutPopup';
+import AppFooter from '../../../components/AppComponents/AppFooter';
+import signoutHandler from '../../../components/helpers/signout';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/BaseComponents/Button/Button';
+import Button from '../../../components/BaseComponents/Button/Button';
 
 const Accessibility: React.FC<{}> = () => {
     const { t } = useTranslation();
