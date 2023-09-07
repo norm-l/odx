@@ -10,10 +10,10 @@ const ConfirmationPage = () => {
   const { t } = useTranslation();
 
   return (
-    <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+    <main className="govuk-main-wrapper" id="main-content" role="main">
       <div className="govuk-grid-row">
         <div className='govuk-grid-column-two-thirds'>
-          <div className='govuk-panel govuk-panel--confirmation'>
+          <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
             <h1 className='govuk-panel__title'> {t("APPLICATION_FOR_CHB_COMPLETE")}</h1>
           </div>
           <h2 className='govuk-heading-m'> {t("WHAT_HAPPENS_NEXT")}</h2>
