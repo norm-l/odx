@@ -54,7 +54,7 @@ const AppFooter: React.FC<{}> = () => {
             </li>
             <li className="govuk-footer__inline-list-item">
               <a className="govuk-footer__link" href="https://www.tax.service.gov.uk/contact/report-technical-problem" target="_blank" rel="noreferrer">
-                {t("PAGE_NOT_WORKING_PROPERLY")}
+                {t("PAGE_NOT_WORKING_PROPERLY")}{t("OPENS_IN_NEW_TAB")}
               </a>
             </li>
           </ul>
