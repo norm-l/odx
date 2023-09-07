@@ -96,15 +96,15 @@ export default function Date(props) {
 
 
  const  handleChangeDay = dayChange => {
-    setDay((dayChange.target.value));
+    setDay(dayChange.target.value);
   };
 
   const handleChangeMonth = monthChange => {
-    setMonth((monthChange.target.value));
+    setMonth(monthChange.target.value);
   }
 
   const  handleChangeYear = yearChange => {
-    setYear((yearChange.target.value));
+    setYear(yearChange.target.value);
   };
 
 
