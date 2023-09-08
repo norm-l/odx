@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useRef} from 'react';
 import PropTypes from 'prop-types';
 import FieldSet from '../FormGroup/FieldSet';
 import GDSCheckbox from './Checkbox'
-import { Checkboxes as govukCheckbox} from 'govuk-frontend/govuk/all';
+// import { Checkboxes as govukCheckbox} from 'govuk-frontend/govuk/all';
 
 export default function Checkboxes(props) {
   const {
@@ -28,7 +28,7 @@ export default function Checkboxes(props) {
 
   function exclusive(indexToIgnore){
     optionsList.forEach((element, index) => {
-      if(index != indexToIgnore){
+      if(index !== indexToIgnore){
         element.onChange({target: { checked :false}});
       }
     });
@@ -37,7 +37,6 @@ export default function Checkboxes(props) {
 
 
   const checkboxClasses = `govuk-checkboxes`;
-  const exclusiveInputProps = {...inputProps, ['data-behaviour']:'exclusive'};
 
   return (
     <FieldSet {...props}>
@@ -56,7 +55,9 @@ export default function Checkboxes(props) {
               onBlur={onBlur}
               key={item.name}
             />)
-          }})
+          }
+          return null
+        })
         }
 
         <div className="govuk-checkboxes__divider">or</div>
@@ -64,7 +65,7 @@ export default function Checkboxes(props) {
           item={optionsList[optionsList.length - 1]}
           index={optionsList.length - 1}
           name={optionsList[optionsList.length - 1].name}
-          inputProps={...exclusiveInputProps}
+          inputProps={...inputProps}
           onChange={(evt) => {
             optionsList[optionsList.length - 1].onChange(evt);
             exclusive(optionsList.length - 1);
