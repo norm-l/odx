@@ -37,82 +37,11 @@ export default function Checkboxes(props) {
 
 
   const checkboxClasses = `govuk-checkboxes`;
-  // const [optionsListToRender, setOptionsList] = useState(optionsList);
-  // const [exclusiveOption, setExclusiveOption] = useState<any>({})
-
   const exclusiveInputProps = {...inputProps, ['data-behaviour']:'exclusive'};
-  const handleExclusiveBehaviour = () => {
-    const selectCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input:not([data-behaviour="exclusive"])');
-    const deselectCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('[data-behaviour="exclusive"]');
-
-    console.log(selectCheckboxes, deselectCheckboxes);
-    for (const selectedElement of selectCheckboxes) {
-        selectedElement.addEventListener('click', () => {
-            for (const elementToDeselect of deselectCheckboxes) {
-                elementToDeselect.checked = false;
-                console.log('deselected');
-            }
-        }, false);
-    }
-
-    for (const selectedElement of deselectCheckboxes) {
-        selectedElement.addEventListener('click', () => {
-            for (const elementToDeselect of selectCheckboxes) {
-                elementToDeselect.checked = false;
-                console.log('selected');
-            }
-        }, false);
-    }
-  }
-
-  useEffect(()=>{
-    handleExclusiveBehaviour();
-  },[])
-
-
-  // useEffect(()=>{
-  //   if(optionsList.length !== 0){
-  //     let exclusiveIndex : number;
-  //     let localExclusiveOption : {};
-  //     optionsList.forEach((option, idx) => {
-  //       if(option.label.toLowerCase().includes('none')){
-  //         localExclusiveOption = option;
-  //         exclusiveIndex = idx;
-  //       }
-  //     })
-  //     optionsList.splice(exclusiveIndex, 1);
-  //     setOptionsList(optionsList);
-  //     setExclusiveOption(localExclusiveOption);
-  //   }
-
-  //   console.log(optionsListToRender)
-  // },[])
-
-  // const handleExclusiveSelector = (onChange) => {
-  //   onChange();
-  //   optionsList.forEach(option => {
-  //     if(option.)
-  //   })
-  // }
-
-
 
   return (
     <FieldSet {...props}>
       <div className={checkboxClasses} data-module="govuk-checkboxes"  ref={checkboxElement}>
-      {/* {optionsList.map((item, index) => {
-          if(true){
-            return (<GDSCheckbox
-              item={item}
-              index={index}
-              name={item.name}
-              inputProps={...inputProps}
-              onChange={item.onChange}
-              onBlur={onBlur}
-              key={item.name}
-            />)
-          }})
-        } */}
         {optionsList.map((item, index) => {
           if(index !== optionsList.length-1){
             return (<GDSCheckbox

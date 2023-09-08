@@ -31,7 +31,7 @@ export default function Date(props) {
   const [year, setYear] = useState(value ? value.split('-')[0] : '');
   const [editedValidateMessage, setEditedValidateMessage] = useState(validatemessage);
   const [specificErrors, setSpecificErrors] = useState<any>(null);
-  pConn.setStateProps({ fieldId: `${name}-day` });
+
 
   const actionsApi = getPConnect().getActionsApi();
   const propName = getPConnect().getStateProps().value;
@@ -76,8 +76,8 @@ export default function Date(props) {
         };
 
       // This sets a state prop to be exposed to the error summary set up in Assisgnment component - and should match the id of the first field of
-      // the date component. Will investigate better way to do this, to avoid mismatches if the Date BaseComponent changes.
-
+      //  the date component. Will investigate better way to do this, to avoid mismatches if the Date BaseComponent changes.
+      pConn.setStateProps({ fieldId: `${name}-day` });
       if (!specificError?.day) {
         if (specificError?.month) {
           pConn.setStateProps({ fieldId: `${name}-month` });
@@ -91,15 +91,20 @@ export default function Date(props) {
 
   // PM - Handlers for each part of date inputs, update state for each respectively
   //      0 pad for ISOString compatibilitiy, with conditions to allow us to clear the fields
-  const handleChangeDay = dayChange => {
+
+
+ const  handleChangeDay = dayChange => {
     setDay(dayChange.target.value);
   };
+
   const handleChangeMonth = monthChange => {
     setMonth(monthChange.target.value);
-  };
-  const handleChangeYear = yearChange => {
+  }
+
+  const  handleChangeYear = yearChange => {
     setYear(yearChange.target.value);
   };
+
 
   if (readOnly) {
     return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
