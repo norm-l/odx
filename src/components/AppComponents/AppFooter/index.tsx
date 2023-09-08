@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 const AppFooter: React.FC<{}> = () => {
@@ -18,14 +18,14 @@ const AppFooter: React.FC<{}> = () => {
               </a>
             </li>
             <li className="govuk-footer__inline-list-item">
-              <NavLink className="govuk-footer__link" to="/accessibility">
+              <Link className="govuk-footer__link" to="/accessibility" target="_blank">
                 {t("ACCESSIBILITY")}
-              </NavLink>
+              </Link>
             </li>
             <li className="govuk-footer__inline-list-item">
-              <NavLink className="govuk-footer__link" to="/cookies">
+              <Link className="govuk-footer__link" to="/cookies" target="_blank">
                 {t("COOKIES")}
-              </NavLink>
+              </Link>
             </li>
             <li className="govuk-footer__inline-list-item">
               <a className="govuk-footer__link" href="https://www.tax.service.gov.uk/help/terms-and-conditions">

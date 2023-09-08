@@ -1,7 +1,6 @@
 import React from "react";
-import { Routes, Route } from 'react-router-dom';
-// import EmbeddedTopLevel from "../Embedded/EmbeddedTopLevel";
-import EmbeddedTopLevel from '../ChildBenefitsClaim/index';
+import { Switch, Route } from 'react-router-dom';
+import ChildBenefitsClaim from '../ChildBenefitsClaim/index';
 import Accessibility from "../ChildBenefitsClaim/AccessibilityPage/index";
 import CookiePage from '../ChildBenefitsClaim/cookiePage/index';
 import { initReactI18next } from 'react-i18next';
@@ -26,16 +25,13 @@ const AppSelector = () => {
       }
     });
 
-  const baseURL = '/';
-
   return (
     <>
-      <Routes>
-        <Route path={baseURL} element={<EmbeddedTopLevel />} />
-        <Route path={`${baseURL}accessibility`} element={<Accessibility />} />
+      <Switch>
+        <Route exact path='/' element={<ChildBenefitsClaim />} />
+        <Route path='/accessibility' element={<Accessibility />} />
         <Route path='/cookies' element={<CookiePage />} />
-        <Route path="*" element={<EmbeddedTopLevel />} />
-      </Routes>
+      </Switch>
     </>
   )
 

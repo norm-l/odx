@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import AppHeader from '../../../components/AppComponents/AppHeader';
-import LogoutPopup from '../../../components/AppComponents/LogoutPopup';
 import AppFooter from '../../../components/AppComponents/AppFooter';
-import signoutHandler from '../../../components/helpers/signout';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/BaseComponents/Button/Button';
 
 const Accessibility: React.FC<{}> = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-
-    const [isSignoutModal, setIsSignoutModal] = useState<boolean>(null);
     const [referrerURL, setReferrerURL] = useState<string>(null);
 
     useEffect(() => {
@@ -33,14 +26,8 @@ const Accessibility: React.FC<{}> = () => {
 
     return (
         <>
-            <AppHeader handleSignout={() => setIsSignoutModal(false)} appname={t("CLAIM_CHILD_BENEFIT")} />
+            <AppHeader appname={t("CLAIM_CHILD_BENEFIT")} />
             <div className="govuk-width-container">
-                <Button
-                    variant='backlink'
-                    onClick={() => navigate(-1)}
-                    key='StartPageBacklink'
-                    attributes={{ type: 'link' }}
-                />
                 <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
                     <div className="govuk-grid-row">
                         <div className='govuk-grid-column-two-thirds'>
@@ -132,12 +119,6 @@ const Accessibility: React.FC<{}> = () => {
                     </div>
                 </main>
             </div>
-            <LogoutPopup
-                show={isSignoutModal}
-                hideModal={() => setIsSignoutModal(false)}
-                handleSignoutModal={signoutHandler}
-                handleStaySignIn={() => setIsSignoutModal(true)}
-            />
             <AppFooter />
         </>
     )
