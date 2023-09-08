@@ -14,7 +14,7 @@ const ConfirmationPage = () => {
       <div className="govuk-grid-row">
         <div className='govuk-grid-column-two-thirds'>
           <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
-            <h1 className='govuk-panel__title'> {t("APPLICATION_FOR_CHB_COMPLETE")}</h1>
+            <h1 className='govuk-panel__title'> {t("APPLICATION_COMPLETE")}</h1>
           </div>
           <h2 className='govuk-heading-m'> {t("WHAT_HAPPENS_NEXT")}</h2>
           <p className='govuk-body'> {t("WE_HAVE_SENT_YOUR_APPLICATION")}</p>
