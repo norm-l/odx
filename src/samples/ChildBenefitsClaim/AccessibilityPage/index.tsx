@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import AppHeader from '../../../components/AppComponents/AppHeader';
 import AppFooter from '../../../components/AppComponents/AppFooter';
+import LanguageToggle from '../../../components/AppComponents/LanguageToggle';
 import { useTranslation } from 'react-i18next';
 import signoutHandler from '../../../components/helpers/signout';
+import {Utils} from '../../../components/helpers/utils';
 
 export default function Accessibility() {
   const { t } = useTranslation();
@@ -11,12 +13,13 @@ export default function Accessibility() {
   const [hmrcURL, setHmrcURL] = useState<string>(null);
 
   useEffect(() => {
-      const getReferrerURL = async () => {
-        const { serverConfig: { sdkContentServerUrl, sdkHmrcURL } } = await getSdkConfig();
-        setReferrerURL(sdkContentServerUrl);
-        setHmrcURL(sdkHmrcURL);
-      }
-      getReferrerURL();
+    const getReferrerURL = async () => {
+      const { serverConfig: { sdkContentServerUrl, sdkHmrcURL } } = await getSdkConfig();
+      setReferrerURL(sdkContentServerUrl);
+      setHmrcURL(sdkHmrcURL);
+    }
+    getReferrerURL();
+    Utils.scrollToTop();
   }, []);
 
     const makeList = (listNumber: number, entries: number) => {
@@ -30,7 +33,8 @@ export default function Accessibility() {
     return (
         <>
             <AppHeader appname={t("CLAIM_CHILD_BENEFIT")} handleSignout={signoutHandler} />
-            <div className="govuk-width-container">
+              <div className="govuk-width-container">
+                <LanguageToggle />
                 <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
                     <div className="govuk-grid-row">
                         <div className='govuk-grid-column-two-thirds'>
