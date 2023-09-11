@@ -23,12 +23,12 @@ const useStyles = makeStyles(() => ({
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function HmrcOdxGdsSummaryCard(props) {
   const classNamees = useStyles();
-
+   
   const {getPConnect,useType} = props;
  
-
+  const thePConn = getPConnect();
  
-  const children = getPConnect()
+  const children = thePConn
 
     .getChildren()
     .map((configObject, index) =>
@@ -47,10 +47,12 @@ export default function HmrcOdxGdsSummaryCard(props) {
      
     }
     const handleChange = event => {
-     getPConnect.setInheritedProp("UserActions", "Amend")
+      thePConn.setInheritedProp("UserActions", "Amend")
+      thePConn.getActionsApi().finishAssignment(thePConn.getContextName())
     };
     const handleRemove = event =>{
-      getPConnect.setInheritedProp("UserActions", "Remove")
+      thePConn.setInheritedProp("UserActions", "Remove")
+      thePConn.getActionsApi().finishAssignment(thePConn.getContextName())
     }
   
  return (
