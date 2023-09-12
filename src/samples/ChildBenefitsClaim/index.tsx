@@ -25,6 +25,7 @@ import signoutHandler from '../../components/helpers/signout';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
+import { checkCookie, setCookie } from '../../components/helpers/cookie';
 
 
 // declare var gbLoggedIn: boolean;
@@ -302,9 +303,6 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
 
-      // Register our deviceID header
-      PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', 'PLACEHOLDER_DEVICEID');
-
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
       PCore.getLocaleUtils().loadLocaleResources([PCore.getLocaleUtils().GENERIC_BUNDLE_KEY, '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE']);
@@ -312,6 +310,23 @@ export default function ChildBenefitsClaim() {
 
       operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
 
+      const COOKIE_PEGAODXDI = 'pegaodxdi';
+      let deviceID = checkCookie(COOKIE_PEGAODXDI);
+      if (deviceID) {
+        setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
+        PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
+      } else {
+        PCore.getDataPageUtils()
+        .getPageDataAsync('D_UserSession', 'root' )
+        .then(res => {
+          deviceID = res.DeviceId;
+          setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
+          PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
+        });
+      }
+
+      // Register our deviceID header
+      PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
 
       setLoadingSubmittedClaims(true);
       // @ts-ignore
@@ -322,10 +337,7 @@ export default function ChildBenefitsClaim() {
         })
         .finally(()=>setLoadingSubmittedClaims(false));
       fetchInProgressClaimsData();
-
-
     });
-
 
     // Initialize the SdkComponentMap (local and pega-provided)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars

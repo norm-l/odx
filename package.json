@@ -76,8 +76,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.3.4",
     "styled-components": "^5.3.6",
-    "throttle-debounce": "^5.0.0",
-    "uuid": "^9.0.0"
+    "throttle-debounce": "^5.0.0"
   },
   "devDependencies": {
     "@kooneko/livereload-webpack-plugin": "^1.2.0",

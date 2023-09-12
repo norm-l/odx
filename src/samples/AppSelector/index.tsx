@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
@@ -7,7 +7,6 @@ import i18n from 'i18next';
 import ChildBenefitsClaim from '../ChildBenefitsClaim/index';
 import CookiePage from '../ChildBenefitsClaim/cookiePage/index';
 import Accessibility from '../ChildBenefitsClaim/AccessibilityPage';
-import { getDeviceId } from "../../components/Utils/cookie";
 
 const AppSelector = () => {
   i18n
@@ -26,10 +25,6 @@ const AppSelector = () => {
         useSuspense: false,
       }
     });
-
-  useEffect(() => {
-    getDeviceId()
-  }, [])
 
   return (
     <Switch>
