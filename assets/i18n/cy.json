@@ -123,5 +123,10 @@
   "GDS_INFO_SUCCESS": "CY - Success",
   "GDS_INFO_WARNING": "CY - Warning",
   "GDS_INFO_INFO_UNVERIFIED_CHILD_HEADER": "CY - We were unable to verify your child's details",
-  "GDS_INFO_INFO_UNVERIFIED_CHILD": "CY - Check that the details you entered match their birth certificate. If you've just registered their birth, try again in 24 hours"
+  "GDS_INFO_INFO_UNVERIFIED_CHILD": "CY - Check that the details you entered match their birth certificate. If you've just registered their birth, try again in 24 hours",
+
+  "GDS_INFO_CHILDREN": "CY - Children",
+  "GDS_INFO_ITEM_CHILD": "CY - Child",
+  "GDS_ACTION_REMOVE": "CY - Remove",
+  "GDS_ACTION_CHANGE": "CY - Change"
 }
