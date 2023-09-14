@@ -11,6 +11,14 @@ import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 
+/*
+  PM MY CONTEXT
+*/
+const HMRCAppContext = React.createContext({
+  singleQuestionPage: false,
+  setSingleQuestionPage : (a:any) => {}
+});
+
 export interface ErrorMessageDetails {
   message: string;
   fieldId: string;
@@ -44,6 +52,11 @@ export default function Assignment(props) {
   const cancelCreateStageAssignment = actionsAPI.cancelCreateStageAssignment.bind(actionsAPI);
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
+  /*APP STATE - PM IN PROGRESS*/
+
+  const [appStateSingleQuestionPage, setAppStateSingleQuestionPage] = useState(false);
+
+  /**********************/
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
@@ -55,6 +68,7 @@ export default function Assignment(props) {
   }
   useEffect(() => {
     setPageTitle();
+    setAppStateSingleQuestionPage(false);
   },[children])
 
   useEffect(() => {
@@ -249,49 +263,55 @@ export default function Assignment(props) {
   }, [actionButtons]);
 
   return (
-    <div id='Assignment'>
-      {arSecondaryButtons?.map(sButton =>
-        sButton['name'] === 'Previous' ? (
-          <Button
-            variant='backlink'
-            onClick={e => {
-              e.target.blur();
-              _onButtonPress(sButton['jsAction'], 'secondary');
-            }}
-            key={sButton['actionID']}
-            attributes={{ type: 'link' }}
-          ></Button>
-        ) : null
-        )}
-      <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column-two-thirds">
-          {errorSummary && errorMessages.length > 0 && (
-            <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
+    <HMRCAppContext.Provider value={{singleQuestionPage: appStateSingleQuestionPage, setSingleQuestionPage: (value) => {
+        value && setAppStateSingleQuestionPage(value)
+      }}}>
+      <div id='Assignment'>
+        {arSecondaryButtons?.map(sButton =>
+          sButton['name'] === 'Previous' ? (
+            <Button
+              variant='backlink'
+              onClick={e => {
+                e.target.blur();
+                _onButtonPress(sButton['jsAction'], 'secondary');
+              }}
+              key={sButton['actionID']}
+              attributes={{ type: 'link' }}
+            ></Button>
+          ) : null
           )}
-          {!isOnlyOneField && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
-          <form>
-            <AssignmentCard
-              getPConnect={getPConnect}
-              itemKey={itemKey}
-              actionButtons={actionButtons}
-              onButtonPress={buttonPress}
+        <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-two-thirds">
+            {errorSummary && errorMessages.length > 0 && (
+              <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
+            )}
+            <HMRCAppContext.Consumer>
+              {value => !value.singleQuestionPage && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
+            </HMRCAppContext.Consumer>
+            <form>
+              <AssignmentCard
+                getPConnect={getPConnect}
+                itemKey={itemKey}
+                actionButtons={actionButtons}
+                onButtonPress={buttonPress}
+              >
+                {children}
+              </AssignmentCard>
+            </form>
+            <a
+              href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+              className='govuk-link'
+              rel='noreferrer noopener'
+              target='_blank'
             >
-              {children}
-            </AssignmentCard>
-          </form>
-          <a
-            href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-            className='govuk-link'
-            rel='noreferrer noopener'
-            target='_blank'
-          >
-            {`${t("ASK_HMRC_ONLINE")} ${t("OPENS_IN_NEW_TAB")}`}
-          </a>
+              {`${t("ASK_HMRC_ONLINE")} ${t("OPENS_IN_NEW_TAB")}`}
+            </a>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </HMRCAppContext.Provider>
   );
 }
 
@@ -308,3 +328,6 @@ Assignment.defaultProps = {
   isCreateStage: false
   // buildName: null
 };
+
+
+export { HMRCAppContext };

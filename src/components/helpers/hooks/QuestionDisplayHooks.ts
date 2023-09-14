@@ -1,4 +1,5 @@
-import {useState, useEffect} from 'react';
+import {useContext} from 'react';
+import { HMRCAppContext } from '../../override-sdk/infra/Assignment/Assignment';
 /**
  * Helper hook for handling instances where there is only one field presented in the current view.
  * Returns a boolean indicating whether or not there is only one field to display in the current context
@@ -8,11 +9,6 @@ import {useState, useEffect} from 'react';
 
 
 export default function useIsOnlyField(effectTrigger = null){
-    const [isOnlyField, setisOnlyField] = useState(PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1").length === 1);
-
-  useEffect ( () => {
-    setisOnlyField(PCore.getFormUtils().getEditableFields("root/primary_1/workarea_1").length === 1);
-  }, [effectTrigger])
-
-  return isOnlyField;
+    const { singleQuestionPage } = useContext(HMRCAppContext);
+    return singleQuestionPage;
 }

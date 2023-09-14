@@ -1,14 +1,18 @@
-import React, { createElement, useEffect } from 'react';
+import React, { createElement, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
+
+import { HMRCAppContext } from '../../infra/Assignment/Assignment';
 // import './DefaultForm.css';
 
 export default function DefaultForm(props) {
-  const { getPConnect, readOnly, additionalProps } = props;
+  const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const isOnlyField = useIsOnlyField();
+  const {singleQuestionPage, setSingleQuestionPage} = useContext(HMRCAppContext);
+  setSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel);
+  const isOnlyField = singleQuestionPage;
   const { t } = useTranslation();
 
   // repoint the children because they are in a region and we need to not render the region
