@@ -4,15 +4,18 @@ import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 
-import { HMRCAppContext } from '../../infra/Assignment/Assignment';
+import {HMRCAppContext, DefaultFormContext}  from '../../../helpers/HMRCAppContext';
+
 // import './DefaultForm.css';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const {singleQuestionPage, setSingleQuestionPage} = useContext(HMRCAppContext);
-  setSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel);
-  const isOnlyField = singleQuestionPage;
+  const {setAssignmentSingleQuestionPage} = useContext(HMRCAppContext);
+  setAssignmentSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel ? true : false);
+  // setAssignmentSingleQuestionPage(true);
+  //configAlternateDesignSystem && (configAlternateDesignSystem.hidePageLabel = false);
+  let isOnlyField = configAlternateDesignSystem?.hidePageLabel ? true : false;
   const { t } = useTranslation();
 
   // repoint the children because they are in a region and we need to not render the region
@@ -176,13 +179,13 @@ export default function DefaultForm(props) {
   }
 
   return (
-    <>
+    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel ? true : false}}>
       {instructionExists && (
         <div id='instructions' className='govuk-body'>
           <InstructionComp htmlString={getFormattedInstructionText()} />
         </div>
       )}
       {dfChildren}
-    </>
+    </DefaultFormContext.Provider>
   );
 }
