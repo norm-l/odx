@@ -22,6 +22,8 @@ interface OrderedErrorMessage {
   displayOrder: string;
 }
 
+let DFCounter = 0;
+
 declare const PCore: any;
 export default function Assignment(props) {
   const { getPConnect, children, itemKey, isCreateStage } = props;
@@ -48,21 +50,27 @@ export default function Assignment(props) {
   /*APP STATE - PM IN PROGRESS*/
 
   const [singleQuestionPage, setSingleQuestionPage] = useState(false);
-  const [singleQuestionPageToggle, setSingleQuestionPageToggle] = useState(false);
+
+  const [DFCounter, setDFCounter] = useState([]);
 
   /**********************/
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
+  const _containerName =  getPConnect().getContainerName();
+  const context = getPConnect().getContextName();
+  const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
+  useEffect(() => {
+    setPageTitle();
+    setSingleQuestionPage(PCore.getFormUtils().getEditableFields(containerID).length === 1);
+    setDFCounter([]);
+  },[children])
 
   let containerName;
   if(thePConn.getDataObject().caseInfo?.assignments && thePConn.getDataObject().caseInfo?.assignments.length > 0){
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
   }
-  useEffect(() => {
-    setPageTitle();
-    setSingleQuestionPage(false);
-  },[children])
+
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -82,9 +90,7 @@ export default function Assignment(props) {
     }
   }, [children]);
 
-  const _containerName =  getPConnect().getContainerName();
-  const context = getPConnect().getContextName();
-  const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
+
   function checkErrorMessages() {
     let errorStateProps = [];
     errorStateProps = PCore.getFormUtils().getEditableFields(containerID).reduce( (acc, o) => {
@@ -260,7 +266,14 @@ export default function Assignment(props) {
         singleQuestionPage,
         setAssignmentSingleQuestionPage: (value) => {
           value && !containerName.toLowerCase().includes('check your answer')  && setSingleQuestionPage(value)
-        }
+        },
+        DFCounter: DFCounter,
+        DFCounterIncrement: (DFName) => {if(!DFCounter.includes(DFName)) {
+          const extendedList = DFCounter;
+          extendedList.push(DFName);
+          setDFCounter(extendedList)
+        }}
+
       }}>
       <div id='Assignment'>
         {arSecondaryButtons?.map(sButton =>

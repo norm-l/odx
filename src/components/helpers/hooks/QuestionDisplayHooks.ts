@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {DefaultFormContext} from '../../helpers/HMRCAppContext';
+import {DefaultFormContext, HMRCAppContext} from '../../helpers/HMRCAppContext';
 /**
  * Helper hook for handling instances where there is only one field presented in the current view.
  * Returns a boolean indicating whether or not there is only one field to display in the current context
@@ -9,7 +9,19 @@ import {DefaultFormContext} from '../../helpers/HMRCAppContext';
 
 
 export default function useIsOnlyField(callerDisplayOrder = null){
-    const myContext = useContext(DefaultFormContext);
+    const DFContext = useContext(DefaultFormContext);
+    const AssignmentContext = useContext(HMRCAppContext);
 
-    return callerDisplayOrder != 0 ? false : myContext.displayAsSingleQuestion;
+    if(AssignmentContext.DFCounter.includes(DFContext.DFName)){
+        return callerDisplayOrder === "0" ? DFContext.displayAsSingleQuestion : false;
+    } else {
+        return AssignmentContext.singleQuestionPage;
+    }
+    /*if(!DFContext.displayAsSingleQuestion){
+        if(DFContext.DFOrder !== 0){
+            return false;
+        } else {}
+
+    }*/
+
 }

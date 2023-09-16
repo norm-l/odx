@@ -44,7 +44,7 @@ export default function TextInput(props) {
     }
   };
 
-  const isOnlyField = useIsOnlyField(props.displayOrder);
+  const isOnlyField = useIsOnlyField();
 
   const maxLength = fieldMetadata?.maxLength;
 

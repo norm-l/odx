@@ -1,4 +1,4 @@
-import React, { createElement, useContext, useEffect } from 'react';
+import React, { createElement, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
@@ -11,11 +11,12 @@ import {HMRCAppContext, DefaultFormContext}  from '../../../helpers/HMRCAppConte
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const {setAssignmentSingleQuestionPage} = useContext(HMRCAppContext);
+  const {setAssignmentSingleQuestionPage, DFCounter, DFCounterIncrement} = useContext(HMRCAppContext);
+  if(configAlternateDesignSystem?.hidePageLabel === true || DFCounter.length > 0) DFCounterIncrement(props.localeReference);
   setAssignmentSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel ? true : false);
   // setAssignmentSingleQuestionPage(true);
   //configAlternateDesignSystem && (configAlternateDesignSystem.hidePageLabel = false);
-  let isOnlyField = configAlternateDesignSystem?.hidePageLabel ? true : false;
+  let isOnlyField = useIsOnlyField();
   const { t } = useTranslation();
 
   // repoint the children because they are in a region and we need to not render the region
@@ -94,7 +95,7 @@ export default function DefaultForm(props) {
       displayOrder = `${idx}`;
     }
     childPConnect.registerAdditionalProps({ displayOrder });
-
+    childPConnect.setInheritedProp("displayOrder", displayOrder);
     const formattedContext = props.context ? props.context?.split('.').pop() : '';
     const formattedPropertyName =
       childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
@@ -179,7 +180,7 @@ export default function DefaultForm(props) {
   }
 
   return (
-    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel ? true : false}}>
+    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel ? true : false, DFName: props.localeReference}}>
       {instructionExists && (
         <div id='instructions' className='govuk-body'>
           <InstructionComp htmlString={getFormattedInstructionText()} />
