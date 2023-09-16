@@ -11,6 +11,5 @@ import {DefaultFormContext} from '../../helpers/HMRCAppContext';
 export default function useIsOnlyField(callerDisplayOrder = null){
     const myContext = useContext(DefaultFormContext);
 
-
-    return myContext.displayAsSingleQuestion;
+    return callerDisplayOrder != 0 ? false : myContext.displayAsSingleQuestion;
 }

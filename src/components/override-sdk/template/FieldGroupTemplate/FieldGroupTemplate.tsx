@@ -14,7 +14,7 @@ export default function Group(props){
   const actionsApi = thePConn.getActionsApi();
   const [stateChanged, setStateChanged] = useState(false);
 
-  const isOnlyField = useIsOnlyField();
+  const isOnlyField = useIsOnlyField(props.displayOrder);
 
   const formattedContext = thePConn.options.pageReference ? thePConn.options.pageReference.split('.').pop() : '';
 
@@ -101,13 +101,16 @@ export default function Group(props){
         />
       </>);
     }
+
+
+    return (<>
+    {heading && <div id='heading' className='govuk-body'>{heading}</div>}
+    {instructions && <div id='instructions' className='govuk-body'><InstructionComp htmlString={instructions}/></div>}
+    {children}
+    </>);
   }
 
-  return (<>
-  {heading && <div id='heading' className='govuk-body'>{heading}</div>}
-  {instructions && <div id='instructions' className='govuk-body'><InstructionComp htmlString={instructions}/></div>}
-  {children}
-  </>);
+  return null
 }
 
 

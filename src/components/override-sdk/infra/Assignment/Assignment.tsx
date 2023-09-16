@@ -259,7 +259,7 @@ export default function Assignment(props) {
     <HMRCAppContext.Provider value={{
         singleQuestionPage,
         setAssignmentSingleQuestionPage: (value) => {
-          value && PCore.getFormUtils().getEditableFields(containerID).length > 0 && setSingleQuestionPage(value)
+          value && !containerName.toLowerCase().includes('check your answer')  && setSingleQuestionPage(value)
         }
       }}>
       <div id='Assignment'>
