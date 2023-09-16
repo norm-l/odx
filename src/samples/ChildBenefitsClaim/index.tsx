@@ -55,7 +55,6 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
-
   function createCase() {
     setShowStartPage(false);
     setShowPega(true);
