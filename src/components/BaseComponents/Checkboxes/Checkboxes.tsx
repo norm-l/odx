@@ -9,6 +9,7 @@ export default function Checkboxes(props) {
     optionsList,
     onBlur,
     inputProps,
+    exclusiveOption
   } = props;
 
 
@@ -17,19 +18,12 @@ export default function Checkboxes(props) {
   // updated and the unchecking of checkboxes doesn't actually get applied
   // (The govuk-frontend changes the checked attribute of each checkbox, this doesn't trigger an onchange)
 
-    const checkboxElement = useRef(null);
+  const checkboxElement = useRef(null);
 
-  /*
-    useEffect( () => {
-    const govukCb = new govukCheckbox(checkboxElement.current);
-    govukCb.init();
-    }, []);
-  */
-
-  function exclusive(indexToIgnore){
+  function onExclusiveClick(exclusiveOptopnIndex){
     optionsList.forEach((element, index) => {
-      if(index !== indexToIgnore){
-        element.onChange({target: { checked :false}});
+      if(index !== exclusiveOptopnIndex){
+        element.onChange({target: {checked: false}});
       }
     });
 
@@ -42,7 +36,6 @@ export default function Checkboxes(props) {
     <FieldSet {...props}>
       <div className={checkboxClasses} data-module="govuk-checkboxes"  ref={checkboxElement}>
         {optionsList.map((item, index) => {
-          if(index !== optionsList.length-1){
             return (<GDSCheckbox
               item={item}
               index={index}
@@ -50,29 +43,33 @@ export default function Checkboxes(props) {
               inputProps={...inputProps}
               onChange={(evt) => {
                 item.onChange(evt);
-                optionsList[optionsList.length - 1].onChange({target: { checked: false}});
+                if(exclusiveOption){
+                  exclusiveOption.onChange({target: {checked: false}});
+                }
               }}
               onBlur={onBlur}
               key={item.name}
             />)
-          }
-          return null
-        })
+          })
         }
 
-        <div className="govuk-checkboxes__divider">or</div>
-        <GDSCheckbox
-          item={optionsList[optionsList.length - 1]}
-          index={optionsList.length - 1}
-          name={optionsList[optionsList.length - 1].name}
-          inputProps={...inputProps}
-          onChange={(evt) => {
-            optionsList[optionsList.length - 1].onChange(evt);
-            exclusive(optionsList.length - 1);
-          }}
-          onBlur={onBlur}
-          key={optionsList[optionsList.length - 1].name}
-        />
+        {exclusiveOption &&
+          <>
+            <div className="govuk-checkboxes__divider">or</div>
+            <GDSCheckbox
+              item={exclusiveOption}
+              index={optionsList.length}
+              name={exclusiveOption.name}
+              inputProps={...inputProps}
+              onChange={(evt) => {
+                exclusiveOption.onChange(evt);
+                onExclusiveClick(optionsList.length);
+              }}
+              onBlur={onBlur}
+              key={exclusiveOption.name}
+            />
+            </>
+        }
       </div>
     </FieldSet>
   );
@@ -90,5 +87,6 @@ Checkboxes.propTypes = {
   inputProps: PropTypes.object,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
+  exclusiveOption: PropTypes.object,
   ...FieldSet.propTypes ,
 };
