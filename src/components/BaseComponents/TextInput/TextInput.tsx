@@ -8,9 +8,14 @@ export default function TextInput(props) {
 
   if (disabled) {
     return (
-      <FormGroup {...props}>
+      <>
+        {hintText && (
+          <div id={makeHintId(name)} className='govuk-hint'>
+            <HintTextComponent htmlString={hintText} />
+          </div>
+        )}
         <span className='govuk-body govuk-!-font-weight-bold'>{inputProps.value}</span><br/>
-      </ FormGroup>
+      </>
     );
   }
 
