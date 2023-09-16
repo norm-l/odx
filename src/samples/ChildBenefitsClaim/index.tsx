@@ -26,8 +26,6 @@ import signoutHandler from '../../components/helpers/signout';
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
 
-import {initAll} from 'govuk-frontend/govuk/all';
-
 
 // declare var gbLoggedIn: boolean;
 // declare var login: Function;
@@ -57,7 +55,6 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
-  initAll();
 
   function createCase() {
     setShowStartPage(false);
