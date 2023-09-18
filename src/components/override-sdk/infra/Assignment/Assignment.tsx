@@ -22,8 +22,6 @@ interface OrderedErrorMessage {
   displayOrder: string;
 }
 
-let DFCounter = 0;
-
 declare const PCore: any;
 export default function Assignment(props) {
   const { getPConnect, children, itemKey, isCreateStage } = props;
@@ -47,13 +45,13 @@ export default function Assignment(props) {
   const cancelCreateStageAssignment = actionsAPI.cancelCreateStageAssignment.bind(actionsAPI);
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
-  /*APP STATE - PM IN PROGRESS*/
+  /* APP STATE - PM IN PROGRESS */
 
   const [singleQuestionPage, setSingleQuestionPage] = useState(false);
 
-  const [DFCounter, setDFCounter] = useState([]);
+  const [DFStack, setDFStack] = useState([]);
 
-  /**********************/
+  /* ******************** */
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
@@ -62,8 +60,10 @@ export default function Assignment(props) {
   const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
   useEffect(() => {
     setPageTitle();
+    // Set the assignment level singleQuestionpage value for 'original' logic handling
     setSingleQuestionPage(PCore.getFormUtils().getEditableFields(containerID).length === 1);
-    setDFCounter([]);
+    // Reset the DFStack array when assignment page updates
+    setDFStack([]);
   },[children])
 
   let containerName;
@@ -265,13 +265,13 @@ export default function Assignment(props) {
     <HMRCAppContext.Provider value={{
         singleQuestionPage,
         setAssignmentSingleQuestionPage: (value) => {
-          value && !containerName.toLowerCase().includes('check your answer')  && setSingleQuestionPage(value)
+          if(value && !containerName.toLowerCase().includes('check your answer')) setSingleQuestionPage(value);
         },
-        DFCounter: DFCounter,
-        DFCounterIncrement: (DFName) => {if(!DFCounter.includes(DFName)) {
-          const extendedList = DFCounter;
+        SingleQuestionDisplayDFStack: DFStack,
+        SingleQuestionDisplayDFStackPush: (DFName) => {if(!DFStack.includes(DFName)) {
+          const extendedList = DFStack;
           extendedList.push(DFName);
-          setDFCounter(extendedList)
+          setDFStack(extendedList)
         }}
 
       }}>

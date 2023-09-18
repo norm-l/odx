@@ -12,16 +12,13 @@ export default function useIsOnlyField(callerDisplayOrder = null){
     const DFContext = useContext(DefaultFormContext);
     const AssignmentContext = useContext(HMRCAppContext);
 
-    if(AssignmentContext.DFCounter.includes(DFContext.DFName)){
+    // Checks to see if the closest parent default form of the current element is in the SingleQuestionDisplayDFStack
+    // If it is, display this element as if it's a single field IF it's the first element in the form. (Driven by the display order it has been given)
+    if(AssignmentContext.SingleQuestionDisplayDFStack.includes(DFContext.DFName)){
         return callerDisplayOrder === "0" ? DFContext.displayAsSingleQuestion : false;
-    } else {
+    }
+    // Otherwise, use the Assignment context's singleQuestion page value, to fall back to the original logic (checking number of editable fields);
+    else {
         return AssignmentContext.singleQuestionPage;
     }
-    /*if(!DFContext.displayAsSingleQuestion){
-        if(DFContext.DFOrder !== 0){
-            return false;
-        } else {}
-
-    }*/
-
 }
