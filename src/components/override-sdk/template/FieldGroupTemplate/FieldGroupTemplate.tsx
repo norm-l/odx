@@ -7,7 +7,7 @@ import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 
 declare const PCore : any;
 
-export default function Group(props){
+export default function Group(props) {
   const { children, heading, instructions, readOnly, getPConnect } = props;
 
   const thePConn = getPConnect();
@@ -20,7 +20,7 @@ export default function Group(props){
 
   // Doesn't seem that state change on children (checkboxes) causes refresh on the containing group,
   // working around with this for now
-  useEffect(()=>{
+  useEffect(() => {
     if (stateChanged) {
       children.forEach(child => {
         PCore.getMessageManager().clearMessages({
@@ -28,58 +28,58 @@ export default function Group(props){
           pageReference: child.props.getPConnect().getPageReference(),
           context: child.props.getPConnect().getContextName(),
           type: 'error'
-          })
-      })
+        });
+      });
       setStateChanged(false);
     }
   }, [stateChanged]);
 
-  if(children?.length > 0){
+  if (children?.length > 0) {
     const handleChange = (event, propName) => {
       handleEvent(actionsApi, 'changeNblur', propName, event.target.checked);
       setStateChanged(true);
     };
 
     const errors = [""];
-    if(children[0].props?.getPConnect().getMetadata().type === 'Checkbox'){
+    if (children[0].props?.getPConnect().getMetadata().type === 'Checkbox') {
 
-      if(readOnly){
-        const valuesList = children.filter( (child) => {
+      if (readOnly) {
+        const valuesList = children.filter((child) => {
           const childPConnect = child.props.getPConnect();
-          const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps())
+          const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
           return (resolvedProps.value);
         }).map((child) => {
-            const childPConnect = child.props.getPConnect();
-            const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps())
-            return (resolvedProps.caption);
-          }
-        )
-        return (<ReadOnlyDisplay value={valuesList} label={heading}/>)
+          const childPConnect = child.props.getPConnect();
+          const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
+          return (resolvedProps.caption);
+        }
+        );
+        return (<ReadOnlyDisplay value={valuesList} label={heading} />);
       }
 
       let firstOptionPropertyName = null;
       let exlcusiveOption = null;
 
       const optionsList = [];
-      children.forEach( child => {
+      children.forEach(child => {
         const childPConnect = child.props.getPConnect();
-        const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps())
+        const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
         childPConnect.populateAdditionalProps(childPConnect.getConfigProps());
         errors.push(PCore.getMessageManager().getMessages({
           property: child.props.getPConnect().getStateProps().value,
           pageReference: child.props.getPConnect().getPageReference(),
           context: child.props.getPConnect().getContextName(),
           type: 'error'
-          })[0]?.message
+        })[0]?.message
         );
 
         const formattedPropertyName = childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
-        const optionName = `${formattedContext}` // -${formattedPropertyName}`
+        const optionName = `${formattedContext}`; // -${formattedPropertyName}`
 
         // Points error summary link to first checkbox in group
-        if(!firstOptionPropertyName) {firstOptionPropertyName = formattedPropertyName}
-        const fieldId = `${formattedContext}-${firstOptionPropertyName}`
-        childPConnect.setStateProps({fieldId});
+        if (!firstOptionPropertyName) { firstOptionPropertyName = formattedPropertyName; }
+        const fieldId = `${formattedContext}-${firstOptionPropertyName}`;
+        childPConnect.setStateProps({ fieldId });
 
         const option = {
           checked: resolvedProps.value,
@@ -88,14 +88,14 @@ export default function Group(props){
           readOnly: resolvedProps.readOnly,
           name: optionName,
           onChange: event => handleChange(event, childPConnect.getStateProps().value),
-        }
+        };
 
-        if(option.label.toLowerCase().includes('none of these apply')){
+        if (option.label.toLowerCase().includes('none of these apply')) {
           exlcusiveOption = option;
         } else {
           optionsList.push(option);
         }
-      })
+      });
 
       return (<>
         <CheckBoxes
@@ -112,13 +112,11 @@ export default function Group(props){
     }
 
 
-  return (<>
-  {heading && <div id='heading' className='govuk-body'>{heading}</div>}
-  {instructions && instructions !== 'none' && <div id='instructions' className='govuk-body'><InstructionComp htmlString={instructions}/></div>}
-  {children}
-  </>);
-}
-
-
-Group.propTypes = {
+    return (<>
+      {heading && <div id='heading' className='govuk-body'>{heading}</div>}
+      {instructions && instructions !== 'none' && <div id='instructions' className='govuk-body'><InstructionComp htmlString={instructions} /></div>}
+      {children}
+    </>);
+  }
+  return null;
 }
