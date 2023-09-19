@@ -15,12 +15,10 @@
       "required": false,
       "helperText": "Autocomplete attributes allow browsers to complete information which has been provided before on any site.  This assists users when completing forms.  Please add the relevant autocomplete value if required.",
       "source": [
-        { "key": "tel", "value": "tel" },
-        { "key": "tel-area-code", "value": "tel-area-code" },
-        { "key": "tel-country-code", "value": "tel-country-code" },
-        { "key": "tel-external", "value": "tel-external" },
-        { "key": "tel-local", "value": "tel-local" },
-        { "key": "tel-national", "value": "tel-national" }
+        { "key": "bday", "value": "bday" },
+        { "key": "bday-day", "value": "bday-day" },
+        { "key": "bday-month", "value": "bday-month" },
+        { "key": "bday-year", "value": "bday-year" }
       ]
     }
   ]
