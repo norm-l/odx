@@ -46,17 +46,26 @@ export default function HmrcOdxGdsSummaryCard(props) {
     // console.log(action);
     switch (action) {
       case 'Remove Child': // Need to make dynamic and more robust
-        // getPConnect().setInheritedProp("UserActions", "Remove");
-        getPConnect().setValue("UserActions", "Remove");
+        // getPConnect().setInheritedProp(".UserActions", "Remove");
+        getPConnect().setValue(".UserActions", "Remove");
+        // handleEvent(getPConnect().getActionsApi(), 'change', '.UserActions', 'Remove');
         getPConnect().getActionsApi().finishAssignment(containerItemID);
         // console.log('Invoke remove')
         break;
       case 'Change Child': // Need to make dynamic and more robust
         // getPConnect().setInheritedProp("UserActions", "Amend");
-        getPConnect().setValue("UserActions", "Amend");
+        getPConnect().setValue(".UserActions", "Amend");
+        // handleEvent(getPConnect().getActionsApi(), 'change', '.UserActions', 'Amend');
         getPConnect().getActionsApi().finishAssignment(containerItemID);
         // console.log('Invoke amend')
         break;
+      // case 'Add Child': // Need to make dynamic and more robust
+      //   // getPConnect().setInheritedProp("UserActions", "Amend");
+      //   // getPConnect().setValue("UserActions", "Amend");
+      //   handleEvent(getPConnect().getActionsApi(), 'change', '.AddToList', 'Yes');
+      //   getPConnect().getActionsApi().finishAssignment(containerItemID);
+      //   // console.log('Invoke amend')
+      //   break;
       default:
         // console.log('default')
         break;

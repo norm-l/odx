@@ -21,6 +21,7 @@ import InfraViewContainer from './src/components/override-sdk/infra/ViewContaine
 import MimicASentence from './src/components/custom-sdk/template/MimicASentence/'
 import HmrcOdxGdsInfoPanel from './src/components/custom-sdk/template/HMRC_ODX_GDSInfoPanel/';
 import HmrcOdxGdsSummaryCard from './src/components/custom-sdk/template/HMRC_ODX_GDSSummaryCard/';
+import HmrcOdxGdsButton from './src/components/custom-sdk/field/HMRC_ODX_GDSButton/';
 /*import end - DO NOT REMOVE*/
 
 // localSdkComponentMap is the JSON object where we'll store the components that are
@@ -49,6 +50,7 @@ const localSdkComponentMap = {
   "ViewContainer" : InfraViewContainer,
   "HMRC_ODX_GDSInfoPanel" : HmrcOdxGdsInfoPanel,
   "HMRC_ODX_GDSSummaryCard" : HmrcOdxGdsSummaryCard,
+  "HMRC_ODX_GDSButton" : HmrcOdxGdsButton,
 /*map end - DO NOT REMOVE*/
 };
 
