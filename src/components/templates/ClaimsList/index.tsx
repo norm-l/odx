@@ -68,20 +68,19 @@ export default function ClaimsList(props){
             </Button>),
         status : statusMapping(item.pyStatusWork)
       };
+
       if(item.Claim.ChildrenJSON){
         const additionalChildren = extractChildren(item.Claim.ChildrenJSON);
         additionalChildren.forEach(child =>{
           const newChild = {
-            firstName : child.name,
-            lastName : item.Claim.Child.pyLastName,
+            name : child.name,
             dob : DateFormatter.Date(child.dob, { format: 'DD/MM/YYYY' })
           }
           claimItem.children.push(newChild);
         })
       }else{
         claimItem.children.push({
-          firstName : item.Claim.Child.pyFirstName,
-          lastName : item.Claim.Child.pyLastName,
+          name : (item.Claim.Child.pyFirstName && item.Claim.Child.pyLastName) ? item.Claim.Child.pyFirstName+ ' ' + item.Claim.Child.pyLastName : null,
           dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD/MM/YYYY' })
         });
       }
@@ -103,8 +102,8 @@ export default function ClaimsList(props){
           <div className='govuk-summary-list__row'>
             <dt className='govuk-summary-list__key'>
               {claimItem.children.map(child =>
-                <p key={child.firstName}>
-                  {child.firstName && child.lastName && `${child.firstName} ${child.lastName}`}
+                <p key={child.name}>
+                  {child.name  && <>{child.name}</>}
                   {child.dob && <><br/><span className='govuk-!-font-weight-regular'>{`${t('DATE_OF_BIRTH')} ${child.dob}`}</span><br/></>}
                   <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')} {claimItem.dateCreated}</span>
                 </p>

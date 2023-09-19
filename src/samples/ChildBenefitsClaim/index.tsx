@@ -29,7 +29,8 @@ import { checkCookie, setCookie } from '../../components/helpers/cookie';
 
 declare const myLoadMashup: any;
 
-export default function ChildBenefitsClaim() {
+export default function ChildBenefitsClaim(props) {
+  const {setReturnSlipContent} = props;
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
   const [showStartPage, setShowStartPage] = useState(false);
@@ -39,6 +40,7 @@ export default function ChildBenefitsClaim() {
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+
   const { t } = useTranslation();
   let operatorId = '';
 
@@ -434,7 +436,8 @@ export default function ChildBenefitsClaim() {
 
       </UserPortal>}
 
-      {bShowResolutionScreen && <ConfirmationPage />}
+      {bShowResolutionScreen && <ConfirmationPage setReturnSlipContent={setReturnSlipContent} />}
+
       </div>
 
       <LogoutPopup

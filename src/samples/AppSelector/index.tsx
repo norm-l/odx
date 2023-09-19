@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
@@ -7,6 +7,7 @@ import i18n from 'i18next';
 import ChildBenefitsClaim from '../ChildBenefitsClaim/index';
 import CookiePage from '../ChildBenefitsClaim/cookiePage/index';
 import Accessibility from '../ChildBenefitsClaim/AccessibilityPage';
+import ReturnSlip from '../ChildBenefitsClaim/ReturnSlip/ReturnSlip';
 
 const AppSelector = () => {
   i18n
@@ -26,11 +27,14 @@ const AppSelector = () => {
       }
     });
 
+  const [content, setContent] = useState('');
+
   return (
     <Switch>
-      <Route exact path='/' component={ChildBenefitsClaim} />
+      <Route exact path='/' render={setContent => <ChildBenefitsClaim setReturnSlipContent={setContent}/>}/>
       <Route path='/cookies' component={CookiePage} />
       <Route path='/accessibility' component={Accessibility} />
+      <Route path='/returnSlip' render={content => <ReturnSlip content={content}/>} />
     </Switch>
   );
 

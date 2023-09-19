@@ -12,8 +12,6 @@ export default function DefaultForm(props) {
 
   const isOnlyField = useIsOnlyField();
   const { t } = useTranslation();
-  const [declaration, setDeclaration] = useState({text1: '', text2:'', warning1: ''});
-  // const [showDeclaration, setShowDeclaration] = useState(false);
 
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
@@ -22,8 +20,6 @@ export default function DefaultForm(props) {
   let hasSingleChildWhichIsReference = false;
   const instructionText = props.instructions === 'none' ? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
-  console.log(props);
-
 
   const settingTargetForAnchorTag = () => {
     const instructionDiv = document.getElementById('instructions');
@@ -41,19 +37,6 @@ export default function DefaultForm(props) {
       settingTargetForAnchorTag();
     }
   },[instructionExists])
-
-  useEffect(()=>{
-    const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', `${getPConnect().getContextName()}`);
-    const declarationText2 = PCore.getStoreValue('.DeclarationText2', 'caseInfo.content.Claim', `${getPConnect().getContextName()}`);
-    const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', `${getPConnect().getContextName()}`);
-    setDeclaration({
-      text1: declarationText1,
-      text2: declarationText2,
-      warning1: declarationWarning1});
-    console.log(PCore.getStoreValue('.pyViewName', 'caseInfo.content', `${getPConnect().getContextName()}`));
-    console.log(PCore.getStoreValue('.pyViewName', 'caseInfo.content', `${getPConnect().getContextName()}`) === 'Declaration')
-    // setShowDeclaration(PCore.getStoreValue('.pyViewName', 'caseInfo.content', `${getPConnect().getContextName()}`) === 'Declaration');
-  },[])
 
   const getFormattedInstructionText = () => {
     let text = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
@@ -197,23 +180,7 @@ export default function DefaultForm(props) {
           <InstructionComp htmlString={getFormattedInstructionText()} />
         </p>
       )}
-
-      {declaration.text1 && (
-        <p id='declarationText1' className='govuk-body'>
-          <InstructionComp htmlString={declaration.text1}/>
-        </p>
-      )}
       {dfChildren}
-      {/* {declaration.text2 && (
-        <p id='declarationText2' className='govuk-body'>
-          <InstructionComp htmlString={declaration.text2}/>
-        </p>
-      )}
-      {declaration.warning1 && (
-        <p id='declarationWarning1' className='govuk-body'>
-          <InstructionComp htmlString={declaration.warning1}/>
-        </p>
-      )} */}
     </>
   );
 }
