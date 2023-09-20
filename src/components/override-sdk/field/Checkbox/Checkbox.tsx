@@ -24,11 +24,8 @@ export default function CheckboxComponent(props) {
   const [showDeclaration, setShowDeclaration] = useState(false);
   const [declaration, setDeclaration] = useState({text1: '', text2:'', warning1: ''});
 
-  console.log(props);
-
   useEffect(()=>{
     if(name ==='Claim-Declaration'){
-      console.log('found');
       setShowDeclaration(true);
     }
   },[])

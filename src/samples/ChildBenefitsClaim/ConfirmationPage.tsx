@@ -4,8 +4,7 @@ import ParsedHTML from '../../components/helpers/formatters/ParsedHtml';
 
 declare const PCore : any;
 
-const ConfirmationPage = (props) => {
-  const {setReturnSlipContent} = props;
+const ConfirmationPage = () => {
 
   const { t } = useTranslation();
   const [documentList, setDocumentList] = useState(``);
@@ -14,25 +13,18 @@ const ConfirmationPage = (props) => {
 
   useEffect(()=>{
     PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0003', Locale: 'en_GB', CaseID: caseID}).then(res => {
-      console.log(res);
       if(res.DocumentContentHTML.includes("data-bornabroad='true'") || res.DocumentContentHTML.includes("data-adopted='true'")){
-        console.log(true);
         setIsBornAbroadOrAdopted(true);
       }
       setDocumentList(res.DocumentContentHTML);
-    }).catch(err => console.log(err));
-
-    console.log('work in progress');
-    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0002', Locale: 'en_GB', CaseID: caseID}).then(res => {
-      console.log(res);
-      setReturnSlipContent(res.DocumentContentHTML);
-    }).catch(err => console.log(err));
+    }).catch(err => console.error(err));
   },[])
 
-  /* In separate branch maybe.. us-10477 */
-
   const generateReturnSlip = () => {
-
+    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0002', Locale: 'en_GB', CaseID: caseID}).then(res => {
+      let myWindow = window.open("", "ReturnSlip", "width=450,height=600");
+      myWindow.document.write(res.DocumentContentHTML);
+    }).catch(err => console.error(err));
   }
 
   if(isBornAbroadOrAdopted){
@@ -48,7 +40,7 @@ const ConfirmationPage = (props) => {
             <p className='govuk-body'> {t('THE_INFO_YOU_HAVE_PROVIDED')} </p>
             <ParsedHTML htmlString={documentList}/>
             <p className='govuk-body'> {t('HMRC_MIGHT_CALL_YOU')} </p>
-            <p className='govuk-body'> {t('AFTER_YOU_HAVE')} <a href='/returnSlip' target='_blank'>{t('PRINTED_AND_SIGNED_THE_FORM')} {t('OPENS_IN_NEW_TAB')}</a>, {t('RETURN_THE_FORM_WITH')} </p>
+            <p className='govuk-body'> {t('AFTER_YOU_HAVE')} <a href='' onClick={generateReturnSlip}>{t('PRINTED_AND_SIGNED_THE_FORM')} {t('OPENS_IN_NEW_TAB')}</a>, {t('RETURN_THE_FORM_WITH')} </p>
             <p className='govuk-body govuk-!-font-weight-bold'>
               Child Benefit Office (GB)<br/>
               Washington<br/>
