@@ -9,22 +9,26 @@ const ConfirmationPage = () => {
   const { t } = useTranslation();
   const [documentList, setDocumentList] = useState(``);
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
+  const [returnSlipContent, setReturnSlipContent] = useState();
   const caseID = PCore.getStoreValue('.key', '' , 'app/primary_1');
 
   useEffect(()=>{
-    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0003', Locale: 'en_GB', CaseID: caseID}).then(res => {
-      if(res.DocumentContentHTML.includes("data-bornabroad='true'") || res.DocumentContentHTML.includes("data-adopted='true'")){
+    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0003', Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(listData => {
+      if(listData.DocumentContentHTML.includes("data-bornabroad='true'") || listData.DocumentContentHTML.includes("data-adopted='true'")){
         setIsBornAbroadOrAdopted(true);
       }
-      setDocumentList(res.DocumentContentHTML);
+      setDocumentList(listData.DocumentContentHTML);
+    }).catch(err => console.error(err));
+
+    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0002', Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(pageData => {
+      setReturnSlipContent(pageData.DocumentContentHTML);
     }).catch(err => console.error(err));
   },[])
 
-  const generateReturnSlip = () => {
-    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0002', Locale: 'en_GB', CaseID: caseID}).then(res => {
-      let myWindow = window.open("", "ReturnSlip", "width=450,height=600");
-      myWindow.document.write(res.DocumentContentHTML);
-    }).catch(err => console.error(err));
+  const generateReturnSlip = (e) => {
+    e.preventDefault();
+    let myWindow = window.open("", "ReturnSlip", "width=450,height=600");
+    myWindow.document.write(returnSlipContent);
   }
 
   if(isBornAbroadOrAdopted){
@@ -40,7 +44,7 @@ const ConfirmationPage = () => {
             <p className='govuk-body'> {t('THE_INFO_YOU_HAVE_PROVIDED')} </p>
             <ParsedHTML htmlString={documentList}/>
             <p className='govuk-body'> {t('HMRC_MIGHT_CALL_YOU')} </p>
-            <p className='govuk-body'> {t('AFTER_YOU_HAVE')} <a href='' onClick={generateReturnSlip}>{t('PRINTED_AND_SIGNED_THE_FORM')} {t('OPENS_IN_NEW_TAB')}</a>, {t('RETURN_THE_FORM_WITH')} </p>
+            <p className='govuk-body'> {t('AFTER_YOU_HAVE')} <a href='' onClick={(e)=>generateReturnSlip(e)}>{t('PRINTED_AND_SIGNED_THE_FORM')} {t('OPENS_IN_NEW_TAB')}</a>, {t('RETURN_THE_FORM_WITH')} </p>
             <p className='govuk-body govuk-!-font-weight-bold'>
               Child Benefit Office (GB)<br/>
               Washington<br/>

@@ -1,15 +1,23 @@
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
+
+import {HMRCAppContext, DefaultFormContext}  from '../../../helpers/HMRCAppContext';
+
 // import './DefaultForm.css';
 
 declare const PCore: any;
 
 export default function DefaultForm(props) {
-  const { getPConnect, readOnly, additionalProps } = props;
+  const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
+  const {setAssignmentSingleQuestionPage, SingleQuestionDisplayDFStack, SingleQuestionDisplayDFStackPush} = useContext(HMRCAppContext);
+  // If this Default Form should display as a single question, or is wrapped by a DF that should be, push it to the df stack, to check later.
+  if(configAlternateDesignSystem?.hidePageLabel === true || SingleQuestionDisplayDFStack.length > 0) SingleQuestionDisplayDFStackPush(props.localeReference);
+  // Set the assignment level singleQuestionPage boolean to reflect the page type of the default form.
+  setAssignmentSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel);
   const isOnlyField = useIsOnlyField();
   const { t } = useTranslation();
 
@@ -72,7 +80,8 @@ export default function DefaultForm(props) {
       isOnlyField &&
       !instructionExists &&
       childPConnect.getConfigProps().readOnly !== true &&
-      idx === 0
+      idx === 0 &&
+      !configAlternateDesignSystem?.hidePageLabel
     ) {
       childPConnect.setInheritedProp(
         'label',
@@ -89,7 +98,7 @@ export default function DefaultForm(props) {
       displayOrder = `${idx}`;
     }
     childPConnect.registerAdditionalProps({ displayOrder });
-
+    childPConnect.setInheritedProp("displayOrder", displayOrder);
     const formattedContext = props.context ? props.context?.split('.').pop() : '';
     const formattedPropertyName =
       childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
@@ -174,13 +183,13 @@ export default function DefaultForm(props) {
   }
 
   return (
-    <>
+    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference}}>
       {instructionExists && (
         <p id='instructions' className='govuk-body'>
           <InstructionComp htmlString={getFormattedInstructionText()} />
         </p>
       )}
       {dfChildren}
-    </>
+    </DefaultFormContext.Provider>
   );
 }
