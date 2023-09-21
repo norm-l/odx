@@ -20,11 +20,17 @@ const ConfirmationPage = () => {
         setIsBornAbroadOrAdopted(true);
       }
       setDocumentList(listData.DocumentContentHTML);
-    }).catch(err => console.error(err));
+    }).catch(err => {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    });
 
     PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: docIDForReturnSlip, Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(pageData => {
       setReturnSlipContent(pageData.DocumentContentHTML);
-    }).catch(err => console.error(err));
+    }).catch(err => {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    });
   },[])
 
   const generateReturnSlip = (e) => {
