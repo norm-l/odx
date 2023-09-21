@@ -37,7 +37,7 @@ const ConfirmationPage = () => {
 
   const generateReturnSlip = (e) => {
     e.preventDefault();
-    const myWindow = window.open("", "ReturnSlip", "width=450,height=600");
+    const myWindow = window.open("");
     myWindow.document.write(returnSlipContent);
   }
 
