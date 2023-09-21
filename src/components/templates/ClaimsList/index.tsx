@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
-import { Utils } from '../../helpers/utils';
+import { Utils, GBdate} from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
@@ -77,15 +77,17 @@ export default function ClaimsList(props){
         const additionalChildren = extractChildren(item.Claim.ChildrenJSON);
         additionalChildren.forEach(child =>{
           const newChild = {
-            name : child.name,
-            dob : DateFormatter.Date(child.dob, { format: 'DD/MM/YYYY' })
+            firstName : child.name,
+            lastName : ' ',
+            dob : child.dob ? GBdate(child.dob) : ''
           }
           claimItem.children.push(newChild);
         })
       }else{
         claimItem.children.push({
-          name : (item.Claim.Child.pyFirstName && item.Claim.Child.pyLastName) ? item.Claim.Child.pyFirstName+ ' ' + item.Claim.Child.pyLastName : null,
-          dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD/MM/YYYY' })
+          firstName : item.Claim.Child.pyFirstName,
+          lastName : item.Claim.Child.pyLastName,
+          dob : item.Claim.Child.DateOfBirth ? GBdate(item.Claim.Child.DateOfBirth) : ''
         });
       }
       claimsData.push(claimItem);
@@ -106,8 +108,8 @@ export default function ClaimsList(props){
           <div className='govuk-summary-list__row'>
             <dt className='govuk-summary-list__key'>
               {claimItem.children.map(child =>
-                <p key={child.name}>
-                  {child.name  && <>{child.name}</>}
+                <p key={child.firstName}>
+                  {child.firstName && child.lastName && `${child.firstName} ${child.lastName}`}
                   {child.dob && <><br/><span className='govuk-!-font-weight-regular'>{`${t('DATE_OF_BIRTH')} ${child.dob}`}</span><br/></>}
                   <span className='govuk-!-font-weight-regular'>{t('CREATED_DATE')} {claimItem.dateCreated}</span>
                 </p>

@@ -11,23 +11,25 @@ const ConfirmationPage = () => {
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
   const caseID = PCore.getStoreValue('.key', '' , 'app/primary_1');
+  const docIDForDocList = 'CR0003';
+  const docIDForReturnSlip = 'CR0002';
 
   useEffect(()=>{
-    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0003', Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(listData => {
+    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: docIDForDocList, Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(listData => {
       if(listData.DocumentContentHTML.includes("data-bornabroad='true'") || listData.DocumentContentHTML.includes("data-adopted='true'")){
         setIsBornAbroadOrAdopted(true);
       }
       setDocumentList(listData.DocumentContentHTML);
     }).catch(err => console.error(err));
 
-    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: 'CR0002', Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(pageData => {
+    PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: docIDForReturnSlip, Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(pageData => {
       setReturnSlipContent(pageData.DocumentContentHTML);
     }).catch(err => console.error(err));
   },[])
 
   const generateReturnSlip = (e) => {
     e.preventDefault();
-    let myWindow = window.open("", "ReturnSlip", "width=450,height=600");
+    const myWindow = window.open("", "ReturnSlip", "width=450,height=600");
     myWindow.document.write(returnSlipContent);
   }
 
