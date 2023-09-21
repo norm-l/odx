@@ -86,17 +86,10 @@ export default function HmrcOdxGdsSummaryCard(props) {
           <div className="govuk-summary-card__content">
             <dl className='govuk-summary-list'>
               {formElms.map((field, index) => {
-                // const formattedValue =
-                //   typeof field === 'object' && field !== null && 'props' in field && field.props?.DateTimeFormat
-                //     ? new Date((field as any)?.props?.value).toLocaleDateString('en-GB', {
-                //         day: '2-digit',
-                //         month: '2-digit',
-                //         year: 'numeric',
-                //       })
-                //     : (field as any)?.props?.value;
+
                 let formattedValue = "";
 
-                formattedValue = (field as any)?.props?.label === 'Date of birth'?
+                formattedValue = (field as any)?.props?.label === 'Date of birth'? // TODO: Need to make more robust
                   GBdate((field as any)?.props?.value)
                 : (field as any)?.props?.value;
 
