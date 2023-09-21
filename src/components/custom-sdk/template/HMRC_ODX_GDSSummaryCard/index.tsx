@@ -89,7 +89,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
                 let formattedValue = "";
 
-                formattedValue = (field as any)?.props?.label === 'Date of birth'? // TODO: Need to make more robust
+                formattedValue = ((field as any)?.props?.label === 'Date of birth' || (field as any)?.props?.label === 'Dyddiad geni')? // TODO: Need to make more robust
                   GBdate((field as any)?.props?.value)
                 : (field as any)?.props?.value;
 
