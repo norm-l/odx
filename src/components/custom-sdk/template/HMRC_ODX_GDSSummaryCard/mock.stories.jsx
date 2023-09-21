@@ -23,7 +23,7 @@ const renderField = (resolvedProps) => {
     label = ''
     // theme = useTheme() // can't use custom hook here, which is what I think useTheme() is
   } = resolvedProps;
-
+ 
   // loop through updateVals array and update the relevant props
   updateVals.map(p => {
     switch (p.propName) {
@@ -84,9 +84,9 @@ const renderField = (resolvedProps) => {
       return <Input label={label} value={value} readOnly={readOnly} />;
   }
 };
-
+ let regionChildrenResolved;
 // looks like this data object is used to look up values to see if they exist - at ALL levels e.g. top level or children
-export const pyReviewRawMetadata = {
+ export default  pyReviewRawMetadata = {
   name: 'DisplayClaimantDetails',
   type: 'View',
   config: {
@@ -112,6 +112,7 @@ export const pyReviewRawMetadata = {
       getPConnect: () => {
         return {
           getRawMetadata: () => {
+         
             return pyReviewRawMetadata;
           },
           getChildren: () => {
@@ -202,13 +203,12 @@ export const pyReviewRawMetadata = {
   ],
   classID: 'HMRC-ChB-Work-Claim'
 };
-
-// mocked resolved data - used to create the component.
-export const regionChildrenResolved = [
+  regionChildrenResolved = [
   {
     getPConnect: () => {
       return {
         getRawMetadata: () => {
+       
           return pyReviewRawMetadata;
         },
         getChildren: () => {
@@ -239,6 +239,7 @@ export const regionChildrenResolved = [
     getPConnect: () => {
       return {
         getRawMetadata: () => {
+       
           return pyReviewRawMetadata;
         },
         getChildren: () => {
@@ -269,6 +270,7 @@ export const regionChildrenResolved = [
     getPConnect: () => {
       return {
         getRawMetadata: () => {
+      
           return pyReviewRawMetadata;
         },
         getChildren: () => {
@@ -298,6 +300,7 @@ export const regionChildrenResolved = [
     getPConnect: () => {
       return {
         getRawMetadata: () => {
+       
           return pyReviewRawMetadata;
         },
         getChildren: () => {
@@ -326,3 +329,9 @@ export const regionChildrenResolved = [
     value: 'No'
   }
 ];
+
+
+
+
+
+

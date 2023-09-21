@@ -14,8 +14,10 @@ export default {
   title: 'HmrcOdxGdsSummaryCard',
   component: HmrcOdxGdsSummaryCard
 };
+let Template = {};
+export const Primary = Template.bind({});
 
-const Template = args => {
+ Template = args => {
   const regionAChildren = pyReviewRawMetadata.children[0].children.map(child => {
     return Primary.args.getPConnect().createComponent(child);
   });
@@ -34,7 +36,88 @@ const Template = args => {
   );
 };
 
-export const Primary = Template.bind({});
+// TODO Make more generic
+const renderField = resolvedProps => {
+  const {
+    type,
+    readOnly = false, // is field read only?
+    value = '',
+    label = '',
+    // theme = useTheme()
+  } = resolvedProps;
+
+  // const variant = displayMode === 'LABELS_LEFT' ? 'inline' : 'stacked';
+
+  // INPUT
+  switch (type) {
+    case 'TextInput':
+      return <Input label={label} value={value} readOnly={readOnly} />;
+
+    case 'DateTime':
+      return <DateInput label={label} value={value} readOnly={readOnly} DateTimeFormat='short' />;
+
+    case 'RadioButtons': // TODO - make dynamic
+      return (
+        <RadioButtonGroup label={label} value={value}>
+          <RadioButton
+            label='Yes'
+            id='Yes'
+            defaultChecked='false'
+            additionalInfo={{
+              heading: 'Additional Info',
+              content: 'You declare you are subject to immigration'
+            }}
+          />
+          <RadioButton
+            label='No'
+            id='No'
+            defaultChecked
+            additionalInfo={{
+              heading: 'Additional Info',
+              content: 'You are not subject to immigration'
+            }}
+          />
+        </RadioButtonGroup>
+      );
+      default:
+        return '';
+  }
+
+  // let val = value != '' ? <Input label={label} value={value} readOnly={readOnly} /> : '';
+
+  // if (label === 'Create date/time')
+  //   val = <DateTimeDisplay value={value} variant='datetime' format='long' clockFormat={null} />;
+
+  // if (displayAsStatus === true) val = StatusWorkRenderer({ value });
+
+  // if (label === 'Create Operator')
+  //   val = (
+  //     <Button
+  //       variant='link'
+  //       style={
+  //         label !== null
+  //           ? { width: 'max-content', height: theme.components.input.height }
+  //           : undefined
+  //       }
+  //     >
+  //       {value.userName}
+  //     </Button>
+  //   );
+
+  // if (variant === 'inline') {
+  //   val = value || <span aria-hidden='true'>&ndash;&ndash;</span>;
+  // } else {
+  //   val = (
+  //     <Text variant='h1' as='span'>
+  //       {val}
+  //     </Text>
+  //   );
+  // }
+
+  // return <FieldValueList variant={variant} fields={[{ name: label, value: val }]} />;
+  // return <Input label={label} value={value} />;
+};
+
 
 // core template as used by Storybook
 Primary.args = {
@@ -121,84 +204,3 @@ Primary.args = {
   }
 };
 
-// TODO Make more generic
-const renderField = resolvedProps => {
-  const {
-    type,
-    readOnly = false, // is field read only?
-    value = '',
-    label = '',
-    // theme = useTheme()
-  } = resolvedProps;
-
-  // const variant = displayMode === 'LABELS_LEFT' ? 'inline' : 'stacked';
-
-  // INPUT
-  switch (type) {
-    case 'TextInput':
-      return <Input label={label} value={value} readOnly={readOnly} />;
-
-    case 'DateTime':
-      return <DateInput label={label} value={value} readOnly={readOnly} DateTimeFormat='short' />;
-
-    case 'RadioButtons': // TODO - make dynamic
-      return (
-        <RadioButtonGroup label={label} value={value}>
-          <RadioButton
-            label='Yes'
-            id='Yes'
-            defaultChecked='false'
-            additionalInfo={{
-              heading: 'Additional Info',
-              content: 'You declare you are subject to immigration'
-            }}
-          />
-          <RadioButton
-            label='No'
-            id='No'
-            defaultChecked
-            additionalInfo={{
-              heading: 'Additional Info',
-              content: 'You are not subject to immigration'
-            }}
-          />
-        </RadioButtonGroup>
-      );
-      default:
-        return '';
-  }
-
-  // let val = value != '' ? <Input label={label} value={value} readOnly={readOnly} /> : '';
-
-  // if (label === 'Create date/time')
-  //   val = <DateTimeDisplay value={value} variant='datetime' format='long' clockFormat={null} />;
-
-  // if (displayAsStatus === true) val = StatusWorkRenderer({ value });
-
-  // if (label === 'Create Operator')
-  //   val = (
-  //     <Button
-  //       variant='link'
-  //       style={
-  //         label !== null
-  //           ? { width: 'max-content', height: theme.components.input.height }
-  //           : undefined
-  //       }
-  //     >
-  //       {value.userName}
-  //     </Button>
-  //   );
-
-  // if (variant === 'inline') {
-  //   val = value || <span aria-hidden='true'>&ndash;&ndash;</span>;
-  // } else {
-  //   val = (
-  //     <Text variant='h1' as='span'>
-  //       {val}
-  //     </Text>
-  //   );
-  // }
-
-  // return <FieldValueList variant={variant} fields={[{ name: label, value: val }]} />;
-  // return <Input label={label} value={value} />;
-};
