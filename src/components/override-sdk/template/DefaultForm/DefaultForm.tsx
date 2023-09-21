@@ -2,6 +2,7 @@ import React, { createElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
+import './DefaultForm.css';
 
 import DefaultFormContext  from '../../../helpers/HMRCAppContext';
 
@@ -11,6 +12,11 @@ export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
   const { t } = useTranslation();
+  let cssClassHook = "";
+
+  if (configAlternateDesignSystem?.cssClassHook) {
+    cssClassHook = configAlternateDesignSystem.cssClassHook;
+  }
 
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
@@ -180,8 +186,10 @@ export default function DefaultForm(props) {
     });
   }
 
-  return (
+  return (        
+    <div className={cssClassHook}>
     <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name }}>
+
       {instructionExists && (
         <p id='instructions' className='govuk-body'>
           <InstructionComp htmlString={getFormattedInstructionText()} />
@@ -189,5 +197,6 @@ export default function DefaultForm(props) {
       )}
       {dfChildren}
     </DefaultFormContext.Provider>
+    </div>
   );
 }
