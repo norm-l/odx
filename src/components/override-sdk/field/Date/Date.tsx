@@ -19,11 +19,12 @@ export default function Date(props) {
     helperText,
     readOnly,
     name,
-    testId
+    testId,
+    configAlternateDesignSystem
   } = props;
   const pConn = getPConnect();
 
-  const isOnlyField = useIsOnlyField();
+  const isOnlyField = useIsOnlyField(props.displayOrder);
 
   // PM - Set up state for each input field, either the value we received from pega, or emtpy
   const [day, setDay] = useState(value ? value.split('-')[2] : '');
@@ -40,8 +41,10 @@ export default function Date(props) {
   const handleDateChange = () => {
     let isoDate;
     if (year || month || day) {
-      isoDate = `${year}-${month.toString().length === 1 ? `0${month}` : month}-${
-        day.toString().length === 1 ? `0${day}` : day
+      const trimMonth = month.replace(/\s/g, '');
+      const trimDay = day.replace(/\s/g, '');
+      isoDate = `${year.replace(/\s/g, '')}-${trimMonth.toString().length === 1 ? `0${trimMonth}` : trimMonth}-${
+        trimDay.toString().length === 1 ? `0${trimDay}` : trimDay
       }`;
     } else {
       isoDate = '';
@@ -111,6 +114,10 @@ export default function Date(props) {
   }
 
   const extraProps = { testProps: { 'data-test-id': testId } };
+
+  if (configAlternateDesignSystem?.autocomplete) {
+    extraProps['autoComplete'] = configAlternateDesignSystem.autocomplete;
+  }
 
   return (
     <DateInput
