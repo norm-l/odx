@@ -3,13 +3,18 @@ import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
-// import './DefaultForm.css';
+import './DefaultForm.css';
 
 export default function DefaultForm(props) {
-  const { getPConnect, readOnly, additionalProps } = props;
+  const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
   const isOnlyField = useIsOnlyField();
   const { t } = useTranslation();
+  let cssClassHook = "";
+
+  if (configAlternateDesignSystem?.cssClassHook) {
+    cssClassHook = configAlternateDesignSystem.cssClassHook;
+  }
 
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
@@ -173,12 +178,14 @@ export default function DefaultForm(props) {
 
   return (
     <>
-      {instructionExists && (
-        <div id='instructions' className='govuk-body'>
-          <InstructionComp htmlString={getFormattedInstructionText()} />
-        </div>
-      )}
-      {dfChildren}
+      <div className={cssClassHook}>
+        {instructionExists && (
+          <div id='instructions' className='govuk-body'>
+            <InstructionComp htmlString={getFormattedInstructionText()} />
+          </div>
+        )}
+        {dfChildren}
+      </div>
     </>
   );
 }
