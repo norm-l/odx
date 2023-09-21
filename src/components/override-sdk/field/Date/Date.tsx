@@ -18,7 +18,8 @@ export default function Date(props) {
     helperText,
     readOnly,
     name,
-    testId
+    testId,
+    configAlternateDesignSystem
   } = props;
   const pConn = getPConnect();
 
@@ -114,6 +115,10 @@ export default function Date(props) {
   }
 
   const extraProps = { testProps: { 'data-test-id': testId } };
+
+  if (configAlternateDesignSystem?.autocomplete) {
+    extraProps['autoComplete'] = configAlternateDesignSystem.autocomplete;
+  }
 
   return (
     <DateInput

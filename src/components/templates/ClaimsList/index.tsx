@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
-import { Utils } from '../../helpers/utils';
+import { Utils, GBdate} from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
@@ -72,13 +72,14 @@ export default function ClaimsList(props){
             </Button>),
         status : statusMapping(item.pyStatusWork)
       };
+
       if(item.Claim.ChildrenJSON){
         const additionalChildren = extractChildren(item.Claim.ChildrenJSON);
         additionalChildren.forEach(child =>{
           const newChild = {
             firstName : child.name,
             lastName : ' ',
-            dob : DateFormatter.Date(child.dob, { format: 'DD/MM/YYYY' })
+            dob : child.dob ? GBdate(child.dob) : ''
           }
           claimItem.children.push(newChild);
         })
@@ -86,7 +87,7 @@ export default function ClaimsList(props){
         claimItem.children.push({
           firstName : item.Claim.Child.pyFirstName,
           lastName : item.Claim.Child.pyLastName,
-          dob : DateFormatter.Date(item.Claim.Child.DateOfBirth, { format: 'DD/MM/YYYY' })
+          dob : item.Claim.Child.DateOfBirth ? GBdate(item.Claim.Child.DateOfBirth) : ''
         });
       }
       claimsData.push(claimItem);
