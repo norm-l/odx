@@ -197,15 +197,16 @@ export default function DefaultForm(props) {
     //     {dfChildren}
     //   </div>
     // </>
-    <div className={cssClassHook}>
-      <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference}}>
-        {instructionExists && (
-          <div id='instructions' className='govuk-body'>
-            <InstructionComp htmlString={getFormattedInstructionText()} />
-          </div>
-        )}
-        {dfChildren}
-      </DefaultFormContext.Provider>
-    </div>
   
+    <div className={cssClassHook}>
+    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference}}>
+      {instructionExists && (
+        <p id='instructions' className='govuk-body'>
+          <InstructionComp htmlString={getFormattedInstructionText()} />
+        </p>
+      )}
+      {dfChildren}
+    </DefaultFormContext.Provider>
+    </div>
+  );
 }
