@@ -9,7 +9,6 @@ import { DateErrorFormatter } from '../../../helpers/formatters/DateErrorFormatt
 import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
-import {HMRCAppContext} from '../../../helpers/HMRCAppContext';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 
 
@@ -315,6 +314,3 @@ Assignment.defaultProps = {
   isCreateStage: false
   // buildName: null
 };
-
-
-export { HMRCAppContext };

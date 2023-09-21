@@ -14,9 +14,7 @@ export default function Group(props) {
   const actionsApi = thePConn.getActionsApi();
   const [stateChanged, setStateChanged] = useState(false);
 
-  let label = props.label;
-  const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
-  if(isOnlyField) label = overrideLabel.trim() ? overrideLabel : label;
+  const {isOnlyField} = useIsOnlyField(props.displayOrder);
 
   const formattedContext = thePConn.options.pageReference ? thePConn.options.pageReference.split('.').pop() : '';
 

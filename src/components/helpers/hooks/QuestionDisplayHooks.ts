@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {DefaultFormContext, HMRCAppContext} from '../../helpers/HMRCAppContext';
+import DefaultFormContext from '../../helpers/HMRCAppContext';
 /**
  * Helper hook for handling instances where there is only one field presented in the current view.
  * Returns a boolean indicating whether or not there is only one field to display in the current context
@@ -29,13 +29,12 @@ export default function useIsOnlyField(callerDisplayOrder = null){
 
         if(editableFieldsCount === 1){
             returnObj.isOnlyField = true;
+        } else if (DFContext.DFName !== -1) {
+            returnObj.isOnlyField = false;
         } else {
-            if(DFContext.DFName !== -1) {
-                returnObj.isOnlyField = false;
-            } else {
-                returnObj.isOnlyField = PCore.getStoreValue('displayAsSingleQuestion', '', 'app');
-            }
+            returnObj.isOnlyField = PCore.getStoreValue('displayAsSingleQuestion', '', 'app');
         }
+
     }
     return returnObj;
 }
