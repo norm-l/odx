@@ -11,11 +11,6 @@ import {HMRCAppContext, DefaultFormContext}  from '../../../helpers/HMRCAppConte
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const {setAssignmentSingleQuestionPage, SingleQuestionDisplayDFStack, SingleQuestionDisplayDFStackPush} = useContext(HMRCAppContext);
-  // If this Default Form should display as a single question, or is wrapped by a DF that should be, push it to the df stack, to check later.
-  if(configAlternateDesignSystem?.hidePageLabel === true || SingleQuestionDisplayDFStack.length > 0) SingleQuestionDisplayDFStackPush(props.localeReference);
-  // Set the assignment level singleQuestionPage boolean to reflect the page type of the default form.
-  setAssignmentSingleQuestionPage(configAlternateDesignSystem?.hidePageLabel);
   const isOnlyField = useIsOnlyField();
   const { t } = useTranslation();
 
@@ -37,6 +32,25 @@ export default function DefaultForm(props) {
       }
     }
   }
+
+  useEffect(() => {
+    if(configAlternateDesignSystem?.hidePageLabel){
+      PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
+        "reference": "displayAsSingleQuestion",
+        "value": true,
+        "context": "app",
+        "isArrayDeepMerge": true
+    }})
+  };
+    return (() => {
+      if(configAlternateDesignSystem?.hidePageLabel){
+      PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
+        "reference": "displayAsSingleQuestion",
+        "value": false,
+        "context": "app",
+        "isArrayDeepMerge": true
+    }})}})
+  }, []);
 
   useEffect(()=>{
     if(instructionExists){
@@ -74,8 +88,8 @@ export default function DefaultForm(props) {
   const dfChildren = arChildren?.map((kid, idx) => {
     let extraProps = {};
     const childPConnect = kid.getPConnect();
-    if (
-      isOnlyField &&
+    /*if (
+      (isOnlyField || configAlternateDesignSystem?.hidePageLabel) &&
       !instructionExists &&
       childPConnect.getConfigProps().readOnly !== true &&
       idx === 0
@@ -84,7 +98,7 @@ export default function DefaultForm(props) {
         'label',
         getPConnect().getDataObject().caseInfo.assignments[0].name
       );
-    }
+    }*/
     if (readOnly)
       extraProps = { ...extraProps, showLabel: false, labelHiddenForReadOnly: kid.showLabel };
 
@@ -180,7 +194,7 @@ export default function DefaultForm(props) {
   }
 
   return (
-    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference}}>
+    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name }}>
       {instructionExists && (
         <div id='instructions' className='govuk-body'>
           <InstructionComp htmlString={getFormattedInstructionText()} />
