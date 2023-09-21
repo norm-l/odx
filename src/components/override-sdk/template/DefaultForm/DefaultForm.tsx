@@ -30,7 +30,7 @@ export default function DefaultForm(props) {
   // defaultForm kids
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
   let hasSingleChildWhichIsReference = false;
-  const instructionText = props.instructions === 'none' ? '' : props.instructions;
+  const instructionText = props.instructions === 'none' ||props.instructions === null ? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
 
   const settingTargetForAnchorTag = () => {
@@ -207,5 +207,5 @@ export default function DefaultForm(props) {
         {dfChildren}
       </DefaultFormContext.Provider>
     </div>
-  );
+  
 }
