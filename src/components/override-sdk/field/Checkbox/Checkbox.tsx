@@ -23,7 +23,6 @@ export default function CheckboxComponent(props) {
   if(isOnlyField) label = overrideLabel.trim() ? overrideLabel : label;
   
   const[errorMessage,setErrorMessage] = useState(validatemessage);
-  const [errorMessage,setErrorMessage] = useState(validatemessage);
   const [showDeclaration, setShowDeclaration] = useState(false);
   const [declaration, setDeclaration] = useState({text1: '', text2:'', warning1: ''});
 
