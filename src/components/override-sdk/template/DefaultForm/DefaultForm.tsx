@@ -1,16 +1,18 @@
-import React, { createElement, useEffect } from 'react';
+import React, { createElement, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 import './DefaultForm.css';
 
 import DefaultFormContext  from '../../../helpers/HMRCAppContext';
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 
 // import './DefaultForm.css';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
-
+  const {instructionsText} = useContext(DefaultFormContext);
+  const [singleQuestionPage, setSingleQuestionPage] = useState(false);
   const { t } = useTranslation();
   let cssClassHook = "";
 
@@ -23,7 +25,7 @@ export default function DefaultForm(props) {
   // defaultForm kids
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
   let hasSingleChildWhichIsReference = false;
-  const instructionText = props.instructions === 'none' ||props.instructions === null ? '' : props.instructions;
+  const instructionText = props.instructions === 'none' || props.instructions === null ? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
 
   const settingTargetForAnchorTag = () => {
@@ -35,9 +37,12 @@ export default function DefaultForm(props) {
         ele.setAttribute('target', '_blank');
       }
     }
-  }
+  }  
+
+  const {isOnlyField} = useIsOnlyField();
 
   useEffect(() => {
+    setSingleQuestionPage(isOnlyField);
     if(configAlternateDesignSystem?.hidePageLabel){
       PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
         "reference": "displayAsSingleQuestion",
@@ -186,15 +191,26 @@ export default function DefaultForm(props) {
     });
   }
 
+  let nestedInstructionText = null;
+  if(instructionExists) { nestedInstructionText = getFormattedInstructionText()}
+  else if(instructionsText) { nestedInstructionText = instructionsText}
+     
+
   return (        
     <div className={cssClassHook}>
-    <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name }}>
+    <DefaultFormContext.Provider value={
+      { 
+        displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel,
+        DFName: props.localeReference,
+        OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name, 
+        instructionsText: nestedInstructionText
+      }}>
 
-      {instructionExists && (
+      {instructionExists && !singleQuestionPage &&
         <p id='instructions' className='govuk-body'>
-          <InstructionComp htmlString={getFormattedInstructionText()} />
+          <InstructionComp htmlString={getFormattedInstructionText()} />  
         </p>
-      )}
+      }
       {dfChildren}
     </DefaultFormContext.Provider>
     </div>

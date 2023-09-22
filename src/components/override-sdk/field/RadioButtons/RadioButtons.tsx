@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import DefaultFormContext from '../../../helpers/HMRCAppContext';
 
 
 export default function RadioButtons(props) {
@@ -11,7 +12,6 @@ export default function RadioButtons(props) {
     getPConnect,
     validatemessage,
     helperText,
-    instructionText,
     readOnly,
     value,
     name,
@@ -19,9 +19,15 @@ export default function RadioButtons(props) {
     fieldMetadata
   } = props;
 
+  let instructionText = null;
+
   let label = props.label;
   const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
   if(isOnlyField) label = overrideLabel.trim() ? overrideLabel : label;
+
+  
+  const {instructionsText} = useContext(DefaultFormContext);
+  if(isOnlyField) instructionText = instructionsText;
 
   const[errorMessage,setErrorMessage] = useState(validatemessage);
 

@@ -32,7 +32,7 @@ export default function useIsOnlyField(callerDisplayOrder = null){
         } else if (DFContext.DFName !== -1) {
             returnObj.isOnlyField = false;
         } else {
-            returnObj.isOnlyField = PCore.getStoreValue('displayAsSingleQuestion', '', 'app');
+            returnObj.isOnlyField = !!PCore.getStoreValue('displayAsSingleQuestion', '', 'app');
         }
 
     }

@@ -3,8 +3,9 @@ import React, {useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ConditionalWrapper from '../../helpers/formatters/ConditionalWrapper';
 import HintTextComponent from '../../helpers/formatters/ParsedHtml';
+import InstructionComp from '../../helpers/formatters/ParsedHtml';
 
-export default function FieldSet({legendIsHeading=true, label, name, errorText, hintText, children, fieldsetElementProps, testProps}){
+export default function FieldSet({legendIsHeading=true, label, name, errorText, hintText, instructionText, children, fieldsetElementProps, testProps}){
   const[ErrorMessage,setErrorMessage] = useState(errorText);
 
   useEffect(()=>{
@@ -40,6 +41,9 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
             childrenToWrap={label}
           />
         </legend>
+        {instructionText && <p id='instructions' className='govuk-body'>
+          <InstructionComp htmlString={instructionText} />  
+        </p>}
         {hintText && <div id={hintID} className="govuk-hint"> <HintTextComponent htmlString={hintText}/></div>}
         {ErrorMessage  && <p id={errorID} className="govuk-error-message"><span className="govuk-visually-hidden">Error:</span>{ErrorMessage}</p> }
         {children}
