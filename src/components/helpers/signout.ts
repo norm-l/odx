@@ -3,7 +3,7 @@ import {logout} from '@pega/react-sdk-components/lib/components/helpers/authMana
 const signOutAndRedirect = () => {
   sessionStorage.removeItem('rsdk_locale');
   logout().then(()=> {
-    window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+ //   window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
   })
 }
 

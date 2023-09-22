@@ -27,6 +27,7 @@ import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helper
 import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 
+
 declare const myLoadMashup: any;
 
 export default function ChildBenefitsClaim() {
@@ -363,6 +364,8 @@ export default function ChildBenefitsClaim() {
       startMashup();
     });
 
+
+
     // Subscriptions can't be done until onPCoreReady.
     //  So we subscribe there. But unsubscribe when this
     //  component is unmounted (in function returned from this effect)
@@ -388,11 +391,35 @@ export default function ChildBenefitsClaim() {
       ); */
     };
   }, []);
+  useEffect(()=>{
+    getSdkConfig().then(sdkConfig => {
+      const sdkConfigAuth = sdkConfig.authConfig;
+      return function handleSignoutRedirection() {
+      if (sdkConfigAuth.authService === 'gg-dev') {
+        PCore.getDataPageUtils.getPageDataAsync('D_AuthServiceLogout','root',{AuthService:'GovGateway-Dev'}).then(res=>{
+          //Do nothing as everything is handled on server side
+        })
+
+      }
+      else if(sdkConfigAuth.authService === 'gg'){
+        PCore.getDataPageUtils.getPageDataAsync('D_AuthServiceLogout','root',{AuthService:'GovGateway'}).then(res=>{
+          //Do nothing as everything is handled on server side
+        })
+      }
+    }
+ });
+    document.addEventListener('SdkLoggedOut', () => {
+      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+    });
+
+  },[])
+
 
   function handleSignout() {
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
+
       signoutHandler();
     }
   }
