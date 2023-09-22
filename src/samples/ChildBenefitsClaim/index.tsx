@@ -10,6 +10,7 @@ import { gbLoggedIn, loginIfNecessary, sdkSetAuthHeader } from '@pega/react-sdk-
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
+import {logout} from '@pega/react-sdk-components/lib/components/helpers/authManager';
 
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
@@ -21,7 +22,6 @@ import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
-import signoutHandler from '../../components/helpers/signout';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
@@ -40,6 +40,7 @@ export default function ChildBenefitsClaim() {
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const [authType, setAuthType] = useState('gg');
 
   const { t } = useTranslation();
   let operatorId = '';
@@ -332,6 +333,7 @@ export default function ChildBenefitsClaim() {
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
       const sdkConfigAuth = sdkConfig.authConfig;
+      setAuthType(sdkConfigAuth.authService);
       if (!sdkConfigAuth.mashupClientId && sdkConfigAuth.customAuthType === 'Basic') {
         // Service package to use custom auth with Basic
         const sB64 = window.btoa(
@@ -364,7 +366,9 @@ export default function ChildBenefitsClaim() {
       startMashup();
     });
 
-
+    document.addEventListener('SdkLoggedOut', () => {
+      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+    });
 
     // Subscriptions can't be done until onPCoreReady.
     //  So we subscribe there. But unsubscribe when this
@@ -391,36 +395,21 @@ export default function ChildBenefitsClaim() {
       ); */
     };
   }, []);
-  useEffect(()=>{
-    getSdkConfig().then(sdkConfig => {
-      const sdkConfigAuth = sdkConfig.authConfig;
-      return function handleSignoutRedirection() {
-      if (sdkConfigAuth.authService === 'gg-dev') {
-        PCore.getDataPageUtils.getPageDataAsync('D_AuthServiceLogout','root',{AuthService:'GovGateway-Dev'}).then(res=>{
-          //Do nothing as everything is handled on server side
-        })
 
-      }
-      else if(sdkConfigAuth.authService === 'gg'){
-        PCore.getDataPageUtils.getPageDataAsync('D_AuthServiceLogout','root',{AuthService:'GovGateway'}).then(res=>{
-          //Do nothing as everything is handled on server side
-        })
-      }
-    }
- });
-    document.addEventListener('SdkLoggedOut', () => {
-      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
-    });
+  function signOut() {
+    const authService = authType === 'gg' ? 'GovGateway' : (authType === 'gg-dev' ? 'GovGateway-Dev' : authType);
+     // @ts-ignore
+        PCore.getDataPageUtils().getPageDataAsync('D_AuthServiceLogout','root',{AuthService: authService}).then(res=>{
+          logout();
+        });
 
-  },[])
-
+  }
 
   function handleSignout() {
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
-
-      signoutHandler();
+      signOut();
     }
   }
 
@@ -469,7 +458,7 @@ export default function ChildBenefitsClaim() {
       <LogoutPopup
         show={showSignoutModal}
         hideModal={() => setShowSignoutModal(false)}
-        handleSignoutModal={signoutHandler}
+        handleSignoutModal={signOut}
         handleStaySignIn={handleStaySignIn}
       />
       <AppFooter/>
