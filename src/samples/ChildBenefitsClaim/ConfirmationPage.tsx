@@ -10,7 +10,6 @@ const ConfirmationPage = () => {
   const [documentList, setDocumentList] = useState(``);
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
-  const [loading, setLoading] = useState(true);
   const caseID = PCore.getStoreValue('.key', '' , 'app/primary_1');
   const docIDForDocList = 'CR0003';
   const docIDForReturnSlip = 'CR0002';
@@ -19,7 +18,6 @@ const ConfirmationPage = () => {
     PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: docIDForDocList, Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(listData => {
       if(listData.DocumentContentHTML.includes("data-bornabroad='true'") || listData.DocumentContentHTML.includes("data-adopted='true'")){
         setIsBornAbroadOrAdopted(true);
-        setLoading(false);
       }
       setDocumentList(listData.DocumentContentHTML);
     }).catch(err => {
@@ -41,9 +39,7 @@ const ConfirmationPage = () => {
     myWindow.document.write(returnSlipContent);
   }
 
-  if(loading){
-    return null;
-  } else {
+  
     if(isBornAbroadOrAdopted){
       return (
         <main className="govuk-main-wrapper" id="main-content" role="main">
@@ -68,13 +64,12 @@ const ConfirmationPage = () => {
               <h3 className='govuk-heading-m'>{t('TRACK_YOUR_APPLICATION')}</h3>
               <p className='govuk-body'> {t('YOU_CAN_CHECK_STATUS_USING_THE_LINK')} </p>
               <p className='govuk-body'><a href='#'>{t('RETURN_TO_HOMEPAGE')}</a></p>
-              <p className='govuk-body'><a href='#'>{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
+              <p className='govuk-body'><a href='https://www.tax.service.gov.uk/feedback/ODXCHB' className="govuk-link" target="_blank" rel="noreferrer">{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
             </div>
           </div>
         </main>
       );
-    }
-
+    } else {
     return (
       <main className="govuk-main-wrapper" id="main-content" role="main">
         <div className="govuk-grid-row">
@@ -84,16 +79,13 @@ const ConfirmationPage = () => {
             </div>
             <h2 className='govuk-heading-m'> {t("WHAT_HAPPENS_NEXT")}</h2>
             <p className='govuk-body'> {t("WE_HAVE_SENT_YOUR_APPLICATION")}</p>
-            <p className='govuk-body'>
-            {t("WE_WILL_TELL_YOU_IN_14_DAYS")}
-            </p>
+            <p className='govuk-body'> {t("WE_WILL_TELL_YOU_IN_14_DAYS")}</p>
+            <p className='govuk-body'><a href='https://www.tax.service.gov.uk/feedback/ODXCHB' className="govuk-link" target="_blank" rel="noreferrer">{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
           </div>
         </div>
       </main>
     );
   }
-
-
 };
 
 export default ConfirmationPage;
