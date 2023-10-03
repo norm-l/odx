@@ -27,7 +27,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
                 rel='noopener noreferrer'
                 href='https://www.gov.uk/child-benefit-16-19'
               >
-                {t('USE_THIS_FORM_TO_CLAIM_CONTD')}
+                {t('USE_THIS_FORM_TO_CLAIM_CONTD')} {t('OPENS_IN_NEW_TAB')}
               </a>
               .
             </p>
