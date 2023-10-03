@@ -62,10 +62,6 @@ export default function Assignment(props) {
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
   }
 
-  useEffect(()=>{
-    document.title = containerName + ' - ' + 'Claim Child Benefit - GOV.UK'
-  },[children])
-
   useEffect(() => {
     if (children && children.length > 0) {
       // debugger;
