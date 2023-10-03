@@ -27,7 +27,6 @@ export default function Date(props) {
   let label = props.label;
   const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
   if(isOnlyField) label = overrideLabel.trim() ? overrideLabel : label;
-  console.log(props);
 
   // PM - Set up state for each input field, either the value we received from pega, or emtpy
   const [day, setDay] = useState(value ? value.split('-')[2] : '');
