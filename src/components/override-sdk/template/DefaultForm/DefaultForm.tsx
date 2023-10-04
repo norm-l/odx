@@ -13,8 +13,10 @@ export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
   const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
+  const {DFName} = useContext(DefaultFormContext);
 
-  const [declaration, setDeclaration] = useState({text1: 'text1', text2:'text2', warning1: 'warning'});
+  const [declaration, setDeclaration] = useState({text1: '', warning1: ''});
+  const containerName = getPConnect().getDataObject().caseInfo.assignments[0].name;
 
   const { t } = useTranslation();
   let cssClassHook = "";
@@ -68,18 +70,11 @@ export default function DefaultForm(props) {
   },[instructionExists])
 
   useEffect(()=>{
-    // if(name ==='Claim-Declaration'){
-    //   setShowDeclaration(true);
-    // }
-    // if(showDeclaration){
-    //   const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', 'app/primary_1');
-    //   const declarationText2 = PCore.getStoreValue('.DeclarationText2', 'caseInfo.content.Claim', 'app/primary_1');
-    //   const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', 'app/primary_1');
-    //   setDeclaration({
-    //     text1: declarationText1,
-    //     text2: declarationText2,
-    //     warning1: declarationWarning1, });
-    // }
+    if(containerName === 'Declaration'){
+      const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', 'app/primary_1');
+      const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', 'app/primary_1');
+      setDeclaration({text1 : declarationText1, warning1: declarationWarning1});
+    }
   },[])
 
   const getFormattedInstructionText = () => {
@@ -217,25 +212,20 @@ export default function DefaultForm(props) {
         </div>)        
       }}
       childrenToWrap = {
-        <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name }}>
+        <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: containerName }}>
 
         {instructionExists && (
           <p id='instructions' className='govuk-body'>
             <ParsedHTML htmlString={getFormattedInstructionText()} />
           </p>
         )}
-        {declaration.text1 && (
+        {declaration.text1 && DFName === -1 && (
           <p id='declarationText1' className='govuk-body'>
             <ParsedHTML htmlString={declaration.text1}/>
           </p>
         )}
         {dfChildren}
-        {declaration.text2 && (
-          <p id='declarationText2' className='govuk-body'>
-            <ParsedHTML htmlString={declaration.text2}/>
-          </p>
-        )}
-        {declaration.warning1 && (
+        {declaration.warning1 && DFName === -1 && (
           <p id='declarationWarning1' className='govuk-body'>
             <ParsedHTML htmlString={declaration.warning1}/>
           </p>
