@@ -1,7 +1,7 @@
-import React, { createElement, useEffect, useContext } from 'react';
+import React, { createElement, useEffect, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
-import InstructionComp from '../../../helpers/formatters/ParsedHtml';
+import ParsedHTML from '../../../helpers/formatters/ParsedHtml';
 import './DefaultForm.css';
 
 import { DefaultFormContext, ReadOnlyDefaultFormContext }  from '../../../helpers/HMRCAppContext';
@@ -13,6 +13,8 @@ export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
   const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
+
+  const [declaration, setDeclaration] = useState({text1: 'text1', text2:'text2', warning1: 'warning'});
 
   const { t } = useTranslation();
   let cssClassHook = "";
@@ -64,6 +66,21 @@ export default function DefaultForm(props) {
       settingTargetForAnchorTag();
     }
   },[instructionExists])
+
+  useEffect(()=>{
+    // if(name ==='Claim-Declaration'){
+    //   setShowDeclaration(true);
+    // }
+    // if(showDeclaration){
+    //   const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', 'app/primary_1');
+    //   const declarationText2 = PCore.getStoreValue('.DeclarationText2', 'caseInfo.content.Claim', 'app/primary_1');
+    //   const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', 'app/primary_1');
+    //   setDeclaration({
+    //     text1: declarationText1,
+    //     text2: declarationText2,
+    //     warning1: declarationWarning1, });
+    // }
+  },[])
 
   const getFormattedInstructionText = () => {
     let text = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
@@ -204,10 +221,25 @@ export default function DefaultForm(props) {
 
         {instructionExists && (
           <p id='instructions' className='govuk-body'>
-            <InstructionComp htmlString={getFormattedInstructionText()} />
+            <ParsedHTML htmlString={getFormattedInstructionText()} />
+          </p>
+        )}
+        {declaration.text1 && (
+          <p id='declarationText1' className='govuk-body'>
+            <ParsedHTML htmlString={declaration.text1}/>
           </p>
         )}
         {dfChildren}
+        {declaration.text2 && (
+          <p id='declarationText2' className='govuk-body'>
+            <ParsedHTML htmlString={declaration.text2}/>
+          </p>
+        )}
+        {declaration.warning1 && (
+          <p id='declarationWarning1' className='govuk-body'>
+            <ParsedHTML htmlString={declaration.warning1}/>
+          </p>
+        )}
       </DefaultFormContext.Provider>
       } />
   );
