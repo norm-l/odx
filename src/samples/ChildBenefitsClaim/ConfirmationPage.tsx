@@ -49,7 +49,7 @@ const ConfirmationPage = () => {
         <div className="govuk-grid-row">
           <div className='govuk-grid-column-two-thirds'>
             <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
-              <h1 className='govuk-panel__title'> {t("APPLICATION_COMPLETE")}</h1>
+              <h1 className='govuk-panel__title'> {t("APPLICATION_RECEIVED")}</h1>
               <div className='govuk-panel__body govuk-!-font-size-27'>{t('POST_YOUR_SUPPORTING_DOCUMENTS')}</div>
             </div>
             <h2 className='govuk-heading-m'> {t('WHAT_YOU_NEED_TO_DO_NOW')} </h2>
@@ -64,9 +64,6 @@ const ConfirmationPage = () => {
               NE88 1ZD
             </p>
             <p className='govuk-body'> {t('WE_NORMALLY_RETURN_DOCUMENTS_WITHIN')} </p>
-            <h3 className='govuk-heading-m'>{t('TRACK_YOUR_APPLICATION')}</h3>
-            <p className='govuk-body'> {t('YOU_CAN_CHECK_STATUS_USING_THE_LINK')} </p>
-            <p className='govuk-body'><a href='#'>{t('RETURN_TO_HOMEPAGE')}</a></p>
             <p className='govuk-body'><a href='https://www.tax.service.gov.uk/feedback/ODXCHB' className="govuk-link" target="_blank" rel="noreferrer">{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
           </div>
         </div>
@@ -78,7 +75,7 @@ const ConfirmationPage = () => {
         <div className="govuk-grid-row">
           <div className='govuk-grid-column-two-thirds'>
             <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
-              <h1 className='govuk-panel__title'> {t("APPLICATION_COMPLETE")}</h1>
+              <h1 className='govuk-panel__title'> {t("APPLICATION_RECEIVED")}</h1>
             </div>
             <h2 className='govuk-heading-m'> {t("WHAT_HAPPENS_NEXT")}</h2>
             <p className='govuk-body'> {t("WE_HAVE_SENT_YOUR_APPLICATION")}</p>
