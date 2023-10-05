@@ -10,7 +10,7 @@ import './DefaultForm.css';
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
+  const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext); // eslint-disable-line
   const {DFName} = useContext(DefaultFormContext);
 
   const [declaration, setDeclaration] = useState({text1: '', warning1: ''});
@@ -22,6 +22,7 @@ export default function DefaultForm(props) {
   if (configAlternateDesignSystem?.cssClassHook) {
     cssClassHook = configAlternateDesignSystem.cssClassHook;
   }
+  // eslint-disable-next-line
   const [singleQuestionPage, setSingleQuestionPage] = useState(useIsOnlyField().isOnlyField || configAlternateDesignSystem?.hidePageLabel);
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
