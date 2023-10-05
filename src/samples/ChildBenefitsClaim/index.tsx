@@ -54,7 +54,7 @@ export default function ChildBenefitsClaim() {
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
   function doRedirectDone() {
-    history.push(window.location.pathname);
+    history.push('/');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({appName:'embedded', mainRedirect:true});
   }
