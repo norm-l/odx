@@ -60,6 +60,15 @@ export default function DefaultForm(props) {
   }, []);
 
   useEffect(()=>{
+    const spans = document.getElementsByClassName('read-only');
+    if(spans.length > 1){
+      const lastSpan = spans[spans.length-1];
+      lastSpan.classList.add('display-inline-block');
+      lastSpan.classList.add('govuk-!-margin-bottom-4') ;
+    }    
+  },[])
+
+  useEffect(()=>{
     if(instructionExists){
       settingTargetForAnchorTag();
     }
