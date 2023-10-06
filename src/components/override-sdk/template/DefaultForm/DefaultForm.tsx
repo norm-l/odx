@@ -60,11 +60,11 @@ export default function DefaultForm(props) {
   }, []);
 
   useEffect(()=>{
-    const spans = document.getElementsByClassName('read-only');
-    if(spans.length > 1){
-      const lastSpan = spans[spans.length-1];
-      lastSpan.classList.add('display-inline-block');
-      lastSpan.classList.add('govuk-!-margin-bottom-4') ;
+    const roText = document.getElementsByClassName('read-only');
+    if(roText.length > 1){
+      const lastRoText = roText[roText.length-1];
+      lastRoText.classList.add('display-inline-block');
+      lastRoText.classList.add('govuk-!-margin-bottom-4') ;
     }    
   },[])
 
