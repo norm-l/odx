@@ -1,18 +1,20 @@
-import React, { createElement, useEffect, useContext } from 'react';
+import React, { createElement, useEffect, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
-import InstructionComp from '../../../helpers/formatters/ParsedHtml';
-import './DefaultForm.css';
-
+import ParsedHTML from '../../../helpers/formatters/ParsedHtml';
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import { DefaultFormContext, ReadOnlyDefaultFormContext }  from '../../../helpers/HMRCAppContext';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
-
-// import './DefaultForm.css';
+import './DefaultForm.css';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
 
-  const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
+  const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext); // eslint-disable-line
+  const {DFName} = useContext(DefaultFormContext);
+
+  const [declaration, setDeclaration] = useState({text1: '', warning1: ''});
+  const containerName = getPConnect().getDataObject().caseInfo.assignments[0].name;
 
   const { t } = useTranslation();
   let cssClassHook = "";
@@ -20,27 +22,33 @@ export default function DefaultForm(props) {
   if (configAlternateDesignSystem?.cssClassHook) {
     cssClassHook = configAlternateDesignSystem.cssClassHook;
   }
-
+  // eslint-disable-next-line
+  const [singleQuestionPage, setSingleQuestionPage] = useState(useIsOnlyField().isOnlyField || configAlternateDesignSystem?.hidePageLabel);
   // repoint the children because they are in a region and we need to not render the region
   // to take the children and create components for them, put in an array and pass as the
   // defaultForm kids
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
   let hasSingleChildWhichIsReference = false;
-  const instructionText = props.instructions === 'none' ||props.instructions === null ? '' : props.instructions;
+  const instructionText = props.instructions === 'none' || props.instructions === null ? '' : props.instructions;
   const instructionExists = instructionText !== undefined && instructionText !== '';
 
   const settingTargetForAnchorTag = () => {
     const instructionDiv = document.getElementById('instructions');
     const keyText = t('OPENS_IN_NEW_TAB');
-    const elementsArr = instructionDiv.querySelectorAll('a');
-    for(const ele of elementsArr){
-      if(ele.innerHTML.includes(keyText)){
-        ele.setAttribute('target', '_blank');
+    if(instructionDiv){
+      const elementsArr = instructionDiv.querySelectorAll('a');      
+      for(const ele of elementsArr){
+        if(ele.innerHTML.includes(keyText)){
+          ele.setAttribute('target', '_blank');
+        }
       }
     }
-  }
+  }  
+
+  const {isOnlyField} = useIsOnlyField();
 
   useEffect(() => {
+    setSingleQuestionPage(isOnlyField);
     if(configAlternateDesignSystem?.hidePageLabel){
       PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
         "reference": "displayAsSingleQuestion",
@@ -60,12 +68,32 @@ export default function DefaultForm(props) {
   }, []);
 
   useEffect(()=>{
+    const roText = document.getElementsByClassName('read-only');
+    if(roText.length > 1){
+      const lastRoText = roText[roText.length-1];
+      lastRoText.classList.add('display-inline-block');
+      lastRoText.classList.add('govuk-!-margin-bottom-4') ;
+    }    
+  },[])
+
+  useEffect(()=>{
     if(instructionExists){
       settingTargetForAnchorTag();
     }
   },[instructionExists])
 
+  useEffect(()=>{
+    if(containerName === 'Declaration'){
+      const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', 'app/primary_1');
+      const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', 'app/primary_1');
+      setDeclaration({text1 : declarationText1, warning1: declarationWarning1});
+    }
+  },[])
+
   const getFormattedInstructionText = () => {
+    if(!instructionExists){
+      return null;
+    }
     let text = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
     const warning  = t('WARNING');
     if (text.indexOf(`${warning}!!`) !== -1) {
@@ -173,7 +201,7 @@ export default function DefaultForm(props) {
       const allrefs = childGroup.every(
         child => child.props.getPConnect().getMetadata().type === 'reference'
       );
-      if (hasBeenWrapped || allrefs) {
+      if (additionalProps.hasBeenWrapped || allrefs) {
         return <React.Fragment key={key}>{childGroup}</React.Fragment>;
       }
 
@@ -182,14 +210,17 @@ export default function DefaultForm(props) {
       );
 
       return (
-        <ReadOnlyDefaultFormContext.Provider value={{hasBeenWrapped: true}}>
-          <dl className='govuk-summary-list' key={key}>
-            {childGroup}
-          </dl>
-        </ReadOnlyDefaultFormContext.Provider>
+        <dl className='govuk-summary-list' key={key}>
+          {childGroup}
+        </dl>
       );
     });
   }
+/* 
+  let nestedInstructionText = null;
+  if(instructionExists) { nestedInstructionText = getFormattedInstructionText()}
+  else if(instructionText) { nestedInstructionText = instructionText}
+*/     
 
   return (        
     <ConditionalWrapper
@@ -200,15 +231,32 @@ export default function DefaultForm(props) {
         </div>)        
       }}
       childrenToWrap = {
-        <DefaultFormContext.Provider value={{displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel, DFName: props.localeReference, OverrideLabelValue: getPConnect().getDataObject().caseInfo.assignments[0].name }}>
+      <DefaultFormContext.Provider value={
+        { 
+          displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel,
+          DFName: props.localeReference,
+          OverrideLabelValue: containerName, 
+          instructionText: getFormattedInstructionText() as string
+        }}>
 
         {instructionExists && (
           <p id='instructions' className='govuk-body'>
-            <InstructionComp htmlString={getFormattedInstructionText()} />
+            <ParsedHTML htmlString={getFormattedInstructionText()} />
+          </p>
+        )}
+        {declaration.text1 && DFName === -1 && (
+          <p id='declarationText1' className='govuk-body'>
+            <ParsedHTML htmlString={declaration.text1}/>
           </p>
         )}
         {dfChildren}
+        {declaration.warning1 && DFName === -1 && (
+          <p id='declarationWarning1' className='govuk-body'>
+            <ParsedHTML htmlString={declaration.warning1}/>
+          </p>
+        )}
       </DefaultFormContext.Provider>
       } />
+ 
   );
 }
