@@ -1,6 +1,7 @@
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from "react-dom";
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import StoreContext from "@pega/react-sdk-components/lib/bridge/Context/StoreContext";
@@ -71,6 +72,7 @@ export default function ChildBenefitsClaim() {
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false)
   const [authType, setAuthType] = useState('gg');  
+  const history = useHistory();
 
   const { t } = useTranslation();
   let operatorId = '';  
@@ -82,7 +84,13 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
-  function createCase() {
+  function doRedirectDone() {
+    history.push('/');
+    // appName and mainRedirect params have to be same as earlier invocation
+    loginIfNecessary({appName:'embedded', mainRedirect:true});
+  }
+
+  function createCase() { 
     setShowStartPage(false);
     setShowPega(true);
     PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
@@ -401,7 +409,7 @@ export default function ChildBenefitsClaim() {
       }
 
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary('embedded', false);
+      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
     });
 
     document.addEventListener('SdkConstellationReady', () => {
