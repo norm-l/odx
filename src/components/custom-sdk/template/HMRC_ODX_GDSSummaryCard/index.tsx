@@ -24,10 +24,8 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const [formElms, setFormElms] = useState<Array<ReactNode>>([]); // Initialize as an empty array of React Nodes
  
 
-  let itemName = "";
-  if(useType === 1) {
-    itemName = t('GDS_INFO_ITEM_CHILD');
-  }
+  let itemName = (useType === 1) ? t('GDS_INFO_ITEM_CHILD') : '';
+ 
   const [childName, setChildName] = useState(itemName);
   useEffect(() => {
     const elms : Array<string> = [];
@@ -48,7 +46,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
   useEffect(()=>{
     formElms.forEach((field) =>{ 
-     if((field as any)?.props?.label === 'First Name'){
+     if((field as any)?.props?.label === 'First Name'  || (field as any)?.props?.label === 'Enw cyntaf'){
         setChildName((field as any)?.props?.value)
       }
     })
