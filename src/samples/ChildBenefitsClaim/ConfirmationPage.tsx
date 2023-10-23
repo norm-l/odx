@@ -67,6 +67,17 @@ const ConfirmationPage = () => {
             </p>
             <p className='govuk-body'> {t('WE_NORMALLY_RETURN_DOCUMENTS_WITHIN')} </p>
             <p className='govuk-body'><a href='https://www.tax.service.gov.uk/feedback/ODXCHB' className="govuk-link" target="_blank" rel="noreferrer">{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
+            <div className='govuk-!-margin-top-8'>
+              <a
+                lang='en'
+                className='govuk-link hmrc-report-technical-issue '
+                rel='noreferrer noopener'
+                target='_blank'
+                href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
+              >
+                {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
+              </a>
+            </div>
           </div>
         </div>
       </main>
@@ -83,6 +94,17 @@ const ConfirmationPage = () => {
             <p className='govuk-body'> {t("WE_HAVE_SENT_YOUR_APPLICATION")}</p>
             <p className='govuk-body'> {t("WE_WILL_TELL_YOU_IN_14_DAYS")}</p>
             <p className='govuk-body'><a href='https://www.tax.service.gov.uk/feedback/ODXCHB' className="govuk-link" target="_blank" rel="noreferrer">{t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} </a>{t('TAKES_30_SECONDS')}</p>
+            <div className='govuk-!-margin-top-8'>
+              <a
+                lang='en'
+                className='govuk-link hmrc-report-technical-issue '
+                rel='noreferrer noopener'
+                target='_blank'
+                href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
+              >
+                {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
+              </a>
+            </div>
           </div>
         </div>
       </main>
