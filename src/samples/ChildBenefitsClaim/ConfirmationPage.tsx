@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ParsedHTML from '../../components/helpers/formatters/ParsedHtml';
+import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 
 declare const PCore : any;
 
@@ -16,6 +17,10 @@ const ConfirmationPage = () => {
   const caseID = PCore.getStoreValue('.ID', 'caseInfo' , context);
   const docIDForDocList = 'CR0003';
   const docIDForReturnSlip = 'CR0002';
+
+  useEffect(()=> {
+    setPageTitle();
+  }, []);
 
   useEffect(()=>{
     PCore.getDataPageUtils().getPageDataAsync('D_DocumentContent', 'root', {DocumentID: docIDForDocList, Locale: PCore.getEnvironmentInfo().locale.replaceAll('-','_'), CaseID: caseID}).then(listData => {
