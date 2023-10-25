@@ -20,7 +20,6 @@ export default function ActionButtons(props) {
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(mButton.jsAction, 'primary');
-                console.log(localizedVal(mButton.name, localeCategory));
               }}
               key={mButton.actionID}
               attributes={{ type: 'button' }}
@@ -38,7 +37,6 @@ export default function ActionButtons(props) {
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(sButton.jsAction, 'secondary');
-                console.log(localizedVal(sButton.name, localeCategory))
               }}
               key={sButton.actionID}
               attributes={{ type: 'button' }}
@@ -58,7 +56,6 @@ export default function ActionButtons(props) {
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(sButton.jsAction, 'secondary');
-                console.log(localizedVal(sButton.name, localeCategory));
               }}
               key={sButton.actionID}
               attributes={{ type: 'link' }}
