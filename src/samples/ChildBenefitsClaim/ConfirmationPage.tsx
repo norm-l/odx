@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ParsedHTML from '../../components/helpers/formatters/ParsedHtml';
+import usePageNotWorkingURL from '../../components/helpers/hooks/PageNotWorkingURLHook';
 
 declare const PCore : any;
 
@@ -11,6 +12,7 @@ const ConfirmationPage = () => {
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
   const [loading, setLoading] = useState(true);
+  const {referrerURL, hmrcURL} = usePageNotWorkingURL();
   
   const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
   const caseID = PCore.getStoreValue('.ID', 'caseInfo' , context);
@@ -73,7 +75,7 @@ const ConfirmationPage = () => {
                 className='govuk-link hmrc-report-technical-issue '
                 rel='noreferrer noopener'
                 target='_blank'
-                href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
+                href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
               >
                 {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
               </a>
@@ -100,7 +102,7 @@ const ConfirmationPage = () => {
                 className='govuk-link hmrc-report-technical-issue '
                 rel='noreferrer noopener'
                 target='_blank'
-                href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
+                href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
               >
                 {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
               </a>

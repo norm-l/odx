@@ -16,6 +16,7 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
+import usePageNotWorkingURL from '../../components/helpers/hooks/PageNotWorkingURLHook';
 
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
@@ -71,11 +72,12 @@ export default function ChildBenefitsClaim() {
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false)
-  const [authType, setAuthType] = useState('gg');  
+  const [authType, setAuthType] = useState('gg'); 
+  const {referrerURL, hmrcURL} = usePageNotWorkingURL();
   const history = useHistory();
 
   const { t } = useTranslation();
-  let operatorId = '';  
+  let operatorId = '';
   
   useEffect(()=> {
     setPageTitle();
@@ -490,16 +492,16 @@ export default function ChildBenefitsClaim() {
         <div id='pega-part-of-page'>
           <div id='pega-root'></div>
           <div className='govuk-!-margin-bottom-8'>
-              <a
-                lang='en'
-                className='govuk-link hmrc-report-technical-issue '
-                rel='noreferrer noopener'
-                target='_blank'
-                href='https://www.tax.service.gov.uk/contact/report-technical-problem?newTab=true&amp;service=claim-child-benefit&amp;referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Ffill-online%2Fclaim-child-benefit%2F'
-              >
-                {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
-              </a>
-            </div>
+            <a
+              lang='en'
+              className='govuk-link hmrc-report-technical-issue '
+              rel='noreferrer noopener'
+              target='_blank'
+              href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
+            >
+              {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
+            </a>
+          </div>
         </div>
 
         {showStartPage && <StartPage onStart={startNow} onBack={closeContainer} />}
