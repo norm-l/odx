@@ -28,8 +28,8 @@ export default function setPageTitle(){
     const serviceName = i18n.t("CLAIM_CHILD_BENEFIT");
 
   if(pageHeading){
-  document.title = `${pageHeading} - ${serviceName} - GOV.UK`
+    document.title = `${pageHeading} - ${serviceName} - GOV.UK`
   } else {
-  document.title = `${serviceName} - GOV.UK`;
+    document.title = `${serviceName} - GOV.UK`;
   }
 }
