@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../../components/BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
-import usePageNotWorkingURL from '../../components/helpers/hooks/PageNotWorkingURLHook';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 
 const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = ({
@@ -9,7 +9,7 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
   onBack
 }) => {
   const { t } = useTranslation();
-  const {referrerURL, hmrcURL} = usePageNotWorkingURL();
+  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
 
   return (
     <>

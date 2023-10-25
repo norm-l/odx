@@ -16,7 +16,7 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
-import usePageNotWorkingURL from '../../components/helpers/hooks/PageNotWorkingURLHook';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
@@ -73,7 +73,7 @@ export default function ChildBenefitsClaim() {
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false)
   const [authType, setAuthType] = useState('gg'); 
-  const {referrerURL, hmrcURL} = usePageNotWorkingURL();
+  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
   const history = useHistory();
 
   const { t } = useTranslation();

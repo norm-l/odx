@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 
-export default function usePageNotWorkingURL(){
+export default function useHMRCExternalLinks(){
     const [referrerURL, setReferrerURL] = useState<string>(null);
     const [hmrcURL, setHmrcURL] = useState<string>(null);
     useEffect(() => {

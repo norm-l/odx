@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ParsedHTML from '../../components/helpers/formatters/ParsedHtml';
-import usePageNotWorkingURL from '../../components/helpers/hooks/PageNotWorkingURLHook';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 declare const PCore : any;
 
@@ -12,7 +12,7 @@ const ConfirmationPage = () => {
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
   const [loading, setLoading] = useState(true);
-  const {referrerURL, hmrcURL} = usePageNotWorkingURL();
+  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
   
   const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
   const caseID = PCore.getStoreValue('.ID', 'caseInfo' , context);
