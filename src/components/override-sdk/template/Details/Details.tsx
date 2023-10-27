@@ -5,7 +5,7 @@ import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 
 
 export default function Details(props) {
-  const { children, label, context } = props;
+  const { children, label, context, readOnly } = props;
   const arFields: Array<any> = [];
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
@@ -28,7 +28,7 @@ export default function Details(props) {
   return (
     // Conditionally wrap in main wrapper only if we are not in a case with and open status (i.e. we are in a finished case, viewing the claim summary)
     <ConditionalWrapper    
-      condition={!PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open')}
+      condition={!PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open') && !readOnly}
       wrapper = {childrenForWrap => <MainWrapper>{childrenForWrap}</MainWrapper>}
       childrenToWrap={
         <>        
