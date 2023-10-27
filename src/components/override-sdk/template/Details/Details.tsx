@@ -1,7 +1,7 @@
 import React from 'react';
-
 import DetailsFields from '@pega/react-sdk-components/lib/components/designSystemExtension/DetailsFields';
 import MainWrapper from '../../../BaseComponents/MainWrapper';
+import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 
 
 export default function Details(props) {
@@ -22,12 +22,21 @@ export default function Details(props) {
     arFields.push(theChildrenOfChild);
   }
 
-  return (<>
-        <MainWrapper>
+  const contextName = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);  
+  const containerName = PCore.getContainerUtils().getActiveContainerItemName(`${contextName}/workarea`) || contextName;
+  
+  return (
+    // Conditionally wrap in main wrapper only if we are not in a case with and open status (i.e. we are in a finished case, viewing the claim summary)
+    <ConditionalWrapper    
+      condition={!PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open')}
+      wrapper = {childrenForWrap => <MainWrapper>{childrenForWrap}</MainWrapper>}
+      childrenToWrap={
+        <>        
           {label && context && <h1 className='govuk-heading-l'>{localizedVal(label, localeCategory /* ,localeReference */)} details</h1>}
           <DetailsFields fields={arFields[0]}/>
-        </MainWrapper>
-  </>)
+        </>
+    }/>
+  )
 }
 
 
