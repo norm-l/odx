@@ -1,17 +1,30 @@
-import React from 'react';
+import React, {createElement, useContext} from 'react';
+
+import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect'
 import DetailsFields from '@pega/react-sdk-components/lib/components/designSystemExtension/DetailsFields';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
+import { DefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 
 export default function Details(props) {
-  const { children, label, context } = props;
+  const { /*children,*/ label, context, getPConnect, readOnly } = props;
+  const {DFName} = useContext(DefaultFormContext)
   const arFields: Array<any> = [];
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+
+  //Using inherited config as a test to see if this is the root Details on Claim Summary, or embedded for correct wrapping
+  const inheritedConfig = getPConnect()._inheritedConfig;
   const localeCategory = 'Assignment';
   // TODO: may be needed after page heading logic is re-worked (value may need changing to point to correct reference)
   // const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect().getCaseInfo().getName()}`.toUpperCase();
-
+  const children = getPConnect()
+    .getChildren()
+    .map((configObject, index) => createElement(createPConnectComponent(), {
+    ...configObject,
+    // eslint-disable-next-line react/no-array-index-key
+    key: index.toString()
+  }));
 
   for (const child of children) {
     const theChildPConn = child.props.getPConnect();
@@ -27,7 +40,7 @@ export default function Details(props) {
   return (
     // Conditionally wrap in main wrapper only if we are not in a case with and open status (i.e. we are in a finished case, viewing the claim summary)
     <ConditionalWrapper    
-      condition={!PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open')}
+      condition={!PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open') && !Object.getOwnPropertyNames(inheritedConfig).length}
       wrapper = {childrenForWrap =>        
       <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
         <div className="govuk-grid-row">
@@ -40,9 +53,9 @@ export default function Details(props) {
       childrenToWrap={
         <>        
           {label && context && <h1 className='govuk-heading-l'>{localizedVal(label, localeCategory /* ,localeReference */)} details</h1>}
-          <DetailsFields fields={arFields[0]}/>
-        </>
-    }/>
+          {children} 
+        </> 
+      }></ConditionalWrapper>                
   )
 }
 
