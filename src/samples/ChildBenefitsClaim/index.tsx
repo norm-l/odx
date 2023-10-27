@@ -117,7 +117,7 @@ export default function ChildBenefitsClaim() {
     setShowUserPortal(false);
   }
   function returnToPortalPage() {
-    // Added to ensure that clicking begin claim restarts timeout
+  
     staySignedIn(setShowTimeoutModal);
     setShowStartPage(false);
     setShowUserPortal(true);
