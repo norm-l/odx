@@ -1,6 +1,7 @@
 import React from 'react';
 
 import DetailsFields from '@pega/react-sdk-components/lib/components/designSystemExtension/DetailsFields';
+import MainWrapper from '../../../BaseComponents/MainWrapper';
 
 
 export default function Details(props) {
@@ -22,14 +23,10 @@ export default function Details(props) {
   }
 
   return (<>
-    <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-      <div className="govuk-grid-row">
-        <div className='govuk-grid-column-two-thirds'>
+        <MainWrapper>
           {label && context && <h1 className='govuk-heading-l'>{localizedVal(label, localeCategory /* ,localeReference */)} details</h1>}
           <DetailsFields fields={arFields[0]}/>
-        </div>
-      </div>
-    </main>
+        </MainWrapper>
   </>)
 }
 
