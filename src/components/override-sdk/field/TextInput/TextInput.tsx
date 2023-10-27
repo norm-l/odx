@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import GDSTextInput from '../../../BaseComponents/TextInput/TextInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
 
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 
@@ -24,6 +25,8 @@ export default function TextInput(props) {
 
   const[errorMessage,setErrorMessage] = useState(validatemessage);
 
+  registerNonEditableField(!!disabled);
+
   useEffect(()=>{
 
     if(validatemessage){
@@ -45,7 +48,7 @@ export default function TextInput(props) {
 
   let label = props.label;
   const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
-  if(isOnlyField) label = overrideLabel.trim() ? overrideLabel : label;
+  if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
   const maxLength = fieldMetadata?.maxLength;
 

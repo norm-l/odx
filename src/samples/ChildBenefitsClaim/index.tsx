@@ -1,12 +1,13 @@
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from "react-dom";
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import StoreContext from "@pega/react-sdk-components/lib/bridge/Context/StoreContext";
 import createPConnectComponent from "@pega/react-sdk-components/lib/bridge/react_pconnect";
 
-import { gbLoggedIn, loginIfNecessary, sdkSetAuthHeader } from '@pega/react-sdk-components/lib/components/helpers/authManager';
+import { sdkIsLoggedIn, loginIfNecessary, sdkSetAuthHeader } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
@@ -15,19 +16,52 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
+import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 
-
 declare const myLoadMashup: any;
+
+/* Time out modal functionality */
+let applicationTimeout = null;
+let signoutTimeout = null;
+// Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
+let milisecondsTilSignout = 115 * 1000;
+let milisecondsTilWarning = 780 * 1000;
+
+
+// Starts the timeout for warning, after set time shows the modal and starts signout timer
+function initTimeout(setShowTimeoutModal){  
+  applicationTimeout = setTimeout(
+    () => {
+      setShowTimeoutModal(true)
+      signoutTimeout = setTimeout(() => { logout() }, milisecondsTilSignout);
+    },
+    milisecondsTilWarning
+  ); 
+}
+
+// Clears exisiting timeouts, sends 'ping' to pega to keep session alive and then initiates the timout
+function staySignedIn(setShowTimeoutModal, refreshSignin = true){
+  clearTimeout(applicationTimeout);  
+  clearTimeout(signoutTimeout);  
+  if(refreshSignin){
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
+  }
+  setShowTimeoutModal(false);
+  initTimeout(setShowTimeoutModal);
+}
+/* ******************************* */
 
 export default function ChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -39,11 +73,17 @@ export default function ChildBenefitsClaim() {
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
-  const [authType, setAuthType] = useState('gg');
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [serviceNotAvailable, setServiceNotAvailable] = useState(false)
+  const [authType, setAuthType] = useState('gg'); 
+  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
+  const history = useHistory();
 
   const { t } = useTranslation();
   let operatorId = '';
+  
 
+  
   useEffect(()=> {
     setPageTitle();
   }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen]);
@@ -51,7 +91,13 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
-  function createCase() {
+  function doRedirectDone() {
+    history.push('/');
+    // appName and mainRedirect params have to be same as earlier invocation
+    loginIfNecessary({appName:'embedded', mainRedirect:true});
+  }
+
+  function createCase() { 
     setShowStartPage(false);
     setShowPega(true);
     PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
@@ -65,10 +111,20 @@ export default function ChildBenefitsClaim() {
   }
 
   function beginClaim() {
+    // Added to ensure that clicking begin claim restarts timeout
+    staySignedIn(setShowTimeoutModal);
     setShowStartPage(true);
     setShowUserPortal(false);
   }
-
+  function returnToPortalPage() {
+  
+    staySignedIn(setShowTimeoutModal);
+    setShowStartPage(false);
+    setShowUserPortal(true);
+    setShowPega(false);
+    setShowResolutionScreen(false);
+    setServiceNotAvailable(false);
+  }
   function assignmentFinished() {
     setShowStartPage(false);
     setShowPega(false);
@@ -110,7 +166,28 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
       () => {
+
         assignmentFinished();
+       
+      },
+      'assignmentFinished'
+    );
+    PCore.getPubSubUtils().subscribe(
+      "assignmentFinished",
+      () => {
+
+        setShowStartPage(false);
+        setShowUserPortal(false);
+        setShowPega(false);
+        const containername = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
+        const context =  PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+        const status =  (PCore.getStoreValue(".pyStatusWork","caseInfo.content",context))
+        if(status === "Resolved-Discarded"){
+      
+        setServiceNotAvailable(true);
+      
+        PCore.getContainerUtils().closeContainerItem(context);
+        }
       },
       'assignmentFinished'
     );
@@ -144,6 +221,7 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
       () => {
+      
         setShowStartPage(false);
         setShowUserPortal(false);
         setShowPega(true);
@@ -191,7 +269,7 @@ export default function ChildBenefitsClaim() {
     // If not logged in, we used to prompt for login. Now moved up to TopLevelApp
     // If logged in, make the Triple Play Options visible
 
-    if (!gbLoggedIn) {
+    if (!sdkIsLoggedIn()) {
       // login();     // Login now handled at TopLevelApp
     } else {
       setShowUserPortal(true);
@@ -233,6 +311,7 @@ export default function ChildBenefitsClaim() {
     } = inRenderObj;
 
     const thePConn = props.getPConnect();
+   
     setPConn(thePConn);
 
     let target: any = null;
@@ -280,6 +359,17 @@ export default function ChildBenefitsClaim() {
       establishPCoreSubscriptions();
       setShowAppName(true);
 
+      // Fetches timeout length config
+      getSdkConfig().then( sdkConfig => {  
+        if(sdkConfig.timeoutConfig.secondsTilWarning) milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+        if(sdkConfig.timeoutConfig.secondsTimSignout) milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000
+      }).finally(() => {        
+        // Subscribe to any store change to reset timeout counter
+        PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+        initTimeout(setShowTimeoutModal);
+      })
+            
+
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
       PCore.getLocaleUtils().loadLocaleResources([PCore.getLocaleUtils().GENERIC_BUNDLE_KEY, '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE']);
@@ -326,6 +416,7 @@ export default function ChildBenefitsClaim() {
     //  top level Pega root element (likely a RootContainer)
 
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
+  
   }
 
   // One time (initialization) subscriptions and related unsubscribe
@@ -357,7 +448,7 @@ export default function ChildBenefitsClaim() {
       }
 
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary('embedded', false);
+      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
     });
 
     document.addEventListener('SdkConstellationReady', () => {
@@ -419,17 +510,38 @@ export default function ChildBenefitsClaim() {
   const handleStaySignIn = e => {
     e.preventDefault();
     setShowSignoutModal(false);
+    // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
+    staySignedIn(setShowTimeoutModal);
   };
 
   return (
     <>
+      <TimeoutPopup 
+        show={showTimeoutModal}
+        staySignedinHandler={() => staySignedIn(setShowTimeoutModal)} 
+        signoutHandler={() => logout()}
+      />
+      
       <AppHeader handleSignout={handleSignout} appname={t("CLAIM_CHILD_BENEFIT")} />
       <div className="govuk-width-container">
 
         <LanguageToggle PegaApp="true"/>
         <div id='pega-part-of-page'>
           <div id='pega-root'></div>
+          <div className='govuk-!-margin-bottom-8'>
+            <a
+              lang='en'
+              className='govuk-link hmrc-report-technical-issue '
+              rel='noreferrer noopener'
+              target='_blank'
+              href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
+            >
+              {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
+            </a>
+          </div>
         </div>
+ 
+        {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage}/>}
 
         {showStartPage && <StartPage onStart={startNow} onBack={closeContainer} />}
 
@@ -459,7 +571,7 @@ export default function ChildBenefitsClaim() {
       </div>
 
       <LogoutPopup
-        show={showSignoutModal}
+        show={showSignoutModal && !showTimeoutModal}
         hideModal={() => setShowSignoutModal(false)}
         handleSignoutModal={signOut}
         handleStaySignIn={handleStaySignIn}

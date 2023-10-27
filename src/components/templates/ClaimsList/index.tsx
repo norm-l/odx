@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
-import { Utils, GBdate} from '../../helpers/utils';
+import { scrollToTop, GBdate} from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
@@ -18,15 +18,27 @@ export default function ClaimsList(props){
         return { text: t('IN_PROGRESS'), tagColour: 'blue' };
       case 'Pending-CBS':
       case 'Resolved-Completed':
+      case 'Resolved-Rejected':
       case 'Pending-ManualInvestigation':
-      case 'Pending - verify documentation':
+      case 'Pending-verify documentation':
       case 'Pending-awaiting documentation':
       case 'Pending-VerifyDocumentation':
+      case 'Pending-SystemError':
       case 'Pending-AwaitingDocumentation':
         return {text: t('CLAIM_RECEIVED'), tagColour:'purple'};
       default:
         return {text:status, tagColour:'grey'};
     }
+  }
+
+  const containerManger = thePConn.getContainerManager();
+  const resetContainer = () => {
+    const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
+    containerManger.resetContainers({
+      context:"app",
+      name:"primary",     
+      containerItems: [context]
+    });
   }
 
   function _rowClick(row: any) {
@@ -36,15 +48,16 @@ export default function ClaimsList(props){
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
     if( rowClickAction === 'OpenAssignment'){
+      resetContainer();
       const openAssignmentOptions = { containerName: container};
       PCore.getMashupApi().openAssignment(pyAssignmentID, target, openAssignmentOptions)
       .then(()=>{
-        Utils.scrollToTop();
-      });
+        scrollToTop();
+      }).catch(err => console.log('Error : ',err)); // eslint-disable-line no-console
     } else if ( rowClickAction === 'OpenCase'){
       PCore.getMashupApi().openCase(pzInsKey, target, {pageName:'SummaryClaim'})
       .then(()=>{
-        Utils.scrollToTop();
+        scrollToTop();
       });
     }
   }
@@ -60,16 +73,15 @@ export default function ClaimsList(props){
         claimRef : item.pyID,
         dateCreated : DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
         children : [],
-        actionButton : 
-          (<Button
-              attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
-              variant='secondary'
-              onClick={() => {
-                _rowClick(item);
-              }}
-            >
-              {buttonContent}
-            </Button>),
+        actionButton : <Button
+        attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
+        variant='secondary'
+        onClick={() => {
+          _rowClick(item);
+        }}
+      >
+        {buttonContent}
+      </Button>,
         status : statusMapping(item.pyStatusWork)
       };
 
@@ -117,9 +129,7 @@ export default function ClaimsList(props){
               {claimItem.actionButton}
             </dt>
             <dd className='govuk-summary-list__actions govuk-!-width-one-half'>
-              <a href='#' className='govuk-link'>
-                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>{claimItem.status.text}</strong>
-              </a>
+              <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>{claimItem.status.text}</strong>            
             </dd>
           </div>
         </dl>

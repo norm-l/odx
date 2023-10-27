@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-
-import {Utils} from '../../../helpers/utils';
+import { scrollToTop } from '../../../helpers/utils';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import { DateErrorFormatter } from '../../../helpers/formatters/DateErrorFormatter';
@@ -46,7 +45,7 @@ export default function Assignment(props) {
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
 
-  const isOnlyField  = useIsOnlyField().isOnlyField;
+  const isOnlyFieldDetails  = useIsOnlyField(null, children);// .isOnlyField;
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
 
@@ -61,7 +60,6 @@ export default function Assignment(props) {
   if(thePConn.getDataObject().caseInfo?.assignments && thePConn.getDataObject().caseInfo?.assignments.length > 0){
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
   }
-
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -154,11 +152,11 @@ export default function Assignment(props) {
 
           navigatePromise
             .then(() => {
-              Utils.scrollToTop();
+              scrollToTop();
               setErrorSummary(false);
             })
             .catch(() => {
-              Utils.scrollToTop();
+              scrollToTop();
               showErrorSummary();
             });
 
@@ -226,11 +224,11 @@ export default function Assignment(props) {
 
           finishPromise
             .then(() => {
-              Utils.scrollToTop();
+              scrollToTop();
               setErrorSummary(false);
             })
             .catch(() => {
-              Utils.scrollToTop();
+              scrollToTop();
               showErrorSummary();
             });
 
@@ -274,7 +272,7 @@ export default function Assignment(props) {
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
             )}
-            {(!isOnlyField || containerName.toLowerCase().includes('check your answer')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
+            {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
             <form>
               <AssignmentCard
                 getPConnect={getPConnect}
@@ -291,8 +289,8 @@ export default function Assignment(props) {
               rel='noreferrer noopener'
               target='_blank'
             >
-              {`${t("ASK_HMRC_ONLINE")} ${t("OPENS_IN_NEW_TAB")}`}
-            </a>
+              {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
+            </a><br/><br/>
             </div>
           </div>
         </main>

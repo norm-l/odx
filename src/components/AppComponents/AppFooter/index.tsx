@@ -1,23 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import {Utils} from '../../../components/helpers/utils';
 
 export default function AppFooter() {
   const { t } = useTranslation();
-  const [referrerURL, setReferrerURL] = useState<string>(null);
-  const [hmrcURL, setHmrcURL] = useState<string>(null);
-
-  useEffect(() => {
-    const getReferrerURL = async () => {
-      const { serverConfig: { sdkContentServerUrl, sdkHmrcURL } } = await getSdkConfig();
-      setReferrerURL(sdkContentServerUrl);
-      setHmrcURL(sdkHmrcURL);
-    }
-    getReferrerURL();
-    Utils.scrollToTop();
-  }, []);
 
   return (
     <footer className="govuk-footer " role="contentinfo">
@@ -64,11 +50,6 @@ export default function AppFooter() {
             <li className="govuk-footer__inline-list-item">
               <a className="govuk-footer__link" href="https://www.gov.uk/cymraeg" target="_blank" rel="noreferrer">
                 {t("CYMRAEG")} {t("OPENS_IN_NEW_TAB")}
-              </a>
-            </li>
-            <li className="govuk-footer__inline-list-item">
-              <a className="govuk-footer__link" href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`} rel="noreferrer" target="_blank">
-                  {t("PAGE_NOT_WORKING_PROPERLY")}
               </a>
             </li>
           </ul>

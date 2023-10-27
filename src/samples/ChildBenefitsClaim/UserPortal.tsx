@@ -1,10 +1,13 @@
 import React from 'react';
 import Button from '../../components/BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
+
 
 export default function UserPortal(props) {
   const { beginClaim, children } = props;
   const { t } = useTranslation();
+  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
 
   return (
     <>
@@ -21,7 +24,7 @@ export default function UserPortal(props) {
               <li><span className='govuk-body'>{t('CLAIMS_THAT_ARE_IN_PROGRESS')}</span></li>
               <li><span className='govuk-body'>{t('CLAIMS_THAT_ARE_SUBMITTED')}</span></li>
             </ul>
-            <hr className="govuk-section-break govuk-section-break--xl govuk-section-break--visible"></hr>
+            <hr className="govuk-section-break govuk-section-break--xl govuk-section-break--visible" aria-hidden></hr>
 
             {/* Claims list */}
             <div className='govuk-grid-column-two-thirds'>
@@ -29,6 +32,8 @@ export default function UserPortal(props) {
               <>
                 <h3 className='govuk-heading-m' id="subsection-title">{t('MAKE_A_CLAIM')}</h3>
                 <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
+                <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
+                
                 <Button
                   attributes={{ className: 'govuk' }}
                   onClick={beginClaim}
@@ -51,6 +56,16 @@ export default function UserPortal(props) {
                   <li><span className='govuk-body'>{t('THE_HIGH_INCOME_CHB_TAX_CHARGE')}</span></li>
                   <li><span className='govuk-body'>{t('ANY_CHANGE_OF_CIRCUMSTANCE')}</span></li>
                 </ul>
+                <br/>
+                <a
+                  lang='en'
+                  className='govuk-link hmrc-report-technical-issue '
+                  rel='noreferrer noopener'
+                  target='_blank'
+                  href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
+                >
+                  {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
+                </a>
               </>
             </div>
           </div>
