@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import { scrollToTop } from '../../../helpers/utils';
 import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
@@ -10,6 +9,7 @@ import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
+import MainWrapper from '../../../BaseComponents/MainWrapper';
 
 
 export interface ErrorMessageDetails {
@@ -49,19 +49,6 @@ export default function Assignment(props) {
   const isOnlyFieldDetails  = useIsOnlyField(null, children);// .isOnlyField;
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
-
-  const [referrerURL, setReferrerURL] = useState<string>(null);
-  const [hmrcURL, setHmrcURL] = useState<string>(null);
-
-  useEffect(() => {
-    const getReferrerURL = async () => {
-      const { serverConfig: { sdkContentServerUrl, sdkHmrcURL } } = await getSdkConfig();
-      setReferrerURL(sdkContentServerUrl);
-      setHmrcURL(sdkHmrcURL);
-    }
-    getReferrerURL();
-    scrollToTop();
-  }, []);
 
   const _containerName =  getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -279,9 +266,7 @@ export default function Assignment(props) {
             ></Button>
           ) : null
           )}
-        <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
+          <MainWrapper>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
             )}
@@ -304,12 +289,7 @@ export default function Assignment(props) {
             >
               {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
             </a><br/><br/>
-            <a className="govuk-link" href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`} rel="noreferrer" target="_blank">
-                {t("PAGE_NOT_WORKING_PROPERLY")} {t("OPENS_IN_NEW_TAB")}
-            </a>
-            </div>
-          </div>
-        </main>
+          </MainWrapper>
       </div>
     </>
   );
