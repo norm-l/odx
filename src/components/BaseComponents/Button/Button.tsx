@@ -1,6 +1,7 @@
 import React,{ useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+
 export default function Button(props) {
   const {
     disabled,
@@ -17,6 +18,7 @@ export default function Button(props) {
   if(!Object.prototype.hasOwnProperty.call(attributes, 'className')) {attributes.className=''};
 
   useEffect(()=>{
+    // eslint-disable-next-line no-prototype-builtins
     if(pointerState.hasOwnProperty('pointerEvents')){
       setTimeout(() => setPointerState({}), 200);
     }
