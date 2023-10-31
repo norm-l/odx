@@ -26,7 +26,6 @@ export default function Details(props) {
     const theChildPConn = child.props.getPConnect();
     theChildPConn.setInheritedProp('displayMode', 'LABELS_LEFT');
     theChildPConn.setInheritedProp('readOnly', true);
-    const theChildrenOfChild = theChildPConn.getChildren();
   }
   const contextName = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);  
   const containerName = PCore.getContainerUtils().getActiveContainerItemName(`${contextName}/workarea`) || contextName;
