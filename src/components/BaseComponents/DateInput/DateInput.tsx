@@ -55,7 +55,7 @@ export default function DateInput(props){
   const extraProps= {testProps:{'data-test-id':testId}};
 
   return(
-    <FieldSet {...props} fieldsetElementProps={{role:"group"}} {...extraProps} tabIndex={-1}>
+    <FieldSet {...props} fieldsetElementProps={{role:"group"}} {...extraProps}>
       <div className="govuk-date-input" id={name}>
         <div className="govuk-date-input__item">
           <FormGroup name={`${name}-day`} label={dayLabel} labelIsHeading={false} extraLabelClasses="govuk-date-input__label">
