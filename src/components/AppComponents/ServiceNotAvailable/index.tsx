@@ -13,7 +13,7 @@ export default function ServiceNotAvailable(props) {
    
     <div className='govuk-body govuk-!-margin-bottom-9'>
          <h1 className="govuk-heading-l">{t('SERVICE_NOT_AVAILABLE')}</h1>
-         <p className="govuk-body" style={mystyle}>{t('COME_BACK_LATER')}</p>
+         <p className="govuk-body">{t('COME_BACK_LATER')}</p>
         <a href="#" className="govuk-link " onClick={returnToPortalPage} >{t('RETURN_TO_THE_HOMEPAGE')}</a>
     
                   
