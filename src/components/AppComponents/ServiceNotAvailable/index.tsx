@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 export default function ServiceNotAvailable(props) {
   const {returnToPortalPage } = props;
-  const mystyle = {
-  fontSize: "19px"
-  };
  
   const { t } = useTranslation();
   return (
