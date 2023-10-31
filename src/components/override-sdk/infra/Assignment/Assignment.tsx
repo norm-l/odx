@@ -9,6 +9,7 @@ import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
+import MainWrapper from '../../../BaseComponents/MainWrapper';
 
 
 export interface ErrorMessageDetails {
@@ -63,7 +64,6 @@ export default function Assignment(props) {
 
   useEffect(() => {
     if (children && children.length > 0) {
-      // debugger;
 
       const oWorkItem = children[0].props.getPConnect();
       const oWorkData = oWorkItem.getDataObject();
@@ -266,9 +266,7 @@ export default function Assignment(props) {
             ></Button>
           ) : null
           )}
-        <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
+          <MainWrapper>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
             )}
@@ -291,9 +289,7 @@ export default function Assignment(props) {
             >
               {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
             </a><br/><br/>
-            </div>
-          </div>
-        </main>
+          </MainWrapper>
       </div>
     </>
   );
