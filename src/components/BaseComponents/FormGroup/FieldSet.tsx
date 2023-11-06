@@ -13,10 +13,7 @@ export default function FieldSet({legendIsHeading=true, label, name, errorText, 
   
 
   useEffect(()=>{
-    if(errorText){
     setErrorMessage(errorText)
-    }
-
   },[errorText])
   const formGroupDivClasses = `govuk-form-group ${ErrorMessage?'govuk-form-group--error':""}`.trim();
   const legendClasses = `govuk-fieldset__legend ${(legendIsHeading) ?"govuk-fieldset__legend--l":""}`.trim();

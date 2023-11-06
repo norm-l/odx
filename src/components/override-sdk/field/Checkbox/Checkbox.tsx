@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 // import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 
 export default function CheckboxComponent(props) {
   const {
     getPConnect,
     inputProps,
-    // validatemessage,
+    validatemessage,
     hintText,
     readOnly,
     value
@@ -23,17 +24,15 @@ export default function CheckboxComponent(props) {
   // relevant handler (mainly - non-exclusive checkboxes should have a handler that clears the exclusive option ,
   // and exclusive option will need a different handler to clear all other items )
   const {exclusiveOption, exclusiveOptionChangeHandler = () => {}, index} = getPConnect().getConfigProps();
-  
+  //const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
   /* retaining for future reference, incase changes need to be reverted
-  const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
+ 
   if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label; */
   
-  /* const[errorMessage,setErrorMessage] = useState(validatemessage);
+   const[errorMessage,setErrorMessage] = useState(validatemessage);
   useEffect(()=>{
-    if(validatemessage){
     setErrorMessage(validatemessage)
-    }
-  },[validatemessage]) */
+ },[validatemessage]) 
   
   // build name for id, allows for error message navigation to field
   const propertyContext = getPConnect().options.pageReference ? getPConnect().options.pageReference.split('.').pop() : '';
