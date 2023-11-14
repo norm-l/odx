@@ -16,7 +16,6 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
-import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
@@ -76,7 +75,7 @@ export default function ChildBenefitsClaim() {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false)
   const [authType, setAuthType] = useState('gg'); 
-  const {referrerURL, hmrcURL} = useHMRCExternalLinks();
+  const [caseId, setCaseId] = useState('');
   const history = useHistory();
 
   const { t } = useTranslation();
@@ -87,6 +86,9 @@ export default function ChildBenefitsClaim() {
   useEffect(()=> {
     setPageTitle();
   }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen]);
+
+  
+  
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
@@ -122,21 +124,26 @@ export default function ChildBenefitsClaim() {
     setShowStartPage(false);
     setShowUserPortal(true);
     setShowPega(false);
+    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
     setShowResolutionScreen(false);
     setServiceNotAvailable(false);
   }
   function assignmentFinished() {
     setShowStartPage(false);
     setShowPega(false);
+    const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
+    const caseID = PCore.getStoreValue('.ID', 'caseInfo' , context);
+    setCaseId(caseID);
+    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
     setShowResolutionScreen(true);
   }
 
-  function closeContainer(){
-    setShowPega(false);
-    setShowStartPage(false);
-    setShowUserPortal(true);
-    setShowResolutionScreen(false);
-  }
+  // function closeContainer(){
+  //   setShowPega(false);
+  //   setShowStartPage(false);
+  //   setShowUserPortal(true);
+  //   setShowResolutionScreen(false);
+  // }
 
   // Calls data page to fetch in progress claims, then for each result (limited to first 10), calls D_Claim to get extra details about each 'assignment'
   // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
@@ -154,11 +161,11 @@ export default function ChildBenefitsClaim() {
   };
 
   function cancelAssignment() {
-    // PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext(`${PCore.getConstants().APP.APP}/primary`), {skipDirtyCheck :true});
     fetchInProgressClaimsData();
     setShowStartPage(false);
-    setShowUserPortal(true);
     setShowPega(false);
+    setShowUserPortal(true);
+    PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
     setShowResolutionScreen(false);
   }
 
@@ -200,13 +207,13 @@ export default function ChildBenefitsClaim() {
       'cancelAssignment'
     );
 
-    PCore.getPubSubUtils().subscribe(
-      PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
-      () => {
-        closeContainer();
-      },
-      'closeContainer'
-    );
+    // PCore.getPubSubUtils().subscribe(
+    //   PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
+    //   () => {
+    //     closeContainer();
+    //   },
+    //   'closeContainer'
+    // );
 
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
@@ -221,7 +228,6 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
       () => {
-      
         setShowStartPage(false);
         setShowUserPortal(false);
         setShowPega(true);
@@ -528,22 +534,11 @@ export default function ChildBenefitsClaim() {
         <LanguageToggle PegaApp="true"/>
         <div id='pega-part-of-page'>
           <div id='pega-root'></div>
-          <div className='govuk-!-margin-bottom-8'>
-            <a
-              lang='en'
-              className='govuk-link hmrc-report-technical-issue '
-              rel='noreferrer noopener'
-              target='_blank'
-              href={`${hmrcURL}contact/report-technical-problem?newTab=true&service=463&referrerUrl=${referrerURL}`}
-            >
-              {t('PAGE_NOT_WORKING_PROPERLY')} {t("OPENS_IN_NEW_TAB")}
-            </a>
-          </div>
         </div>
  
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage}/>}
 
-        {showStartPage && <StartPage onStart={startNow} onBack={closeContainer} />}
+        {showStartPage && <StartPage onStart={startNow} onBack={() => {showUserPortal(true);}} />}
 
         {showUserPortal && <UserPortal beginClaim={beginClaim}>
 
@@ -566,7 +561,7 @@ export default function ChildBenefitsClaim() {
 
       </UserPortal>}
 
-      {bShowResolutionScreen && <ConfirmationPage />}
+      {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
 
       </div>
 

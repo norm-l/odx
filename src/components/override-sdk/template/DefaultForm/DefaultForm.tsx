@@ -2,7 +2,7 @@ import React, { createElement, useEffect, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import ParsedHTML from '../../../helpers/formatters/ParsedHtml';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
+import useIsOnlyField, {registerNonEditableField} from '../../../helpers/hooks/QuestionDisplayHooks';
 import { DefaultFormContext, ReadOnlyDefaultFormContext }  from '../../../helpers/HMRCAppContext';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 import './DefaultForm.css';
@@ -14,10 +14,10 @@ export default function DefaultForm(props) {
   const {DFName} = useContext(DefaultFormContext);
   const {instructionText: passedThroughInstructionText} = useContext(DefaultFormContext);
 
-  const [declaration, setDeclaration] = useState({text1: '', warning1: ''});
-  let containerName = '';
+  const [declaration, setDeclaration] = useState({text1: '', warning1: ''});  
+  let  containerName = null;
   if(getPConnect().getDataObject().caseInfo?.assignments){
-    containerName = getPConnect().getDataObject().caseInfo?.assignments[0]?.name;
+    containerName = getPConnect().getDataObject().caseInfo?.assignments[0].name;
   }
 
   const { t } = useTranslation();
@@ -86,6 +86,7 @@ export default function DefaultForm(props) {
     }    
   },[])
 
+  registerNonEditableField(instructionExists);
   useEffect(()=>{
     if(instructionExists){
       settingTargetForAnchorTag();

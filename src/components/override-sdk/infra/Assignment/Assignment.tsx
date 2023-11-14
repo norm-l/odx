@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { scrollToTop } from '../../../helpers/utils';
-import useAddErrorToPageTitle from '../../../helpers/hooks/useAddErrorToPageTitle';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
-import { DateErrorFormatter } from '../../../helpers/formatters/DateErrorFormatter';
+import { DateErrorFormatter, DateErrorTargetFields } from '../../../helpers/formatters/DateErrorFormatter';
 import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
+import MainWrapper from '../../../BaseComponents/MainWrapper';
 
 
 export interface ErrorMessageDetails {
@@ -53,8 +53,8 @@ export default function Assignment(props) {
   const context = getPConnect().getContextName();
   const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
   useEffect(() => {
-    setPageTitle();
-  },[children])
+    setPageTitle(errorMessages.length > 0);
+  },[children, errorMessages])
 
   let containerName;
   if(thePConn.getDataObject().caseInfo?.assignments && thePConn.getDataObject().caseInfo?.assignments.length > 0){
@@ -63,7 +63,6 @@ export default function Assignment(props) {
 
   useEffect(() => {
     if (children && children.length > 0) {
-      // debugger;
 
       const oWorkItem = children[0].props.getPConnect();
       const oWorkData = oWorkItem.getDataObject();
@@ -94,9 +93,20 @@ export default function Assignment(props) {
       type: 'error'
       })[0]?.message;
     if(validatemessage){
-      const fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
-      if(fieldC11nEnv.meta.type === 'Date')
-      validatemessage = DateErrorFormatter(validatemessage, fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label);
+      let fieldId = fieldC11nEnv.getStateProps().fieldId || fieldComponent.props.name;
+      if(fieldC11nEnv.meta.type === 'Date'){
+         const propertyName = fieldComponent.props.name ;
+         const DateErrorTargetFieldId = DateErrorTargetFields(validatemessage);
+         fieldId = `${propertyName}-day`;
+         if(DateErrorTargetFieldId.includes(`month`)){
+          fieldId = `${propertyName}-month`;
+         }else if(DateErrorTargetFieldId.includes(`year`)){
+          fieldId = `${propertyName}-year`;
+         }
+         validatemessage = DateErrorFormatter(validatemessage,fieldC11nEnv.resolveConfigProps(fieldC11nEnv.getMetadata().config).label);
+        
+      }
+     
     acc.push({message:{
       message: validatemessage,
       fieldId},
@@ -124,8 +134,6 @@ export default function Assignment(props) {
       bodyfocus.focus();
     }
   }, [children]);
-
-  useAddErrorToPageTitle(errorMessages.length > 0);
 
   function showErrorSummary() {
     setErrorMessages([]);
@@ -266,13 +274,11 @@ export default function Assignment(props) {
             ></Button>
           ) : null
           )}
-        <main className="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
+          <MainWrapper>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
             )}
-            {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
+            {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer') || containerName.toLowerCase().includes('declaration')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
             <form>
               <AssignmentCard
                 getPConnect={getPConnect}
@@ -291,9 +297,7 @@ export default function Assignment(props) {
             >
               {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
             </a><br/><br/>
-            </div>
-          </div>
-        </main>
+          </MainWrapper>
       </div>
     </>
   );
