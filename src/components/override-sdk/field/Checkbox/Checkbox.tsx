@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 // import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import { DefaultFormContext }  from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
   const {
     getPConnect,
     inputProps,
-   // validatemessage,
+    validatemessage,
     hintText,
     readOnly,
     value
@@ -53,10 +54,30 @@ export default function CheckboxComponent(props) {
     handleEvent(actionsApi, 'changeNblur', propName, event.target.checked);
   };
 
+  const formContext = useContext(DefaultFormContext);
+
   return (
     <>    
       {exclusiveOption && <div className="govuk-checkboxes__divider">or</div>}
-      <GDSCheckbox
+      {formContext.OverrideLabelValue === 'Declaration' ? (
+        <div className={`govuk-form-group ${validatemessage ? 'govuk-form-group--error' : ''}`}>
+          {validatemessage && <p id={`${name}-error`} className="govuk-error-message">
+            <span className="govuk-visually-hidden">Error:</span> {validatemessage}
+          </p>}
+          <GDSCheckbox
+          item={{checked: value, label: caption, readOnly:false, hintText}}
+          index={index}
+          name={name}
+          inputProps={...inputProps}
+          onChange={(evt) => {
+            handleChange(evt)
+            exclusiveOptionChangeHandler();                
+          }}
+          key={name}
+              />
+        </div>
+      ) : (
+        <GDSCheckbox
         item={{checked: value, label: caption, readOnly:false, hintText}}
         index={index}
         name={name}
@@ -67,6 +88,7 @@ export default function CheckboxComponent(props) {
         }}
         key={name}
             />
+      )}
     </>
   );
 }
