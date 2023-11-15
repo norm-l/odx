@@ -6,6 +6,8 @@ import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDis
 import { DefaultFormContext }  from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
+  const {OverrideLabelValue} = useContext(DefaultFormContext);
+  
   const {
     getPConnect,
     inputProps,
@@ -54,14 +56,12 @@ export default function CheckboxComponent(props) {
     handleEvent(actionsApi, 'changeNblur', propName, event.target.checked);
   };
 
-  const formContext = useContext(DefaultFormContext);
-
   return (
     <>    
       {exclusiveOption && <div className="govuk-checkboxes__divider">or</div>}
 
       {/* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */}
-      {formContext.OverrideLabelValue === 'Declaration' ? (
+      {OverrideLabelValue === 'Declaration' ? (
         <div className={`govuk-form-group ${validatemessage ? 'govuk-form-group--error' : ''}`}>
           {validatemessage && <p id={`${name}-error`} className="govuk-error-message">
             <span className="govuk-visually-hidden">Error:</span> {validatemessage}
