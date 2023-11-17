@@ -61,7 +61,7 @@ export default function CheckboxComponent(props) {
       {exclusiveOption && <div className="govuk-checkboxes__divider">or</div>}
 
       {/* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */}
-      {OverrideLabelValue === 'Declaration' ? (
+      {OverrideLabelValue.trim().toLowerCase() === 'declaration' ? (
         <div className={`govuk-form-group ${validatemessage ? 'govuk-form-group--error' : ''}`}>
           {validatemessage && <p id={`${name}-error`} className="govuk-error-message">
             <span className="govuk-visually-hidden">Error:</span> {validatemessage}
