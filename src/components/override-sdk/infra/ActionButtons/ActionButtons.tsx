@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
+import { scrollToTop } from '../../../helpers/utils';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress } = props;
@@ -37,6 +38,7 @@ export default function ActionButtons(props) {
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(sButton.jsAction, 'secondary');
+                scrollToTop();
               }}
               key={sButton.actionID}
               attributes={{ type: 'button' }}
