@@ -58,6 +58,7 @@ export default function ActionButtons(props) {
               onClick={e => {
                 e.target.blur();
                 _onButtonPress(sButton.jsAction, 'secondary');
+                scrollToTop();
               }}
               key={sButton.actionID}
               attributes={{ type: 'link' }}
