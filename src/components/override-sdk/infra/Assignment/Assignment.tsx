@@ -9,6 +9,7 @@ import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { SdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import MainWrapper from '../../../BaseComponents/MainWrapper';
+import ShutterServicePage from '../../../AppComponents/ShutterServicePage';
 
 
 export interface ErrorMessageDetails {
@@ -48,6 +49,7 @@ export default function Assignment(props) {
   const isOnlyFieldDetails  = useIsOnlyField(null, children);// .isOnlyField;
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
+  const [serviceShut, setServiceShut] = useState(false);
 
   const _containerName =  getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -60,6 +62,13 @@ export default function Assignment(props) {
   if(thePConn.getDataObject().caseInfo?.assignments && thePConn.getDataObject().caseInfo?.assignments.length > 0){
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
   }
+
+  // Get the IsChBServiceShut property value from the store
+  const isChBServiceShut = PCore.getStoreValue(".IsChBServiceShut","caseInfo.content", context);
+  // Check if the store is shuttered before showing any further questions 
+  useEffect(()=> {
+    setServiceShut(isChBServiceShut);
+  },[isChBServiceShut])
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -267,7 +276,7 @@ export default function Assignment(props) {
   return (
     <>
       <div id='Assignment'>
-        {arSecondaryButtons?.map(sButton =>
+        {!serviceShut && arSecondaryButtons?.map(sButton =>
           sButton['name'] === 'Previous' ? (
             <Button
               variant='backlink'
@@ -280,30 +289,33 @@ export default function Assignment(props) {
             ></Button>
           ) : null
           )}
-          <MainWrapper>
-            {errorSummary && errorMessages.length > 0 && (
-              <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
-            )}
-            {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer') || containerName.toLowerCase().includes('declaration')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
-            <form>
-              <AssignmentCard
-                getPConnect={getPConnect}
-                itemKey={itemKey}
-                actionButtons={actionButtons}
-                onButtonPress={buttonPress}
+          {!serviceShut && (
+            <MainWrapper>
+              {errorSummary && errorMessages.length > 0 && (
+                <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
+              )}
+              {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer') || containerName.toLowerCase().includes('declaration')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
+              <form>
+                <AssignmentCard
+                  getPConnect={getPConnect}
+                  itemKey={itemKey}
+                  actionButtons={actionButtons}
+                  onButtonPress={buttonPress}
+                >
+                  {children}
+                </AssignmentCard>
+              </form>
+              <a
+                href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+                className='govuk-link'
+                rel='noreferrer noopener'
+                target='_blank'
               >
-                {children}
-              </AssignmentCard>
-            </form>
-            <a
-              href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-              className='govuk-link'
-              rel='noreferrer noopener'
-              target='_blank'
-            >
-              {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
-            </a><br/><br/>
-          </MainWrapper>
+                {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
+              </a><br/><br/>
+            </MainWrapper>
+          )}
+          {serviceShut && <ShutterServicePage />}
       </div>
     </>
   );
