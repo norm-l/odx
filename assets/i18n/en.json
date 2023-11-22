@@ -1,6 +1,6 @@
 {
   "CLAIM_CHILD_BENEFIT": "Claim Child Benefit",
-  "BEGIN_NEW_CHB_CLAIM" : "Begin new Child Benefit claim",
+  "BEGIN_NEW_CHB_CLAIM" : "Begin Child Benefit claim",
   "USE_THIS_FORM_TO_CLAIM": "Use this form to claim Child Benefit if you or your partner are responsible for a child who is under 16, or under 20 if they are in ",
   "USE_THIS_FORM_TO_CLAIM_CONTD": "approved education or training",
   "WHO_CAN_APPLY": "Who can apply",
@@ -258,6 +258,9 @@
   "NOTIFICATION_BANNER_CONTENT": "There must be at least one child on the claim. Please amend this child's details instead.",
   "SERVICE_NOT_AVAILABLE": "Sorry, there is a problem with the service",
   "COME_BACK_LATER": "You can try again or come back later",
-  "RETURN_TO_THE_HOMEPAGE": "Return to the homepage"
+  "RETURN_TO_THE_HOMEPAGE": "Return to the homepage",
+  "SHUTTER_SERVICE_UNAVAILABLE": "Sorry, the service is unavailable",
+  "SHUTTER_USE_SERVICE_LATER_MESSAGE": "You will be able to use the service later."
+ 
 
 }
