@@ -67,7 +67,9 @@ export default function Assignment(props) {
   const isChBServiceShut = PCore.getStoreValue(".IsChBServiceShut","caseInfo.content", context);
   // Check if the store is shuttered before showing any further questions 
   useEffect(()=> {
-    setServiceShut(isChBServiceShut);
+    if (isChBServiceShut) {
+      setServiceShut(true);
+    }
   },[isChBServiceShut])
 
   useEffect(() => {
@@ -275,8 +277,9 @@ export default function Assignment(props) {
 
   return (
     <>
+    {!serviceShut && 
       <div id='Assignment'>
-        {!serviceShut && arSecondaryButtons?.map(sButton =>
+        {arSecondaryButtons?.map(sButton =>
           sButton['name'] === 'Previous' ? (
             <Button
               variant='backlink'
@@ -289,34 +292,33 @@ export default function Assignment(props) {
             ></Button>
           ) : null
           )}
-          {!serviceShut && (
-            <MainWrapper>
-              {errorSummary && errorMessages.length > 0 && (
-                <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
-              )}
-              {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer') || containerName.toLowerCase().includes('declaration')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
-              <form>
-                <AssignmentCard
-                  getPConnect={getPConnect}
-                  itemKey={itemKey}
-                  actionButtons={actionButtons}
-                  onButtonPress={buttonPress}
-                >
-                  {children}
-                </AssignmentCard>
-              </form>
-              <a
-                href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-                className='govuk-link'
-                rel='noreferrer noopener'
-                target='_blank'
+          <MainWrapper>
+            {errorSummary && errorMessages.length > 0 && (
+              <ErrorSummary errors={errorMessages.map(item => localizedVal(item.message, localeCategory, localeReference))} />
+            )}
+            {(!isOnlyFieldDetails.isOnlyField || containerName.toLowerCase().includes('check your answer') || containerName.toLowerCase().includes('declaration')) && <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>}
+            <form>
+              <AssignmentCard
+                getPConnect={getPConnect}
+                itemKey={itemKey}
+                actionButtons={actionButtons}
+                onButtonPress={buttonPress}
               >
-                {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
-              </a><br/><br/>
-            </MainWrapper>
-          )}
-          {serviceShut && <ShutterServicePage />}
+                {children}
+              </AssignmentCard>
+            </form>
+            <a
+              href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+              className='govuk-link'
+              rel='noreferrer noopener'
+              target='_blank'
+            >
+              {t("ASK_HMRC_ONLINE")} {t("OPENS_IN_NEW_TAB")}
+            </a><br/><br/>
+          </MainWrapper>
       </div>
+    }
+    {serviceShut && <ShutterServicePage />}
     </>
   );
 }
