@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 // import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import type { PConnFieldProps } from '@pega/react-sdk-components/lib/types/PConnProps'
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
+import FormGroup from '../../../BaseComponents/FormGroup/FormGroup';
+import useIsOnlyField  from '../../../helpers/hooks/QuestionDisplayHooks';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 interface RichTextProps extends PConnFieldProps {
   // If any, enter additional props that only exist on TextArea here
@@ -13,11 +16,18 @@ interface RichTextProps extends PConnFieldProps {
 export default function RichText(props: RichTextProps) {
   registerNonEditableField(true);
 
-  const { value, name } = props;
- 
+  const { value, name, label } = props; 
 
   let { readOnly, required, disabled } = props;
   [readOnly, required, disabled] = [readOnly, required, disabled].map((prop) => prop === true || (typeof prop === 'string' && prop === 'true'));
+
+  const {isOnlyField, overrideLabel} = useIsOnlyField();
+
+  // Do not display RichText instruction text on Summary pages
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
+  if(hasBeenWrapped){
+    return null;
+  }
 
   /* if (displayMode === 'LABELS_LEFT') {
     return <FieldValueList name={hideLabel ? '' : label} value={value} />;
@@ -32,9 +42,12 @@ export default function RichText(props: RichTextProps) {
   if (readOnly) {
     // Rich Text read-only component    
     richTextComponent = (
-      <div id={`${name}-hint`} className="govuk-hint">      
-        <InstructionComp htmlString={value}></InstructionComp>
-      </div>
+      <FormGroup labelIsHeading={isOnlyField} label={label} errorText={null} hintText={value} name={name}  extraLabelClasses="govuk-label--m" >       
+        {/* <div id={`${name}-hint`} className="govuk-hint">      
+          <InstructionComp htmlString={value}></InstructionComp>
+    </div> */}
+      
+      </FormGroup>
     );
   } else {
     // Rich Text editable component
@@ -65,9 +78,12 @@ export default function RichText(props: RichTextProps) {
 
     // Component returns value of field, (parsed if it is html) as readonly block - as no requirement for editable RichText as of US-9579
     richTextComponent = (        
-      <div id={`${name}-hint`} className="govuk-hint">      
-        <InstructionComp htmlString={value}></InstructionComp>
-      </div>        
+      <FormGroup labelIsHeading={isOnlyField} label={label} errorText={null} hintText={value} name={name} extraLabelClasses="govuk-label--m" >       
+        {/* <div id={`${name}-hint`} className="govuk-hint">      
+          <InstructionComp htmlString={value}></InstructionComp>
+    </div> */}
+      
+      </FormGroup>      
     );
     // TODO - Add implementation of Editable Rich Text component (Unsure whether this would simply be text area, or full richtext)
     /* richTextComponent = (        
