@@ -9,7 +9,9 @@ const DefaultFormContext = createContext({
   OverrideLabelValue: '',
 
   // Holds DefaultForm level instruction text for use in field set instruction blocks
-  instructionText: ''
+  instructionText: '',
+  
+  displayOrder: ''
 });
 
 const ReadOnlyDefaultFormContext = createContext({

@@ -12,7 +12,7 @@ export default function DefaultForm(props) {
 
   const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
   const {DFName} = useContext(DefaultFormContext);
-  const {instructionText: passedThroughInstructionText, displayAsSingleQuestion} = useContext(DefaultFormContext);
+  const {instructionText: passedThroughInstructionText, displayAsSingleQuestion, displayOrder} = useContext(DefaultFormContext);
 
   const [declaration, setDeclaration] = useState({text1: '', warning1: ''});  
   let  containerName = null;
@@ -155,14 +155,14 @@ export default function DefaultForm(props) {
     if (readOnly)
       extraProps = { ...extraProps, showLabel: false, labelHiddenForReadOnly: kid.showLabel };
 
-    let displayOrder = '';
-    if (props.additionalProps.displayOrder) {
-      displayOrder = `${props.additionalProps.displayOrder}-${idx}`;
+    let childDisplayOrder = '';
+    if (displayOrder) {
+      childDisplayOrder = `${displayOrder}-${idx+1}`;
     } else {
-      displayOrder = `${idx}`;
+      childDisplayOrder = `${idx+1}`;
     }
-    childPConnect.registerAdditionalProps({ displayOrder });
-    childPConnect.setInheritedProp("displayOrder", displayOrder);
+    childPConnect.registerAdditionalProps({ childDisplayOrder });
+    childPConnect.setInheritedProp("displayOrder", childDisplayOrder);
     const formattedContext = props.context ? props.context?.split('.').pop() : '';
     const formattedPropertyName =
       childPConnect.getStateProps().value && childPConnect.getStateProps().value.split('.').pop();
@@ -247,7 +247,8 @@ export default function DefaultForm(props) {
           displayAsSingleQuestion: displayAsSingleQuestion || configAlternateDesignSystem?.hidePageLabel,
           DFName: props.localeReference,
           OverrideLabelValue: containerName, 
-          instructionText: (instructionExists && !singleQuestionPage) ? null : getFormattedInstructionText() as string
+          instructionText: (instructionExists && !singleQuestionPage) ? null : getFormattedInstructionText() as string,
+          displayOrder: displayOrder ? `${displayOrder}-0` : '0'
         }}>
 
         {instructionExists && !singleQuestionPage && (
