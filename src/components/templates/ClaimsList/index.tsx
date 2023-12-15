@@ -4,14 +4,14 @@ import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from "prop-types";
 import { scrollToTop, GBdate} from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
+import WarningText from '../../BaseComponents/WarningText/WarningText';
 
 declare const PCore: any;
 
 export default function ClaimsList(props){
-  const { thePConn, data, title, rowClickAction, buttonContent} = props;
+  const { thePConn, data, title, rowClickAction, buttonContent,  caseId} = props;
   const { t } = useTranslation();
   const [claims, setClaims] = useState([]);
-
   const statusMapping = (status) => {
     switch(status){
       case 'Open-InProgress':
@@ -72,6 +72,7 @@ export default function ClaimsList(props){
       const claimItem = {
         claimRef : item.pyID,
         dateCreated : DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
+       dateUpdated: item.pxUpdateDateTime,
         children : [],
         actionButton :
           (<Button
@@ -114,13 +115,20 @@ export default function ClaimsList(props){
 
   return (
     <>
+    
       {claims.length !== 0 && <h2 className='govuk-heading-m'>{title}</h2>}
+    
       {claims.length > 1 && <h3 className='govuk-heading-s'>{t('CHILDREN_ADDED')}</h3>}
       {claims.map(claimItem =>
-        <dl className='govuk-summary-list' key={claimItem.claimRef}>
+    
+        <div className='govuk-summary-list inline-block-warning' key={claimItem.claimRef}>
+         {!caseId?.includes(claimItem.claimRef) &&( claimItem?.status?.text === 'In Progress' || claimItem?.status?.text === 'AR WAITH')  && <WarningText date ={claimItem?.dateUpdated}/>}
           <div className='govuk-summary-list__row'>
             <dt className='govuk-summary-list__key'>
+          
               {claimItem.children.map(child =>
+              
+           
                 <p key={child.firstName}>
                   {child.firstName && child.lastName && `${child.firstName} ${child.lastName}`}
                   {child.dob && <><br/><span className='govuk-!-font-weight-regular'>{`${t('DATE_OF_BIRTH')} ${child.dob}`}</span><br/></>}
@@ -133,8 +141,8 @@ export default function ClaimsList(props){
               <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>{claimItem.status.text}</strong>            
             </dd>
           </div>
-        </dl>
-      )}
+        </div>
+  )}
     </>
   )
 }

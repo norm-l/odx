@@ -30,6 +30,7 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 
+
 declare const myLoadMashup: any;
 
 /* Time out modal functionality */
@@ -39,22 +40,23 @@ let signoutTimeout = null;
 let milisecondsTilSignout = 115 * 1000;
 let milisecondsTilWarning = 780 * 1000;
 
+// Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
+function initTimeout(setShowTimeoutModal){
+  clearTimeout(applicationTimeout);  
+  clearTimeout(signoutTimeout); 
 
-// Starts the timeout for warning, after set time shows the modal and starts signout timer
-function initTimeout(setShowTimeoutModal){  
   applicationTimeout = setTimeout(
     () => {
       setShowTimeoutModal(true)
       signoutTimeout = setTimeout(() => { logout() }, milisecondsTilSignout);
     },
     milisecondsTilWarning
-  ); 
+  );
 }
 
-// Clears exisiting timeouts, sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true){
-  clearTimeout(applicationTimeout);  
-  clearTimeout(signoutTimeout);  
+// Sends 'ping' to pega to keep session alive and then initiates the timout
+function staySignedIn(setShowTimeoutModal, refreshSignin = true){ 
+
   if(refreshSignin){
     PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
   }
@@ -78,6 +80,7 @@ export default function ChildBenefitsClaim() {
   const [shutterServicePage,setShutterServicePage] = useState(false);
   const [authType, setAuthType] = useState('gg'); 
   const [caseId, setCaseId] = useState('');
+  const [showPortalBanner, setShowPortalBanner] = useState(false);
   const history = useHistory();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = "ChB"
@@ -119,13 +122,9 @@ export default function ChildBenefitsClaim() {
   const { t } = useTranslation();
   let operatorId = '';
   
-
-  
   useEffect(()=> {
     setPageTitle();
   }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen]);
-
-
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
@@ -161,12 +160,15 @@ export default function ChildBenefitsClaim() {
     PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
     
   }
-  function assignmentFinished() {
-    displayResolutionScreen();    
+  function getClaimsCaseID(){
     const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
     const caseID = PCore.getStoreValue('.ID', 'caseInfo' , context);
     setCaseId(caseID);
+  }
+  function assignmentFinished() { 
+    getClaimsCaseID();
     PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
+    displayResolutionScreen();
   }
 
    function closeContainer(){
@@ -189,7 +191,9 @@ export default function ChildBenefitsClaim() {
   };
 
   function cancelAssignment() {
+    
     fetchInProgressClaimsData();
+    getClaimsCaseID();
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
   }
@@ -227,6 +231,8 @@ export default function ChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
       () => {
         cancelAssignment();
+        setShowPortalBanner(true);
+
       },
       'cancelAssignment'
     );
@@ -258,7 +264,8 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
       () => {
-        cancelAssignment()
+        cancelAssignment();
+        setShowPortalBanner(true);
       },
       'savedCase'
     );
@@ -387,7 +394,7 @@ export default function ChildBenefitsClaim() {
       // Fetches timeout length config
       getSdkConfig().then( sdkConfig => {  
         if(sdkConfig.timeoutConfig.secondsTilWarning) milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
-        if(sdkConfig.timeoutConfig.secondsTimSignout) milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000
+        if(sdkConfig.timeoutConfig.secondsTilLogout) milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000
       }).finally(() => {        
         // Subscribe to any store change to reset timeout counter
         PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
@@ -577,7 +584,8 @@ export default function ChildBenefitsClaim() {
 
         {showStartPage && <StartPage onStart={startNow} onBack={displayUserPortal} />}
 
-        {showUserPortal && <UserPortal beginClaim={beginClaim}>
+        {showUserPortal && <UserPortal beginClaim={beginClaim}  showPortalBanner={ showPortalBanner}>
+       
 
           {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
             <ClaimsList
@@ -586,6 +594,7 @@ export default function ChildBenefitsClaim() {
               title={t("CLAIMS_IN_PROGRESS")}
               rowClickAction="OpenAssignment"
               buttonContent={t("CONTINUE_CLAIM")}
+              caseId = {caseId}
           />)}
 
           {!loadingsubmittedClaims && submittedClaims.length !== 0 && (

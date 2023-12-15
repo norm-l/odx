@@ -26,9 +26,8 @@ export default function Assignment(props) {
   const { getPConnect, children, itemKey, isCreateStage } = props;
   const thePConn = getPConnect();
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
-  const [actionButtons, setActionButtons] = useState<any>({});  
+  const [actionButtons, setActionButtons] = useState<any>({});
   const { t } = useTranslation();
-  
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard'] ? SdkComponentMap.getLocalComponentMap()['AssignmentCard'] : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
@@ -45,7 +44,7 @@ export default function Assignment(props) {
   const cancelCreateStageAssignment = actionsAPI.cancelCreateStageAssignment.bind(actionsAPI);
   // const showPage = actionsAPI.showPage.bind(actionsAPI);
 
-  
+
   const isOnlyFieldDetails  = useIsOnlyField(null, children);// .isOnlyField;
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
@@ -53,9 +52,15 @@ export default function Assignment(props) {
   const _containerName =  getPConnect().getContainerName();
   const context = getPConnect().getContextName();
   const containerID = PCore.getContainerUtils().getContainerAccessOrder(`${context}/${_containerName}`).at(-1)
+
   useEffect(() => {
-    setPageTitle(errorMessages.length > 0);
-  },[children, errorMessages])
+     const updateErrorTimeOut = setTimeout(()=>{ 
+        setPageTitle(errorMessages.length > 0);  
+     }, 500);
+     return ()=>{
+      clearTimeout(updateErrorTimeOut);
+     }
+  },[errorMessages])
 
   let containerName;
   if(thePConn.getDataObject().caseInfo?.assignments && thePConn.getDataObject().caseInfo?.assignments.length > 0){
@@ -133,7 +138,6 @@ export default function Assignment(props) {
   // has -day appended), a fieldId stateprop will be defined and this will be used instead.
   useEffect(() => {
     checkErrorMessages();
-    //
   }, [children])
 
   useEffect(() => {
@@ -251,9 +255,9 @@ export default function Assignment(props) {
             })
             .catch(() => {
               scrollToTop();
-              showErrorSummary();
+              showErrorSummary();             
             });
-
+          
           break;
         }
 

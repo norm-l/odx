@@ -3,7 +3,6 @@ import FieldSet from '../../../BaseComponents/FormGroup/FieldSet';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
-import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 
 declare const PCore : any;
 
@@ -57,7 +56,8 @@ export default function Group(props) {
       const nonExclusivePropNames = [];
       const unCheckExclusive = () => {
         if(exclusiveOptionPropName){
-          handleEvent(actionsApi, 'changeNblur', exclusiveOptionPropName, '');
+          const defaultValue: any = false;
+          handleEvent(actionsApi, 'changeNblur', exclusiveOptionPropName, defaultValue);
           setStateChanged(true);
         }
       };
@@ -65,7 +65,8 @@ export default function Group(props) {
       const unCheckNonExlcusives = () => { 
         if(exclusiveOptionPropName && nonExclusivePropNames){
           nonExclusivePropNames.forEach((propName) => {
-            handleEvent(actionsApi, 'changeNblur', propName, '');
+            const defaultValue: any = false;
+            handleEvent(actionsApi, 'changeNblur', propName, defaultValue);
           })           
           setStateChanged(true);
         }
@@ -122,9 +123,9 @@ export default function Group(props) {
     }
 
     return (<>
-      {heading && <div id='heading' className='govuk-hint'>{heading}</div>}
-      {instructions && instructions !== 'none' && <div id='instructions' className='govuk-body'><InstructionComp htmlString={instructions} /></div>}
+    <FieldSet hintText={instructions} label={heading} legendIsHeading={isOnlyField} errorText={errors.join(' ').trim() !== '' ? errors.join(' ').trim() : null} {...props}>
       {children}
+      </FieldSet>
     </>);
   }
   return null;

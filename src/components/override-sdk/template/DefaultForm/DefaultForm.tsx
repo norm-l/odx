@@ -12,7 +12,7 @@ export default function DefaultForm(props) {
 
   const {hasBeenWrapped} = useContext(ReadOnlyDefaultFormContext);
   const {DFName} = useContext(DefaultFormContext);
-  const {instructionText: passedThroughInstructionText} = useContext(DefaultFormContext);
+  const {instructionText: passedThroughInstructionText, displayAsSingleQuestion} = useContext(DefaultFormContext);
 
   const [declaration, setDeclaration] = useState({text1: '', warning1: ''});  
   let  containerName = null;
@@ -55,7 +55,7 @@ export default function DefaultForm(props) {
   const isOnlyFieldDetails = useIsOnlyField();
 
   useEffect(() => {
-    if(configAlternateDesignSystem?.hidePageLabel){
+    if(displayAsSingleQuestion || configAlternateDesignSystem?.hidePageLabel){
       PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
         "reference": "displayAsSingleQuestion",
         "value": true,
@@ -67,7 +67,7 @@ export default function DefaultForm(props) {
       setSingleQuestionPage(isOnlyFieldDetails.isOnlyField);
     }
     return (() => {
-      if(configAlternateDesignSystem?.hidePageLabel){
+      if(displayAsSingleQuestion || configAlternateDesignSystem?.hidePageLabel){
       PCore.getStore().dispatch({type:'SET_PROPERTY', payload:{
         "reference": "displayAsSingleQuestion",
         "value": false,
@@ -94,12 +94,30 @@ export default function DefaultForm(props) {
 
   useEffect(()=>{
     if(containerName === 'Declaration'){
+      // Get current context
       const context = PCore.getContainerUtils().getActiveContainerItemName(`${PCore.getConstants().APP.APP}/primary`);
-      const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', context);
-      const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', context);
-      setDeclaration({text1 : declarationText1, warning1: declarationWarning1});
+      // Get is documentation required flag value
+      const isDocumentationRequired = PCore.getStoreValue('.IsDocumentationRequired', 'context_data.caseInfo.content.Claim.summary_of_when_conditions__', context);
+
+      if (isDocumentationRequired) {
+        const declarationText1 = PCore.getStoreValue('.DeclarationText1', 'caseInfo.content.Claim', context);
+        const declarationWarning1 = PCore.getStoreValue('.DeclarationWarning1', 'caseInfo.content.Claim', context);
+
+        setDeclaration({text1 : declarationText1, warning1: declarationWarning1});
+      }
     }
   },[])
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Perform actions before the component unloads
+      PCore.getContainerUtils().closeContainerItem(PCore.getContainerUtils().getActiveContainerItemContext('app/primary'), {skipDirtyCheck:true});
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const getFormattedInstructionText = () => {
     if(!instructionExists){
@@ -226,7 +244,7 @@ export default function DefaultForm(props) {
       childrenToWrap = {
       <DefaultFormContext.Provider value={
         { 
-          displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel,
+          displayAsSingleQuestion: displayAsSingleQuestion || configAlternateDesignSystem?.hidePageLabel,
           DFName: props.localeReference,
           OverrideLabelValue: containerName, 
           instructionText: (instructionExists && !singleQuestionPage) ? null : getFormattedInstructionText() as string

@@ -25,7 +25,6 @@ export default function InstructionComp({htmlString}) {
     return htmlString;
   }
 
-  // Configure DOMPurify to retain target=_blank attributes on html, adding noreferrer and noopener rel attributes for added safety
   const appendSecureRelValue = (rel) => {
     const attributes = new Set(rel ? rel.toLowerCase().split(' ') : []);
   
@@ -34,6 +33,7 @@ export default function InstructionComp({htmlString}) {
   
     return Array.from(attributes).join(' ');
   };
+  
   const TEMPORARY_ATTRIBUTE = 'data-temp-href-target';
 
   DOMPurify.addHook('beforeSanitizeAttributes', (node) => {
