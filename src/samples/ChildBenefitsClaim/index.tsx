@@ -602,7 +602,7 @@ export default function ChildBenefitsClaim() {
               data={submittedClaims}
               title=  {t("SUBMITTED_CLAIMS")}
               rowClickAction="OpenCase"
-              buttonContent={t("VIEW_CLAIM")}
+              buttonContent={null}
           />)}
 
       </UserPortal>}
