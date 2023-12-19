@@ -75,7 +75,7 @@ export default function ClaimsList(props){
        dateUpdated: item.pxUpdateDateTime,
         children : [],
         actionButton :
-          (<Button
+          (buttonContent && <Button
               attributes={{className:'govuk-!-margin-top-4 govuk-!-margin-bottom-4'}}
               variant='secondary'
               onClick={() => {
