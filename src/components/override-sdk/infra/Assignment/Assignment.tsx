@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import {
   getServiceShutteredStatus,
   scrollToTop,
-  shouldRemoveFormTagForReadOnly
+  shouldRemoveFormTagForReadOnly,
+  shouldRequireFieldset
 } from '../../../helpers/utils';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import {
@@ -19,6 +20,7 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
+import { container } from 'webpack';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -306,6 +308,18 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
+  function renderFields() {
+    return (
+      <>
+        {(!isOnlyFieldDetails.isOnlyField ||
+          containerName.toLowerCase().includes('check your answer') ||
+          containerName.toLowerCase().includes('declaration')) &&
+          wrapLegandSet()}
+        {renderAssignmentCard()}
+      </>
+    );
+  }
+
   function renderAssignmentCard() {
     return (
       <ErrorMsgContext.Provider
@@ -323,6 +337,22 @@ export default function Assignment(props) {
           {children}
         </AssignmentCard>
       </ErrorMsgContext.Provider>
+    );
+  }
+  function wrapLegandSet() {
+    return shouldRequireFieldset(containerName) ? (
+      <legend className='govuk-fieldset__legend govuk-fieldset__legend--l'>
+        <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>
+      </legend>
+    ) : (
+      <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>
+    );
+  }
+  function wrapFieldset() {
+    return shouldRequireFieldset(containerName) ? (
+      <fieldset className='govuk-fieldset'>{renderFields()}</fieldset>
+    ) : (
+      renderFields()
     );
   }
 
@@ -352,14 +382,7 @@ export default function Assignment(props) {
                 )}
               />
             )}
-            {(!isOnlyFieldDetails.isOnlyField ||
-              containerName.toLowerCase().includes('check your answer') ||
-              containerName.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', localeReference)}
-              </h1>
-            )}
-            {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
+            {shouldRemoveFormTag ? wrapFieldset() : <form>{wrapFieldset()}</form>}
             <a
               href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
               className='govuk-link'

@@ -57,3 +57,12 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     return false;
   }
 };
+export const shouldRequireFieldset = (containerName: string) => {
+  const arrContainerNames = [
+    'Find address',
+    'Tell us your last address',
+    'What is the name of the child you want to claim for?',
+    'What is the name of the person the child lived with?'
+  ];
+  return arrContainerNames.includes(containerName);
+};
