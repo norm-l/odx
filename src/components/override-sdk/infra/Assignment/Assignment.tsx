@@ -310,6 +310,7 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
+  // Added a beforeunload event to save an existing claim if the page is refreshed
   useEffect(() => {
     const handleBeforeUnload = () => {
       buttonPress('saveAssignment', 'secondary');
