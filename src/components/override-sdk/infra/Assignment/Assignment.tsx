@@ -72,7 +72,7 @@ export default function Assignment(props) {
   useEffect(() => {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
-  
+
   useEffect(() => {
     const updateErrorTimeOut = setTimeout(() => {
       setPageTitle(errorMessages.length > 0);
@@ -81,6 +81,17 @@ export default function Assignment(props) {
       clearTimeout(updateErrorTimeOut);
     };
   }, [errorMessages]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      buttonPress('saveAssignment', 'secondary');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   let containerName;
   if (
