@@ -82,17 +82,6 @@ export default function Assignment(props) {
     };
   }, [errorMessages]);
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      buttonPress('saveAssignment', 'secondary');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
   let containerName;
   if (
     thePConn.getDataObject().caseInfo?.assignments &&
@@ -320,6 +309,17 @@ export default function Assignment(props) {
       setArSecondaryButtons(actionButtons.secondary);
     }
   }, [actionButtons]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      buttonPress('saveAssignment', 'secondary');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   function renderAssignmentCard() {
     return (
