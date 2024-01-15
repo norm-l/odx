@@ -142,6 +142,19 @@ export default function DefaultForm(props) {
         PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
         { skipDirtyCheck: true }
       );
+
+      // Save's the claim if the page is refreshed.
+      const saveAssignmentPromise = getPConnect().getActionsApi().saveAssignment('app/primary');
+
+      saveAssignmentPromise
+        .then(() => {
+          console.log('Claim saved'); // eslint-disable-line
+        })
+        .catch(error => {
+          // Save assignment error handling
+          // eslint-disable-next-line no-console
+          console.error('Claim not saved', error);
+        });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
