@@ -19,7 +19,7 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
-
+import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
 import ProgressPage from './ProgressPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -80,6 +80,7 @@ export default function UnAuthChildBenefitsClaim() {
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [authType, setAuthType] = useState('gg');
+  const [caseId, setCaseId] = useState('');
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const history = useHistory();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
@@ -98,16 +99,25 @@ export default function UnAuthChildBenefitsClaim() {
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
 
-  function resetAppDisplay() {
+  function resetAppDisplay(typ) {
+    console.log('***** I am at resetAppDisplay due to ', typ, ' *****');
     setShowStartPage(false);
     setShowResolutionScreen(false);
     setServiceNotAvailable(false);
     setShowPega(false);
   }
 
+  function getClaimsCaseID() {
+    const context = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const caseID = PCore.getStoreValue('.ID', 'caseInfo', context);
+    setCaseId(caseID);
+  }
+
   function createCase() {
     // displayPega();
-    resetAppDisplay();
+    resetAppDisplay('create case');
     setShowPega(true);
     PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
   }
@@ -121,29 +131,32 @@ export default function UnAuthChildBenefitsClaim() {
   }
 
   function closeContainer() {
+    getClaimsCaseID();
     PCore.getContainerUtils().closeContainerItem(
       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
       { skipDirtyCheck: true }
     );
+    console.log('**** I am close container ****');
   }
 
   function returnToPortalPage() {
     staySignedIn(setShowTimeoutModal);
-    resetAppDisplay();
+    resetAppDisplay('return to portal page');
     setShowStartPage(true);
     closeContainer();
   }
 
   function assignmentFinished() {
+    console.log('***** I am at assignment finished *****');
     closeContainer();
-    resetAppDisplay();
+    resetAppDisplay('assignment finished');
     setShowResolutionScreen(true);
   }
 
   function cancelAssignment() {
     closeContainer();
     // displayUserPortal();
-    resetAppDisplay();
+    resetAppDisplay('cancel assignment');
     setShowStartPage(true);
   }
 
@@ -158,7 +171,8 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        resetAppDisplay();
+        setShowStartPage(false);
+        setShowPega(false);
         const containername = PCore.getContainerUtils().getActiveContainerItemName(
           `${PCore.getConstants().APP.APP}/primary`
         );
@@ -194,8 +208,9 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
       () => {
-        resetAppDisplay();
+        resetAppDisplay('assginment opened subscibe');
         setShowPega(true);
+        console.log('***** I am at continue assignment assignment opened *****');
       },
       'continueAssignment'
     );
@@ -204,8 +219,9 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
       () => {
         // displayPega();
-        resetAppDisplay();
+        resetAppDisplay('case created subscribe');
         setShowPega(true);
+        console.log('***** I am at continue assignment case created *****');
       },
       'continueCase'
     );
@@ -215,6 +231,7 @@ export default function UnAuthChildBenefitsClaim() {
       () => {
         cancelAssignment();
         setShowPortalBanner(true);
+        console.log('***** I am at continue assignment case saved *****');
       },
       'savedCase'
     );
@@ -223,8 +240,9 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
       () => {
         // displayPega();
-        resetAppDisplay();
+        resetAppDisplay('case opened subscibe');
         setShowPega(true);
+        console.log('***** I am at continue assignment case opened *****');
       },
       'continueCase'
     );
@@ -370,11 +388,11 @@ export default function UnAuthChildBenefitsClaim() {
       .then(resp => {
         const isShuttered = resp.Shuttered;
         if (isShuttered) {
-          resetAppDisplay();
+          resetAppDisplay('is shuttered true');
           setShutterServicePage(true);
         } else {
           setShutterServicePage(false);
-          resetAppDisplay();
+          resetAppDisplay('is shuttered false');
           setShowStartPage(true);
         }
       })
@@ -499,6 +517,7 @@ export default function UnAuthChildBenefitsClaim() {
         {showStartPage && (
           <ProgressPage onStart={startNow} showPortalBanner={showPortalBanner}></ProgressPage>
         )}
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
       </div>
 
       <LogoutPopup
