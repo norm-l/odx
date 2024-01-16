@@ -8,6 +8,7 @@ import useIsOnlyField, {
 import { DefaultFormContext, ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 import './DefaultForm.css';
+import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
@@ -135,32 +136,27 @@ export default function DefaultForm(props) {
     }
   }, []);
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Perform actions before the component unloads
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+  useBeforeUnload(() => {
+    // Perform actions before the component unloads
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  });
 
-      // Save's the claim if the page is refreshed.
-      const saveAssignmentPromise = getPConnect().getActionsApi().saveAssignment('app/primary');
-
-      saveAssignmentPromise
-        .then(() => {
-          console.log('claim saved'); // eslint-disable-line
-        })
-        .catch(error => {
-          // Save assignment error handling
-          // eslint-disable-next-line no-console
-          console.error('claim not saved', error);
-        });
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     // Perform actions before the component unloads
+  //     PCore.getContainerUtils().closeContainerItem(
+  //       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+  //       { skipDirtyCheck: true }
+  //     );
+  //   };
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
 
   const getFormattedInstructionText = () => {
     if (!instructionExists) {

@@ -19,6 +19,7 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
+import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -303,12 +304,35 @@ export default function Assignment(props) {
   }
   function _onButtonPress(sAction: string, sButtonType: string) {
     buttonPress(sAction, sButtonType);
+    console.log(sAction, sButtonType);
   }
   useEffect(() => {
     if (actionButtons) {
       setArSecondaryButtons(actionButtons.secondary);
     }
   }, [actionButtons]);
+
+  useBeforeUnload(() => {
+    _onButtonPress('saveAssignment', 'secondary');
+  });
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = e => {
+  //     _onButtonPress('saveAssignment', 'secondary');
+
+  //     // PCore.getContainerUtils().closeContainerItem(
+  //     //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+  //     //   { skipDirtyCheck: true }
+  //     // );
+
+  //     e.preventDefault();
+  //   };
+
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
 
   function renderAssignmentCard() {
     return (
