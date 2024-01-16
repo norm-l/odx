@@ -148,12 +148,12 @@ export default function DefaultForm(props) {
 
       saveAssignmentPromise
         .then(() => {
-          console.log('Claim saved'); // eslint-disable-line
+          console.log('claim saved'); // eslint-disable-line
         })
         .catch(error => {
           // Save assignment error handling
           // eslint-disable-next-line no-console
-          console.error('Claim not saved', error);
+          console.error('claim not saved', error);
         });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
