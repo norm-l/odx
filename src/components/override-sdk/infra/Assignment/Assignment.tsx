@@ -19,7 +19,7 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
-import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
+// import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -220,6 +220,8 @@ export default function Assignment(props) {
           const assignmentID = thePConn.getCaseInfo().getAssignmentID();
           const savePromise = saveAssignment(itemKey);
 
+          console.log(`"buttonPress:" ${sAction}, ${sButtonType}`);
+
           savePromise
             .then(() => {
               const caseType = thePConn
@@ -304,7 +306,7 @@ export default function Assignment(props) {
   }
   function _onButtonPress(sAction: string, sButtonType: string) {
     buttonPress(sAction, sButtonType);
-    console.log(sAction, sButtonType);
+    console.log(`"_onButtonPress:" ${sAction}, ${sButtonType}`);
   }
   useEffect(() => {
     if (actionButtons) {
@@ -312,27 +314,43 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
-  useBeforeUnload(() => {
-    _onButtonPress('saveAssignment', 'secondary');
-  });
+  // useBeforeUnload(e => {
+  //   _onButtonPress('saveAssignment', 'secondary');
+  //   console.log('This fires before the prevent default');
+  //   e.preventDefault();
+  // });
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = e => {
-  //     _onButtonPress('saveAssignment', 'secondary');
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const caseID = thePConn.getCaseInfo().getKey();
+      const assignmentID = thePConn.getCaseInfo().getAssignmentID();
+      const savePromise = saveAssignment(itemKey);
 
-  //     // PCore.getContainerUtils().closeContainerItem(
-  //     //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-  //     //   { skipDirtyCheck: true }
-  //     // );
+      savePromise
+        .then(() => {
+          const caseType = thePConn
+            .getCaseInfo()
+            .c11nEnv.getValue(PCore.getConstants().CASE_INFO.CASE_TYPE_ID);
+          onSaveActionSuccess({ caseType, caseID, assignmentID });
+          scrollToTop();
+          setErrorSummary(false);
+        })
+        .catch(() => {
+          scrollToTop();
+          showErrorSummary();
+        });
 
-  //     e.preventDefault();
-  //   };
+      // PCore.getContainerUtils().closeContainerItem(
+      //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      //   { skipDirtyCheck: true }
+      // );
+    };
 
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   function renderAssignmentCard() {
     return (
