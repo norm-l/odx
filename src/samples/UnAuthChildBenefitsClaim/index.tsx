@@ -20,7 +20,6 @@ import AppFooter from '../../components/AppComponents/AppFooter';
 import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
-import ProgressPage from './ProgressPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
@@ -53,22 +52,22 @@ function initTimeout(setShowTimeoutModal) {
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
-  if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_GetUnauthClaimStatusBySessionID', 'root');
-  }
+function staySignedIn(setShowTimeoutModal) {
+  // if (refreshSignin) {
+  //   PCore.getDataPageUtils().getDataAsync('D_GetUnauthClaimStatusBySessionID', 'root');
+  // }
   setShowTimeoutModal(false);
   initTimeout(setShowTimeoutModal);
 }
 
-function fetchClaimsData() {
-  PCore.getDataPageUtils()
-    .getDataAsync('D_GetUnauthClaimStatusBySessionID', 'root')
-    .then(res => {
-      // eslint-disable-next-line no-console
-      console.log('res: ', res);
-    });
-}
+// function fetchClaimsData() {
+//   PCore.getDataPageUtils()
+//     .getDataAsync('D_GetUnauthClaimStatusBySessionID', 'root')
+//     .then(res => {
+//       // eslint-disable-next-line no-console
+//       console.log('res: ', res);
+//     });
+// }
 
 export default function UnAuthChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -80,23 +79,13 @@ export default function UnAuthChildBenefitsClaim() {
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [authType, setAuthType] = useState('gg');
-  const [showPortalBanner, setShowPortalBanner] = useState(false);
+  //  const [showPortalBanner, setShowPortalBanner] = useState(false);
   const history = useHistory();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'ChB';
   const featureType = 'Service';
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    setPageTitle();
-  }, [showStartPage, bShowPega, bShowResolutionScreen]);
-
-  function doRedirectDone() {
-    history.push('/ua');
-    // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-  }
 
   function resetAppDisplay() {
     setShowStartPage(false);
@@ -105,19 +94,28 @@ export default function UnAuthChildBenefitsClaim() {
     setShowPega(false);
   }
 
-  function createCase() {
-    // displayPega();
-    resetAppDisplay();
-    setShowPega(true);
-    PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
-  }
+  useEffect(() => {
+    setPageTitle();
 
-  function startNow() {
-    // Check if PConn is created, and create case if it is
-    if (pConn) {
-      createCase();
+    // Move the logic from startNow into useEffect
+    function startNow() {
+      // Check if PConn is created, and create case if it is
+      if (pConn) {
+        // displayPega();
+        resetAppDisplay();
+        setShowPega(true);
+        PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
+      }
+      setShowStartPage(false);
     }
-    setShowStartPage(false);
+
+    startNow();
+  }, [showStartPage, bShowPega, bShowResolutionScreen]);
+
+  function doRedirectDone() {
+    history.push('/ua');
+    // appName and mainRedirect params have to be same as earlier invocation
+    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
 
   function closeContainer() {
@@ -178,7 +176,7 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
       () => {
         cancelAssignment();
-        setShowPortalBanner(true);
+        //  setShowPortalBanner(true);
       },
       'cancelAssignment'
     );
@@ -214,7 +212,7 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
       () => {
         cancelAssignment();
-        setShowPortalBanner(true);
+        //  setShowPortalBanner(true);
       },
       'savedCase'
     );
@@ -324,9 +322,9 @@ export default function UnAuthChildBenefitsClaim() {
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+          //  PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
           initTimeout(setShowTimeoutModal);
-          fetchClaimsData();
+          //  fetchClaimsData();
         });
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -495,10 +493,6 @@ export default function UnAuthChildBenefitsClaim() {
         {shutterServicePage && <ShutterServicePage />}
 
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
-
-        {showStartPage && (
-          <ProgressPage onStart={startNow} showPortalBanner={showPortalBanner}></ProgressPage>
-        )}
       </div>
 
       <LogoutPopup
