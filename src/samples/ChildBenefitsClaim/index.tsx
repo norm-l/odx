@@ -14,7 +14,6 @@ import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/
 import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
-import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
 import StartPage from './StartPage';
@@ -77,7 +76,7 @@ export default function ChildBenefitsClaim() {
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false)
-  const [shutterServicePage,setShutterServicePage] = useState(false);
+  const [shutterServicePage, setShutterServicePage] = useState(false);
   const [authType, setAuthType] = useState('gg'); 
   const [caseId, setCaseId] = useState('');
   const [showPortalBanner, setShowPortalBanner] = useState(false);
@@ -276,23 +275,6 @@ export default function ChildBenefitsClaim() {
       'continueCase'
     );
   }
-  
-
-  useEffect(() => {
-    // Update visibility of UI when bShowPega changes
-    const thePegaPartEl = document.getElementById('pega-part-of-page');
-    const languageToggle = document.getElementById('hmrc-language-toggle');
-
-    if (thePegaPartEl) {
-      if (bShowPega) {
-        thePegaPartEl.style.display = 'block';
-        languageToggle.style.display = 'none';
-      } else {
-        thePegaPartEl.style.display = 'none';
-        languageToggle.style.display = 'block';
-      }
-    }
-  }, [bShowPega]);
 
   useEffect(() => {
     // Update when bShowAppName changes
@@ -561,6 +543,10 @@ export default function ChildBenefitsClaim() {
     staySignedIn(setShowTimeoutModal);
   };
 
+  const checkShuttered = (status: boolean) => {
+    setShutterServicePage(status);
+  }
+
   return (
     <>
       <TimeoutPopup 
@@ -569,21 +555,19 @@ export default function ChildBenefitsClaim() {
         signoutHandler={() => logout()}
       />
       
-      <AppHeader handleSignout={handleSignout} appname={t("CLAIM_CHILD_BENEFIT")} />
+      <AppHeader handleSignout={handleSignout} appname={t("CLAIM_CHILD_BENEFIT")} hasLanguageToggle={true} isPegaApp={bShowPega} />
       <div className="govuk-width-container">
 
-        <LanguageToggle PegaApp="true"/>
-        <div id='pega-part-of-page'>
-          <div id='pega-root'></div>
-        </div>
-        {shutterServicePage && <ShutterServicePage/>}
- 
-        {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage}/>}
+        {shutterServicePage ? <ShutterServicePage/>: <>        
+          <div id='pega-part-of-page'>
+            <div id='pega-root'></div>
+          </div>
+  
+          {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage}/>}
 
-        {showStartPage && <StartPage onStart={startNow} onBack={displayUserPortal} />}
+          {showStartPage && <StartPage onStart={startNow} onBack={displayUserPortal} />}
 
-        {showUserPortal && <UserPortal beginClaim={beginClaim}  showPortalBanner={ showPortalBanner}>
-       
+          {showUserPortal && <UserPortal beginClaim={beginClaim}  showPortalBanner={ showPortalBanner}>
 
           {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
             <ClaimsList
@@ -601,9 +585,12 @@ export default function ChildBenefitsClaim() {
               title=  {t("SUBMITTED_CLAIMS")}
               rowClickAction="OpenCase"
               buttonContent={t("VIEW_CLAIM")}
+              checkShuttered={checkShuttered}
           />)}
 
-      </UserPortal>}
+          </UserPortal>}
+        </>
+      }
 
       {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
 

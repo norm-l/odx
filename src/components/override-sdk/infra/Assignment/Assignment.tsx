@@ -39,7 +39,7 @@ export default function Assignment(props) {
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
   const [actionButtons, setActionButtons] = useState<any>({});
   const { t } = useTranslation();
-  const { serviceShuttered } = useServiceShuttered();
+  const serviceShuttered = useServiceShuttered();
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -71,6 +71,10 @@ export default function Assignment(props) {
     .getContainerAccessOrder(`${context}/${_containerName}`)
     .at(-1);
 
+  useEffect(() => {
+    setServiceShutteredStatus(serviceShuttered);
+  }, [serviceShuttered]);
+  
   useEffect(() => {
     const updateErrorTimeOut = setTimeout(() => {
       setPageTitle(errorMessages.length > 0);
@@ -275,9 +279,9 @@ export default function Assignment(props) {
       // eslint-disable-next-line sonarjs/no-small-switch
       switch (sAction) {
         case 'finishAssignment': {
-          const shutteredStatus = await getServiceShutteredStatus();
-          if (shutteredStatus) {
-            setServiceShutteredStatus(shutteredStatus);
+          const status = await getServiceShutteredStatus();
+          if (status) {
+            setServiceShutteredStatus(status);
           } else {
             const finishPromise = finishAssignment(itemKey);
 
@@ -359,7 +363,9 @@ export default function Assignment(props) {
   const shouldRemoveFormTag = shouldRemoveFormTagForReadOnly(containerName);
   return (
     <>
-      {!serviceShutteredStatus && (
+      {serviceShutteredStatus ? (
+        <ShutterServicePage />
+      ) : (
         <div id='Assignment'>
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' ? (
@@ -396,7 +402,6 @@ export default function Assignment(props) {
           </MainWrapper>
         </div>
       )}
-      {serviceShutteredStatus && <ShutterServicePage />}
     </>
   );
 }
