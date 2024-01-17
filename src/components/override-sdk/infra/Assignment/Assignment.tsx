@@ -20,7 +20,6 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
-import { container } from 'webpack';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -74,7 +73,7 @@ export default function Assignment(props) {
   useEffect(() => {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
-  
+
   useEffect(() => {
     const updateErrorTimeOut = setTimeout(() => {
       setPageTitle(errorMessages.length > 0);
@@ -312,18 +311,6 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
-  function renderFields() {
-    return (
-      <>
-        {(!isOnlyFieldDetails.isOnlyField ||
-          containerName.toLowerCase().includes('check your answer') ||
-          containerName.toLowerCase().includes('declaration')) &&
-          wrapLegandSet()}
-        {renderAssignmentCard()}
-      </>
-    );
-  }
-
   function renderAssignmentCard() {
     return (
       <ErrorMsgContext.Provider
@@ -343,13 +330,24 @@ export default function Assignment(props) {
       </ErrorMsgContext.Provider>
     );
   }
-  function wrapLegandSet() {
+  function wrapLegendSet() {
     return shouldRequireFieldset(containerName) ? (
       <legend className='govuk-fieldset__legend govuk-fieldset__legend--l'>
         <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>
       </legend>
     ) : (
       <h1 className='govuk-heading-l'>{localizedVal(containerName, '', localeReference)}</h1>
+    );
+  }
+  function renderFields() {
+    return (
+      <>
+        {(!isOnlyFieldDetails.isOnlyField ||
+          containerName.toLowerCase().includes('check your answer') ||
+          containerName.toLowerCase().includes('declaration')) &&
+          wrapLegendSet()}
+        {renderAssignmentCard()}
+      </>
     );
   }
   function wrapFieldset() {
