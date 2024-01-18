@@ -18,6 +18,7 @@ import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
+import { UnAuthNINOContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 
 export interface ErrorMessageDetails {
@@ -62,7 +63,8 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
-
+  const [haveNINO, setHaveNINO] = useState(false);
+  const haveNINOVal = { haveNINO, setHaveNINO };
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
   const containerID = PCore.getContainerUtils()
@@ -72,7 +74,7 @@ export default function Assignment(props) {
   useEffect(() => {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
-  
+
   useEffect(() => {
     const updateErrorTimeOut = setTimeout(() => {
       setPageTitle(errorMessages.length > 0);
@@ -312,21 +314,23 @@ export default function Assignment(props) {
 
   function renderAssignmentCard() {
     return (
-      <ErrorMsgContext.Provider
-        value={{
-          errorMsgs: errorMessages
-        }}
-      >
-        <AssignmentCard
-          getPConnect={getPConnect}
-          itemKey={itemKey}
-          actionButtons={actionButtons}
-          onButtonPress={buttonPress}
-          errorMsgs={errorMessages}
+      <UnAuthNINOContext.Provider value={haveNINOVal}>
+        <ErrorMsgContext.Provider
+          value={{
+            errorMsgs: errorMessages
+          }}
         >
-          {children}
-        </AssignmentCard>
-      </ErrorMsgContext.Provider>
+          <AssignmentCard
+            getPConnect={getPConnect}
+            itemKey={itemKey}
+            actionButtons={actionButtons}
+            onButtonPress={buttonPress}
+            errorMsgs={errorMessages}
+          >
+            {children}
+          </AssignmentCard>
+        </ErrorMsgContext.Provider>
+      </UnAuthNINOContext.Provider>
     );
   }
 

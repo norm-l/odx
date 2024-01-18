@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
-
+import { UnAuthNINOContext } from '../../../helpers/HMRCAppContext';
 
 export default function RadioButtons(props) {
   const {
@@ -15,20 +15,20 @@ export default function RadioButtons(props) {
     readOnly,
     value,
     name,
-    
+
     testId,
     fieldMetadata
   } = props;
 
   let label = props.label;
-  const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
-  if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
+  const { isOnlyField, overrideLabel } = useIsOnlyField(props.displayOrder);
+  if (isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
-  const[errorMessage,setErrorMessage] = useState(validatemessage);
-  useEffect(()=>{
-    setErrorMessage(validatemessage)
-  },[validatemessage])
- 
+  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  useEffect(() => {
+    setErrorMessage(validatemessage);
+  }, [validatemessage]);
+
   const thePConn = getPConnect();
   const theConfigProps = thePConn.getConfigProps();
   const className = thePConn.getCaseInfo().getClassName();
@@ -51,26 +51,34 @@ export default function RadioButtons(props) {
   const localeName = localeContext === 'datapage' ? metaData?.datasource?.name : configProperty;
   const localePath = localeContext === 'datapage' ? displayName : localeName;
 
-
-
   let displayValue = null;
-  if(selectedOption && selectedOption.value){
+  if (selectedOption && selectedOption.value) {
     displayValue = selectedOption.value;
   }
 
-  if(readOnly){
-    return <ReadOnlyDisplay label={label} value={thePConn.getLocalizedValue(
-      displayValue,
-      localePath,
-      thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
-      )} />
+  if (readOnly) {
+    return (
+      <ReadOnlyDisplay
+        label={label}
+        value={thePConn.getLocalizedValue(
+          displayValue,
+          localePath,
+          thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+        )}
+      />
+    );
   }
 
-  const extraProps= {testProps:{'data-test-id':testId}};
+  const extraProps = { testProps: { 'data-test-id': testId } };
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
-
+  let { haveNINO, setHaveNINO } = useContext(UnAuthNINOContext);
   const handleChange = event => {
+    if (event.target.id === 'Claimant-IsNINOKnown') {
+      if (event.target.value === 'Yes') {
+        setHaveNINO(true);
+      }
+    }
     handleEvent(actionsApi, 'changeNblur', propName, event.target.value);
   };
 
@@ -81,13 +89,15 @@ export default function RadioButtons(props) {
       label={label}
       onChange={handleChange}
       legendIsHeading={isOnlyField}
-      options={theOptions.map(option => {return {
-        value:option.key,
-        label:thePConn.getLocalizedValue(
-        option.value,
-        localePath,
-        thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
-        )}
+      options={theOptions.map(option => {
+        return {
+          value: option.key,
+          label: thePConn.getLocalizedValue(
+            option.value,
+            localePath,
+            thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+          )
+        };
       })}
       displayInline={theOptions.length === 2}
       hintText={helperText}

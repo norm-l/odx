@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ParsedHTML from '../../components/helpers/formatters/ParsedHtml';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import { UnAuthNINOContext } from '../../components/helpers/HMRCAppContext';
 
 declare const PCore: any;
 
@@ -15,7 +16,7 @@ const ConfirmationPage = ({ caseId }) => {
   const [returnSlipContent, setReturnSlipContent] = useState();
   const [loading, setLoading] = useState(true);
   const serviceShuttered = useServiceShuttered();
-
+  const { haveNINO } = useContext(UnAuthNINOContext);
   const docIDForDocList = 'CR0003';
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
@@ -32,6 +33,7 @@ const ConfirmationPage = ({ caseId }) => {
         CaseID: caseId
       })
       .then(listData => {
+        console.log('*** I am at conf page --- Doc content ', listData.DocumentContentHTML, ' ***');
         if (
           listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
           listData.DocumentContentHTML.includes("data-adopted='true'")
@@ -43,6 +45,7 @@ const ConfirmationPage = ({ caseId }) => {
       })
       .catch(err => {
         // eslint-disable-next-line no-console
+        console.log('*** I am at conf page doc content failed ***');
         console.error(err);
       });
 
@@ -53,10 +56,16 @@ const ConfirmationPage = ({ caseId }) => {
         CaseID: caseId
       })
       .then(pageData => {
+        console.log(
+          '*** I am at conf page --- Doc content return slip ',
+          pageData.DocumentContentHTML,
+          ' ***'
+        );
         setReturnSlipContent(pageData.DocumentContentHTML);
       })
       .catch(err => {
         // eslint-disable-next-line no-console
+        console.log('*** I am at conf page doc return slip failed ***');
         console.error(err);
       });
   }, []);
@@ -76,6 +85,7 @@ const ConfirmationPage = ({ caseId }) => {
       <MainWrapper>
         <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
           <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
+          <h1 className='govuk-panel__title'> {caseId}</h1>
           <div className='govuk-panel__body govuk-!-font-size-27'>
             {t('POST_YOUR_SUPPORTING_DOCUMENTS')}
           </div>
@@ -120,6 +130,7 @@ const ConfirmationPage = ({ caseId }) => {
       <MainWrapper>
         <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
           <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
+          <h1 className='govuk-panel__title'> {caseId}</h1>
         </div>
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
         <p className='govuk-body'> {t('WE_HAVE_SENT_YOUR_APPLICATION')}</p>

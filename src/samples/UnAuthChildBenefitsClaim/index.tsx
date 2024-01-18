@@ -113,6 +113,7 @@ export default function UnAuthChildBenefitsClaim() {
     );
     const caseID = PCore.getStoreValue('.ID', 'caseInfo', context);
     setCaseId(caseID);
+    console.log('*** I am at getClaimsCaseID with id as ', caseID, ' ***');
   }
 
   function createCase() {
@@ -131,7 +132,6 @@ export default function UnAuthChildBenefitsClaim() {
   }
 
   function closeContainer() {
-    getClaimsCaseID();
     PCore.getContainerUtils().closeContainerItem(
       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
       { skipDirtyCheck: true }
@@ -148,6 +148,7 @@ export default function UnAuthChildBenefitsClaim() {
 
   function assignmentFinished() {
     console.log('***** I am at assignment finished *****');
+    getClaimsCaseID();
     closeContainer();
     resetAppDisplay('assignment finished');
     setShowResolutionScreen(true);
@@ -200,7 +201,7 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
       () => {
-        closeContainer();
+        resetAppDisplay('close container subscibe');
       },
       'closeContainer'
     );
