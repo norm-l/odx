@@ -19,7 +19,7 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
-// import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
+import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -314,43 +314,9 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
-  // useBeforeUnload(e => {
-  //   _onButtonPress('saveAssignment', 'secondary');
-  //   console.log('This fires before the prevent default');
-  //   e.preventDefault();
-  // });
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      const caseID = thePConn.getCaseInfo().getKey();
-      const assignmentID = thePConn.getCaseInfo().getAssignmentID();
-      const savePromise = saveAssignment(itemKey);
-
-      savePromise
-        .then(() => {
-          const caseType = thePConn
-            .getCaseInfo()
-            .c11nEnv.getValue(PCore.getConstants().CASE_INFO.CASE_TYPE_ID);
-          onSaveActionSuccess({ caseType, caseID, assignmentID });
-          scrollToTop();
-          setErrorSummary(false);
-        })
-        .catch(() => {
-          scrollToTop();
-          showErrorSummary();
-        });
-
-      // PCore.getContainerUtils().closeContainerItem(
-      //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      //   { skipDirtyCheck: true }
-      // );
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  useBeforeUnload(() => {
+    _onButtonPress('saveAssignment', 'secondary');
+  });
 
   function renderAssignmentCard() {
     return (

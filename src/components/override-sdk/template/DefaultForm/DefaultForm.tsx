@@ -8,7 +8,7 @@ import useIsOnlyField, {
 import { DefaultFormContext, ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 import './DefaultForm.css';
-// import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
+import useBeforeUnload from '../../../helpers/hooks/useBeforeUnload';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
@@ -137,27 +137,13 @@ export default function DefaultForm(props) {
     }
   }, []);
 
-  // useBeforeUnload(() => {
-  //   // Perform actions before the component unloads
-  //   PCore.getContainerUtils().closeContainerItem(
-  //     PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-  //     { skipDirtyCheck: true }
-  //   );
-  // });
-
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     // Perform actions before the component unloads
-  //     PCore.getContainerUtils().closeContainerItem(
-  //       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-  //       { skipDirtyCheck: true }
-  //     );
-  //   };
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
+  useBeforeUnload(() => {
+    // Perform actions before the component unloads
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  });
 
   const getFormattedInstructionText = () => {
     if (!instructionExists) {
