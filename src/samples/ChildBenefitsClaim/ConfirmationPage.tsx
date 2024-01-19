@@ -12,13 +12,17 @@ declare const PCore: any;
 const ConfirmationPage = ({ caseId }) => {
   const { t } = useTranslation();
   const [documentList, setDocumentList] = useState(``);
+  const [documentListUA, setDocumentListUA] = useState(``);
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
   const [loading, setLoading] = useState(true);
   const serviceShuttered = useServiceShuttered();
   const { haveNINO } = useContext(UnAuthNINOContext);
+  const caseIdNum = caseId.replace('HMRC-CHB-WORK ', '');
+  const [caseIdPresent, setCaseIdPresent] = useState(false);
   const docIDForDocList = 'CR0003';
   const docIDForReturnSlip = 'CR0002';
+  const docIDForDocListUA = 'CR0004';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
 
   useEffect(() => {
@@ -42,6 +46,37 @@ const ConfirmationPage = ({ caseId }) => {
         }
         setLoading(false);
         setDocumentList(listData.DocumentContentHTML);
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.log('*** I am at conf page doc content failed ***');
+        console.error(err);
+      });
+
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_DocumentContent', 'root', {
+        DocumentID: docIDForDocListUA,
+        Locale: locale,
+        CaseID: caseId
+      })
+      .then(listData => {
+        console.log(
+          '*** I am at conf page --- Doc content UA',
+          listData.DocumentContentHTML,
+          ' ***'
+        );
+        setDocumentListUA(listData.DocumentContentHTML);
+        if (listData.DocumentContentHTML.includes(caseIdNum)) {
+          setCaseIdPresent(true);
+          console.log('**********', caseIdPresent, '********', caseIdNum);
+        }
+        // if (
+        //   listData.DocumentContentHTML.includes("")
+        // ) {
+        //   setIsBornAbroadOrAdopted(true);
+        // }
+        // setLoading(false);
+        // setDocumentList(listData.DocumentContentHTML);
       })
       .catch(err => {
         // eslint-disable-next-line no-console
@@ -85,7 +120,13 @@ const ConfirmationPage = ({ caseId }) => {
       <MainWrapper>
         <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
           <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
-          <h1 className='govuk-panel__title'> {caseId}</h1>
+          {caseIdPresent && (
+            <div className='govuk-panel__body'>
+              {t('YOUR_REF_NUMBER')}
+              <br></br>
+              <strong>{caseId}</strong>
+            </div>
+          )}
           <div className='govuk-panel__body govuk-!-font-size-27'>
             {t('POST_YOUR_SUPPORTING_DOCUMENTS')}
           </div>
@@ -130,7 +171,13 @@ const ConfirmationPage = ({ caseId }) => {
       <MainWrapper>
         <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
           <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
-          <h1 className='govuk-panel__title'> {caseId}</h1>
+          {caseIdPresent && (
+            <div className='govuk-panel__body'>
+              {t('YOUR_REF_NUMBER')}
+              <br></br>
+              <strong>{caseId}</strong>
+            </div>
+          )}
         </div>
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
         <p className='govuk-body'> {t('WE_HAVE_SENT_YOUR_APPLICATION')}</p>
