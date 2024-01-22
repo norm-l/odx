@@ -105,10 +105,6 @@ export default function UnAuthChildBenefitsClaim() {
         console.log('****I am at startnow ... above reset ... ', bShowResolutionScreen, '****');
         resetAppDisplay();
         setShowPega(true);
-        if (confScreen) {
-          console.log('I am at startnow....confscreen is', confScreen);
-          setShowResolutionScreen(true);
-        }
         PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
         console.log('****** I am at startnow***', bShowResolutionScreen, '****');
         console.log('****** I am at startnow******');
@@ -117,11 +113,6 @@ export default function UnAuthChildBenefitsClaim() {
     }
     startNow();
   }, [showStartPage, bShowPega, bShowResolutionScreen]);
-
-  // useEffect(() => {
-  //   setPageTitle();
-  //   console.log('**** I am at useEffect due to bshowresolution screen***', bShowResolutionScreen);
-  // }, [bShowResolutionScreen]);
 
   function closeContainer() {
     PCore.getContainerUtils().closeContainerItem(
@@ -137,13 +128,11 @@ export default function UnAuthChildBenefitsClaim() {
     closeContainer();
   }
 
-  let confScreen;
   function assignmentFinished() {
     getClaimsCaseID();
     closeContainer();
     resetAppDisplay();
     setShowResolutionScreen(true);
-    confScreen = true;
     console.log('****** I am at assignment finished *****');
   }
 
