@@ -18,6 +18,7 @@ import { logout } from '@pega/react-sdk-components/lib/components/helpers/authMa
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
+import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
 
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -66,6 +67,7 @@ export default function UnAuthChildBenefitsClaim() {
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [authType, setAuthType] = useState('gg');
+  const [caseId, setCaseId] = useState('');
   const history = useHistory();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'ChB';
@@ -86,19 +88,40 @@ export default function UnAuthChildBenefitsClaim() {
     setShowPega(false);
   }
 
+  function getClaimsCaseID() {
+    const context = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const caseID = PCore.getStoreValue('.ID', 'caseInfo', context);
+    setCaseId(caseID);
+    console.log('*** I am at getClaimsCaseID with id as ', caseID, ' ***');
+  }
+
   useEffect(() => {
     setPageTitle();
     function startNow() {
       // Check if PConn is created, and create case if it is
       if (pConn) {
+        console.log('****I am at startnow ... above reset ... ', bShowResolutionScreen, '****');
         resetAppDisplay();
         setShowPega(true);
+        if (confScreen) {
+          console.log('I am at startnow....confscreen is', confScreen);
+          setShowResolutionScreen(true);
+        }
         PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
+        console.log('****** I am at startnow***', bShowResolutionScreen, '****');
+        console.log('****** I am at startnow******');
       }
       setShowStartPage(false);
     }
     startNow();
   }, [showStartPage, bShowPega, bShowResolutionScreen]);
+
+  // useEffect(() => {
+  //   setPageTitle();
+  //   console.log('**** I am at useEffect due to bshowresolution screen***', bShowResolutionScreen);
+  // }, [bShowResolutionScreen]);
 
   function closeContainer() {
     PCore.getContainerUtils().closeContainerItem(
@@ -114,10 +137,14 @@ export default function UnAuthChildBenefitsClaim() {
     closeContainer();
   }
 
+  let confScreen;
   function assignmentFinished() {
+    getClaimsCaseID();
     closeContainer();
     resetAppDisplay();
     setShowResolutionScreen(true);
+    confScreen = true;
+    console.log('****** I am at assignment finished *****');
   }
 
   function cancelAssignment() {
@@ -138,7 +165,8 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        resetAppDisplay();
+        setShowStartPage(false);
+        setShowPega(false);
         const containername = PCore.getContainerUtils().getActiveContainerItemName(
           `${PCore.getConstants().APP.APP}/primary`
         );
@@ -165,7 +193,7 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
       () => {
-        closeContainer();
+        resetAppDisplay();
       },
       'closeContainer'
     );
@@ -453,6 +481,8 @@ export default function UnAuthChildBenefitsClaim() {
         {shutterServicePage && <ShutterServicePage />}
 
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
+
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
       </div>
 
       <LogoutPopup
