@@ -97,22 +97,27 @@ export default function UnAuthChildBenefitsClaim() {
     console.log('*** I am at getClaimsCaseID with id as ', caseID, ' ***');
   }
 
+  function startNow() {
+    // Check if PConn is created, and create case if it is
+    if (pConn && !bShowPega) {
+      console.log('****I am at startnow ... above reset ... ', bShowResolutionScreen, '****');
+      resetAppDisplay();
+      setShowPega(true);
+      PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
+      console.log('****** I am at startnow***', bShowResolutionScreen, '****');
+      console.log('****** I am at startnow******');
+    }
+    setShowStartPage(false);
+  }
   useEffect(() => {
     setPageTitle();
-    function startNow() {
-      // Check if PConn is created, and create case if it is
-      if (pConn) {
-        console.log('****I am at startnow ... above reset ... ', bShowResolutionScreen, '****');
-        resetAppDisplay();
-        setShowPega(true);
-        PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP);
-        console.log('****** I am at startnow***', bShowResolutionScreen, '****');
-        console.log('****** I am at startnow******');
-      }
-      setShowStartPage(false);
-    }
-    startNow();
   }, [showStartPage, bShowPega, bShowResolutionScreen]);
+
+  useEffect(() => {
+    if (showStartPage) {
+      startNow();
+    }
+  }, [showStartPage]);
 
   function closeContainer() {
     PCore.getContainerUtils().closeContainerItem(
