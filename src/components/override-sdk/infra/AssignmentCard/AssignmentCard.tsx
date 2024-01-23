@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-import ActionButtons from "../ActionButtons";
+import ActionButtons from '../ActionButtons';
 
 export default function AssignmentCard(props) {
-  const { children, actionButtons, onButtonPress} = props;
+  const { children, actionButtons, onButtonPress, getPConnect } = props;
 
   const [arMainButtons, setArMainButtons] = useState([]);
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
+  // const containerName = getPConnect().getContainerName();
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  console.log('*****CONTAINER NAME*****', containername);
+  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  // const context = PCore.getContainerUtils().getActiveContainerItemContext(
+  //   `${PCore.getConstants().APP.APP}/${containerName}`
+  // );
+  console.log('******CONTEXT**************', context);
+  const UnAuth = PCore.getStoreValue('.UserName', 'referencedUsers.Model_Unauth', context);
+  console.log('*********UNAUTH***********', UnAuth);
+  const isUnAuthJourney = UnAuth === 'Model Unauth' ? true : false;
 
-  useEffect( ()=> {
+  useEffect(() => {
     if (actionButtons) {
       setArMainButtons(actionButtons.main);
       setArSecondaryButtons(actionButtons.secondary);
@@ -23,11 +36,16 @@ export default function AssignmentCard(props) {
   return (
     <>
       {children}
-      {
-        arMainButtons && arSecondaryButtons && <ActionButtons arMainButtons={arMainButtons} arSecondaryButtons={arSecondaryButtons} onButtonPress={buttonPress}></ActionButtons>
-      }
+      {arMainButtons && arSecondaryButtons && (
+        <ActionButtons
+          arMainButtons={arMainButtons}
+          arSecondaryButtons={arSecondaryButtons}
+          onButtonPress={buttonPress}
+          isUnAuthJourney={isUnAuthJourney}
+        ></ActionButtons>
+      )}
     </>
-  )
+  );
 }
 
 AssignmentCard.propTypes = {
@@ -40,6 +58,6 @@ AssignmentCard.propTypes = {
 };
 
 AssignmentCard.defaultProps = {
-  itemKey: null,
+  itemKey: null
   // buildName: null
 };
