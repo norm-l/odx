@@ -36,6 +36,7 @@ export default function Assignment(props) {
   const thePConn = getPConnect();
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
   const [actionButtons, setActionButtons] = useState<any>({});
+  const [heading, setHeading] = useState<string>('');
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
 
@@ -310,6 +311,17 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
+  useEffect(() => {
+    const hasHeading =
+      !isOnlyFieldDetails.isOnlyField ||
+      containerName.toLowerCase().includes('check your answer') ||
+      containerName.toLowerCase().includes('declaration');
+
+    if (hasHeading) {
+      setHeading(localizedVal(containerName, '', localeReference));
+    }
+  }, [t('ASK_HMRC_ONLINE')]);
+
   function renderAssignmentCard() {
     return (
       <ErrorMsgContext.Provider
@@ -358,13 +370,7 @@ export default function Assignment(props) {
                 )}
               />
             )}
-            {(!isOnlyFieldDetails.isOnlyField ||
-              containerName.toLowerCase().includes('check your answer') ||
-              containerName.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', localeReference)}
-              </h1>
-            )}
+            {heading && <h1 className='govuk-heading-l'>{heading}</h1>}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <a
               href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
