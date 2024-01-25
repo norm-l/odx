@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function ReadOnlyDisplay(props) {
-  const COMMA_DELIMITED_FIELD = 'Claimant-pyCommaDelimitedString';
+  const COMMA_DELIMITED_FIELD = 'pyCommaDelimitedString';
   const { label, value, name } = props;
   const [formattedValue, setFormattedValue] = useState<string | []>(value);
 
   useEffect(() => {
-    if (name === COMMA_DELIMITED_FIELD) {
+    if (name && name.indexOf(COMMA_DELIMITED_FIELD) !== -1) {
       const formatValue = value.split(',').map((item: string) => item.trim());
       setFormattedValue(formatValue);
     }
