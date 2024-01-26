@@ -11,8 +11,8 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
   const containerItemID = getPConnect().getContextName();
   const [singleEntity, setSingleEntity] = useState(false);
-  const { t } = useTranslation();
   const [content, setContent] = useState('');
+  const { t } = useTranslation();
   const nCols = parseInt(NumCols, 8);
   const [formElms, setFormElms] = useState<Array<ReactNode>>([]); // Initialize as an empty array of React Nodes
   let itemName = '';
@@ -24,6 +24,9 @@ export default function HmrcOdxGdsSummaryCard(props) {
       itemName = t('GDS_INFO_ITEM_NATIONALITY');
       break;
 
+    case '3':
+      itemName = t('GDS_INFO_ITEM_COUNTRY');
+      break;
     default:
       break;
   }
@@ -69,14 +72,19 @@ export default function HmrcOdxGdsSummaryCard(props) {
           setContent(t('NOTIFICATION_BANNER_CONTENT'));
           if (checkSingleEntity) return;
           break;
-
         case '2':
           key = '.Claim.Claimant.Nationalities';
           checkSingleEntity = isSingleEntity(useType, key, action, getPConnect);
           setSingleEntity(checkSingleEntity);
           setContent(t('NOTIFICATION_NATIONALITY_BANNER_CONTENT'));
           if (checkSingleEntity) return;
-
+          break;
+        case '3':
+          key = '.Claim.Claimant.CurrentEmployment.CountriesWorkedIn.Countries';
+          checkSingleEntity = isSingleEntity(useType, key, action, getPConnect);
+          setSingleEntity(checkSingleEntity);
+          setContent(t('NOTIFICATION_COUNTRY_BANNER_CONTENT'));
+          if (checkSingleEntity) return;
           break;
         default:
           break;
@@ -106,6 +114,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
         }}
       >
         {singleEntity && <NotificationBanner content={content} />}
+
         <div className='govuk-summary-card'>
           <div className='govuk-summary-card__title-wrapper'>
             <h2 className='govuk-summary-card__title'>{itemName}</h2>
