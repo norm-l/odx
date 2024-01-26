@@ -436,7 +436,7 @@ export default function UnAuthChildBenefitsClaim() {
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
         {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
-        <UnauthTimeOut
+        {/* <UnauthTimeOut
           show={showTimeoutModal}
           modalId='timeout-popup'
           primaryHandler={() => staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)}
@@ -444,7 +444,7 @@ export default function UnAuthChildBenefitsClaim() {
             deleteData();
             setHasSessionTimedOut(false);
           }}
-        />
+        /> */}
 
         {/** No Log out popup required as one isn't logged in */}
       </div>
