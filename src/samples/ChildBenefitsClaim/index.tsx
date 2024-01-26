@@ -569,6 +569,7 @@ export default function ChildBenefitsClaim() {
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
         signoutHandler={() => logout()}
+        isAuthorised
       />
 
       <AppHeader
