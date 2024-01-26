@@ -21,6 +21,11 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
 
+  function getFeedBackLink() {
+    return isUnAuth
+      ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
+      : 'https://www.tax.service.gov.uk/feedback/ODXCHB';
+  }
   useEffect(() => {
     setPageTitle();
   }, []);
@@ -120,16 +125,7 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
           </p>
           <p className='govuk-body'> {t('WE_NORMALLY_RETURN_DOCUMENTS_WITHIN')} </p>
           <p className='govuk-body'>
-            <a
-              href={
-                isUnAuth
-                  ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
-                  : 'https://www.tax.service.gov.uk/feedback/ODXCHB'
-              }
-              className='govuk-link'
-              target='_blank'
-              rel='noreferrer'
-            >
+            <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
               {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')}{' '}
             </a>
             {t('TAKES_30_SECONDS')}
@@ -155,16 +151,7 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
           <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
           <p className='govuk-body'> {t('WE_WILL_TELL_YOU_IN_14_DAYS')}</p>
           <p className='govuk-body'>
-            <a
-              href={
-                isUnAuth
-                  ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
-                  : 'https://www.tax.service.gov.uk/feedback/ODXCHB'
-              }
-              className='govuk-link'
-              target='_blank'
-              rel='noreferrer'
-            >
+            <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
               {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')}{' '}
             </a>
             {t('TAKES_30_SECONDS')}
