@@ -27,6 +27,9 @@ export default function HmrcOdxGdsSummaryCard(props) {
     case '3':
       itemName = t('GDS_INFO_ITEM_COUNTRY');
       break;
+    case '4':
+      itemName = t('GDS_INFO_ITEM_NAME');
+      break;
     default:
       break;
   }
@@ -84,6 +87,13 @@ export default function HmrcOdxGdsSummaryCard(props) {
           checkSingleEntity = isSingleEntity(useType, key, action, getPConnect);
           setSingleEntity(checkSingleEntity);
           setContent(t('NOTIFICATION_COUNTRY_BANNER_CONTENT'));
+          if (checkSingleEntity) return;
+          break;
+        case '4':
+          key = '.Claim.Claimant.OtherNames';
+          checkSingleEntity = isSingleEntity(useType, key, action, getPConnect);
+          setSingleEntity(checkSingleEntity);
+          setContent(t('NOTIFICATION_NAME_BANNER_CONTENT'));
           if (checkSingleEntity) return;
           break;
         default:
