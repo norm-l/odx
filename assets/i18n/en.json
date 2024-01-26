@@ -224,10 +224,9 @@
   "TO_SHARE_YOUR_FEEDBACK_ON_THIS_SERVICE": "to share your feedback on this service",
   "NOTIFICATION_BANNER_HEADER": "Important",
   "NOTIFICATION_BANNER_CONTENT": "There must be at least one child on the claim. Please amend this child's details instead.",
-  "NOTIFICATION_NATIONALITY_BANNER_CONTENT": "There must be at least one nationality on the claim. Please amend this nationality details instead.",
-  "NOTIFICATION_COUNTRY_BANNER_CONTENT": "There must be at least one country on the claim. Please amend this country details instead.",
-  "NOTIFICATION_NAME_BANNER_CONTENT": "There must be at least one other name on the claim. Please amend this name details instead.",
-
+  "NOTIFICATION_NATIONALITY_BANNER_CONTENT": "There must be at least one nationality on the claim",
+  "NOTIFICATION_COUNTRY_BANNER_CONTENT": "There must be at least one country on the claim",
+  "NOTIFICATION_NAME_BANNER_CONTENT": "There must be at least one other name on the claim",
   "SERVICE_NOT_AVAILABLE": "Sorry, there is a problem with the service",
   "COME_BACK_LATER": "You can try again or come back later",
   "RETURN_TO_THE_HOMEPAGE": "Return to the homepage",
