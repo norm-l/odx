@@ -122,11 +122,11 @@ export default function ChildBenefitsClaim() {
 
   function beginClaim() {
     // Added to ensure that clicking begin claim restarts timeout
-    staySignedIn(setShowTimeoutModal, claimsListApi, true);
+    staySignedIn(setShowTimeoutModal, claimsListApi, null, true);
     displayStartPage();
   }
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal, claimsListApi, true);
+    staySignedIn(setShowTimeoutModal, claimsListApi, null, true);
     setServiceNotAvailable(false);
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
@@ -353,9 +353,9 @@ export default function ChildBenefitsClaim() {
       setShowAppName(true);
 
       PCore.getStore().subscribe(() =>
-        staySignedIn(setShowTimeoutModal, claimsListApi, true, false)
+        staySignedIn(setShowTimeoutModal, claimsListApi, null, true, false)
       );
-      initTimeout(setShowTimeoutModal, true);
+      initTimeout(setShowTimeoutModal, null, true);
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
@@ -521,7 +521,7 @@ export default function ChildBenefitsClaim() {
     e.preventDefault();
     setShowSignoutModal(false);
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal, claimsListApi, true, false);
+    staySignedIn(setShowTimeoutModal, claimsListApi, null, true, false);
   };
 
   const checkShuttered = (status: boolean) => {
@@ -583,7 +583,7 @@ export default function ChildBenefitsClaim() {
       <AuthTimeOut
         show={showTimeoutModal}
         modalId='timeout-popup'
-        primaryHandler={() => staySignedIn(setShowTimeoutModal, claimsListApi, true)}
+        primaryHandler={() => staySignedIn(setShowTimeoutModal, claimsListApi, null, true)}
         secondaryHandler={() => logout()}
       />
 
