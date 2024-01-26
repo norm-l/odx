@@ -435,7 +435,7 @@ export default function UnAuthChildBenefitsClaim() {
 
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
         {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={true} />}
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
         <UnauthTimeOut
           show={showTimeoutModal}
           modalId='timeout-popup'
