@@ -73,5 +73,6 @@ export default function TimeoutPopup(props) {
 TimeoutPopup.propTypes = {
   show: PropTypes.bool,
   staySignedinHandler: PropTypes.func,
-  signoutHandler: PropTypes.func
+  signoutHandler: PropTypes.func,
+  isAuthorised: PropTypes.bool
 };
