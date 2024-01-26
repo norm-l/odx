@@ -577,7 +577,7 @@ export default function ChildBenefitsClaim() {
           </>
         )}
 
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={false} />}
       </div>
 
       <AuthTimeOut

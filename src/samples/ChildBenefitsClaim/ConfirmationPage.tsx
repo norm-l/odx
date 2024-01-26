@@ -8,7 +8,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 
 declare const PCore: any;
 
-const ConfirmationPage = ({ caseId }) => {
+const ConfirmationPage = ({ caseId, isUnAuth }) => {
   const { t } = useTranslation();
   const [documentList, setDocumentList] = useState(``);
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
@@ -121,7 +121,11 @@ const ConfirmationPage = ({ caseId }) => {
           <p className='govuk-body'> {t('WE_NORMALLY_RETURN_DOCUMENTS_WITHIN')} </p>
           <p className='govuk-body'>
             <a
-              href='https://www.tax.service.gov.uk/feedback/ODXCHB'
+              href={
+                isUnAuth
+                  ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
+                  : 'https://www.tax.service.gov.uk/feedback/ODXCHB'
+              }
               className='govuk-link'
               target='_blank'
               rel='noreferrer'
@@ -152,7 +156,11 @@ const ConfirmationPage = ({ caseId }) => {
           <p className='govuk-body'> {t('WE_WILL_TELL_YOU_IN_14_DAYS')}</p>
           <p className='govuk-body'>
             <a
-              href='https://www.tax.service.gov.uk/feedback/ODXCHB'
+              href={
+                isUnAuth
+                  ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
+                  : 'https://www.tax.service.gov.uk/feedback/ODXCHB'
+              }
               className='govuk-link'
               target='_blank'
               rel='noreferrer'
