@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-const _DateErrorFormatter = (message, propertyName) => {
+const _DateErrorFormatter = message => {
   const dateRegExp = /(\d*-\d*-\d*)/;
   const matchedDates = message.match(dateRegExp);
   const originalDate = matchedDates?.length > 0 ? matchedDates[0] : null;
@@ -43,9 +43,9 @@ const _DateErrorFormatter = (message, propertyName) => {
 
 export const DateErrorFormatter = (message, propertyName) => {
   if (propertyName === ' ') propertyName = i18n.t('DATE_OF_BIRTH');
-  return _DateErrorFormatter(message, propertyName).message;
+  return _DateErrorFormatter(message).message;
 };
 
 export const DateErrorTargetFields = message => {
-  return _DateErrorFormatter(message, null).targets;
+  return _DateErrorFormatter(message).targets;
 };
