@@ -25,9 +25,7 @@ const _DateErrorFormatter = (message, propertyName) => {
       else missingPartMessage += ` ${i18n.t('A_YEAR')}`;
       targets.push('year');
     }
-    const shortPropertyName = String(propertyName).includes('?')
-      ? i18n.t('DATE_OF_BIRTH')
-      : propertyName;
+    const shortPropertyName = String(propertyName).includes('?') ? i18n.t('DATE') : propertyName;
 
     if (missingPartMessage.length > 0) {
       return {
