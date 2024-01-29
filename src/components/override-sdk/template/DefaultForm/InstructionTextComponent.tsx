@@ -1,6 +1,6 @@
 import React from 'react';
 import ParsedHTML from '../../../helpers/formatters/ParsedHtml';
-import { getFormattedInstructionText } from './DefaultFormUtils';
+import getFormattedInstructionText from './DefaultFormUtils';
 
 export default function InstructionTextComponent({ instructionText }) {
   return (

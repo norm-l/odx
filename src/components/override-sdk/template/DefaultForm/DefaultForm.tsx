@@ -8,7 +8,7 @@ import { DefaultFormContext, ReadOnlyDefaultFormContext } from '../../../helpers
 import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 import './DefaultForm.css';
 import InstructionTextComponent from './InstructionTextComponent';
-import { getFormattedInstructionText, settingTargetForAnchorTag } from './DefaultFormUtils';
+import getFormattedInstructionText from './DefaultFormUtils';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
@@ -45,6 +45,20 @@ export default function DefaultForm(props) {
   const instructionExists = instructionText !== undefined && instructionText !== '';
 
   const isOnlyFieldDetails = useIsOnlyField();
+
+  function settingTargetForAnchorTag() {
+    const instructionDiv = document.getElementById('instructions');
+    const keyText = 'OPENS_IN_NEW_TAB';
+    if (instructionDiv) {
+      const elementsArr = instructionDiv.querySelectorAll('a');
+      for (const ele of elementsArr) {
+        if (ele.innerHTML.includes(keyText)) {
+          ele.setAttribute('target', '_blank');
+          ele.setAttribute('rel', 'noreferrer noopener');
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     if (configAlternateDesignSystem?.hidePageLabel) {

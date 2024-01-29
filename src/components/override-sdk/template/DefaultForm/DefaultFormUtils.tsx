@@ -19,42 +19,30 @@ function replaceInsetText(finalText, textToBeReplaced, textToBeFormatted) {
   return finalText;
 }
 
-function formatter(finalText, stringWithTag, replace) {
+function formatter(finalText, stringWithTag, endtag, replace) {
   const startOfMarkedSpan = finalText.indexOf(stringWithTag); // e.g. abjhfds*<strong>WARNING!!jkgkjhhlk</strong>abjkk
-  const endOfMarkedSpan = finalText.indexOf('</strong>', startOfMarkedSpan) + '</strong>'.length; // e.g. abjhfds<strong>WARNING!!jkgkjhhlk</strong>*abjkk
+  const endOfMarkedSpan = finalText.indexOf(endtag, startOfMarkedSpan) + endtag.length; // e.g. abjhfds<strong>WARNING!!jkgkjhhlk</strong>*abjkk
   const textToReplace = finalText.substring(startOfMarkedSpan, endOfMarkedSpan); // e.g. <strong>WARNING!!jkgkjhhlk</strong>
 
-  const startOfTextToExtract = finalText.indexOf(stringWithTag) + stringWithTag.length + 1; // e.g. abjhfds<strong>WARNING!!*jkgkjhhlk</strong>abjkk
-  const endOfTextToExtract = finalText.indexOf('</strong>', startOfTextToExtract); // e.g. abjhfds<strong>WARNING!!jkgkjhhlk*</strong>abjkk
+  const startOfTextToExtract = finalText.indexOf(stringWithTag) + stringWithTag.length; // e.g. abjhfds<strong>WARNING!!*jkgkjhhlk</strong>abjkk
+  const endOfTextToExtract = finalText.indexOf(endtag, startOfTextToExtract); // e.g. abjhfds<strong>WARNING!!jkgkjhhlk*</strong>abjkk
   const textToExtract = finalText.substring(startOfTextToExtract, endOfTextToExtract); // e.g. jkgkjhhlk
   return replace(finalText, textToReplace, textToExtract);
 }
 
-export function getFormattedInstructionText(instructionText) {
+export default function getFormattedInstructionText(instructionText) {
   let finalText = instructionText.replaceAll('\n<p>&nbsp;</p>\n', '');
   const stringWithTagForWarning = `<strong>WARNING!!`;
+  const endtagForWarning = '</strong>';
   const stringWithTagForInset = `<p>INSET!!`;
+  const endtagForInset = '</p>';
   // if the required text exists
   if (finalText.indexOf(stringWithTagForWarning) !== -1) {
-    finalText = formatter(finalText, stringWithTagForWarning, replaceWarningText);
+    finalText = formatter(finalText, stringWithTagForWarning, endtagForWarning, replaceWarningText);
   }
   if (finalText.indexOf(stringWithTagForInset) !== -1) {
-    finalText = formatter(finalText, stringWithTagForInset, replaceInsetText);
+    finalText = formatter(finalText, stringWithTagForInset, endtagForInset, replaceInsetText);
   }
 
   return finalText;
-}
-
-export function settingTargetForAnchorTag() {
-  const instructionDiv = document.getElementById('instructions');
-  const keyText = 'OPENS_IN_NEW_TAB';
-  if (instructionDiv) {
-    const elementsArr = instructionDiv.querySelectorAll('a');
-    for (const ele of elementsArr) {
-      if (ele.innerHTML.includes(keyText)) {
-        ele.setAttribute('target', '_blank');
-        ele.setAttribute('rel', 'noreferrer noopener');
-      }
-    }
-  }
 }
