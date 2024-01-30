@@ -9,6 +9,7 @@ import ConditionalWrapper from '../../../helpers/formatters/ConditionalWrapper';
 import './DefaultForm.css';
 import InstructionTextComponent from './InstructionTextComponent';
 import getFormattedInstructionText from './DefaultFormUtils';
+import { useTranslation } from 'react-i18next';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
@@ -16,6 +17,7 @@ export default function DefaultForm(props) {
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   const { DFName } = useContext(DefaultFormContext);
   const { instructionText: passedThroughInstructionText } = useContext(DefaultFormContext);
+  const { t } = useTranslation();
 
   const [declaration, setDeclaration] = useState({ text1: '', warning1: '' });
   let containerName = null;
@@ -48,7 +50,7 @@ export default function DefaultForm(props) {
 
   function settingTargetForAnchorTag() {
     const instructionDiv = document.getElementById('instructions');
-    const keyText = 'OPENS_IN_NEW_TAB';
+    const keyText = t('OPENS_IN_NEW_TAB');
     if (instructionDiv) {
       const elementsArr = instructionDiv.querySelectorAll('a');
       for (const ele of elementsArr) {
