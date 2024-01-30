@@ -8,15 +8,12 @@ function replaceWarningText(finalText, textToBeReplaced, textToBeFormatted) {
             ${textToBeFormatted}
           </strong>
         </div>`;
-
-  finalText = finalText.replaceAll(textToBeReplaced, textToBeInserted);
-  return finalText;
+  return finalText.replaceAll(textToBeReplaced, textToBeInserted);
 }
 
 function replaceInsetText(finalText, textToBeReplaced, textToBeFormatted) {
   const textToBeInserted = `<div class="govuk-inset-text">${textToBeFormatted}</div>`;
-  finalText = finalText.replaceAll(textToBeReplaced, textToBeInserted);
-  return finalText;
+  return finalText.replaceAll(textToBeReplaced, textToBeInserted);
 }
 
 function formatter(finalText, stringWithTag, endtag, replace) {
