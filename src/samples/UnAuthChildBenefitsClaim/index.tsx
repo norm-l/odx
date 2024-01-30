@@ -18,7 +18,6 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
-import UnauthTimeOut from '../../components/AppComponents/TimeoutPopup/unauthTimeOut';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
@@ -27,15 +26,17 @@ import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import {
   initTimeout,
-  staySignedIn
+  staySignedIn,
+  clearTimer
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import DeleteAnswers from './deleteAnswers';
+import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 
 declare const myLoadMashup: Function;
 
 export default function UnAuthChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
-  const [bShowPega, setShowPega] = useState(false);
+  const [bShowPega, setShowPega] = useState(true);
   const [showStartPage, setShowStartPage] = useState(true);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
@@ -298,29 +299,6 @@ export default function UnAuthChildBenefitsClaim() {
 
       /* Functionality to set the device id in the header for use in CIP.
       Device id is unique and will be stored on the user device / browser cookie */
-      const COOKIE_PEGAODXDI = 'pegaodxdi';
-      const COOKIE_PEGAODXEI = 'pegaodxei';
-
-      async function setIdsInHeaders(deviceID, externalID) {
-        setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
-        setCookie(COOKIE_PEGAODXEI, externalID, 3650);
-        await PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
-        await PCore.getRestClient().getHeaderProcessor().registerHeader('externalid', externalID);
-      }
-
-      let deviceID = checkCookie(COOKIE_PEGAODXDI);
-      let externalID = checkCookie(COOKIE_PEGAODXEI);
-      if (deviceID && externalID) {
-        setIdsInHeaders(deviceID, externalID);
-      } else {
-        PCore.getDataPageUtils()
-          .getPageDataAsync('D_UserSession', 'root')
-          .then(res => {
-            deviceID = res.DeviceId;
-            externalID = res.ExternalId;
-            setIdsInHeaders(deviceID, externalID);
-          });
-      }
     });
 
     // Initialize the SdkComponentMap (local and pega-provided)
@@ -356,6 +334,37 @@ export default function UnAuthChildBenefitsClaim() {
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
   }
 
+  function setIdsInHeaders(deviceID, externalID) {
+    setCookie('pegaodxdi', deviceID, 3650);
+    setCookie('pegaodxei', externalID, 3650);
+    const isDeviceIdSet = PCore.getRestClient()
+      .getHeaderProcessor()
+      .registerHeader('deviceid', deviceID);
+    const isExternalIdSet = PCore.getRestClient()
+      .getHeaderProcessor()
+      .registerHeader('externalid', externalID);
+    if (isDeviceIdSet && isExternalIdSet) {
+      // start the portal
+      startMashup();
+    }
+  }
+
+  function fetchingIDsForHeader() {
+    let deviceID = checkCookie('pegaodxdi');
+    let externalID = checkCookie('pegaodxei');
+    if (deviceID && externalID) {
+      setIdsInHeaders(deviceID, externalID);
+    } else {
+      PCore.getDataPageUtils()
+        .getPageDataAsync('D_UserSession', 'root')
+        .then(res => {
+          deviceID = res.DeviceId;
+          externalID = res.ExternalId;
+          setIdsInHeaders(deviceID, externalID);
+        });
+    }
+  }
+
   // One time (initialization) subscriptions and related unsubscribe
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
@@ -389,13 +398,9 @@ export default function UnAuthChildBenefitsClaim() {
     });
 
     document.addEventListener('SdkConstellationReady', () => {
-      // start the portal
-      startMashup();
+      // ready the header and call startMashup()
+      fetchingIDsForHeader();
     });
-
-    // document.addEventListener('SdkLoggedOut', () => {
-    //   window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
-    // });
 
     // Subscriptions can't be done until onPCoreReady.
     // So we subscribe there. But unsubscribe when this
@@ -436,14 +441,17 @@ export default function UnAuthChildBenefitsClaim() {
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
         {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
-        <UnauthTimeOut
+        <TimeoutPopup
           show={showTimeoutModal}
-          modalId='timeout-popup'
-          primaryHandler={() => staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)}
-          secondaryHandler={() => {
+          staySignedinHandler={() =>
+            staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
+          }
+          signoutHandler={() => {
             deleteData();
+            clearTimer();
             setHasSessionTimedOut(false);
           }}
+          isAuthorised={false}
         />
 
         {/** No Log out popup required as one isn't logged in */}
