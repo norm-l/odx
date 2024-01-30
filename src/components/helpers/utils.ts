@@ -70,3 +70,13 @@ export const isFieldSetReqiredForSelectComponent = (label: string) => {
   const arrFieldSetNotRequiredForSelectComponent = ['name of building society'];
   return !arrFieldSetNotRequiredForSelectComponent.includes(label.toLocaleLowerCase());
 };
+
+export const isUnAuthJourney = () => {
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  const UnAuth = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
+  const isUnAuthJourney = UnAuth === 'Unauth' ? true : false;
+  return isUnAuthJourney;
+};
