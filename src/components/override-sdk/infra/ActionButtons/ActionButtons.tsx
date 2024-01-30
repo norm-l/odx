@@ -43,7 +43,7 @@ export default function ActionButtons(props) {
               key={sButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {!isUnAuth ? localizedVal(sButton.name, localeCategory) : t('CLOSE_CLAIM')}
+              {isUnAuth ? t('CLOSE_CLAIM') : localizedVal(sButton.name, localeCategory)}
             </Button>
           ) : null
         )}

@@ -5,7 +5,7 @@ import { isUnAuthJourney } from '../../../helpers/utils';
 import ActionButtons from '../ActionButtons';
 
 export default function AssignmentCard(props) {
-  const { children, actionButtons, onButtonPress, getPConnect } = props;
+  const { children, actionButtons, onButtonPress } = props;
 
   const [arMainButtons, setArMainButtons] = useState([]);
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);

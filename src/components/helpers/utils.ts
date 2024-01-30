@@ -76,7 +76,6 @@ export const isUnAuthJourney = () => {
     `${PCore.getConstants().APP.APP}/primary`
   );
   const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-  const UnAuth = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
-  const isUnAuthJourney = UnAuth === 'Unauth' ? true : false;
-  return isUnAuthJourney;
+  const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
+  return caseType === 'Unauth';
 };
