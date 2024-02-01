@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ConditionalWrapper from '../../helpers/formatters/ConditionalWrapper';
 import HintTextComponent from '../../helpers/formatters/ParsedHtml';
 import { DefaultFormContext, ErrorMsgContext } from '../../helpers/HMRCAppContext';
-import { checkErrorMsgs } from '../../helpers/utils';
+import { checkErrorMsgs, checkErrorDateFormat } from '../../helpers/utils';
 import InstructionTextComponent from '../../override-sdk/template/DefaultForm/InstructionTextComponent';
 
 export default function FieldSet({
@@ -24,7 +24,8 @@ export default function FieldSet({
   useEffect(() => {
     const found = checkErrorMsgs(errorMsgs, name);
     if (!found) {
-      setErrorMessage(errorText);
+      const errText = checkErrorDateFormat(errorText);
+      setErrorMessage(errText);
     }
   }, [errorText, errorMsgs]);
   const formGroupDivClasses = `govuk-form-group ${

@@ -11,6 +11,30 @@ export const GBdate = date => {
   return d.length > 1 ? `${d[2]}/${d[1]}/${d[0]}` : date;
 };
 
+export const checkErrorDateFormat = errMessage => {
+  const regex = /([A-Za-z0-9]+(-[A-Za-z0-9]+)+)/;
+
+  // Check if the string has a date matching the regex format
+  if (regex.test(errMessage)) {
+    // Return just the date from the string
+    const dateMatch = regex.exec(errMessage);
+
+    if (dateMatch) {
+      const date = dateMatch[0];
+      const text = errMessage.replace(regex, '');
+
+      const reformatDate = GBdate(date).replaceAll('/', ' ');
+
+      return `${reformatDate}${text}`;
+    } else {
+      // Handle the case where regex doesn't match
+      return errMessage;
+    }
+  } else {
+    return errMessage;
+  }
+};
+
 export const checkErrorMsgs = (errorMsgs = [], fieldIdentity = '', fieldElement = '') => {
   return errorMsgs.find(
     element =>
