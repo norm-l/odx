@@ -89,6 +89,10 @@ module.exports = (env, argv) => {
         {
           from: './assets/i18n/*',
           to: './'
+        },
+        {
+          from: './assets/lib/*',
+          to: './'
         }
       ]
     })
