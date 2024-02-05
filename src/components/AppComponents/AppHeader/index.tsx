@@ -80,7 +80,7 @@ export default function AppHeader(props) {
               </span>
             </p>
           </div>
-          {hasLanguageToggle && <LanguageToggle PegaApp={isPegaApp} />}
+          {hasLanguageToggle && <LanguageToggle />}
         </div>
       </header>
     </>
