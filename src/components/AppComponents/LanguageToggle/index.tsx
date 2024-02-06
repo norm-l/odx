@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
 
-const LanguageToggle = (props) => {
+const LanguageToggle = props => {
   const { PegaApp } = props;
   const { i18n } = useTranslation();
   let lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const [selectedLang, setSelectedLang] = useState(lang);
 
-  const changeLanguage = (e) => {
+  const changeLanguage = e => {
     e.preventDefault();
     lang = e.currentTarget.getAttribute('lang');
     setSelectedLang(lang);
@@ -18,7 +18,11 @@ const LanguageToggle = (props) => {
     if (PegaApp) {
       PCore.getEnvironmentInfo().setLocale(`${lang}_GB`);
       PCore.getLocaleUtils().resetLocaleStore();
-      PCore.getLocaleUtils().loadLocaleResources([PCore.getLocaleUtils().GENERIC_BUNDLE_KEY, '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE']);
+      PCore.getLocaleUtils().loadLocaleResources([
+        PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
+        '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE',
+        'HMRC-CHB-WORK-CLAIM!CASE!CLAIM'
+      ]);
     }
   };
 
