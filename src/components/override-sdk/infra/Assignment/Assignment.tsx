@@ -19,6 +19,7 @@ import MainWrapper from '../../../BaseComponents/MainWrapper';
 import ShutterServicePage from '../../../../components/AppComponents/ShutterServicePage';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
+import useTranslatedText from '../../../helpers/hooks/useTranslations';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -89,6 +90,8 @@ export default function Assignment(props) {
   ) {
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
   }
+
+  const heading = useTranslatedText(containerName, '', localeReference);
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -361,9 +364,7 @@ export default function Assignment(props) {
             {(!isOnlyFieldDetails.isOnlyField ||
               containerName.toLowerCase().includes('check your answer') ||
               containerName.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', localeReference)}
-              </h1>
+              <h1 className='govuk-heading-l'>{heading}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <a
