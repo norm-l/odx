@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import AppHeader from '../../../components/AppComponents/AppHeader';
 import AppFooter from '../../../components/AppComponents/AppFooter';
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../../components/BaseComponents/MainWrapper';
-import RadioButtons from '../../../components/BaseComponents/RadioButtons/RadioButtons';
 import Button from '../../../components/BaseComponents/Button/Button';
 
 export default function CheckOnClaim() {

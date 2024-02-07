@@ -13,7 +13,8 @@ export default function RecentlyClaimedChildBenefit() {
   const { t } = useTranslation();
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState('');
-
+  const summaryErrorHref = `#serviceType`;
+  const BtnClasses = `govuk-button static-page-cont-button`;
   const radioOptions = [
     {
       value: 'makeanewclaim',
@@ -78,7 +79,7 @@ export default function RecentlyClaimedChildBenefit() {
           {errorMsg && errorMsg.length > 0 && (
             <StaticPageErrorSummary
               errorSummary={errorMsg}
-              linkHref={`#serviceType`}
+              linkHref={summaryErrorHref}
             ></StaticPageErrorSummary>
           )}
           <RadioButtons
@@ -93,7 +94,7 @@ export default function RecentlyClaimedChildBenefit() {
             errorText={errorMsg}
           ></RadioButtons>
           <button
-            className={`govuk-button static-page-cont-button`}
+            className={BtnClasses}
             data-module='govuk-button'
             onClick={routeToService}
             type='button'
