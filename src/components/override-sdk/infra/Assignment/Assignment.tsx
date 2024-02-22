@@ -65,6 +65,7 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
+  const [messagesToClear, setMessagesToClear] = useState([]);
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -130,12 +131,19 @@ export default function Assignment(props) {
           type: 'error'
         });
         let validatemessage = '';
+        // New array for the messages in case they need to be cleared when user clicks back button.
+        let clearMessageList = [];
         if (errorVal.length > 0) {
           errorVal.forEach(element => {
             validatemessage =
               validatemessage + (validatemessage.length > 0 ? '. ' : '') + element.message;
+            clearMessageList.push(element);
+            return clearMessageList;
           });
         }
+
+        // Add the messages to be cleared to a new array
+        setMessagesToClear([...clearMessageList]);
 
         if (validatemessage) {
           const formattedPropertyName = fieldC11nEnv?.getStateProps()?.value?.split('.')?.pop();
@@ -170,6 +178,17 @@ export default function Assignment(props) {
       }, []);
 
     setErrorMessages([...errorStateProps]);
+  }
+
+  function clearErrors() {
+    messagesToClear.forEach(message =>
+      PCore.getMessageManager().clearMessages({
+        property: message.property,
+        pageReference: message.pageReference,
+        context: message.context,
+        type: message.type
+      })
+    );
   }
 
   // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
@@ -209,6 +228,8 @@ export default function Assignment(props) {
       switch (sAction) {
         case 'navigateToStep': {
           const navigatePromise = navigateToStep('previous', itemKey);
+
+          clearErrors();
 
           navigatePromise
             .then(() => {
