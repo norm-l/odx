@@ -25,6 +25,8 @@ import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreCon
 export interface ErrorMessageDetails {
   message: string;
   fieldId: string;
+  pageRef: string;
+  clearMessageProperty: string;
 }
 
 interface OrderedErrorMessage {
@@ -65,7 +67,6 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
-  const [messagesToClear, setMessagesToClear] = useState([]);
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -131,21 +132,16 @@ export default function Assignment(props) {
           type: 'error'
         });
         let validatemessage = '';
-        // New array for the messages in case they need to be cleared when user clicks back button.
-        let clearMessageList = [];
         if (errorVal.length > 0) {
           errorVal.forEach(element => {
             validatemessage =
               validatemessage + (validatemessage.length > 0 ? '. ' : '') + element.message;
-            clearMessageList.push(element);
-            return clearMessageList;
           });
         }
 
-        // Add the messages to be cleared to a new array
-        setMessagesToClear([...clearMessageList]);
-
         if (validatemessage) {
+          const clearMessageProperty = fieldC11nEnv?.getStateProps()?.value;
+          const pageRef = fieldC11nEnv?.getPageReference();
           const formattedPropertyName = fieldC11nEnv?.getStateProps()?.value?.split('.')?.pop();
           let fieldId =
             fieldC11nEnv.getStateProps().fieldId ||
@@ -169,7 +165,9 @@ export default function Assignment(props) {
           acc.push({
             message: {
               message: removeRedundantString(validatemessage),
-              fieldId
+              pageRef,
+              fieldId,
+              clearMessageProperty
             },
             displayOrder: fieldComponent.props.displayOrder
           });
@@ -181,12 +179,12 @@ export default function Assignment(props) {
   }
 
   function clearErrors() {
-    messagesToClear.forEach(message =>
+    errorMessages.forEach(error =>
       PCore.getMessageManager().clearMessages({
-        property: message.property,
-        pageReference: message.pageReference,
-        context: message.context,
-        type: message.type
+        property: error.message.clearMessageProperty,
+        pageReference: error.message.pageRef,
+        context: containerID,
+        type: 'error'
       })
     );
   }
