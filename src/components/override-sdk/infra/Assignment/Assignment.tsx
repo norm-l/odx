@@ -183,6 +183,7 @@ export default function Assignment(props) {
       PCore.getMessageManager().clearMessages({
         property: error.message.clearMessageProperty,
         pageReference: error.message.pageRef,
+        category: 'Property',
         context: containerID,
         type: 'error'
       })
