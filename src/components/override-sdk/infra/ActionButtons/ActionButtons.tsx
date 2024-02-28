@@ -26,7 +26,11 @@ export default function ActionButtons(props) {
               key={mButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {isUnAuth ? localizedVal(mButton.name, localeCategory) : t('SAVE_AND_CONTINUE')}
+              {isUnAuth
+                ? localizedVal(mButton.name, localeCategory)
+                : mButton.actionID === 'submit'
+                ? localizedVal(mButton.name, localeCategory)
+                : t('SAVE_AND_CONTINUE')}
             </Button>
           ) : null
         )}
