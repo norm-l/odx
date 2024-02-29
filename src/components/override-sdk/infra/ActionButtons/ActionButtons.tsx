@@ -28,9 +28,9 @@ export default function ActionButtons(props) {
             >
               {isUnAuth
                 ? localizedVal(mButton.name, localeCategory)
-                : mButton.actionID === 'submit'
-                ? localizedVal(mButton.name, localeCategory)
-                : t('SAVE_AND_CONTINUE')}
+                : mButton.name === 'Continue'
+                ? t('SAVE_AND_CONTINUE')
+                : localizedVal(mButton.name, localeCategory)}
             </Button>
           ) : null
         )}
