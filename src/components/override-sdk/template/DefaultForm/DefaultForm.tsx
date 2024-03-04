@@ -55,7 +55,7 @@ export default function DefaultForm(props) {
       const elementsArr = instructionDiv.querySelectorAll('a');
       // @ts-ignore
       for (const ele of elementsArr) {
-        if (ele.innerHTML.includes(keyText)) {
+        if (ele.innerHTML.includes(keyText) || ele.hasAttribute('target')) {
           ele.setAttribute('target', '_blank');
           ele.setAttribute('rel', 'noreferrer noopener');
         }
