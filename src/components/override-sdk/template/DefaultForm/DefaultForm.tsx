@@ -55,7 +55,11 @@ export default function DefaultForm(props) {
       const elementsArr = instructionDiv.querySelectorAll('a');
       // @ts-ignore
       for (const ele of elementsArr) {
-        if (ele.innerHTML.includes(keyText) || ele.hasAttribute('target')) {
+        if (
+          ele.innerHTML.includes(keyText) ||
+          ele.innerHTML.includes('(opens in a new tab)') ||
+          ele.innerHTML.includes('(yn agor mewn tab newydd)')
+        ) {
           ele.setAttribute('target', '_blank');
           ele.setAttribute('rel', 'noreferrer noopener');
         }
