@@ -50,17 +50,13 @@ export default function DefaultForm(props) {
 
   function settingTargetForAnchorTag() {
     const instructionDiv = document.getElementById('instructions');
-    const keyText = t('OPENS_IN_NEW_TAB');
+    const keyTexts = [t('OPENS_IN_NEW_TAB'), '(opens in a new tab)', '(yn agor mewn tab newydd)'];
 
     if (instructionDiv) {
       const elementsArr = instructionDiv.querySelectorAll('a');
       // @ts-ignore
       for (const ele of elementsArr) {
-        if (
-          ele.innerHTML.includes(keyText) ||
-          ele.innerHTML.includes('(opens in a new tab)') ||
-          ele.innerHTML.includes('(yn agor mewn tab newydd)')
-        ) {
+        if (keyTexts.some(text => ele.innerHTML.includes(text))) {
           ele.setAttribute('target', '_blank');
           ele.setAttribute('rel', 'noreferrer noopener');
         }
