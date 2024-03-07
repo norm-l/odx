@@ -51,6 +51,7 @@ export default function DefaultForm(props) {
   function settingTargetForAnchorTag() {
     const instructionDiv = document.getElementById('instructions');
     const keyText = t('OPENS_IN_NEW_TAB');
+
     if (instructionDiv) {
       const elementsArr = instructionDiv.querySelectorAll('a');
       // @ts-ignore
