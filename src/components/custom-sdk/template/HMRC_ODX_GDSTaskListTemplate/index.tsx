@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { Fragment } from 'react';
 import { Grid } from '@pega/cosmos-react-core';
 import { useTranslation } from 'react-i18next';
@@ -88,16 +89,29 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
                         <span>{task.TaskLabel}</span>
                       )}
                     </div>
-                    <div
-                      className='govuk-task-list__status'
-                      id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
-                    >
-                      {task.IsTaskInProgress && !task.IsTaskComplete ? (
-                        <strong className='govuk-tag govuk-tag--blue'>{task.TaskStatus}</strong>
-                      ) : (
-                        task.TaskStatus
-                      )}
-                    </div>
+                    {!task.IsTaskALink && !task.IsTaskInProgress && !task.IsTaskComplete ? (
+                      <div
+                        className='govuk-task-list__status govuk-task-list__status--cannot-start-yet'
+                        id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
+                      >
+                        {task.TaskStatus}
+                      </div>
+                    ) : (
+                      <div
+                        className='govuk-task-list__status'
+                        id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
+                      >
+                        {task.IsTaskInProgress && !task.IsTaskComplete ? (
+                          <strong className='govuk-tag govuk-tag--light-blue'>
+                            {task.TaskStatus}
+                          </strong>
+                        ) : task.IsTaskComplete ? (
+                          <span>{task.TaskStatus}</span>
+                        ) : (
+                          <strong className='govuk-tag govuk-tag--blue'>{task.TaskStatus}</strong>
+                        )}
+                      </div>
+                    )}
                   </li>
                 </Fragment>
               );
