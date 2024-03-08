@@ -49,5 +49,5 @@ tests/playwright-report
 /coverage
 
 # sdk configuration file
-sdk-config.json
-package-lock.json
+# sdk-config.json
+# package-lock.json
