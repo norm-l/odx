@@ -75,7 +75,7 @@
   "RETURN_TO_HOMEPAGE": "Yn ôl i hafan eich porth hawlio",
   "WHAT_DID_YOU_THINK_OF_THIS_SERVICE": "Beth oedd eich barn am y gwasanaeth hwn?",
   "TAKES_30_SECONDS": "(mae’n cymryd 30 eiliad)",
-  "PRINT_THIS_INFO": "Argraffwch y dudalen hon neu gwnewch nodyn o’r cyfeirnod. Bydd angen hwn arnoch os byddwch yn cysylltu â CThEF neu os bydd CThEF yn gofyn am ragor o wybodaeth",
+  "PRINT_THIS_INFO": "Argraffwch y dudalen hon neu gwnewch nodyn o’r cyfeirnod. Bydd angen hwn arnoch os byddwch yn cysylltu â CThEF neu os bydd CThEF yn gofyn am ragor o wybodaeth.",
 
   "WHAT_HAPPENS_NEXT": "Yr hyn sy’n digwydd nesaf",
   "WE_HAVE_SENT_YOUR_APPLICATION": "We've sent your application to the Child Benefit Office.",
@@ -295,7 +295,7 @@
   "NOTIFICATION_BANNER_CONTENT": "Rhaid i o leiaf un plentyn fod ar yr hawliad. Diwygiwch fanylion y plentyn hwn yn lle hynny.",
   "NOTIFICATION_NATIONALITY_BANNER_CONTENT": "There must be at least one nationality on the claim. Please amend this nationality details instead.",
   "NOTIFICATION_COUNTRY_BANNER_CONTENT": "There must be at least one country on the claim. Please amend this country details instead.",
-  "NOTIFICATION_NAME_BANNER_CONTENT": "Mae’n rhaid i o leiaf un enw arall fod ar yr hawliad. Diwygiwch fanylion yr enw hwn yn lle hynny..",
+  "NOTIFICATION_NAME_BANNER_CONTENT": "Mae’n rhaid i o leiaf un enw arall fod ar yr hawliad. Diwygiwch fanylion yr enw hwn yn lle hynny.",
 
   "SERVICE_NOT_AVAILABLE": "Mae’n ddrwg gennym, ond mae problem gyda’r gwasanaeth",
   "COME_BACK_LATER": "Gallwch roi cynnig arall arni neu ddod yn ôl nes ymlaen",
