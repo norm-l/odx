@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { Fragment } from 'react';
 import { Grid } from '@pega/cosmos-react-core';
 import { useTranslation } from 'react-i18next';
@@ -89,29 +88,50 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
                         <span>{task.TaskLabel}</span>
                       )}
                     </div>
-                    {!task.IsTaskALink && !task.IsTaskInProgress && !task.IsTaskComplete ? (
+                    {!task.IsTaskALink && !task.IsTaskInProgress && !task.IsTaskComplete && (
+                      // cannot start
                       <div
                         className='govuk-task-list__status govuk-task-list__status--cannot-start-yet'
                         id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
                       >
                         {task.TaskStatus}
                       </div>
-                    ) : (
-                      <div
-                        className='govuk-task-list__status'
-                        id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
-                      >
-                        {task.IsTaskInProgress && !task.IsTaskComplete ? (
+                    )}
+
+                    {task.IsTaskALink &&
+                      !task.IsTaskInProgress &&
+                      !task.IsTaskComplete && ( // to begin
+                        <div
+                          className='govuk-task-list__status'
+                          id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
+                        >
+                          <strong className='govuk-tag govuk-tag--blue'>{task.TaskStatus}</strong>
+                        </div>
+                      )}
+
+                    {task.IsTaskALink &&
+                      task.IsTaskInProgress &&
+                      !task.IsTaskComplete && ( // in progress
+                        <div
+                          className='govuk-task-list__status'
+                          id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
+                        >
                           <strong className='govuk-tag govuk-tag--light-blue'>
                             {task.TaskStatus}
                           </strong>
-                        ) : task.IsTaskComplete ? (
+                        </div>
+                      )}
+
+                    {task.IsTaskALink &&
+                      task.IsTaskInProgress &&
+                      task.IsTaskComplete && ( // complete
+                        <div
+                          className='govuk-task-list__status'
+                          id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
+                        >
                           <span>{task.TaskStatus}</span>
-                        ) : (
-                          <strong className='govuk-tag govuk-tag--blue'>{task.TaskStatus}</strong>
-                        )}
-                      </div>
-                    )}
+                        </div>
+                      )}
                   </li>
                 </Fragment>
               );
