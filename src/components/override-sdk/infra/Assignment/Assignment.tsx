@@ -94,11 +94,17 @@ export default function Assignment(props) {
   }, [errorMessages]);
 
   let containerName;
+  let headerLocaleLocation;
   if (
     thePConn.getDataObject().caseInfo?.assignments &&
     thePConn.getDataObject().caseInfo?.assignments.length > 0
   ) {
     containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
+    headerLocaleLocation = `${thePConn
+      .getDataObject()
+      .caseInfo?.caseTypeID.toUpperCase()}!VIEW!${thePConn
+      .getDataObject()
+      .caseInfo?.assignments[0].actions[0].ID.toUpperCase()}`;
   }
 
   useEffect(() => {
@@ -391,7 +397,7 @@ export default function Assignment(props) {
               containerName.toLowerCase().includes('check your answer') ||
               containerName.toLowerCase().includes('declaration')) && (
               <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', localeReference)}
+                {localizedVal(containerName, '', headerLocaleLocation)}
               </h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
