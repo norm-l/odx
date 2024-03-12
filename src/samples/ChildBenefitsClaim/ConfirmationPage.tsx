@@ -46,7 +46,7 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
         }
         setLoading(false);
         setDocumentList(listData.DocumentContentHTML);
-        if (listData.DocumentContentHTML.includes('data-ninopresent')) {
+        if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
           setIsCaseRefRequired(true);
         }
       })
@@ -99,11 +99,9 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
           </div>
           <h2 className='govuk-heading-m'> {t('WHAT_YOU_NEED_TO_DO_NOW')} </h2>
           {isUnAuth && isCaseRefRequired && <p className='govuk-body'>{t('PRINT_THIS_INFO')}</p>}
-          <p className='govuk-body'> {t('THE_INFO_YOU_HAVE_PROVIDED')} </p>
+          <p className='govuk-body'> {t('THE_INFO_YOU_HAVE_PROVIDED')}. </p>
           <ParsedHTML htmlString={documentList} />
-          <p className='govuk-body'> {t('HMRC_MIGHT_CALL_YOU')} </p>
           <p className='govuk-body'>
-            {' '}
             {t('AFTER_YOU_HAVE')}{' '}
             <a
               href=''
