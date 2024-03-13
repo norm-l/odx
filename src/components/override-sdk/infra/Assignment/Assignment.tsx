@@ -95,17 +95,16 @@ export default function Assignment(props) {
 
   let containerName;
   let headerLocaleLocation;
-  if (
-    thePConn.getDataObject().caseInfo?.assignments &&
-    thePConn.getDataObject().caseInfo?.assignments.length > 0
-  ) {
-    containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
-    headerLocaleLocation = `${thePConn
-      .getDataObject()
-      .caseInfo?.caseTypeID.toUpperCase()}!VIEW!${thePConn
-      .getDataObject()
-      .caseInfo?.assignments[0].actions[0].ID.toUpperCase()}`;
+
+  const caseInfo = thePConn.getDataObject().caseInfo;
+
+  if (caseInfo?.assignments?.length > 0) {
+    containerName = caseInfo.assignments[0].name;
+    const firstActionId = caseInfo.assignments[0]?.actions[0]?.ID.toUpperCase();
+    headerLocaleLocation = `${caseInfo.caseTypeID.toUpperCase()}!VIEW!${firstActionId}`;
   }
+
+  console.log('Looking in', headerLocaleLocation);
 
   useEffect(() => {
     if (children && children.length > 0) {
