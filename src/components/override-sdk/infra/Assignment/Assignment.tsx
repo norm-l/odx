@@ -104,8 +104,6 @@ export default function Assignment(props) {
     headerLocaleLocation = `${caseInfo.caseTypeID.toUpperCase()}!VIEW!${firstActionId}`;
   }
 
-  console.log('Looking in', headerLocaleLocation);
-
   useEffect(() => {
     if (children && children.length > 0) {
       const oWorkItem = children[0].props.getPConnect();
