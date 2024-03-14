@@ -47,7 +47,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
       if (selectedOptionValue === 'yes') {
         history.push('/ua');
       } else {
-        window.location.href = 'https://www.access.service.gov.uk/login/signin/creds';
+        window.location.href = '/';
       }
     } else {
       setErrorMsg(t('SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN'));
