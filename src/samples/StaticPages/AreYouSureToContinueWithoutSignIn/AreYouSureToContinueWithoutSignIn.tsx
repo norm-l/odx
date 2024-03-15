@@ -78,6 +78,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
             useSmallRadios
             options={radioOptions}
             label={t('ARE_YOU_SURE_YOU_WANT_TO_CONTINUE_WO_SIGN_IN')}
+            legendIsHeading
             errorText={errorMsg}
           ></RadioButtons>
           <button
