@@ -14,7 +14,6 @@ export default function RecentlyClaimedChildBenefit() {
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState('');
   const errorHref = `#serviceType`;
-  const summaryErrClasses = `govuk-button static-page-cont-button`;
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
 
   useEffect(() => {
