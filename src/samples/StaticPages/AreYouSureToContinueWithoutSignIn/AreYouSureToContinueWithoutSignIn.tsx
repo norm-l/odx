@@ -49,7 +49,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
           'https://www.tax.service.gov.uk/fill-online/claim-child-benefit/task-list'
         );
       } else {
-        window.location.href = '/';
+        history.push('/');
       }
     } else {
       setErrorMsg(t('SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN'));
@@ -78,7 +78,6 @@ export default function AreYouSureToContinueWithoutSignIn() {
             useSmallRadios
             options={radioOptions}
             label={t('ARE_YOU_SURE_YOU_WANT_TO_CONTINUE_WO_SIGN_IN')}
-            legendIsHeading
             errorText={errorMsg}
           ></RadioButtons>
           <button
