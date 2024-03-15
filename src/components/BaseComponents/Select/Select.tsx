@@ -4,7 +4,7 @@ import FormGroup, { makeErrorId, makeHintId } from '../FormGroup/FormGroup';
 import FieldSet from '../FormGroup/FieldSet';
 
 export default function Select(props) {
-  const { name, onChange, value, children, errorText, hintText, label } = props;
+  const { name, onChange, value, children, errorText, hintText } = props;
 
   const describedbyIds = `${hintText ? makeHintId(name) : ''} ${
     errorText ? makeErrorId(name) : ''
