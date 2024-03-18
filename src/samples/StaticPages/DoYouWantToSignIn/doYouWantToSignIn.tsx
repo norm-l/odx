@@ -72,26 +72,27 @@ export default function DoYouWantToSignIn() {
         />
         <MainWrapper>
           <StaticPageErrorSummary errorSummary={errorMsg} linkHref='#doYouWantToSignIn' />
-          <h1 className='govuk-label govuk-label--l'>{t('DO_YOU_WANT_TO_SIGN_IN')}</h1>
-          <InstructionTextComponent instructionText={instructionText} />
-          <RadioButtons
-            name='doYouWantToSignIn'
-            displayInline
-            value=''
-            useSmallRadios
-            options={radioOptions}
-            legendIsHeading
-            errorText={errorMsg}
-          ></RadioButtons>
-          <button
-            className='govuk-button'
-            data-module='govuk-button'
-            onClick={handleSubmit}
-            type='button'
-          >
-            {t('CONTINUE')}
-          </button>
-          <br />
+          <form>
+            <h1 className='govuk-heading-l'>{t('DO_YOU_WANT_TO_SIGN_IN')}</h1>
+            <InstructionTextComponent instructionText={instructionText} />
+            <RadioButtons
+              name='doYouWantToSignIn'
+              displayInline
+              value=''
+              useSmallRadios
+              options={radioOptions}
+              legendIsHeading
+              errorText={errorMsg}
+            ></RadioButtons>
+            <button
+              className='govuk-button'
+              data-module='govuk-button'
+              onClick={handleSubmit}
+              type='button'
+            >
+              {t('CONTINUE')}
+            </button>
+          </form>
         </MainWrapper>
       </div>
       <AppFooter />
