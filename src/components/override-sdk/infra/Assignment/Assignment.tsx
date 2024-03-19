@@ -67,6 +67,7 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
+  const [header, setHeader] = useState('');
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -94,15 +95,24 @@ export default function Assignment(props) {
   }, [errorMessages]);
 
   let containerName;
-  let headerLocaleLocation;
 
   const caseInfo = thePConn.getDataObject().caseInfo;
 
   if (caseInfo?.assignments?.length > 0) {
     containerName = caseInfo.assignments[0].name;
-    const firstActionId = caseInfo.assignments[0]?.actions[0]?.ID.toUpperCase();
-    headerLocaleLocation = `${caseInfo.caseTypeID.toUpperCase()}!VIEW!${firstActionId}`;
+    // const firstActionId = caseInfo.assignments[0]?.actions[0]?.ID.toUpperCase();
+    // headerLocaleLocation = `${caseInfo.caseTypeID.toUpperCase()}!VIEW!${firstActionId}`;
   }
+
+  const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
+
+  useEffect(() => {
+    setHeader(localizedVal(containerName, '', headerLocaleLocation));
+  }, [headerLocaleLocation]);
+
+  // PCore.getAssetLoader().loadAssets(`${headerLocaleLocation}.json`)
+  // .then(setHeader(localizedVal(containerName,'', headerLocaleLocation)))
+  // .catch(console.log('Error'))
 
   useEffect(() => {
     if (children && children.length > 0) {
