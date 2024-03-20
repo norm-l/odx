@@ -128,7 +128,7 @@
   
   "COOKIE_PEGAODXEI_DESCRIPTION": "This is used to identify the session ID of a user not using Government Gateway.",
   "COOKIE_PEGAODXDI_DESCRIPTION": "This is used to uniquely identify a device that has interacted with HMRC services and is used for internal security auditing.",
-  "COOKIE_AKA_A2_DESCRIPTION": "This Akamai cookie is used to help speed up content delivery on websites using adaptive acceleration",
+  "COOKIE_AKA_A2_DESCRIPTION": "This Akamai cookie is used to help speed up content delivery on websites using adaptive acceleration.",
   
   "COOKIE_FIND_OUT_MORE": "Dysgwch ragor am gwcis ar wasanaethau CThEF",
   "GDS_INFO_IMPORTANT": "Pwysig",
