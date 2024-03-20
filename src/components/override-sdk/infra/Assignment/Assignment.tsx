@@ -100,19 +100,17 @@ export default function Assignment(props) {
 
   if (caseInfo?.assignments?.length > 0) {
     containerName = caseInfo.assignments[0].name;
-    // const firstActionId = caseInfo.assignments[0]?.actions[0]?.ID.toUpperCase();
-    // headerLocaleLocation = `${caseInfo.caseTypeID.toUpperCase()}!VIEW!${firstActionId}`;
   }
 
   const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
 
   useEffect(() => {
-    setHeader(localizedVal(containerName, '', headerLocaleLocation));
-  }, [headerLocaleLocation]);
+    const headerFetch = setTimeout(() => {
+      setHeader(localizedVal(containerName, '', headerLocaleLocation));
+    }, 50);
 
-  // PCore.getAssetLoader().loadAssets(`${headerLocaleLocation}.json`)
-  // .then(setHeader(localizedVal(containerName,'', headerLocaleLocation)))
-  // .catch(console.log('Error'))
+    return () => clearTimeout(headerFetch);
+  }, [headerLocaleLocation]);
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -403,9 +401,7 @@ export default function Assignment(props) {
             {(!isOnlyFieldDetails.isOnlyField ||
               containerName.toLowerCase().includes('check your answer') ||
               containerName.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', headerLocaleLocation)}
-              </h1>
+              <h1 className='govuk-heading-l'>{header}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <a
