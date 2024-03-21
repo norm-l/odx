@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
@@ -417,6 +417,10 @@ export default function UnAuthChildBenefitsClaim() {
       fetchingIDsForHeader();
     });
 
+    document.addEventListener('SdkLoggedOut', () => {
+      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+    });
+
     // Subscriptions can't be done until onPCoreReady.
     // So we subscribe there. But unsubscribe when this
     // component is unmounted (in function returned from this effect)
@@ -470,9 +474,13 @@ export default function UnAuthChildBenefitsClaim() {
             staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
           }
           signoutHandler={() => {
-            deleteData();
-            clearTimer();
-            setHasSessionTimedOut(false);
+            if (bShowResolutionScreen) {
+              logout();
+            } else {
+              deleteData();
+              clearTimer();
+              setHasSessionTimedOut(false);
+            }
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
