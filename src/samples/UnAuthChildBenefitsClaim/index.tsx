@@ -475,6 +475,7 @@ export default function UnAuthChildBenefitsClaim() {
             setHasSessionTimedOut(false);
           }}
           isAuthorised={false}
+          isConfirmationPage={bShowResolutionScreen}
         />
 
         {/** No Log out popup required as one isn't logged in */}

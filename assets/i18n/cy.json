@@ -235,5 +235,8 @@
   "CHECK_CLAIM_REPLY": "wirio pryd y gallwch ddisgwyl ymateb i’ch hawliad (yn agor tab newydd).",
   "CHECK_CLAIM_APPROVED": "I wirio os yw’ch hawliad am Fudd-dal Plant wedi’i gymeradwyo, gallwch fwrw golwg dros eich tystiolaeth o hawl. ",
   "YOU_NEED_TO_SIGN_IN_TO_ACCESS_INFO": "Bydd angen i chi mewngofnodi i gael at yr wybodaeth hon. Os nad oes gennych fanylion mewngofnodi, gallwch eu creu (yn agor tab newydd).",
-  "EXCLUSIVEOPTION_OR": "neu"
+  "EXCLUSIVEOPTION_OR": "neu",
+  "AUTOMATICALLY_CLOSE_IN": "This page will automatically close in",
+  "STAY_ON_THIS_PAGE": "Stay on this page",
+  "EXIT_THIS_PAGE": "Exit this page"
 }
