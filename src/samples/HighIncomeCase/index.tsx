@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect} from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -11,122 +11,134 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 import { logout } from '@pega/auth/lib/sdk-auth-manager';
 import { staySignedIn } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import { useStartMashup } from './reuseables/PegaSetup';
-import { initTimeout, settingTimer } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import {
-    loginIfNecessary, 
-  } from '@pega/react-sdk-components/lib/components/helpers/authManager';
-  
+  initTimeout,
+  settingTimer
+} from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
+import { loginIfNecessary } from '@pega/react-sdk-components/lib/components/helpers/authManager';
+
 // declare const myLoadMashup;
 
-const HighIncomeCase:FunctionComponent<any> = () => {
+const HighIncomeCase: FunctionComponent<any> = () => {
+  // const [bShowPega, setShowPega] = useState(false);
+  const [shutterServicePage /* setShutterServicePage */] = useState(false);
+  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
+  const [authType, setAuthType] = useState('gg');
 
-    // const [bShowPega, setShowPega] = useState(false);
-    const [shutterServicePage, /* setShutterServicePage */] = useState(false);
-    const [serviceNotAvailable, /* setServiceNotAvailable */] = useState(false);
-    const [authType, setAuthType] = useState('gg');
+  const [currentDisplay, setCurrentDisplay] = useState<
+    'startpage' | 'pegapage' | 'resolutionpage' | 'servicenotavailable' | 'shutterpage'
+  >('startpage');
 
-    const [currentDisplay, setCurrentDisplay] = useState<'startpage'|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'>('startpage');
-    
-    const [showTimeoutModal, setShowTimeoutModal] = useState(false);  
-    const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [showSignoutModal, setShowSignoutModal] = useState(false);
 
-    const history = useHistory();
-    useEffect(() => 
-        {initTimeout(setShowTimeoutModal, false, true) }  
-    , []);
-    
-    function doRedirectDone() {
-        history.push('/hicbc/opt-in');
-        // appName and mainRedirect params have to be same as earlier invocation
-        loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-      } 
-    const { showPega, setShowPega, showResolutionPage } = useStartMashup(setAuthType, doRedirectDone);
+  const history = useHistory();
+  useEffect(() => {
+    initTimeout(setShowTimeoutModal, false, true);
+  }, []);
 
-    useEffect(() => {
-      if(showPega){setCurrentDisplay('pegapage')}
-      else if(showResolutionPage){setCurrentDisplay('resolutionpage')}
-      else if(shutterServicePage){setCurrentDisplay('shutterpage')}      
-      else if(serviceNotAvailable){setCurrentDisplay('servicenotavailable')}
-      else {setCurrentDisplay('startpage')}
+  function doRedirectDone() {
+    history.push('/hicbc/opt-in');
+    // appName and mainRedirect params have to be same as earlier invocation
+    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+  }
+  const { showPega, setShowPega, showResolutionPage } = useStartMashup(setAuthType, doRedirectDone);
 
-    }, [showResolutionPage, showPega, shutterServicePage, serviceNotAvailable])
-
-
-    function signOut() {
-        //  const authService = authType === 'gg' ? 'GovGateway' : (authType === 'gg-dev' ? 'GovGateway-Dev' : authType);
-        let authService;
-        if (authType && authType === 'gg') {
-        authService = 'GovGateway';
-        } else if (authType && authType === 'gg-dev') {
-        authService = 'GovGateway-Dev';
-        }
-        const dpprom =PCore.getDataPageUtils()
-        .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService }) as Promise<object>;
-        
-        dpprom.then(() => {
-            logout().then(() => {});
-        });
+  useEffect(() => {
+    if (showPega) {
+      setCurrentDisplay('pegapage');
+    } else if (showResolutionPage) {
+      setCurrentDisplay('resolutionpage');
+    } else if (shutterServicePage) {
+      setCurrentDisplay('shutterpage');
+    } else if (serviceNotAvailable) {
+      setCurrentDisplay('servicenotavailable');
+    } else {
+      setCurrentDisplay('startpage');
     }
+  }, [showResolutionPage, showPega, shutterServicePage, serviceNotAvailable]);
 
-    function handleSignout() {
-        if (currentDisplay==='pegapage') {
-        setShowSignoutModal(true);
-        } else {
-        signOut();
-        }
+  function signOut() {
+    //  const authService = authType === 'gg' ? 'GovGateway' : (authType === 'gg-dev' ? 'GovGateway-Dev' : authType);
+    let authService;
+    if (authType && authType === 'gg') {
+      authService = 'GovGateway';
+    } else if (authType && authType === 'gg-dev') {
+      authService = 'GovGateway-Dev';
     }
+    const dpprom = PCore.getDataPageUtils().getPageDataAsync('D_AuthServiceLogout', 'root', {
+      AuthService: authService
+    }) as Promise<object>;
 
-    const handleStaySignIn = e => {
-        e.preventDefault();
-        setShowSignoutModal(false);
-        // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-        staySignedIn(setShowTimeoutModal, null, null, null);
+    dpprom.then(() => {
+      logout().then(() => {});
+    });
+  }
+
+  function handleSignout() {
+    if (currentDisplay === 'pegapage') {
+      setShowSignoutModal(true);
+    } else {
+      signOut();
+    }
+  }
+
+  const handleStaySignIn = e => {
+    e.preventDefault();
+    setShowSignoutModal(false);
+    // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
+    staySignedIn(setShowTimeoutModal, null, null, null);
+  };
+
+  const startClaim = (caseID = null) => {
+    setShowPega(true);
+    if (caseID) {
+      PCore.getMashupApi().createCase(caseID, PCore.getConstants().APP.APP);
+    } else {
+      PCore.getMashupApi().createCase(
+        'HMRC-ChB-Work-HICBCPreference',
+        PCore.getConstants().APP.APP
+      );
+    }
+  };
+
+  /* ***
+   * Application specific PCore subscriptions
+   *
+   * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
+   */
+  document.addEventListener('SdkConstellationReady', () => {
+    PCore.onPCoreReady(() => {
+      PCore.getPubSubUtils().subscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
+        () => {
+          // console.log("SUBEVENT!!! showStartPageOnCloseContainerItem")
+          setShowPega(false);
+        },
+        'showStartPageOnCloseContainerItem'
+      );
+    });
+    settingTimer();
+  });
+
+  // And clean up
+
+  useEffect(() => {
+    return () => {
+      PCore.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
+        'showStartPageOnCloseContainerItem'
+      );
     };
+  }, []);
 
-    const startClaim= (caseID = null) => {
-        setShowPega(true);
-        if(caseID)
-          { PCore.getMashupApi().createCase(caseID, PCore.getConstants().APP.APP) }
-        else {
-          PCore.getMashupApi().createCase('HMRC-ChB-Work-HICBCPreference', PCore.getConstants().APP.APP);       
-        }    
-    }   
-
-
-
-    /* ***
-     * Application specific PCore subscriptions
-     * 
-     * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps 
-     */
-    document.addEventListener('SdkConstellationReady', () => {
-        PCore.onPCoreReady(() => {        
-        PCore.getPubSubUtils().subscribe(
-            PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
-            () => {
-                // console.log("SUBEVENT!!! showStartPageOnCloseContainerItem")
-                setShowPega(false);
-            },
-            'showStartPageOnCloseContainerItem'
-        );
-        })
-        settingTimer();
-    }); 
-    
-    // And clean up
-
-    useEffect(() => {
-        return () => {
-            PCore.getPubSubUtils().unsubscribe(PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,'showStartPageOnCloseContainerItem')
-        }
-    }, [])
-
-
-    return (
+  return (
     <>
       <TimeoutPopup
         show={showTimeoutModal}
-        staySignedinHandler={() => staySignedIn(setShowTimeoutModal, 'D_ClaimantWorkAssignmentChBCases')}
+        staySignedinHandler={() =>
+          staySignedIn(setShowTimeoutModal, 'D_ClaimantWorkAssignmentChBCases')
+        }
         signoutHandler={() => logout()}
         isAuthorised
       />
@@ -134,12 +146,14 @@ const HighIncomeCase:FunctionComponent<any> = () => {
       <AppHeader
         handleSignout={handleSignout}
         appname={useTranslation().t('HIGH_INCOME_BENEFITS')}
-        hasLanguageToggle
+        hasLanguageToggle={false}
         isPegaApp={showPega}
-        languageToggleCallback={() => {}/* toggleNotificationProcess(
+        languageToggleCallback={
+          () => {} /* toggleNotificationProcess(
           { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
           assignmentPConn 
-        ) */}
+        ) */
+        }
       />
       <div className='govuk-width-container'>
         {shutterServicePage ? (
@@ -152,11 +166,10 @@ const HighIncomeCase:FunctionComponent<any> = () => {
 
             {serviceNotAvailable && <ServiceNotAvailable />}
 
-            { currentDisplay === 'startpage' && <StartPage onStart={startClaim}/>}
-            { currentDisplay === 'resolutionpage' && <h3>Confirmation PlaceHolder</h3> }
-            </>
+            {currentDisplay === 'startpage' && <StartPage onStart={startClaim} />}
+            {currentDisplay === 'resolutionpage' && <h3>Confirmation PlaceHolder</h3>}
+          </>
         )}
-
       </div>
 
       <LogoutPopup
@@ -167,8 +180,7 @@ const HighIncomeCase:FunctionComponent<any> = () => {
       />
       <AppFooter />
     </>
-    )
-}
+  );
+};
 
-
-export default HighIncomeCase ;
+export default HighIncomeCase;
