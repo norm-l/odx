@@ -52,7 +52,7 @@ export default function UnAuthChildBenefitsClaim() {
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'ChB';
   const featureType = 'Service';
-  const claimsListApi = 'D_GetUnauthClaimStatusBySessionID';
+  const claimsListApi = '';
 
   const { t } = useTranslation();
 
@@ -470,9 +470,14 @@ export default function UnAuthChildBenefitsClaim() {
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
         <TimeoutPopup
           show={showTimeoutModal}
-          staySignedinHandler={() =>
-            staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
-          }
+          staySignedinHandler={() => {
+            if (bShowResolutionScreen) {
+              setShowTimeoutModal(false);
+              initTimeout(setShowTimeoutModal, deleteData, false, true);
+            } else {
+              staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false);
+            }
+          }}
           signoutHandler={() => {
             if (bShowResolutionScreen) {
               logout();
