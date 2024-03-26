@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
-      baseUrl:'./'
+      //baseUrl:'./'
     })
   );
   pluginsToAdd.push(
@@ -247,7 +247,7 @@ module.exports = (env, argv) => {
   };
 
   if(webpackMode==='development'){
-    initConfig.output.publicPath = publicPathValue
+    //initConfig.output.publicPath = publicPathValue
   }
 
   return initConfig;

@@ -166,6 +166,7 @@ const ClaimPage: FunctionComponent<any> = () => {
             },
             'showStartPageOnCloseContainerItem'
         );
+        startClaim()
         })
         settingTimer();
         PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));
@@ -217,7 +218,7 @@ const ClaimPage: FunctionComponent<any> = () => {
               <div id='pega-root'></div>
             </div>
             { serviceNotAvailable && <ServiceNotAvailable /> }            
-            { currentDisplay === 'startpage' && <StartPage onStart={startClaim}/>}
+            {/* currentDisplay === 'startpage' && <StartPage onStart={startClaim}/> */}
             { currentDisplay === 'resolutionpage' && <SummaryPage summaryContent={summaryPageContent.content} summaryTitle={summaryPageContent.title} summaryBanner={summaryPageContent.banner} /> }            
           </>
         )}
