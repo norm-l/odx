@@ -468,6 +468,7 @@ export default function UnAuthChildBenefitsClaim() {
         {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
         {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
+        {!showDeletePage && (
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() => {
@@ -489,8 +490,7 @@ export default function UnAuthChildBenefitsClaim() {
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
-        />
-
+        />        
         {/** No Log out popup required as one isn't logged in */}
       </div>
 
