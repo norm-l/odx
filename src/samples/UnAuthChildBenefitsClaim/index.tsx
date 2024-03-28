@@ -50,7 +50,7 @@ export default function UnAuthChildBenefitsClaim() {
   const [caseId, setCaseId] = useState('');
 
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
-  const featureID = 'ChB';
+  const featureID = 'UnauthChB';
   const featureType = 'Service';
   const claimsListApi = 'D_GetUnauthClaimStatusBySessionID';
 
@@ -443,8 +443,35 @@ export default function UnAuthChildBenefitsClaim() {
     };
   }, []);
 
+  const renderContent = () => {
+    return shutterServicePage ? (
+      <ShutterServicePage />
+    ) : (
+      <>
+        <div id='pega-part-of-page'>
+          <div id='pega-root'></div>
+        </div>
+        {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
+      </>
+    );
+  };
+
   return (
     <>
+      {!showDeletePage && (
+        <TimeoutPopup
+          show={showTimeoutModal}
+          staySignedinHandler={() =>
+            staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
+          }
+          signoutHandler={() => {
+            deleteData();
+            clearTimer();
+            setHasSessionTimedOut(false);
+          }}
+          isAuthorised={false}
+        />
+      )}
       <AppHeader
         appname={t('CLAIM_CHILD_BENEFIT')}
         hasLanguageToggle
@@ -454,31 +481,14 @@ export default function UnAuthChildBenefitsClaim() {
           assignmentPConn
         )}
       />
-
       <div className='govuk-width-container'>
-        <div id='pega-part-of-page'>
-          <div id='pega-root'></div>
-        </div>
-        {shutterServicePage && <ShutterServicePage />}
-
-        {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
-        {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
-        {!showDeletePage && (
-          <TimeoutPopup
-            show={showTimeoutModal}
-            staySignedinHandler={() =>
-              staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
-            }
-            signoutHandler={() => {
-              deleteData();
-              clearTimer();
-              setHasSessionTimedOut(false);
-            }}
-            isAuthorised={false}
-          />
+        {serviceNotAvailable ? (
+          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+        ) : (
+          renderContent()
         )}
-        {/** No Log out popup required as one isn't logged in */}
+
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
       </div>
 
       <AppFooter />
