@@ -469,28 +469,29 @@ export default function UnAuthChildBenefitsClaim() {
         {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
         {!showDeletePage && (
-        <TimeoutPopup
-          show={showTimeoutModal}
-          staySignedinHandler={() => {
-            if (bShowResolutionScreen) {
-              setShowTimeoutModal(false);
-              initTimeout(setShowTimeoutModal, deleteData, false, true);
-            } else {
-              staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false);
-            }
-          }}
-          signoutHandler={() => {
-            if (bShowResolutionScreen) {
-              logout();
-            } else {
-              deleteData();
-              clearTimer();
-              setHasSessionTimedOut(false);
-            }
-          }}
-          isAuthorised={false}
-          isConfirmationPage={bShowResolutionScreen}
-        />        
+          <TimeoutPopup
+            show={showTimeoutModal}
+            staySignedinHandler={() => {
+              if (bShowResolutionScreen) {
+                setShowTimeoutModal(false);
+                initTimeout(setShowTimeoutModal, deleteData, false, true);
+              } else {
+                staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false);
+              }
+            }}
+            signoutHandler={() => {
+              if (bShowResolutionScreen) {
+                logout();
+              } else {
+                deleteData();
+                clearTimer();
+                setHasSessionTimedOut(false);
+              }
+            }}
+            isAuthorised={false}
+            isConfirmationPage={bShowResolutionScreen}
+          />
+        )}
         {/** No Log out popup required as one isn't logged in */}
       </div>
 
