@@ -32,11 +32,11 @@ export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfir
     // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      if (isAuthorised || isConfirmationPage) {
-        logout();
-      } else {
+      if (!isAuthorised && !isConfirmationPage) {
         deleteData();
         clearTimer();
+      } else {
+        logout();
       }
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
