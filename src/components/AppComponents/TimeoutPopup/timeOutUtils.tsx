@@ -20,12 +20,7 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = (
-  showTimeoutModal,
-  deleteData,
-  isAuthorised,
-  isConfirmationPage = false
-) => {
+export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
   // TODO - isAuthorised to be replaced by caseType from pega
   // Fetches timeout length config
   settingTimer();
@@ -37,12 +32,11 @@ export const initTimeout = (
     // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      if (!isAuthorised && !isConfirmationPage) {
+      if (isAuthorised || isConfirmationPage) {
+        logout();
+      } else {
         deleteData();
         clearTimer();
-        // session ends and deleteData() (pega)
-      } else {
-        logout();
       }
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
@@ -51,15 +45,10 @@ export const initTimeout = (
 // Sends 'ping' to pega to keep session alive and then initiates the timeout
 export function staySignedIn(
   setShowTimeoutModal,
-  claimsListApi,
   deleteData = null,
   isAuthorised = false,
-  refreshSignin = true
+  isConfirmationPage = false
 ) {
-  if (refreshSignin && claimsListApi.length > 0) {
-    // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
-  }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal, deleteData, isAuthorised);
+  initTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
 }
