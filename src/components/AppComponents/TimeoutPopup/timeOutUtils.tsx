@@ -33,9 +33,12 @@ export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfir
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
       if (!isAuthorised && !isConfirmationPage) {
+        // if the journey is not authorized or from confirmation page , the claim data gets deleted
         deleteData();
         clearTimer();
       } else {
+        // the logout case executes when entire timeout occurs after confirmation page or user clicks
+        // exit survey link in pop after confirmation page
         logout();
       }
     }, milisecondsTilSignout);
