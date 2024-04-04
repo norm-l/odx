@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GDSTextInput from '../../../BaseComponents/TextInput/TextInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
-
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
+import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function TextInput(props) {
   const {
@@ -23,13 +24,13 @@ export default function TextInput(props) {
     configAlternateDesignSystem
   } = props;
 
-  const[errorMessage,setErrorMessage] = useState(validatemessage);
-
+  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   registerNonEditableField(!!disabled);
 
-  useEffect(()=>{
-    setErrorMessage(validatemessage)
-  },[validatemessage])
+  useEffect(() => {
+    setErrorMessage(validatemessage);
+  }, [validatemessage]);
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
 
@@ -44,13 +45,32 @@ export default function TextInput(props) {
   };
 
   let label = props.label;
-  const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
-  if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
+  const { isOnlyField, overrideLabel } = useIsOnlyField(props.displayOrder);
+  if (isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
   const maxLength = fieldMetadata?.maxLength;
+  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
 
   if (readOnly) {
-    return <ReadOnlyDisplay label={label} value={value} name={name}/>;
+    return <ReadOnlyDisplay label={label} value={value} name={name} />;
   }
 
   const extraProps = { testProps: { 'data-test-id': testId } };

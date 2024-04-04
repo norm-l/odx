@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import Select from '../../../BaseComponents/Select/Select';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 interface IOption {
   key: string;
@@ -21,8 +23,10 @@ export default function Dropdown(props) {
     helperText,
     readOnly,
     name,
-    fieldMetadata
+    fieldMetadata,
+    configAlternateDesignSystem
   } = props;
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
 
   const [options, setOptions] = useState<Array<IOption>>([]);
   const [displayValue, setDisplayValue] = useState();
@@ -74,7 +78,25 @@ export default function Dropdown(props) {
     const selectedValue = evt.target.value === placeholder ? '' : evt.target.value;
     handleEvent(actionsApi, 'changeNblur', propName, selectedValue);
   };
-
+  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
   if (readOnly) {
     return (
       <ReadOnlyDisplay

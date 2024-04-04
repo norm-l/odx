@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
-import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
+import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
-
+import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function RadioButtons(props) {
   const {
@@ -15,20 +16,20 @@ export default function RadioButtons(props) {
     readOnly,
     value,
     name,
-    
+    configAlternateDesignSystem,
     testId,
     fieldMetadata
   } = props;
-
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   let label = props.label;
-  const {isOnlyField, overrideLabel} = useIsOnlyField(props.displayOrder);
-  if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
+  const { isOnlyField, overrideLabel } = useIsOnlyField(props.displayOrder);
+  if (isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
-  const[errorMessage,setErrorMessage] = useState(validatemessage);
-  useEffect(()=>{
-    setErrorMessage(validatemessage)
-  },[validatemessage])
- 
+  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  useEffect(() => {
+    setErrorMessage(validatemessage);
+  }, [validatemessage]);
+
   const thePConn = getPConnect();
   const theConfigProps = thePConn.getConfigProps();
   const className = thePConn.getCaseInfo().getClassName();
@@ -51,22 +52,43 @@ export default function RadioButtons(props) {
   const localeName = localeContext === 'datapage' ? metaData?.datasource?.name : configProperty;
   const localePath = localeContext === 'datapage' ? displayName : localeName;
 
-
-
   let displayValue = null;
-  if(selectedOption && selectedOption.value){
+  if (selectedOption && selectedOption.value) {
     displayValue = selectedOption.value;
   }
-
-  if(readOnly){
-    return <ReadOnlyDisplay label={label} value={thePConn.getLocalizedValue(
-      displayValue,
-      localePath,
-      thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
-      )} />
+  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
+  if (readOnly) {
+    return (
+      <ReadOnlyDisplay
+        label={label}
+        value={thePConn.getLocalizedValue(
+          displayValue,
+          localePath,
+          thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+        )}
+      />
+    );
   }
 
-  const extraProps= {testProps:{'data-test-id':testId}};
+  const extraProps = { testProps: { 'data-test-id': testId } };
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
 
@@ -81,13 +103,15 @@ export default function RadioButtons(props) {
       label={label}
       onChange={handleChange}
       legendIsHeading={isOnlyField}
-      options={theOptions.map(option => {return {
-        value:option.key,
-        label:thePConn.getLocalizedValue(
-        option.value,
-        localePath,
-        thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
-        )}
+      options={theOptions.map(option => {
+        return {
+          value: option.key,
+          label: thePConn.getLocalizedValue(
+            option.value,
+            localePath,
+            thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+          )
+        };
       })}
       displayInline={theOptions.length === 2}
       hintText={helperText}

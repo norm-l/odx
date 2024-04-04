@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useEffect, useContext } from 'react';
 import DateInput from '../../../BaseComponents/DateInput/DateInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
@@ -8,6 +8,8 @@ import {
 } from '../../../helpers/formatters/DateErrorFormatter';
 import { GBdate } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
+import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/index';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 declare const global;
 
@@ -39,8 +41,10 @@ export default function Date(props) {
     )
   );
   const [specificErrors, setSpecificErrors] = useState<any>(null);
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
 
   const actionsApi = getPConnect().getActionsApi();
+
   const propName = getPConnect().getStateProps().value;
   // PM - Create ISODate string (as expected by onChange) and pass to onchange value, adding 0 padding here for day and month to comply with isostring format.
   const handleDateChange = () => {
@@ -113,6 +117,25 @@ export default function Date(props) {
     return <span className='govuk-body govuk-!-font-weight-bold'>{GBdate(value)}</span>;
   }
 
+  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
   if (readOnly) {
     return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
   }

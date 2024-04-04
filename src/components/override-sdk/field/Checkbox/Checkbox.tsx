@@ -6,11 +6,21 @@ import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDis
 import { DefaultFormContext, ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import { checkErrorMsgs, removeRedundantString } from '../../../helpers/utils';
 import { t } from 'i18next';
+import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
   const { OverrideLabelValue } = useContext(DefaultFormContext);
 
-  const { getPConnect, inputProps, validatemessage, hintText, readOnly, value } = props;
+  const {
+    getPConnect,
+    inputProps,
+    validatemessage,
+    hintText,
+    readOnly,
+    value,
+    configAlternateDesignSystem
+  } = props;
 
   // let label = props.label;
 
@@ -29,7 +39,7 @@ export default function CheckboxComponent(props) {
   /* retaining for future reference, incase changes need to be reverted
  
   if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label; */
-
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   const [errorMessage, setErrorMessage] = useState(validatemessage);
   const { errorMsgs } = useContext(ErrorMsgContext);
 
@@ -52,6 +62,25 @@ export default function CheckboxComponent(props) {
   const { caption } = theConfigProps;
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
+  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
 
   if (readOnly) {
     return <ReadOnlyDisplay value={value ? props.trueLabel : props.falseLabel} label={caption} />;
@@ -72,7 +101,8 @@ export default function CheckboxComponent(props) {
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
-              <span className='govuk-visually-hidden'>Error:</span> {removeRedundantString(errorMessage)}
+              <span className='govuk-visually-hidden'>Error:</span>{' '}
+              {removeRedundantString(errorMessage)}
             </p>
           )}
           <GDSCheckbox
