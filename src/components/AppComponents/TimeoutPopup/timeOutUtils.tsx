@@ -48,10 +48,16 @@ export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfir
 // Sends 'ping' to pega to keep session alive and then initiates the timeout
 export function staySignedIn(
   setShowTimeoutModal,
+  claimsListApi,
   deleteData = null,
   isAuthorised = false,
+  refreshSignin = true,
   isConfirmationPage = false
 ) {
+  if (refreshSignin && !!claimsListApi) {
+    // @ts-ignore
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
+  }
   setShowTimeoutModal(false);
   initTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
 }

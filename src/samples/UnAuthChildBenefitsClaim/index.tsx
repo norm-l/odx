@@ -52,6 +52,7 @@ export default function UnAuthChildBenefitsClaim() {
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'ChB';
   const featureType = 'Service';
+  const claimsListApi = '';
 
   const { t } = useTranslation();
 
@@ -115,10 +116,7 @@ export default function UnAuthChildBenefitsClaim() {
   function deleteData() {
     const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
     if (bShowPega && activeContainer) {
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
     }
 
     setShowTimeoutModal(false);
@@ -129,7 +127,7 @@ export default function UnAuthChildBenefitsClaim() {
   }
 
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal, false);
+    staySignedIn(setShowTimeoutModal, claimsListApi, false);
     resetAppDisplay();
     setShowStartPage(true);
     closeContainer();
@@ -303,7 +301,9 @@ export default function UnAuthChildBenefitsClaim() {
       initTimeout(showTimeoutModal, deleteData, false);
 
       // Subscribe to any store change to reset timeout counter
-      PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, deleteData, false));
+      PCore.getStore().subscribe(() =>
+        staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false, false)
+      );
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
@@ -474,7 +474,14 @@ export default function UnAuthChildBenefitsClaim() {
           <TimeoutPopup
             show={showTimeoutModal}
             staySignedinHandler={() => {
-              staySignedIn(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
+              staySignedIn(
+                setShowTimeoutModal,
+                claimsListApi,
+                deleteData,
+                false,
+                false,
+                bShowResolutionScreen
+              );
             }}
             signoutHandler={() => {
               if (bShowResolutionScreen) {
