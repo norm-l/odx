@@ -3,6 +3,7 @@ import { func, string } from 'prop-types';
 
 import HintTextComponent from '../../helpers/formatters/ParsedHtml';
 import FormGroup from '../FormGroup/FormGroup';
+import TextInput from '../TextInput/TextInput';
 
 function makeHintId(identifier) {
   return `${identifier}-hint`;
@@ -31,6 +32,7 @@ export default function AutoComplete(props) {
       });
     }
   }, [optionList]);
+
   const arrOptions =
     optionList.length &&
     optionList.map(option => {
@@ -78,7 +80,7 @@ export default function AutoComplete(props) {
           {arrOptions}
         </select>
       ) : (
-        <></>
+        <TextInput />
       )}
     </FormGroup>
   );

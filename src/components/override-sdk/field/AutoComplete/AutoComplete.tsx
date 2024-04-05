@@ -196,9 +196,11 @@ export default function AutoComplete(props: AutoCompleteProps) {
     if (validatemessage) {
       element?.classList.add('govuk-input--error');
     }
-    element?.addEventListener('blur', handleChange);
-    element?.addEventListener('keypress', keyHandler);
-    elementUl?.addEventListener('mousedown', event => stopPropagation(event, elementUl));
+    if (elementUl) {
+      element?.addEventListener('blur', handleChange);
+      element?.addEventListener('keypress', keyHandler);
+      elementUl?.addEventListener('mousedown', event => stopPropagation(event, elementUl));
+    }
     return () => {
       window.removeEventListener('blur', handleChange);
       window.removeEventListener('mousedown', handleChange);
