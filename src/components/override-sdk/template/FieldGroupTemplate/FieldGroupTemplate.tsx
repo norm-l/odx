@@ -40,15 +40,28 @@ export default function Group(props) {
   if (children?.length > 0) {
     const errors = [''];
     if (children[0].props?.getPConnect().getMetadata().type === 'Checkbox') {
-      children.forEach(child => {
-        const getconfigAlternateDesignSystem = child.props.getPConnect().getMetadata()
-          .config.configAlternateDesignSystem;
+      const valuesList = children
+        .filter(child => {
+          const childPConnect = child.props.getPConnect();
+          const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
+
+          return resolvedProps.value;
+        })
+        .map(child => {
+          const childPConnect = child.props.getPConnect();
+          const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
+          return resolvedProps.caption;
+        });
+
+      const getconfigAlternateDesignSystem = children[0].props.getPConnect().getMetadata()
+        .config.configAlternateDesignSystem;
+      if (getconfigAlternateDesignSystem) {
         const stepId = getconfigAlternateDesignSystem?.stepId;
         if (hasBeenWrapped && getconfigAlternateDesignSystem?.ShowChangeLink) {
           return (
             <GDSCheckAnswers
-              label={props.label}
-              value={props.value}
+              label={heading}
+              value={valuesList}
               name={props.name}
               stepId={stepId}
               getPConnect={getPConnect}
@@ -63,19 +76,8 @@ export default function Group(props) {
             />
           );
         }
-      });
+      }
       if (readOnly) {
-        const valuesList = children
-          .filter(child => {
-            const childPConnect = child.props.getPConnect();
-            const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
-            return resolvedProps.value;
-          })
-          .map(child => {
-            const childPConnect = child.props.getPConnect();
-            const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
-            return resolvedProps.caption;
-          });
         return <ReadOnlyDisplay value={valuesList} label={heading} />;
       }
 
