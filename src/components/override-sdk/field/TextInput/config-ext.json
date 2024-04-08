@@ -7,18 +7,6 @@
   "subtype": "Text",
   "properties": [
     {
-      "name": "ShowChangeLink",
-      "label": "Show change link",
-      "format": "BOOLEAN"
-    },
-    {
-      "format": "TEXT",
-      "name": "stepId",
-      "label": "stepId for Changelink",
-      "required": false,
-      "visibility": "$this.ShowChangeLink"
-    },
-    {
       "format": "SELECT",
       "name": "autocomplete",
       "label": "Autocomplete attribute",
@@ -66,7 +54,19 @@
         { "key": "tel-national", "value": "tel-national" },
         { "key": "url", "value": "url" },
         { "key": "username", "value": "username" },
-        { "key": "webauthn", "value": "webauthn" }
+        { "key": "webauthn", "value": "webauthn" },
+        {
+          "name": "ShowChangeLink",
+          "label": "Show change link",
+          "format": "BOOLEAN"
+        },
+        {
+          "format": "TEXT",
+          "name": "stepId",
+          "label": "stepId for Changelink",
+          "required": false,
+          "visibility": "$this.ShowChangeLink"
+        }
       ]
     }
   ]
