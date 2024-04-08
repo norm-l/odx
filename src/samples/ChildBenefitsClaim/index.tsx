@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CustomView, getUA } from 'react-device-detect';
 
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
@@ -654,16 +655,18 @@ export default function ChildBenefitsClaim() {
         isAuthorised
       />
 
-      <AppHeader
-        handleSignout={handleSignout}
-        appname={t('CLAIM_CHILD_BENEFIT')}
-        hasLanguageToggle
-        isPegaApp={bShowPega}
-        languageToggleCallback={toggleNotificationProcess(
-          { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn
-        )}
-      />
+      <CustomView condition={getUA === 'Firefox'}>
+        <AppHeader
+          handleSignout={handleSignout}
+          appname={t('CLAIM_CHILD_BENEFIT')}
+          hasLanguageToggle
+          isPegaApp={bShowPega}
+          languageToggleCallback={toggleNotificationProcess(
+            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
+            assignmentPConn
+          )}
+        />
+      </CustomView>
       <div className='govuk-width-container'>
         {serviceNotAvailable ? (
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
