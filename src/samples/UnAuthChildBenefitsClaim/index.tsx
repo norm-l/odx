@@ -3,17 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
-import {
-  loginIfNecessary,
-  sdkSetAuthHeader
-} from '@pega/react-sdk-components/lib/components/helpers/authManager';
+import { loginIfNecessary, sdkSetAuthHeader, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
@@ -52,7 +48,7 @@ export default function UnAuthChildBenefitsClaim() {
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'ChB';
   const featureType = 'Service';
-  const claimsListApi = 'D_GetUnauthClaimStatusBySessionID';
+  const claimsListApi = '';
 
   const { t } = useTranslation();
 
@@ -114,9 +110,11 @@ export default function UnAuthChildBenefitsClaim() {
 
   // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
   function deleteData() {
-    if (bShowPega) {
-      closeContainer();
+    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+    if (bShowPega && activeContainer) {
+      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
     }
+
     setShowTimeoutModal(false);
     setShowStartPage(false);
     setShowPega(false);
@@ -417,6 +415,10 @@ export default function UnAuthChildBenefitsClaim() {
       fetchingIDsForHeader();
     });
 
+    document.addEventListener('SdkLoggedOut', () => {
+      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+    });
+
     // Subscriptions can't be done until onPCoreReady.
     // So we subscribe there. But unsubscribe when this
     // component is unmounted (in function returned from this effect)
@@ -467,15 +469,28 @@ export default function UnAuthChildBenefitsClaim() {
         {!showDeletePage && (
           <TimeoutPopup
             show={showTimeoutModal}
-            staySignedinHandler={() =>
-              staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
-            }
+            staySignedinHandler={() => {
+              staySignedIn(
+                setShowTimeoutModal,
+                claimsListApi,
+                deleteData,
+                false,
+                false,
+                bShowResolutionScreen
+              );
+            }}
             signoutHandler={() => {
-              deleteData();
-              clearTimer();
-              setHasSessionTimedOut(false);
+              if (bShowResolutionScreen) {
+                logout();
+              } else {
+                clearTimer();
+                deleteData();
+
+                setHasSessionTimedOut(false);
+              }
             }}
             isAuthorised={false}
+            isConfirmationPage={bShowResolutionScreen}
           />
         )}
         {/** No Log out popup required as one isn't logged in */}
