@@ -1,4 +1,4 @@
-import { Grid, FieldGroup } from '@pega/cosmos-react-core';
+import { FieldGroup } from '@pega/cosmos-react-core';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -10,7 +10,7 @@ import StyledHmrcOdxSectionBasedWrapper from './styles';
 interface HmrcOdxSectionBasedProps extends PConnFieldProps {
   // If any, enter additional props that only exist on TextInput here
   showLabel: boolean;
-  NumCols: string;
+  // NumCols: string;
   children: any;
 }
 
@@ -19,10 +19,10 @@ interface HmrcOdxSectionBasedProps extends PConnFieldProps {
 // props passed in combination of props from property panel (config.json) and run time props from Constellation
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
-  const { children, NumCols, label, showLabel, getPConnect } = props;
+  const { children, label, showLabel, getPConnect } = props;
   const propsToUse = { label, showLabel, ...getPConnect().getInheritedProps() };
 
-  const nCols = parseInt(NumCols, 10);
+  // const nCols = parseInt(NumCols, 10);
 
   // console.log(`Rendering ${getPConnect()?.getComponentName()} with ${template} with ${children?.length} Region(s)`);
 
@@ -30,14 +30,9 @@ export default function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
     <StyledHmrcOdxSectionBasedWrapper>
       <div className='sectionBased'>
         <FieldGroup name={propsToUse.showLabel ? propsToUse.label : ''}>
-          <Grid
-            container={{
-              cols: `repeat(${nCols}, minmax(0, 1fr))`,
-              gap: 2
-            }}
-          >
-            {children}
-          </Grid>
+          <div className='region'>{children[0]}</div>
+          <div className='region'>{children[1]}</div>
+          <div className='region'>{children[2]}</div>
         </FieldGroup>
       </div>
     </StyledHmrcOdxSectionBasedWrapper>
@@ -45,11 +40,11 @@ export default function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
 }
 
 HmrcOdxSectionBased.defaultProps = {
-  NumCols: 1,
+  // NumCols: 1,
   children: []
 };
 
 HmrcOdxSectionBased.propTypes = {
-  NumCols: PropTypes.number,
+  // NumCols: PropTypes.number,
   children: PropTypes.arrayOf(PropTypes.node)
 };

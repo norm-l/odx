@@ -9,6 +9,7 @@ import styled, { css } from 'styled-components';
 
 export default styled.div(() => {
   return css`
+    margin: 0px 0;
     .sectionBased {
       padding: 20px;
       background-color: #f5f5f5;
@@ -17,14 +18,8 @@ export default styled.div(() => {
     .region {
       border-radius: 5px;
       padding: 20px;
-      background-color: #ffffff;
+      background-color: orange;
+      margin-bottom: 20px;
     }
   `;
 });
-
-// export const StyledHmrcOdxSectionBasedWrapper = styled.div`
-//   .sectionBased {
-//     padding: 20px;
-//     background-color: #f5f5f5;
-//   }
-// `;

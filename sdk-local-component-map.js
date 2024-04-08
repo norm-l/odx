@@ -27,6 +27,7 @@ import HmrcOdxGdsTaskList from './src/components/custom-sdk/widget/HMRC_ODX_GDST
 import HmrcOdxGdsTaskListTemplate from './src/components/custom-sdk/template/HMRC_ODX_GDSTaskListTemplate/';
 import AutoComplete from './src/components/override-sdk/field/AutoComplete/';
 import HmrcOdxGdsTextPresentation from './src/components/custom-sdk/field/HMRC_ODX_GDSTextPresentation/';
+import HmrcOdxSectionBased from './src/components/custom-sdk/template/HMRC_ODX_sectionBased/';
 /*import end - DO NOT REMOVE*/
 
 // localSdkComponentMap is the JSON object where we'll store the components that are
@@ -59,7 +60,8 @@ const localSdkComponentMap = {
   HMRC_ODX_ComplexQuestionExplanation: HmrcOdxComplexQuestionExplanation,
   AutoComplete: AutoComplete,
   HMRC_ODX_GDSTextPresentation: HmrcOdxGdsTextPresentation,
-  HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate
+  HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate,
+  HMRC_ODX_sectionBased: HmrcOdxSectionBased
   /*map end - DO NOT REMOVE*/
 };
 
