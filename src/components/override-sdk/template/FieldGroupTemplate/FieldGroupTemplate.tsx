@@ -55,8 +55,10 @@ export default function Group(props) {
 
       const getconfigAlternateDesignSystem = children[0].props.getPConnect().getMetadata()
         .config.configAlternateDesignSystem;
+
       if (getconfigAlternateDesignSystem) {
-        const stepId = getconfigAlternateDesignSystem?.stepId;
+        let stepId = getconfigAlternateDesignSystem?.stepId;
+        stepId = stepId.split('@L ').pop();
         if (hasBeenWrapped && getconfigAlternateDesignSystem?.ShowChangeLink) {
           return (
             <GDSCheckAnswers
