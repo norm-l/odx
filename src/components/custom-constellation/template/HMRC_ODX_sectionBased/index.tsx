@@ -4,7 +4,7 @@ import React from 'react';
 
 import type { PConnFieldProps } from './PConnProps';
 
-import StyledHmrcOdxSectionBasedWrapper from './styles';
+import { StyledHmrcOdxSectionBasedWrapper, StyledRegion } from './styles';
 
 // interface for props
 interface HmrcOdxSectionBasedProps extends PConnFieldProps {
@@ -30,9 +30,9 @@ export default function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
     <StyledHmrcOdxSectionBasedWrapper>
       <div className='sectionBased'>
         <FieldGroup name={propsToUse.showLabel ? propsToUse.label : ''}>
-          <div className='region'>{children[0]}</div>
-          <div className='region'>{children[1]}</div>
-          <div className='region'>{children[2]}</div>
+          <StyledRegion>{children[0]}</StyledRegion>
+          <StyledRegion>{children[1]}</StyledRegion>
+          <StyledRegion>{children[2]}</StyledRegion>
         </FieldGroup>
       </div>
     </StyledHmrcOdxSectionBasedWrapper>
