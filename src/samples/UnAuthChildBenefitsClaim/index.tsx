@@ -441,6 +441,7 @@ export default function UnAuthChildBenefitsClaim() {
         PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
         'assignmentFinished'
       );
+      PCore?.getPubSubUtils().unsubscribe('languageToggleTriggered');
     };
   }, []);
 
