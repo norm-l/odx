@@ -24,8 +24,7 @@ const LanguageToggle = props => {
         'HMRC-CHB-WORK-CLAIM!CASE!CLAIM'
       ]);
 
-      PCore.getPubSubUtils().publish('languageToggleTriggered', {language: lang});
-      PCore.getPubSubUtils().publish('languageToggleLocale', []);
+      PCore.getPubSubUtils().publish('languageToggleTriggered', {language: lang, localeRef: []});
     }
     if (languageToggleCallback) {
       languageToggleCallback(lang);

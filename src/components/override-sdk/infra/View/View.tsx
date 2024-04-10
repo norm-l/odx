@@ -32,9 +32,9 @@ export default function View(props) {
   let { label, showLabel = false } = props;
 
   // call the locale reference api when we toggle the languge from English to Welsh
-  PCore.getPubSubUtils().subscribe('languageToggleLocale', locale => {
-    if(!locale.includes(props.localeReference)) {
-      locale.push(props.localeReference);
+  PCore.getPubSubUtils().subscribe('languageToggleTriggered', locale => {
+    if(!locale.localeRef.includes(props.localeReference)) {
+      locale.localeRef.push(props.localeReference);
       PCore.getLocaleUtils().loadLocaleResources([props.localeReference]);
     }
   });

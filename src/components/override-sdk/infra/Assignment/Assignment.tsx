@@ -68,7 +68,9 @@ export default function Assignment(props) {
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
   const [header, setHeader] = useState('');
-  const [selectedLang, setSelectedLang] = useState('');
+
+  const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+  const [selectedLang, setSelectedLang] = useState(lang);
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -107,8 +109,8 @@ export default function Assignment(props) {
 
   PCore.getPubSubUtils().subscribe(
     'languageToggleTriggered',
-    (lang) => {
-      setSelectedLang(lang?.language);
+    (langreference) => {
+      setSelectedLang(langreference?.language);
     }
   );
 
