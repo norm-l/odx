@@ -14,7 +14,7 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
   const [returnSlipContent, setReturnSlipContent] = useState();
   const [loading, setLoading] = useState(true);
-  const serviceShuttered = useServiceShuttered();
+  const serviceShuttered = useServiceShuttered(true);
   const [isCaseRefRequired, setIsCaseRefRequired] = useState(false);
   const refId = caseId.replace('HMRC-CHB-WORK ', '');
   const docIDForDocList = 'CR0003';
@@ -68,6 +68,12 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
         // eslint-disable-next-line no-console
         console.error(err);
       });
+    if (!PCore.getContainerUtils().isContainerDirty('app/primary_1')) {
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    }
   }, []);
 
   const generateReturnSlip = e => {
