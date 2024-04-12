@@ -51,6 +51,25 @@ export default function HmrcOdxGdsSummaryCard(props) {
     }
   }, [children[0]]);
 
+  const [formattedValues, setFormattedValues] = useState([]);
+
+  useEffect(() => {
+    // Populate formattedValues array when formElms change
+    const values = formElms.map(field => {
+      let formattedValue = '';
+
+      formattedValue =
+        (field as any)?.props?.label === 'Date of birth' ||
+        (field as any)?.props?.label === 'Dyddiad geni' // TODO: Need to make more robust
+          ? GBdate((field as any)?.props?.value)
+          : (field as any)?.props?.value;
+
+      return formattedValue;
+    });
+
+    setFormattedValues(values);
+  }, [formElms]);
+
   useEffect(() => {
     formElms.forEach(field => {
       if (
@@ -99,7 +118,9 @@ export default function HmrcOdxGdsSummaryCard(props) {
                     onClick={() => handleOnClick(t('GDS_ACTION_REMOVE'))}
                   >
                     {t('GDS_ACTION_REMOVE')}
-                    <span className='govuk-visually-hidden'> {childName}</span>
+                    <span className='govuk-visually-hidden'>
+                      {childName} {formattedValues[0]}
+                    </span>
                   </a>
                 </li>
               )}
@@ -111,7 +132,9 @@ export default function HmrcOdxGdsSummaryCard(props) {
                   onClick={() => handleOnClick(t('GDS_ACTION_CHANGE'))}
                 >
                   {t('GDS_ACTION_CHANGE')}
-                  <span className='govuk-visually-hidden'> {childName}</span>
+                  <span className='govuk-visually-hidden'>
+                    {childName} {formattedValues[0]}
+                  </span>
                 </a>
               </li>
             </ul>
