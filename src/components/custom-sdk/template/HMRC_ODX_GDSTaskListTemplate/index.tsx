@@ -63,7 +63,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
             : `${t('CLAIM')} ${t('COMPLETE')}`}
         </p>
         <p className='govuk-body govuk-!-padding-bottom-4'>
-          {`${t('YOU_HAVE_COMPLETED')} ${completedSections} ${t('OF')} ${totalSections} ${t(
+          {`${t('YOU_HAVE_COMPLETED')} ${completedSections} ${t('OUT_OF')} ${totalSections} ${t(
             'SECTIONS'
           )}`}
           .
