@@ -77,14 +77,31 @@ export default function UnAuthChildBenefitsClaim() {
       resetAppDisplay();
       setShowPega(true);
 
+      const pyAssignmentID = sessionStorage.getItem('assignmentID');
       let startingFields = {};
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
-      PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
-        startingFields
-      });
+      if (!pyAssignmentID) {
+        PCore.getMashupApi()
+          .createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
+            startingFields
+          })
+          .then(() => {});
+      } else {
+        const container = pConn.getContainerName();
+        const target = `${PCore.getConstants().APP.APP}/${container}`;
+        const openAssignmentOptions = { containerName: container };
+        const pyAssignmentID = sessionStorage.getItem('assignmentID');
+        PCore.getMashupApi()
+          .openAssignment(pyAssignmentID, target, openAssignmentOptions)
+          .then(() => {
+            //scrollToTop();
+          })
+          .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
+      }
     }
+
     setShowStartPage(false);
   }
 

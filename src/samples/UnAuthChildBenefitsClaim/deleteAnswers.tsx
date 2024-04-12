@@ -8,8 +8,10 @@ export default function DeleteAnswers({ hasSessionTimedOut }) {
   const { t } = useTranslation();
   const history = useHistory();
   const redirectChoseClaim = () => {
+    sessionStorage.removeItem('assignmentID');
     history.push('/recently-claimed-child-benefit');
   };
+
   return (
     <MainWrapper>
       <h1 className='govuk-heading-l'>
