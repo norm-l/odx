@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
@@ -654,8 +655,8 @@ export default function ChildBenefitsClaim() {
         signoutHandler={() => logout()}
         isAuthorised
       />
-
-      <CustomView condition={getUA === 'Firefox'}>
+      {console.log(`User Agent: ${getUA.toLocaleLowerCase()}`)}
+      <CustomView condition={!getUA.toLocaleLowerCase().includes('HMRCNextGenConsumer')}>
         <AppHeader
           handleSignout={handleSignout}
           appname={t('CLAIM_CHILD_BENEFIT')}
@@ -676,14 +677,15 @@ export default function ChildBenefitsClaim() {
 
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={false} />}
       </div>
-
       <LogoutPopup
         show={showSignoutModal && !showTimeoutModal}
         hideModal={() => setShowSignoutModal(false)}
         handleSignoutModal={signOut}
         handleStaySignIn={handleStaySignIn}
       />
-      <AppFooter />
+      <CustomView condition={!getUA.toLocaleLowerCase().includes('HMRCNextGenConsumer')}>
+        <AppFooter />
+      </CustomView>
     </>
   );
 }
