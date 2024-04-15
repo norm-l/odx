@@ -66,7 +66,7 @@ export default function CheckboxComponent(props) {
     return (
       <GDSCheckAnswers
         label={props.label}
-        value={value}
+        value={value ? props.trueLabel : props.falseLabel}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
         getPConnect={getPConnect}

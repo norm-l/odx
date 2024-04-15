@@ -82,7 +82,11 @@ export default function Dropdown(props) {
     return (
       <GDSCheckAnswers
         label={props.label}
-        value={value}
+        value={thePConn.getLocalizedValue(
+          displayValue,
+          localePath,
+          thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+        )}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
         getPConnect={getPConnect}

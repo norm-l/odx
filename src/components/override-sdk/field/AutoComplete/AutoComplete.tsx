@@ -217,12 +217,15 @@ export default function AutoComplete(props: AutoCompleteProps) {
   if (displayMode === 'STACKED_LARGE_VAL') {
     return <FieldValueList name={hideLabel ? '' : label} value={value} variant='stacked' />;
   }
+  const selectedOption = options?.filter(item => {
+    return item?.key === value;
+  });
 
   if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
     return (
       <GDSCheckAnswers
         label={props.label}
-        value={value}
+        value={selectedOption[0]?.value}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
         getPConnect={getPConnect}
@@ -239,9 +242,6 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }
 
   if (readOnly) {
-    const selectedOption = options?.filter(item => {
-      return item?.key === value;
-    });
     return (
       selectedOption?.length > 0 && (
         <ReadOnlyDisplay label={label} value={selectedOption[0]?.value} name={name} />
