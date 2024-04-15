@@ -28,7 +28,7 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus } from '../../components/helpers/utils';
+import { getServiceShutteredStatus, scrollToTop } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
@@ -92,11 +92,11 @@ export default function UnAuthChildBenefitsClaim() {
         const container = pConn.getContainerName();
         const target = `${PCore.getConstants().APP.APP}/${container}`;
         const openAssignmentOptions = { containerName: container };
-        const pyAssignmentID = sessionStorage.getItem('assignmentID');
+        const assignmentID = sessionStorage.getItem('assignmentID');
         PCore.getMashupApi()
-          .openAssignment(pyAssignmentID, target, openAssignmentOptions)
+          .openAssignment(assignmentID, target, openAssignmentOptions)
           .then(() => {
-            //scrollToTop();
+            scrollToTop();
           })
           .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
       }
