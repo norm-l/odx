@@ -19,6 +19,7 @@ import {
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import AppHeader from '../../components/AppComponents/AppHeader';
+import LanguageToggle from '../../components/AppComponents/LanguageToggle';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
@@ -47,6 +48,8 @@ let milisecondsTilSignout = 115 * 1000;
 let milisecondsTilWarning = 780 * 1000;
 
 let secondsTillStartNowUnblocked = 30 * 1000;
+
+const hasLanguageToggle = true;
 
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
 function initTimeout(setShowTimeoutModal) {
@@ -674,15 +677,19 @@ export default function ChildBenefitsClaim() {
         <AppHeader
           handleSignout={handleSignout}
           appname={t('CLAIM_CHILD_BENEFIT')}
-          hasLanguageToggle
           isPegaApp={bShowPega}
-          languageToggleCallback={toggleNotificationProcess(
-            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-            assignmentPConn
-          )}
         />
       </CustomView>
+
       <div className='govuk-width-container'>
+        {hasLanguageToggle && (
+          <LanguageToggle
+            languageToggleCallback={toggleNotificationProcess(
+              { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
+              assignmentPConn
+            )}
+          />
+        )}
         {serviceNotAvailable ? (
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         ) : (
