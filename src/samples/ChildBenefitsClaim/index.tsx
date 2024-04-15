@@ -250,9 +250,10 @@ export default function ChildBenefitsClaim() {
     setShutterServicePage(status);
     if (status) {
       resetAppDisplay();
-    } else {
-      displayUserPortal();
     }
+    // } else {
+    //   displayUserPortal();
+    // }
   }
 
   function establishPCoreSubscriptions() {
