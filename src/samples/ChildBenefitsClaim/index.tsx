@@ -238,8 +238,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
-    //Here we are passing true as argument for below function because we will close container
-    //based on whether claimant has clicked save and come back later link.
+    //  Here we are passing true as argument for below function because we will close container
+    //  based on whether claimant has clicked save and come back later link.
     fetchInProgressClaimsData(true);
     getClaimsCaseID();
     displayUserPortal();
