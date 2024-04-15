@@ -226,6 +226,9 @@ export default function ChildBenefitsClaim() {
       })
       .finally(() => {
         if (isSaveComeBackClicked === true) {
+          // Here we are calling this close container because of the fact that above
+          // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
+          // close container call as the very last one.
           PCore.getContainerUtils().closeContainerItem(
             PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
             { skipDirtyCheck: true }
@@ -235,6 +238,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function cancelAssignment() {
+    //Here we are passing true as argument for below function because we will close container
+    //based on whether claimant has clicked save and come back later link.
     fetchInProgressClaimsData(true);
     getClaimsCaseID();
     displayUserPortal();
