@@ -96,14 +96,11 @@ export default function ChildBenefitsClaim() {
   const [switchLang, setSwitchLang] = useState(lang);
 
   if (typeof PCore !== 'undefined') {
-    PCore.getPubSubUtils().subscribe(
-      'languageToggleTriggered',
-      (langreference) => {
-        setTimeout(() => {
-          setSwitchLang(langreference?.language);
-        }, 50);
-      }
-    );
+    PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
+      setTimeout(() => {
+        setSwitchLang(langreference?.language);
+      }, 50);
+    });
   }
 
   function resetAppDisplay() {
@@ -643,7 +640,7 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenAssignment'
                 buttonContent={t('CONTINUE_CLAIM')}
                 caseId={caseId}
-                switchLang ={switchLang}
+                switchLang={switchLang}
               />
             )}
 
@@ -655,7 +652,7 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenCase'
                 buttonContent={t('VIEW_CLAIM')}
                 checkShuttered={checkShuttered}
-                switchLang ={switchLang}
+                switchLang={switchLang}
               />
             )}
           </UserPortal>
@@ -673,7 +670,7 @@ export default function ChildBenefitsClaim() {
         isAuthorised
       />
       {console.log(`User Agent: ${getUA.toLocaleLowerCase()}`)}
-      <CustomView condition={!getUA.toLocaleLowerCase().includes('HMRCNextGenConsumer')}>
+      <CustomView condition={!getUA.toLocaleLowerCase().includes('hmrcnextgenconsumer')}>
         <AppHeader
           handleSignout={handleSignout}
           appname={t('CLAIM_CHILD_BENEFIT')}
@@ -700,7 +697,7 @@ export default function ChildBenefitsClaim() {
         handleSignoutModal={signOut}
         handleStaySignIn={handleStaySignIn}
       />
-      <CustomView condition={!getUA.toLocaleLowerCase().includes('HMRCNextGenConsumer')}>
+      <CustomView condition={!getUA.toLocaleLowerCase().includes('hmrcnextgenconsumer')}>
         <AppFooter />
       </CustomView>
     </>
