@@ -32,7 +32,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
       break;
   }
   const [childName, setChildName] = useState(itemName);
-  const [child1, setChild1] = useState('');
+
   useEffect(() => {
     const elms: Array<string> = [];
     let finalELms: Array<string> = [];
@@ -58,7 +58,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
         (field as any)?.props?.label === 'Name' ||
         (field as any)?.props?.label === 'Enw cyntaf'
       ) {
-        setChild1((field as any)?.props?.value);
+        setChildName((field as any)?.props?.value);
       }
     });
   }, [formElms]);
