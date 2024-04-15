@@ -70,6 +70,12 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
       })
       .finally(() => {
         PCore.getPubSubUtils().publish('staySignedInOnConfirmationScreen', {});
+        setTimeout(() => {
+          PCore.getContainerUtils().closeContainerItem(
+            PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+            { skipDirtyCheck: true }
+          );
+        }, 2500);
       });
   }, []);
 

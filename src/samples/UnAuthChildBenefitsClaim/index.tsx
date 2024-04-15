@@ -133,7 +133,6 @@ export default function UnAuthChildBenefitsClaim() {
 
   function assignmentFinished() {
     getClaimsCaseID();
-    closeContainer();
     resetAppDisplay();
     setShowResolutionScreen(true);
   }
