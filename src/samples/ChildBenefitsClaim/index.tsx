@@ -245,7 +245,7 @@ export default function ChildBenefitsClaim() {
     setShutterServicePage(status);
     if (status) {
       resetAppDisplay();
-      // Checking that the assignmentPConn isn't populated so user portal is hidden in assignemnt.
+      // Checking that the assignmentPConn isn't populated so user portal stays hidden in assignemnt.
     } else if (!status && !assignmentPConn === null) {
       displayUserPortal();
     }
