@@ -6,7 +6,7 @@ import {
   DateErrorFormatter,
   DateErrorTargetFields
 } from '../../../helpers/formatters/DateErrorFormatter';
-import { GBdate } from '../../../helpers/utils';
+import { GBdate, checkStatus } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
@@ -117,7 +117,13 @@ export default function Date(props) {
     return <span className='govuk-body govuk-!-font-weight-bold'>{GBdate(value)}</span>;
   }
 
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

@@ -6,6 +6,7 @@ import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplay
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
+import { checkStatus } from '../../../helpers/utils';
 
 export default function TextInput(props) {
   const {
@@ -49,7 +50,13 @@ export default function TextInput(props) {
   if (isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
   const maxLength = fieldMetadata?.maxLength;
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

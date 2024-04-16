@@ -4,7 +4,7 @@ import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { DefaultFormContext, ErrorMsgContext } from '../../../helpers/HMRCAppContext';
-import { checkErrorMsgs, removeRedundantString } from '../../../helpers/utils';
+import { checkErrorMsgs, checkStatus, removeRedundantString } from '../../../helpers/utils';
 import { t } from 'i18next';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
@@ -62,7 +62,13 @@ export default function CheckboxComponent(props) {
   const { caption } = theConfigProps;
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

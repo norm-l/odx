@@ -10,6 +10,7 @@ import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
+import { checkStatus } from '../../../helpers/utils';
 
 interface IOption {
   key: string;
@@ -220,8 +221,13 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const selectedOption = options?.filter(item => {
     return item?.key === value;
   });
+  const inprogressStatus = checkStatus();
 
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

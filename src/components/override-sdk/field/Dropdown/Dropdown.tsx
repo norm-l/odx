@@ -7,6 +7,7 @@ import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
+import { checkStatus } from '../../../helpers/utils';
 
 interface IOption {
   key: string;
@@ -78,7 +79,13 @@ export default function Dropdown(props) {
     const selectedValue = evt.target.value === placeholder ? '' : evt.target.value;
     handleEvent(actionsApi, 'changeNblur', propName, selectedValue);
   };
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import GDSRadioButtons from '../../../BaseComponents/RadioButtons/RadioButtons';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
+import { checkStatus } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
@@ -56,7 +57,13 @@ export default function RadioButtons(props) {
   if (selectedOption && selectedOption.value) {
     displayValue = selectedOption.value;
   }
-  if (hasBeenWrapped && configAlternateDesignSystem?.ShowChangeLink) {
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
     return (
       <GDSCheckAnswers
         label={props.label}

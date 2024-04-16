@@ -5,6 +5,7 @@ import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
+import { checkStatus } from '../../../helpers/utils';
 
 declare const PCore: any;
 
@@ -52,6 +53,7 @@ export default function Group(props) {
           const resolvedProps = childPConnect.resolveConfigProps(childPConnect.getConfigProps());
           return resolvedProps.caption;
         });
+      const inprogressStatus = checkStatus();
 
       const getconfigAlternateDesignSystem = children[0].props.getPConnect().getMetadata()
         .config.configAlternateDesignSystem;
@@ -59,7 +61,11 @@ export default function Group(props) {
       if (getconfigAlternateDesignSystem) {
         let stepId = getconfigAlternateDesignSystem?.stepId;
         stepId = stepId.split('@L ').pop();
-        if (hasBeenWrapped && getconfigAlternateDesignSystem?.ShowChangeLink) {
+        if (
+          hasBeenWrapped &&
+          getconfigAlternateDesignSystem?.ShowChangeLink &&
+          inprogressStatus === 'Open-InProgress'
+        ) {
           return (
             <GDSCheckAnswers
               label={heading}
