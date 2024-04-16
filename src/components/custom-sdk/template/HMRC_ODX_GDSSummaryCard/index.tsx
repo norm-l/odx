@@ -81,6 +81,13 @@ export default function HmrcOdxGdsSummaryCard(props) {
     });
   }, [formElms]);
 
+  const [hiddenText, setHiddenText] = useState('');
+
+  useEffect(() => {
+    const updatedHiddenText = `${childName} ${formattedValues[0]}`;
+    setHiddenText(updatedHiddenText);
+  }, [childName, formattedValues]);
+
   const handleOnClick = (action: string) => {
     switch (action) {
       case t('GDS_ACTION_REMOVE'):
@@ -118,9 +125,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
                     onClick={() => handleOnClick(t('GDS_ACTION_REMOVE'))}
                   >
                     {t('GDS_ACTION_REMOVE')}
-                    <span className='govuk-visually-hidden'>
-                      {childName} {formattedValues[0]}
-                    </span>
+                    <span className='govuk-visually-hidden'>{hiddenText}</span>
                   </a>
                 </li>
               )}
@@ -132,9 +137,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
                   onClick={() => handleOnClick(t('GDS_ACTION_CHANGE'))}
                 >
                   {t('GDS_ACTION_CHANGE')}
-                  <span className='govuk-visually-hidden'>
-                    {childName} {formattedValues[0]}
-                  </span>
+                  <span className='govuk-visually-hidden'>{hiddenText}</span>
                 </a>
               </li>
             </ul>
