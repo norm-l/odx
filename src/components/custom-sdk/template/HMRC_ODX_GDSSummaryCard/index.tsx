@@ -21,7 +21,6 @@ export default function HmrcOdxGdsSummaryCard(props) {
     case '2':
       itemName = t('GDS_INFO_ITEM_NATIONALITY');
       break;
-
     case '3':
       itemName = t('GDS_INFO_ITEM_COUNTRY');
       break;
@@ -84,7 +83,8 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const [hiddenText, setHiddenText] = useState('');
 
   useEffect(() => {
-    const updatedHiddenText = `${childName} ${formattedValues[0]}`;
+    const updatedHiddenText =
+      useType === 2 ? `${formattedValues[0]} ${childName}` : `${childName} ${formattedValues[0]}`;
     setHiddenText(updatedHiddenText);
   }, [childName, formattedValues]);
 
@@ -145,21 +145,13 @@ export default function HmrcOdxGdsSummaryCard(props) {
           <div className='govuk-summary-card__content'>
             <dl className='govuk-summary-list'>
               {formElms.map((field, index) => {
-                let formattedValue = '';
-
-                formattedValue =
-                  (field as any)?.props?.label === 'Date of birth' ||
-                  (field as any)?.props?.label === 'Dyddiad geni' // TODO: Need to make more robust
-                    ? GBdate((field as any)?.props?.value)
-                    : (field as any)?.props?.value;
-
                 const key = new Date().getTime() + index;
 
                 return (
                   <Fragment key={key}>
                     <div className='govuk-summary-list__row'>
                       <dt className='govuk-summary-list__key'>{(field as any).props.label}</dt>
-                      <dd className='govuk-summary-list__value'>{formattedValue}</dd>
+                      <dd className='govuk-summary-list__value'>{formattedValues[index]}</dd>
                     </div>
                   </Fragment>
                 );
