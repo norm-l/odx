@@ -94,14 +94,11 @@ export default function ChildBenefitsClaim() {
   const [switchLang, setSwitchLang] = useState(lang);
 
   if (typeof PCore !== 'undefined') {
-    PCore.getPubSubUtils().subscribe(
-      'languageToggleTriggered',
-      (langreference) => {
-        setTimeout(() => {
-          setSwitchLang(langreference?.language);
-        }, 50);
-      }
-    );
+    PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
+      setTimeout(() => {
+        setSwitchLang(langreference?.language);
+      }, 50);
+    });
   }
 
   function resetAppDisplay() {
@@ -248,7 +245,8 @@ export default function ChildBenefitsClaim() {
     setShutterServicePage(status);
     if (status) {
       resetAppDisplay();
-    } else {
+      // Checking that the assignmentPConn isn't populated so user portal is hidden in assignemnt.
+    } else if (!status && !assignmentPConn === null) {
       displayUserPortal();
     }
   }
@@ -641,7 +639,7 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenAssignment'
                 buttonContent={t('CONTINUE_CLAIM')}
                 caseId={caseId}
-                switchLang ={switchLang}
+                switchLang={switchLang}
               />
             )}
 
@@ -653,7 +651,7 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenCase'
                 buttonContent={t('VIEW_CLAIM')}
                 checkShuttered={checkShuttered}
-                switchLang ={switchLang}
+                switchLang={switchLang}
               />
             )}
           </UserPortal>
