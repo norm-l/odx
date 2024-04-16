@@ -83,11 +83,9 @@ export default function UnAuthChildBenefitsClaim() {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
       if (!pyAssignmentID) {
-        PCore.getMashupApi()
-          .createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
-            startingFields
-          })
-          .then(() => {});
+        PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
+          startingFields
+        });
       } else {
         const container = pConn.getContainerName();
         const target = `${PCore.getConstants().APP.APP}/${container}`;
