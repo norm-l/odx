@@ -202,6 +202,12 @@ export default function ChildBenefitsClaim() {
   }
   function assignmentFinished() {
     getClaimsCaseID();
+    if (!bShowResolutionScreen) {
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    }
     displayResolutionScreen();
   }
 
