@@ -225,7 +225,7 @@ export default function ChildBenefitsClaim() {
         setLoadingInProgressClaims(false);
       })
       .finally(() => {
-        if (isSaveComeBackClicked === true) {
+        if (isSaveComeBackClicked) {
           // Here we are calling this close container because of the fact that above
           // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
           // close container call as the very last one.
