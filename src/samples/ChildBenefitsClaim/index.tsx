@@ -241,13 +241,19 @@ export default function ChildBenefitsClaim() {
   }
 
   async function setShutterStatus() {
-    const status = await getServiceShutteredStatus();
-    setShutterServicePage(status);
-    if (status) {
-      resetAppDisplay();
-      // Checking that the assignmentPConn isn't populated so user portal stays hidden in assignemnt.
-    } else if (!status && !assignmentPConn === null) {
-      displayUserPortal();
+    try {
+      const status = await getServiceShutteredStatus();
+      setShutterServicePage(status);
+
+      if (status) {
+        resetAppDisplay();
+        // Ensure assignmentPConn isn't populated to keep the user portal hidden during assignment.
+      } else if (!status && !assignmentPConn === null) {
+        displayUserPortal();
+      }
+    } catch (error) {
+      // Handle error appropriately, e.g., log it or show a notification
+      console.error('Error setting shutter status:', error);
     }
   }
 
