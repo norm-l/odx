@@ -248,12 +248,12 @@ export default function ChildBenefitsClaim() {
       if (status) {
         resetAppDisplay();
         // Ensure assignmentPConn isn't populated to keep the user portal hidden during assignment.
-      } else if (!status && !assignmentPConn === null) {
+      } else if (!status && assignmentPConn !== null) {
         displayUserPortal();
       }
     } catch (error) {
       // Handle error appropriately, e.g., log it or show a notification
-      console.error('Error setting shutter status:', error);
+      console.error('Error setting shutter status:', error); // eslint-disable-line
     }
   }
 
