@@ -11,6 +11,7 @@ import AreYouSureToContinueWithoutSignIn from '../StaticPages/AreYouSureToContin
 import DoYouWantToSignIn from '../StaticPages/DoYouWantToSignIn/doYouWantToSignIn';
 import CheckOnClaim from '../StaticPages/CheckOnClaim';
 import RecentlyClaimedChildBenefit from '../StaticPages/ChooseClaimService';
+import EducationStart from '../EducationStart';
 
 const AppSelector = () => {
   i18n
@@ -43,6 +44,7 @@ const AppSelector = () => {
       <Route path='/sign-in-to-government-gateway' component={DoYouWantToSignIn} />
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
+      <Route path='/education-start' component={EducationStart} />
     </Switch>
   );
 };

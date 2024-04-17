@@ -247,5 +247,25 @@
   "AUTOMATICALLY_CLOSE_IN": "This page will automatically close in",
   "STAY_ON_THIS_PAGE": "Stay on this page",
   "EXIT_THIS_PAGE": "Exit this page",
-  "THERE_IS_A_PROBLEM": "There is a problem"
+  "THERE_IS_A_PROBLEM": "There is a problem",
+
+  "CHILD_BENEFIT": "Child Benefit",
+  "EXTEND_YOUR_CHILD_BENEFIT_PAYMENTS": "Extend your Child Benefit payments while a young person stays in education",
+  "USE_THIS_FORM": "Use this form if they will be studying",
+  "GCSE_OR_A_LEVELS": "GCSEs or A levels",
+  "BTECS_LEVEL1_2_OR_3": "BTECs, level 1, 2 or 3",
+  "T_LEVELS": "T levels",
+  "NVQS_LEVEL1_2_OR_3": "NVQs, level 1, 2 or 3",
+  "INTERNATIONAL_BACCALAUREATE": "International Baccalaureate",
+  "SCOTTISH_HIGHERS": "Scottish Highers — up to and including level 7 (apart from HNC level 7 or the Certificate of Higher Education level 7, because these are advanced courses)",
+  "IF_THEY_WILL_BE_STUDYING_SOMETHINGELSE": "If they’ll be studying something else, you can still extend your payments",
+  "BUT_YOU_NEED_A_DIFFERENT_FORM": "but you need to use a different form.",
+  "THE_YOUNG_PERSON_WILL_NEED_TO_BE": "The young person will need to be",
+  "16_OR_17_ON_1SEPT2023": "16 or 17 on 1 September 2023",
+  "ON_THEIR_COURSE_FOR_1_OR_2_ACADEMIC_YEARS": "on their course for 1 or 2 academic years",
+  "STUDYING_FT_MORE_THAN_12HRS_A_WEEK": "studying full-time, which means more than 12 hours a week",
+  "ON_A_COURSE_PROVIDED_BY_SCHOOL_OR_COLLEGE": "on a course provided by a school or college",
+  "LIVING_WITH_YOU_IN_THE_UK": "living with you in the UK",
+  "USE_ANOTHER_FORM_TO_APPLY": "Use another form to apply",
+  "IF_THEIR_CIRCUMSTANCES_WILL_BE_DIFFERENT": "if their circumstances will be different"
 }

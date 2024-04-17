@@ -19,7 +19,6 @@ const StartPage: React.FC<{ onStart: React.MouseEventHandler; onBack: any }> = (
 
   return (
     <>
-      {' '}
       {!serviceShuttered && (
         <>
           <Button
