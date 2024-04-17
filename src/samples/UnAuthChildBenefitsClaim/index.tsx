@@ -3,17 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
-import {
-  loginIfNecessary,
-  sdkSetAuthHeader
-} from '@pega/react-sdk-components/lib/components/helpers/authManager';
+import { loginIfNecessary, sdkSetAuthHeader, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
@@ -32,6 +28,7 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
+import { getServiceShutteredStatus } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
@@ -49,10 +46,7 @@ export default function UnAuthChildBenefitsClaim() {
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
-  // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
-  const featureID = 'ChB';
-  const featureType = 'Service';
-  const claimsListApi = 'D_GetUnauthClaimStatusBySessionID';
+  const claimsListApi = '';
 
   const { t } = useTranslation();
 
@@ -87,9 +81,13 @@ export default function UnAuthChildBenefitsClaim() {
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
-      PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
-        startingFields
-      });
+      if (sessionStorage.getItem('isRefreshedOnClaim') === 'true') {
+        setShowDeletePage(true);
+      } else {
+        PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
+          startingFields
+        });
+      }
     }
     setShowStartPage(false);
   }
@@ -102,7 +100,7 @@ export default function UnAuthChildBenefitsClaim() {
 
   useEffect(() => {
     setPageTitle();
-  }, [showStartPage, bShowPega, bShowResolutionScreen]);
+  }, [showStartPage, bShowPega, bShowResolutionScreen, shutterServicePage]);
 
   function closeContainer() {
     PCore.getContainerUtils().closeContainerItem(
@@ -114,9 +112,11 @@ export default function UnAuthChildBenefitsClaim() {
 
   // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
   function deleteData() {
-    if (bShowPega) {
-      closeContainer();
+    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+    if (bShowPega && activeContainer) {
+      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
     }
+
     setShowTimeoutModal(false);
     setShowStartPage(false);
     setShowPega(false);
@@ -133,7 +133,12 @@ export default function UnAuthChildBenefitsClaim() {
 
   function assignmentFinished() {
     getClaimsCaseID();
-    closeContainer();
+    if (!bShowResolutionScreen) {
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    }
     resetAppDisplay();
     setShowResolutionScreen(true);
   }
@@ -141,6 +146,15 @@ export default function UnAuthChildBenefitsClaim() {
     closeContainer();
     resetAppDisplay();
     setShowStartPage(true);
+  }
+
+  async function setShutterStatus(isCalledFromTaskList: boolean) {
+    const status = await getServiceShutteredStatus();
+    setShutterServicePage(status);
+    if (!isCalledFromTaskList) resetAppDisplay();
+    if (!status) {
+      setShowStartPage(true);
+    }
   }
 
   function establishPCoreSubscriptions() {
@@ -151,6 +165,23 @@ export default function UnAuthChildBenefitsClaim() {
       },
       'assignmentFinished'
     );
+
+    PCore.getPubSubUtils().subscribe(
+      'assignmentFinishedOnTaskListClicked',
+      () => {
+        setShutterStatus(true);
+      },
+      'assignmentFinishedOnTaskListClicked'
+    );
+
+    PCore.getPubSubUtils().subscribe(
+      'staySignedInOnConfirmationScreen',
+      () => {
+        staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false, false, true);
+      },
+      'staySignedInOnConfirmationScreen'
+    );
+
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
@@ -296,11 +327,18 @@ export default function UnAuthChildBenefitsClaim() {
       compareSdkPCoreVersions();
       establishPCoreSubscriptions();
 
-      initTimeout(showTimeoutModal, deleteData, false);
+      initTimeout(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
 
       // Subscribe to any store change to reset timeout counter
       PCore.getStore().subscribe(() =>
-        staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false, false)
+        staySignedIn(
+          setShowTimeoutModal,
+          claimsListApi,
+          deleteData,
+          false,
+          false,
+          bShowResolutionScreen
+        )
       );
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -322,26 +360,8 @@ export default function UnAuthChildBenefitsClaim() {
       // eslint-disable-next-line no-console
       console.log(`SdkComponentMap initialized`);
     });
-    PCore.getDataPageUtils()
-      .getPageDataAsync('D_ShutterLookup', 'root', {
-        FeatureID: featureID,
-        FeatureType: featureType
-      })
-      .then(resp => {
-        const isShuttered = resp.Shuttered;
-        if (isShuttered) {
-          resetAppDisplay();
-          setShutterServicePage(true);
-        } else {
-          setShutterServicePage(false);
-          resetAppDisplay();
-          setShowStartPage(true);
-        }
-      })
-      .catch(err => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      });
+
+    setShutterStatus(false);
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
@@ -417,6 +437,10 @@ export default function UnAuthChildBenefitsClaim() {
       fetchingIDsForHeader();
     });
 
+    document.addEventListener('SdkLoggedOut', () => {
+      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
+    });
+
     // Subscriptions can't be done until onPCoreReady.
     // So we subscribe there. But unsubscribe when this
     // component is unmounted (in function returned from this effect)
@@ -435,16 +459,59 @@ export default function UnAuthChildBenefitsClaim() {
         'continueCase'
       );
 
+      PCore?.getPubSubUtils().unsubscribe('assignmentFinishedOnTaskListClicked');
       PCore?.getPubSubUtils().unsubscribe('closeContainer');
       PCore?.getPubSubUtils().unsubscribe(
         PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
         'assignmentFinished'
       );
+      PCore?.getPubSubUtils().unsubscribe('staySignedInOnConfirmationScreen');
+      PCore?.getPubSubUtils().unsubscribe('languageToggleTriggered');
     };
   }, []);
 
+  const renderContent = () => {
+    return shutterServicePage ? (
+      <ShutterServicePage />
+    ) : (
+      <>
+        <div id='pega-part-of-page'>
+          <div id='pega-root'></div>
+        </div>
+        {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
+      </>
+    );
+  };
+
   return (
     <>
+      {!showDeletePage && (
+        <TimeoutPopup
+          show={showTimeoutModal}
+          staySignedinHandler={() => {
+            staySignedIn(
+              setShowTimeoutModal,
+              claimsListApi,
+              deleteData,
+              false,
+              false,
+              bShowResolutionScreen
+            );
+          }}
+          signoutHandler={() => {
+            if (bShowResolutionScreen) {
+              logout();
+            } else {
+              clearTimer();
+              deleteData();
+
+              setHasSessionTimedOut(false);
+            }
+          }}
+          isAuthorised={false}
+          isConfirmationPage={bShowResolutionScreen}
+        />
+      )}
       <AppHeader
         appname={t('CLAIM_CHILD_BENEFIT')}
         hasLanguageToggle
@@ -454,31 +521,14 @@ export default function UnAuthChildBenefitsClaim() {
           assignmentPConn
         )}
       />
-
       <div className='govuk-width-container'>
-        <div id='pega-part-of-page'>
-          <div id='pega-root'></div>
-        </div>
-        {shutterServicePage && <ShutterServicePage />}
-
-        {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
-        {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
-        {!showDeletePage && (
-          <TimeoutPopup
-            show={showTimeoutModal}
-            staySignedinHandler={() =>
-              staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false)
-            }
-            signoutHandler={() => {
-              deleteData();
-              clearTimer();
-              setHasSessionTimedOut(false);
-            }}
-            isAuthorised={false}
-          />
+        {serviceNotAvailable ? (
+          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+        ) : (
+          renderContent()
         )}
-        {/** No Log out popup required as one isn't logged in */}
+
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
       </div>
 
       <AppFooter />
