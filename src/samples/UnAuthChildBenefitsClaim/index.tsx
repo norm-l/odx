@@ -27,7 +27,7 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import { getServiceShutteredStatus, scrollToTop, triggerLogout } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
@@ -76,18 +76,29 @@ export default function UnAuthChildBenefitsClaim() {
       resetAppDisplay();
       setShowPega(true);
 
+      const pyAssignmentID = sessionStorage.getItem('assignmentID');
       let startingFields = {};
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
-      if (sessionStorage.getItem('isRefreshedOnClaim') === 'true') {
-        setShowDeletePage(true);
-      } else {
+      if (!pyAssignmentID) {
         PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
           startingFields
         });
+      } else {
+        const container = pConn.getContainerName();
+        const target = `${PCore.getConstants().APP.APP}/${container}`;
+        const openAssignmentOptions = { containerName: container };
+        const assignmentID = sessionStorage.getItem('assignmentID');
+        PCore.getMashupApi()
+          .openAssignment(assignmentID, target, openAssignmentOptions)
+          .then(() => {
+            scrollToTop();
+          })
+          .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
       }
     }
+
     setShowStartPage(false);
   }
 
