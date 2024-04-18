@@ -1,16 +1,13 @@
-import { FieldGroup } from '@pega/cosmos-react-core';
+import { withConfiguration } from '@pega/cosmos-react-core';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import type { PConnFieldProps } from './PConnProps';
 
-import { StyledHmrcOdxSectionBasedWrapper, StyledRegion } from './styles';
+import StyledHmrcOdxSectionBasedWrapper from './styles';
 
 // interface for props
 interface HmrcOdxSectionBasedProps extends PConnFieldProps {
-  // If any, enter additional props that only exist on TextInput here
-  showLabel: boolean;
-  // NumCols: string;
   children: any;
 }
 
@@ -18,22 +15,27 @@ interface HmrcOdxSectionBasedProps extends PConnFieldProps {
 
 // props passed in combination of props from property panel (config.json) and run time props from Constellation
 // any default values in config.pros should be set in defaultProps at bottom of this file
-export default function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
-  const { children, label, showLabel, getPConnect } = props;
-  const propsToUse = { label, showLabel, ...getPConnect().getInheritedProps() };
+function HmrcOdxSectionBased(props: HmrcOdxSectionBasedProps) {
+  const { children } = props;
 
-  // const nCols = parseInt(NumCols, 10);
+  function generateUniqueKey() {
+    return Math.random().toString(36).substring(2, 15);
+  }
 
   // console.log(`Rendering ${getPConnect()?.getComponentName()} with ${template} with ${children?.length} Region(s)`);
 
   return (
     <StyledHmrcOdxSectionBasedWrapper>
       <div className='sectionBased'>
-        <FieldGroup name={propsToUse.showLabel ? propsToUse.label : ''}>
-          <StyledRegion>{children[0]}</StyledRegion>
-          <StyledRegion>{children[1]}</StyledRegion>
-          <StyledRegion>{children[2]}</StyledRegion>
-        </FieldGroup>
+        {/* Loop through the children array and render each child */}
+        {children.map((child: any) => {
+          const uniqueKey = generateUniqueKey(); // Generate a unique key for each child element
+          return (
+            <div key={uniqueKey} className='sectionBased-region'>
+              {child}
+            </div>
+          );
+        })}
       </div>
     </StyledHmrcOdxSectionBasedWrapper>
   );
@@ -48,3 +50,5 @@ HmrcOdxSectionBased.propTypes = {
   // NumCols: PropTypes.number,
   children: PropTypes.arrayOf(PropTypes.node)
 };
+
+export default withConfiguration(HmrcOdxSectionBased);

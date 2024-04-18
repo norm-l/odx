@@ -44,6 +44,26 @@
       "name": "B",
       "label": "Region B",
       "format": "CONTENTPICKER"
+    },
+    {
+      "name": "C",
+      "label": "Region C",
+      "format": "CONTENTPICKER"
+    },
+    {
+      "name": "D",
+      "label": "Region D",
+      "format": "CONTENTPICKER"
+    },
+    {
+      "name": "E",
+      "label": "Region E",
+      "format": "CONTENTPICKER"
+    },
+    {
+      "name": "F",
+      "label": "Region F",
+      "format": "CONTENTPICKER"
     }
   ]
 }
