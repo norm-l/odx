@@ -109,6 +109,13 @@ export const removeRedundantString = (redundantString: string, separator: string
   return uniqueString;
 };
 
+export const closeActiveContainer = () => {
+  // If the container / case is opened then close the container on signout to prevent locking.
+  const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+  if (activeCase) {
+    PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
+  }
+};
 export const triggerLogout = () => {
   let authType = 'gg';
   getSdkConfig().then(sdkConfig => {
@@ -121,11 +128,7 @@ export const triggerLogout = () => {
   };
   const authService = authServiceList[authType];
 
-  // If the container / case is opened then close the container on signout to prevent locking.
-  const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
-  if (activeCase) {
-    PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
-  }
+  closeActiveContainer();
 
   type responseType = { URLResourcePath2: string };
 

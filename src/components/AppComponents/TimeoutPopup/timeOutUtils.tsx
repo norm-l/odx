@@ -1,5 +1,5 @@
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
-import { triggerLogout } from '../../helpers/utils';
+import { isUnAuthJourney, triggerLogout } from '../../helpers/utils';
 
 let milisecondsTilWarning = 780 * 1000;
 let milisecondsTilSignout = 115 * 1000;
@@ -20,7 +20,7 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
+export const initTimeout = (showTimeoutModal, deleteData, isConfirmationPage) => {
   // TODO - isAuthorised to be replaced by caseType from pega
   // Fetches timeout length config
   settingTimer();
@@ -32,7 +32,7 @@ export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfir
     // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      if (!isAuthorised && !isConfirmationPage) {
+      if (isUnAuthJourney() && !isConfirmationPage) {
         // if the journey is not authorized or from confirmation page , the claim data gets deleted
         deleteData();
         clearTimer();
@@ -50,7 +50,6 @@ export function staySignedIn(
   setShowTimeoutModal,
   claimsListApi,
   deleteData = null,
-  isAuthorised = false,
   refreshSignin = true,
   isConfirmationPage = false
 ) {
@@ -59,5 +58,5 @@ export function staySignedIn(
     PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
   }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
+  initTimeout(setShowTimeoutModal, deleteData, isConfirmationPage);
 }
