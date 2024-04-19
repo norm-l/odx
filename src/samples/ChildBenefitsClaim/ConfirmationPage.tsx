@@ -28,34 +28,33 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       : 'https://www.tax.service.gov.uk/feedback/ODXCHB';
   }
   useEffect(() => {
-    sessionStorage.removeItem('assignmentID');
     setPageTitle();
   }, []);
 
   useEffect(() => {
-      PCore.getDataPageUtils()
-        .getPageDataAsync('D_DocumentContent', 'root', {
-          DocumentID: docIDForDocList,
-          Locale: locale,
-          CaseID: caseId
-        })
-        .then(listData => {
-          if (
-            listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
-            listData.DocumentContentHTML.includes("data-adopted='true'")
-          ) {
-            setIsBornAbroadOrAdopted(true);
-          }
-          setLoading(false);
-          setDocumentList(listData.DocumentContentHTML);
-          if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
-            setIsCaseRefRequired(true);
-          }
-        })
-        .catch(err => {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        });
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_DocumentContent', 'root', {
+        DocumentID: docIDForDocList,
+        Locale: locale,
+        CaseID: caseId
+      })
+      .then(listData => {
+        if (
+          listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
+          listData.DocumentContentHTML.includes("data-adopted='true'")
+        ) {
+          setIsBornAbroadOrAdopted(true);
+        }
+        setLoading(false);
+        setDocumentList(listData.DocumentContentHTML);
+        if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
+          setIsCaseRefRequired(true);
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
 
     PCore.getDataPageUtils()
       .getPageDataAsync('D_DocumentContent', 'root', {

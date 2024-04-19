@@ -27,7 +27,11 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, scrollToTop, triggerLogout } from '../../components/helpers/utils';
+import {
+  getServiceShutteredStatus,
+  scrollToTop,
+  triggerLogout
+} from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
