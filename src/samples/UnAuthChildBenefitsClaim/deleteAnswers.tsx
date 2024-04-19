@@ -8,11 +8,13 @@ export default function DeleteAnswers({ hasSessionTimedOut }) {
   const { t } = useTranslation();
   const history = useHistory();
   const redirectChoseClaim = () => {
+    sessionStorage.removeItem('isRefreshFromDeleteScreen');
     history.push('/recently-claimed-child-benefit');
   };
 
   useEffect(() => {
     sessionStorage.removeItem('assignmentID');
+    sessionStorage.setItem('isRefreshFromDeleteScreen', 'true');
   }, []);
 
   return (
