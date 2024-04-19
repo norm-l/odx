@@ -43,6 +43,8 @@ export default function Date(props) {
   const [specificErrors, setSpecificErrors] = useState<any>(null);
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
 
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+
   const actionsApi = getPConnect().getActionsApi();
 
   const propName = getPConnect().getStateProps().value;
@@ -71,10 +73,11 @@ export default function Date(props) {
 
   useEffect(() => {
     setEditedValidateMessage(
+      localizedVal(
       DateErrorFormatter(
         validatemessage,
         getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label
-      )
+      ))
     );
     const errorTargets = DateErrorTargetFields(validatemessage);
     let specificError: any = null;

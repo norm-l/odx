@@ -40,7 +40,9 @@ export default function CheckboxComponent(props) {
  
   if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label; */
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
-  const [errorMessage, setErrorMessage] = useState(validatemessage);
+
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const { errorMsgs } = useContext(ErrorMsgContext);
 
   // build name for id, allows for error message navigation to field
@@ -53,7 +55,7 @@ export default function CheckboxComponent(props) {
   useEffect(() => {
     const found = checkErrorMsgs(errorMsgs, name);
     if (!found) {
-      setErrorMessage(validatemessage);
+      setErrorMessage(localizedVal(validatemessage));
     }
   }, [errorMsgs, validatemessage]);
 

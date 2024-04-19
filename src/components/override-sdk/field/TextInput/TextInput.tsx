@@ -3,6 +3,7 @@ import GDSTextInput from '../../../BaseComponents/TextInput/TextInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
+import { isHICBCJourney } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
@@ -25,12 +26,21 @@ export default function TextInput(props) {
     configAlternateDesignSystem
   } = props;
 
-  const [errorMessage, setErrorMessage] = useState(validatemessage);
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   registerNonEditableField(!!disabled);
 
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
+  const isHICBC = isHICBCJourney();
+
+  if (isHICBC) {
+    registerNonEditableField();
+  } else {
+    registerNonEditableField(!!disabled);
+  }
+
   useEffect(() => {
-    setErrorMessage(validatemessage);
+    setErrorMessage(localizedVal(validatemessage));
   }, [validatemessage]);
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();

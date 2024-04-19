@@ -1,4 +1,4 @@
-import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
 
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
@@ -74,6 +74,15 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
   }
 };
 
+export const isHICBCJourney = () => {
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const caseType = PCore.getStore().getState().data[containername].caseInfo.caseTypeID;
+
+  return caseType === 'HMRC-ChB-Work-HICBCPreference';
+};
+
 export const isSingleEntity = (propReference: string, getPConnect) => {
   const containerName = getPConnect().getContainerName();
   const context = PCore.getContainerUtils().getActiveContainerItemContext(
@@ -116,4 +125,35 @@ export const checkStatus = () => {
   const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
   const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
   return status;
+};
+export const triggerLogout = () => {
+  let authType = 'gg';
+  getSdkConfig().then(sdkConfig => {
+    const sdkConfigAuth = sdkConfig.authConfig;
+    authType = sdkConfigAuth.authService;
+  });
+  const authServiceList = {
+    gg: 'GovGateway',
+    'gg-dev': 'GovGateway-Dev'
+  };
+  const authService = authServiceList[authType];
+
+  // If the container / case is opened then close the container on signout to prevent locking.
+  const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+  if (activeCase) {
+    PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
+  }
+
+  type responseType = { URLResourcePath2: string };
+
+  PCore.getDataPageUtils()
+    .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
+    // @ts-ignore
+    .then((response: unknown) => {
+      const logoutUrl = (response as responseType).URLResourcePath2;
+
+      logout().then(() => {
+        if (logoutUrl) window.location.href = logoutUrl;
+      });
+    });
 };

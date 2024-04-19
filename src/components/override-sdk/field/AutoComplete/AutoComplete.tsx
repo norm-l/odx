@@ -76,7 +76,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
     name
   } = props;
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
-  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const [isAutocompleteLoaded, setAutocompleteLoaded] = useState(false);
   const context = getPConnect().getContextName();
   let { listType, parameters, datasource = [], columns = [], label } = props;
@@ -88,6 +89,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps()['value'];
+  const formattedPropertyName = name || propName?.split('.')?.pop();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -105,7 +107,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }, []);
 
   useEffect(() => {
-    setErrorMessage(validatemessage);
+    setErrorMessage(localizedVal(validatemessage));
   }, [validatemessage]);
   if (!isDeepEqual(datasource, theDatasource)) {
     // inbound datasource is different, so update theDatasource (to trigger useEffect)
@@ -266,7 +268,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId={testId}
         labelIsHeading={isOnlyField}
         errorText={errorMessage}
-        id={name}
+        id={formattedPropertyName}
       />
     )
   );
