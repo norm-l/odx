@@ -102,7 +102,6 @@ export default function UnAuthChildBenefitsClaim() {
       if (sessionStorage.getItem('isRefreshFromDeleteScreen') === 'true') {
         clearTimer();
         deleteData();
-        setHasSessionTimedOut(false);
       } else if (sessionStorage.getItem('caseRefId')) {
         setShowResolutionScreen(true);
       } else if (!pyAssignmentID) {
@@ -522,6 +521,7 @@ export default function UnAuthChildBenefitsClaim() {
             if (bShowResolutionScreen) {
               triggerLogout();
             } else {
+              sessionStorage.setItem('hasSessionTimedOut', 'true');
               clearTimer();
               deleteData();
 
