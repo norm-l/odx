@@ -10,6 +10,7 @@ import './DefaultForm.css';
 import InstructionTextComponent from './InstructionTextComponent';
 import getFormattedInstructionText from './DefaultFormUtils';
 import { useTranslation } from 'react-i18next';
+import { closeActiveContainer } from '../../../helpers/utils';
 
 export default function DefaultForm(props) {
   const { getPConnect, readOnly, additionalProps, configAlternateDesignSystem } = props;
@@ -159,10 +160,7 @@ export default function DefaultForm(props) {
       // Perform actions before the component unloads
       sessionStorage.setItem('isAutocompleteRendered', 'false');
       sessionStorage.setItem('isRefreshedOnClaim', 'true');
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {

@@ -27,7 +27,11 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import {
+  closeActiveContainer,
+  getServiceShutteredStatus,
+  triggerLogout
+} from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
@@ -60,6 +64,8 @@ export default function UnAuthChildBenefitsClaim() {
     setShowResolutionScreen(false);
     setServiceNotAvailable(false);
     setShowPega(false);
+    setShowTimeoutModal(false);
+    setShowDeletePage(false);
   }
 
   function getClaimsCaseID() {
@@ -102,10 +108,7 @@ export default function UnAuthChildBenefitsClaim() {
   }, [showStartPage, bShowPega, bShowResolutionScreen, shutterServicePage]);
 
   function closeContainer() {
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
+    closeActiveContainer();
     setShowPega(false);
   }
 
@@ -113,18 +116,15 @@ export default function UnAuthChildBenefitsClaim() {
   function deleteData() {
     const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
     if (bShowPega && activeContainer) {
-      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
+      closeActiveContainer();
     }
-
-    setShowTimeoutModal(false);
-    setShowStartPage(false);
-    setShowPega(false);
-    setShowResolutionScreen(false);
+    clearTimer();
+    resetAppDisplay();
     setShowDeletePage(true);
   }
 
-  function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal, claimsListApi, false);
+  function returnToStartPage() {
+    staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData);
     resetAppDisplay();
     setShowStartPage(true);
     closeContainer();
@@ -133,14 +133,12 @@ export default function UnAuthChildBenefitsClaim() {
   function assignmentFinished() {
     getClaimsCaseID();
     if (!bShowResolutionScreen) {
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     }
     resetAppDisplay();
     setShowResolutionScreen(true);
   }
+
   function cancelAssignment() {
     closeContainer();
     resetAppDisplay();
@@ -176,7 +174,7 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'staySignedInOnConfirmationScreen',
       () => {
-        staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false, false, true);
+        staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData);
       },
       'staySignedInOnConfirmationScreen'
     );
@@ -186,16 +184,16 @@ export default function UnAuthChildBenefitsClaim() {
       () => {
         setShowStartPage(false);
         setShowPega(false);
-        const containername = PCore.getContainerUtils().getActiveContainerItemName(
-          `${PCore.getConstants().APP.APP}/primary`
-        );
         const context = PCore.getContainerUtils().getActiveContainerItemName(
-          `${containername}/workarea`
+          `${PCore.getConstants().APP.APP}/primary/workarea`
         );
+        // const context = PCore.getContainerUtils().getActiveContainerItemName(
+        //   `${containername}/workarea`
+        // );
         const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
         if (status === 'Resolved-Discarded') {
           setServiceNotAvailable(true);
-          PCore.getContainerUtils().closeContainerItem(context);
+          closeActiveContainer();
         }
       },
       'assignmentFinished'
@@ -326,18 +324,11 @@ export default function UnAuthChildBenefitsClaim() {
       compareSdkPCoreVersions();
       establishPCoreSubscriptions();
 
-      initTimeout(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
+      initTimeout(setShowTimeoutModal, !bShowResolutionScreen, deleteData);
 
       // Subscribe to any store change to reset timeout counter
       PCore.getStore().subscribe(() =>
-        staySignedIn(
-          setShowTimeoutModal,
-          claimsListApi,
-          deleteData,
-          false,
-          false,
-          bShowResolutionScreen
-        )
+        staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData)
       );
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -491,17 +482,15 @@ export default function UnAuthChildBenefitsClaim() {
             staySignedIn(
               setShowTimeoutModal,
               claimsListApi,
-              deleteData,
               false,
-              false,
-              bShowResolutionScreen
+              !bShowResolutionScreen,
+              deleteData
             );
           }}
           signoutHandler={() => {
             if (bShowResolutionScreen) {
               triggerLogout();
             } else {
-              clearTimer();
               deleteData();
 
               setHasSessionTimedOut(false);
@@ -522,7 +511,7 @@ export default function UnAuthChildBenefitsClaim() {
       />
       <div className='govuk-width-container'>
         {serviceNotAvailable ? (
-          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+          <ServiceNotAvailable returnToPortalPage={returnToStartPage} />
         ) : (
           renderContent()
         )}

@@ -1,5 +1,5 @@
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
-import { isUnAuthJourney, triggerLogout } from '../../helpers/utils';
+import { triggerLogout } from '../../helpers/utils';
 
 let milisecondsTilWarning = 780 * 1000;
 let milisecondsTilSignout = 115 * 1000;
@@ -20,25 +20,17 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = (showTimeoutModal, deleteData, isConfirmationPage) => {
-  // TODO - isAuthorised to be replaced by caseType from pega
-  // Fetches timeout length config
+export const initTimeout = (showTimeoutModal, needsResetData, resetData) => {
   settingTimer();
-  clearTimeout(applicationTimeout);
-  clearTimeout(signoutTimeout);
+  clearTimer();
 
   // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
   applicationTimeout = setTimeout(() => {
-    // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      if (isUnAuthJourney() && !isConfirmationPage) {
-        // if the journey is not authorized or from confirmation page , the claim data gets deleted
-        deleteData();
-        clearTimer();
+      if (needsResetData) {
+        resetData();
       } else {
-        // the logout case executes when entire timeout occurs after confirmation page or user clicks
-        // exit survey link in pop after confirmation page
         triggerLogout();
       }
     }, milisecondsTilSignout);
@@ -49,14 +41,14 @@ export const initTimeout = (showTimeoutModal, deleteData, isConfirmationPage) =>
 export function staySignedIn(
   setShowTimeoutModal,
   claimsListApi,
-  deleteData = null,
   refreshSignin = true,
-  isConfirmationPage = false
+  needsResetData = false,
+  resetData = null
 ) {
   if (refreshSignin && !!claimsListApi) {
     // @ts-ignore
     PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
   }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal, deleteData, isConfirmationPage);
+  initTimeout(setShowTimeoutModal, needsResetData, resetData);
 }

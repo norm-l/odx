@@ -11,7 +11,7 @@ import {
   sdkIsLoggedIn,
   loginIfNecessary,
   sdkSetAuthHeader,
-  getSdkConfig,
+  getSdkConfig
 } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -32,48 +32,56 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import {
+  closeActiveContainer,
+  getServiceShutteredStatus,
+  triggerLogout
+} from '../../components/helpers/utils';
+import {
+  staySignedIn,
+  initTimeout
+} from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 
 declare const myLoadMashup: any;
 
-/* Time out modal functionality */
-let applicationTimeout = null;
-let signoutTimeout = null;
-// Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
-let milisecondsTilSignout = 115 * 1000;
-let milisecondsTilWarning = 780 * 1000;
+// /* Time out modal functionality */
+// let applicationTimeout = null;
+// let signoutTimeout = null;
+// // Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
+// let milisecondsTilSignout = 115 * 1000;
+// let milisecondsTilWarning = 780 * 1000;
 
-let secondsTillStartNowUnblocked = 30 * 1000;
+// let secondsTillStartNowUnblocked = 30 * 1000;
 
-// Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
-function initTimeout(setShowTimeoutModal) {
-  clearTimeout(applicationTimeout);
-  clearTimeout(signoutTimeout);
+// // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
+// function initTimeout(setShowTimeoutModal) {
+//   clearTimeout(applicationTimeout);
+//   clearTimeout(signoutTimeout);
 
-  applicationTimeout = setTimeout(() => {
-    setShowTimeoutModal(true);
-    signoutTimeout = setTimeout(() => {
-      triggerLogout();
-    }, milisecondsTilSignout);
-  }, milisecondsTilWarning);
-}
+//   applicationTimeout = setTimeout(() => {
+//     setShowTimeoutModal(true);
+//     signoutTimeout = setTimeout(() => {
+//       triggerLogout();
+//     }, milisecondsTilSignout);
+//   }, milisecondsTilWarning);
+// }
 
-// Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
-  if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
-  }
-  setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal);
-}
-/* ******************************* */
+// // Sends 'ping' to pega to keep session alive and then initiates the timout
+// function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
+//   if (refreshSignin) {
+//     PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
+//   }
+//   setShowTimeoutModal(false);
+//   initTimeout(setShowTimeoutModal);
+// }
+// /* ******************************* */
 
 export default function ChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
   const [showStartPage, setShowStartPage] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(false);
-  const [bShowAppName, setShowAppName] = useState(false);
+  const [bShowAppName, setShowAppName] = useState(false); // need this?
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
   const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
@@ -90,6 +98,9 @@ export default function ChildBenefitsClaim() {
 
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const [switchLang, setSwitchLang] = useState(lang);
+
+  const claimsListApi = 'D_ClaimantWorkAssignmentChBCases';
+  const secondsTillStartNowUnblocked = 30 * 1000;
 
   if (typeof PCore !== 'undefined') {
     PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
@@ -179,17 +190,14 @@ export default function ChildBenefitsClaim() {
 
   function beginClaim() {
     // Added to ensure that clicking begin claim restarts timeout
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, claimsListApi);
     displayStartPage();
   }
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, claimsListApi);
     setServiceNotAvailable(false);
     displayUserPortal();
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
+    closeActiveContainer();
   }
   function getClaimsCaseID() {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
@@ -201,17 +209,14 @@ export default function ChildBenefitsClaim() {
   function assignmentFinished() {
     getClaimsCaseID();
     if (!bShowResolutionScreen) {
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     }
     displayResolutionScreen();
   }
 
-  function closeContainer() {
-    displayUserPortal();
-  }
+  // function closeContainer() {
+  //   displayUserPortal();
+  // }
 
   // Calls data page to fetch in progress claims, then for each result (limited to first 10), calls D_Claim to get extra details about each 'assignment'
   // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
@@ -233,10 +238,7 @@ export default function ChildBenefitsClaim() {
           // Here we are calling this close container because of the fact that above
           // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
           // close container call as the very last one.
-          PCore.getContainerUtils().closeContainerItem(
-            PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-            { skipDirtyCheck: true }
-          );
+          closeActiveContainer();
         }
       });
   }
@@ -281,17 +283,16 @@ export default function ChildBenefitsClaim() {
         setShowStartPage(false);
         setShowUserPortal(false);
         setShowPega(false);
-        const containername = PCore.getContainerUtils().getActiveContainerItemName(
-          `${PCore.getConstants().APP.APP}/primary`
-        );
         const context = PCore.getContainerUtils().getActiveContainerItemName(
-          `${containername}/workarea`
+          `${PCore.getConstants().APP.APP}/primary/workarea`
         );
+        // const context = PCore.getContainerUtils().getActiveContainerItemName(
+        //   `${containername}/workarea`
+        // );
         const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
         if (status === 'Resolved-Discarded') {
           displayServiceNotAvailable();
-
-          PCore.getContainerUtils().closeContainerItem(context);
+          closeActiveContainer();
         }
       },
       'assignmentFinished'
@@ -310,7 +311,8 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
       () => {
-        closeContainer();
+        // closeContainer();
+        displayUserPortal();
       },
       'closeContainer'
     );
@@ -448,17 +450,17 @@ export default function ChildBenefitsClaim() {
       // Fetches timeout length config
       getSdkConfig()
         .then(sdkConfig => {
-          if (sdkConfig.timeoutConfig.secondsTilWarning)
-            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
-          if (sdkConfig.timeoutConfig.secondsTilLogout)
-            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+          // if (sdkConfig.timeoutConfig.secondsTilWarning)
+          //   milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+          // if (sdkConfig.timeoutConfig.secondsTilLogout)
+          //   milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
           if (sdkConfig.timeoutConfig.secondsTillStartNowUnblocked)
             secondsTillStartNowUnblocked =
-              sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000;
+              sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000; // isn't there in sdk config!
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, claimsListApi, false));
           initTimeout(setShowTimeoutModal);
         });
 
@@ -592,7 +594,7 @@ export default function ChildBenefitsClaim() {
     e.preventDefault();
     setShowSignoutModal(false);
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, claimsListApi);
   };
 
   const checkShuttered = (status: boolean) => {
@@ -643,7 +645,7 @@ export default function ChildBenefitsClaim() {
     <>
       <TimeoutPopup
         show={showTimeoutModal}
-        staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
+        staySignedinHandler={() => staySignedIn(setShowTimeoutModal, claimsListApi)}
         signoutHandler={() => triggerLogout()}
         isAuthorised
       />
