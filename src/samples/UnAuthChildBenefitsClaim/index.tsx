@@ -74,6 +74,20 @@ export default function UnAuthChildBenefitsClaim() {
     setCaseId(caseID);
   }
 
+  // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
+  function deleteData() {
+    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+    if (bShowPega && activeContainer) {
+      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
+    }
+
+    setShowTimeoutModal(false);
+    setShowStartPage(false);
+    setShowPega(false);
+    setShowResolutionScreen(false);
+    setShowDeletePage(true);
+  }
+
   function startNow() {
     // Check if PConn is created, and create case if it is
     if (pConn && !bShowPega) {
@@ -86,7 +100,9 @@ export default function UnAuthChildBenefitsClaim() {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
       if (sessionStorage.getItem('isRefreshFromDeleteScreen') === 'true') {
-        setShowDeletePage(true);
+        clearTimer();
+        deleteData();
+        setHasSessionTimedOut(false);
       } else if (sessionStorage.getItem('caseRefId')) {
         setShowResolutionScreen(true);
       } else if (!pyAssignmentID) {
@@ -126,20 +142,6 @@ export default function UnAuthChildBenefitsClaim() {
       { skipDirtyCheck: true }
     );
     setShowPega(false);
-  }
-
-  // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
-  function deleteData() {
-    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
-    if (bShowPega && activeContainer) {
-      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
-    }
-
-    setShowTimeoutModal(false);
-    setShowStartPage(false);
-    setShowPega(false);
-    setShowResolutionScreen(false);
-    setShowDeletePage(true);
   }
 
   function returnToPortalPage() {

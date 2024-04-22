@@ -39,7 +39,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       .getPageDataAsync('D_DocumentContent', 'root', {
         DocumentID: docIDForDocList,
         Locale: locale,
-        CaseID: caseId
+        CaseID: caseId || sessionStorage.getItem('caseRefId')
       })
       .then(listData => {
         if (
@@ -63,7 +63,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       .getPageDataAsync('D_DocumentContent', 'root', {
         DocumentID: docIDForReturnSlip,
         Locale: locale,
-        CaseID: caseId
+        CaseID: caseId || sessionStorage.getItem('caseRefId')
       })
       .then(pageData => {
         setReturnSlipContent(pageData.DocumentContentHTML);
@@ -93,7 +93,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
 
   const getBirthChildPanelContent = () => {
     const sessionCaseId = sessionStorage.getItem('caseRefId');
-    const referenceNumber = caseId || sessionCaseId;
+    const referenceNumber = refId || sessionCaseId?.replace('HMRC-CHB-WORK ', '');
     return (
       <>
         <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
