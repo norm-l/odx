@@ -245,5 +245,12 @@
   "AUTOMATICALLY_CLOSE_IN": "Bydd y dudalen hon yn cau’n awtomatig mewn",
   "STAY_ON_THIS_PAGE": "Aros ar y dudalen hon",
   "EXIT_THIS_PAGE": "Gadael y dudalen hon",
-  "THERE_IS_A_PROBLEM": "Mae yna broblem"
+  "THERE_IS_A_PROBLEM": "Mae yna broblem",
+  "NOT_YET_STARTED": "Heb ddechrau eto",
+  "CANNOT_START_YET": "Methu dechrau eto",
+  "COMPLETED": "wedi ei gwblhau",
+  "YOUR_DETAILS": "Eich manylion",
+  "RELATIONSHIP_DETAILS": "Manylion perthynas",
+  "CHILD_DETAILS": "Manylion y plentyn",
+  "INCOME_DETAILS": "Manylion incwm"
 }
