@@ -21,6 +21,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
   const chbOfficeLink = 'https://www.gov.uk/child-benefit-tax-charge/your-circumstances-change';
+  const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
 
   function getFeedBackLink() {
     return isUnAuth
@@ -30,32 +31,32 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   useEffect(() => {
     sessionStorage.removeItem('assignmentID');
     setPageTitle();
-  }, []);
+  }, [lang]);
 
   useEffect(() => {
-      PCore.getDataPageUtils()
-        .getPageDataAsync('D_DocumentContent', 'root', {
-          DocumentID: docIDForDocList,
-          Locale: locale,
-          CaseID: caseId
-        })
-        .then(listData => {
-          if (
-            listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
-            listData.DocumentContentHTML.includes("data-adopted='true'")
-          ) {
-            setIsBornAbroadOrAdopted(true);
-          }
-          setLoading(false);
-          setDocumentList(listData.DocumentContentHTML);
-          if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
-            setIsCaseRefRequired(true);
-          }
-        })
-        .catch(err => {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        });
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_DocumentContent', 'root', {
+        DocumentID: docIDForDocList,
+        Locale: locale,
+        CaseID: caseId
+      })
+      .then(listData => {
+        if (
+          listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
+          listData.DocumentContentHTML.includes("data-adopted='true'")
+        ) {
+          setIsBornAbroadOrAdopted(true);
+        }
+        setLoading(false);
+        setDocumentList(listData.DocumentContentHTML);
+        if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
+          setIsCaseRefRequired(true);
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
 
     PCore.getDataPageUtils()
       .getPageDataAsync('D_DocumentContent', 'root', {
