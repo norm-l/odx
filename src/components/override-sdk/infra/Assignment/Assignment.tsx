@@ -22,6 +22,7 @@ import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
+import dayjs from 'dayjs';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -270,12 +271,26 @@ export default function Assignment(props) {
     });
   }
 
+  function handleBackLinkforDateComp(){
+    const childPconnect = children[0]?.props?.getPConnect();
+    const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
+    if(dateField){
+      dateField?.forEach((field, index) => {
+        const stroredDateValue = children[0]?.props?.getPConnect().getValue('.' + field.name?.replace(thePConn.getPageReference(), ''));
+        if(!dayjs(stroredDateValue, 'YYYY-MM-DD', true).isValid()) {
+          children[0]?.props?.getPConnect().setValue('.' + field.name?.replace(thePConn.getPageReference(), ''), '');
+        }
+      })
+    }
+  }
+
   async function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
 
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
+          handleBackLinkforDateComp(); //empty the date only if invalid date for Bug-7756
           const navigatePromise = navigateToStep('previous', itemKey);
 
           clearErrors();
