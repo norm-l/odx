@@ -5,11 +5,11 @@ import Button from '../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 
 export default function LogoutPopup(props) {
-  const { hideModal, handleSignoutModal, handleStaySignIn, id } = props;
+  const { show, handleSignoutModal, handleStaySignIn, id } = props;
   const { t } = useTranslation();
 
   return (
-    <Modal show={props.show} handleClose={hideModal} id={id}>
+    <Modal show={show} id={id}>
       <div>
         <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
           {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
@@ -38,7 +38,6 @@ export default function LogoutPopup(props) {
 LogoutPopup.propTypes = {
   id: PropTypes.string,
   show: PropTypes.bool,
-  hideModal: PropTypes.func,
   handleSignoutModal: PropTypes.func,
   handleStaySignIn: PropTypes.func
 };

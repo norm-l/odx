@@ -5,10 +5,11 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import { isUnAuthJourney } from '../../components/helpers/utils';
 
 declare const PCore: any;
 
-const ConfirmationPage = ({ caseId, isUnAuth }) => {
+const ConfirmationPage = ({ caseId }) => {
   const { t } = useTranslation();
   const [documentList, setDocumentList] = useState(``);
   const [isBornAbroadOrAdopted, setIsBornAbroadOrAdopted] = useState(false);
@@ -20,6 +21,7 @@ const ConfirmationPage = ({ caseId, isUnAuth }) => {
   const docIDForDocList = 'CR0003';
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
+  const isUnAuth = isUnAuthJourney();
 
   function getFeedBackLink() {
     return isUnAuth

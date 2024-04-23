@@ -20,7 +20,7 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = (showTimeoutModal, needsResetData, resetData) => {
+export const initTimeout = (showTimeoutModal, needsResetData = false, resetData = null) => {
   settingTimer();
   clearTimer();
 
@@ -38,17 +38,17 @@ export const initTimeout = (showTimeoutModal, needsResetData, resetData) => {
 };
 
 // Sends 'ping' to pega to keep session alive and then initiates the timeout
-export function staySignedIn(
-  setShowTimeoutModal,
-  claimsListApi,
-  refreshSignin = true,
-  needsResetData = false,
-  resetData = null
-) {
-  if (refreshSignin && !!claimsListApi) {
-    // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
-  }
-  setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal, needsResetData, resetData);
-}
+// export function staySignedIn(
+//   setShowTimeoutModal,
+//   claimsListApi,
+//   refreshSignin = true,
+//   needsResetData = false,
+//   resetData = null
+// ) {
+//   if (refreshSignin && !!claimsListApi) {
+//     // @ts-ignore
+//     PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
+//   }
+//   setShowTimeoutModal(false);
+//   initTimeout(setShowTimeoutModal, needsResetData, resetData);
+// }

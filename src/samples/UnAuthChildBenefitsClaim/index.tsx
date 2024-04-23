@@ -19,11 +19,7 @@ import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helper
 import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-import {
-  initTimeout,
-  staySignedIn,
-  clearTimer
-} from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
+import { initTimeout, clearTimer } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
@@ -48,8 +44,6 @@ export default function UnAuthChildBenefitsClaim() {
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
-
-  const claimsListApi = '';
 
   const { t } = useTranslation();
 
@@ -123,8 +117,23 @@ export default function UnAuthChildBenefitsClaim() {
     setShowDeletePage(true);
   }
 
+  const handleContinueClaim = () => {
+    // sign in refresh doesn't happen for unauth, claimsListApi = '', thus we can skip the api call
+    setShowTimeoutModal(false);
+    initTimeout(setShowTimeoutModal, !bShowResolutionScreen, deleteData);
+  };
+
+  const handleExitClaim = () => {
+    if (bShowResolutionScreen) {
+      triggerLogout();
+    } else {
+      deleteData();
+      setHasSessionTimedOut(false);
+    }
+  };
+
   function returnToStartPage() {
-    staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData);
+    handleContinueClaim();
     resetAppDisplay();
     setShowStartPage(true);
     closeContainer();
@@ -174,7 +183,7 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'staySignedInOnConfirmationScreen',
       () => {
-        staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData);
+        handleContinueClaim();
       },
       'staySignedInOnConfirmationScreen'
     );
@@ -327,9 +336,7 @@ export default function UnAuthChildBenefitsClaim() {
       initTimeout(setShowTimeoutModal, !bShowResolutionScreen, deleteData);
 
       // Subscribe to any store change to reset timeout counter
-      PCore.getStore().subscribe(() =>
-        staySignedIn(setShowTimeoutModal, claimsListApi, false, !bShowResolutionScreen, deleteData)
-      );
+      PCore.getStore().subscribe(() => handleContinueClaim());
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
@@ -478,26 +485,10 @@ export default function UnAuthChildBenefitsClaim() {
       {!showDeletePage && (
         <TimeoutPopup
           show={showTimeoutModal}
-          staySignedinHandler={() => {
-            staySignedIn(
-              setShowTimeoutModal,
-              claimsListApi,
-              false,
-              !bShowResolutionScreen,
-              deleteData
-            );
-          }}
-          signoutHandler={() => {
-            if (bShowResolutionScreen) {
-              triggerLogout();
-            } else {
-              deleteData();
-
-              setHasSessionTimedOut(false);
-            }
-          }}
-          isAuthorised={false}
+          staySignedinHandler={handleContinueClaim}
+          signoutHandler={handleExitClaim}
           isConfirmationPage={bShowResolutionScreen}
+          isAuthorised={false}
         />
       )}
       <AppHeader
@@ -516,7 +507,7 @@ export default function UnAuthChildBenefitsClaim() {
           renderContent()
         )}
 
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth />}
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
       </div>
 
       <AppFooter />
