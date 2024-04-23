@@ -312,7 +312,7 @@ export default function Assignment(props) {
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
-          handleBackLinkforDateComp(); //empty the date only if invalid date for Bug-7756
+          handleBackLinkforDateComp(); //clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
           const navigatePromise = navigateToStep('previous', itemKey);
 
           clearErrors();
