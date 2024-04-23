@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
-import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { loginIfNecessary, sdkSetAuthHeader, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -54,7 +53,6 @@ export default function UnAuthChildBenefitsClaim() {
   const { t } = useTranslation();
   const serviceName = t('CLAIM_CHILD_BENEFIT');
   registerServiceName(serviceName);
-
 
   function doRedirectDone() {
     history.push('/ua');
