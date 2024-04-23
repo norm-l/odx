@@ -297,10 +297,10 @@ export default function Assignment(props) {
     const childPconnect = children[0]?.props?.getPConnect();
     const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
     if(dateField){
-      dateField?.forEach((field, index) => {
-        const stroredDateValue = children[0]?.props?.getPConnect().getValue('.' + field.name?.replace(thePConn.getPageReference(), ''));
+      dateField?.forEach(field => {
+        const stroredDateValue = children[0]?.props?.getPConnect().getValue(`.${field.name?.replace(thePConn.getPageReference(), '')}`);
         if(!dayjs(stroredDateValue, 'YYYY-MM-DD', true).isValid()) {
-          children[0]?.props?.getPConnect().setValue('.' + field.name?.replace(thePConn.getPageReference(), ''), '');
+          children[0]?.props?.getPConnect().setValue(`.${field.name?.replace(thePConn.getPageReference(), '')}`,'');
         }
       })
     }
@@ -312,7 +312,7 @@ export default function Assignment(props) {
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
-          handleBackLinkforDateComp(); //clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
+          handleBackLinkforDateComp(); // clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
           const navigatePromise = navigateToStep('previous', itemKey);
 
           clearErrors();
