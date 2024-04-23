@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
@@ -11,7 +11,7 @@ import {
   sdkIsLoggedIn,
   loginIfNecessary,
   sdkSetAuthHeader,
-  getSdkConfig,
+  getSdkConfig
 } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -120,6 +120,7 @@ export default function ChildBenefitsClaim() {
   }
 
   const { t } = useTranslation();
+  registerServiceName(t('CLAIM_CHILD_BENEFIT'));
   let operatorId = '';
 
   useEffect(() => {
