@@ -34,18 +34,26 @@ export default styled.div(() => {
       margin-bottom: 20px;
     }
 
-    .sectionBased-region > fieldset > legend span {
+    .sectionBased-region > fieldset > legend > div > div > span {
       font-family: 'TransportBold', Arial, sans-serif;
-      font-size: max(1.0625rem, 25px);
+      font-size: max(1.0625rem, 25px) !important;
+    }
+
+    .sectionBased-region > fieldset > div fieldset legend span,
+    .sectionBased-region > fieldset h3 {
+      font-family: 'TransportBold', Arial, sans-serif;
+      font-size: max(1.0625rem, 21px) !important;
     }
 
     .sectionBased-region > fieldset > div legend,
+    .sectionBased-region > fieldset > div legend span,
     .sectionBased-region > fieldset > div label,
     .sectionBased-region fieldset legend,
+    .sectionBased-region fieldset legend span,
     .sectionBased-region fieldset label {
       color: #000000;
       font-family: 'TransportBold', Arial, sans-serif;
-      font-size: max(1.0625rem, 19px);
+      font-size: max(1.0625rem, 19px) !important;
     }
 
     .sectionBased-region > fieldset > div input + label,
