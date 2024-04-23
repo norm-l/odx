@@ -28,6 +28,7 @@ import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import {
+  closeActiveContainer,
   getServiceShutteredStatus,
   scrollToTop,
   triggerLogout
@@ -76,11 +77,7 @@ export default function UnAuthChildBenefitsClaim() {
 
   // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
   function deleteData() {
-    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
-    if (bShowPega && activeContainer) {
-      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
-    }
-
+    closeActiveContainer();
     setShowTimeoutModal(false);
     setShowStartPage(false);
     setShowPega(false);
@@ -136,10 +133,7 @@ export default function UnAuthChildBenefitsClaim() {
   }, [showStartPage, bShowPega, bShowResolutionScreen, shutterServicePage]);
 
   function closeContainer() {
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
+    closeActiveContainer();
     setShowPega(false);
   }
 
@@ -153,10 +147,7 @@ export default function UnAuthChildBenefitsClaim() {
   function assignmentFinished() {
     getClaimsCaseID();
     if (!bShowResolutionScreen) {
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     }
     resetAppDisplay();
     setShowResolutionScreen(true);

@@ -16,6 +16,7 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
+import { closeActiveContainer } from '../../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 
@@ -38,10 +39,7 @@ export function establishPCoreSubscriptions({
     setCaseStatus(status);
     setCaseId(id);
     // console.log('SUBEVENT! closeActiveContainerOnEndOfAssignment');
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
+    closeActiveContainer();
     setShowResolutionPage(true);
   }
   /* *********************************************

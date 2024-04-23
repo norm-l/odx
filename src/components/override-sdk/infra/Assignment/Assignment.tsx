@@ -5,7 +5,8 @@ import {
   getServiceShutteredStatus,
   scrollToTop,
   shouldRemoveFormTagForReadOnly,
-  removeRedundantString
+  removeRedundantString,
+  closeActiveContainer
 } from '../../../helpers/utils';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import {
@@ -107,10 +108,7 @@ export default function Assignment(props) {
       const assignmentID = thePConn.getCaseInfo().getAssignmentID();
       sessionStorage.setItem('assignmentID', assignmentID);
 
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {

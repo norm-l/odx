@@ -11,7 +11,7 @@ import {
   sdkIsLoggedIn,
   loginIfNecessary,
   sdkSetAuthHeader,
-  getSdkConfig,
+  getSdkConfig
 } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -32,7 +32,11 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import {
+  closeActiveContainer,
+  getServiceShutteredStatus,
+  triggerLogout
+} from '../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 
@@ -175,10 +179,7 @@ export default function ChildBenefitsClaim() {
     staySignedIn(setShowTimeoutModal);
     setServiceNotAvailable(false);
     displayUserPortal();
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
+    closeActiveContainer();
   }
   function getClaimsCaseID() {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
@@ -190,10 +191,7 @@ export default function ChildBenefitsClaim() {
   function assignmentFinished() {
     getClaimsCaseID();
     if (!bShowResolutionScreen) {
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
+      closeActiveContainer();
     }
     displayResolutionScreen();
   }
@@ -222,10 +220,7 @@ export default function ChildBenefitsClaim() {
           // Here we are calling this close container because of the fact that above
           // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
           // close container call as the very last one.
-          PCore.getContainerUtils().closeContainerItem(
-            PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-            { skipDirtyCheck: true }
-          );
+          closeActiveContainer();
         }
       });
   }

@@ -5,6 +5,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import { closeActiveContainer } from '../../components/helpers/utils';
 
 declare const PCore: any;
 
@@ -78,10 +79,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         //  As the document API calls are executed as last ones , we want to close container as a very
         //  last call , so we even included 2.5 seconds of time gap for execution
         setTimeout(() => {
-          PCore.getContainerUtils().closeContainerItem(
-            PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-            { skipDirtyCheck: true }
-          );
+          closeActiveContainer();
         }, 2500);
       });
   }, []);
