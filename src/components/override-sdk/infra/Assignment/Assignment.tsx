@@ -44,7 +44,7 @@ export default function Assignment(props) {
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
-  const { appBacklinkProps } = useContext(AppContext)
+  const { appBacklinkProps } = useContext(AppContext);
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -99,6 +99,25 @@ export default function Assignment(props) {
     };
   }, [errorMessages]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Perform actions before the component unloads
+      sessionStorage.setItem('isAutocompleteRendered', 'false');
+
+      const assignmentID = thePConn.getCaseInfo().getAssignmentID();
+      sessionStorage.setItem('assignmentID', assignmentID);
+
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   let containerName;
 
   const caseInfo = thePConn.getDataObject().caseInfo;
@@ -119,6 +138,9 @@ export default function Assignment(props) {
       let tryTranslate = localizedVal(containerName, '', 'HMRC-CHB-WORK-CLAIM!CASE!CLAIM');
       if (tryTranslate === containerName) {
         tryTranslate = localizedVal(tryTranslate, '', headerLocaleLocation);
+      }
+      if (containerName.toLowerCase() === 'claim child benefit') {
+        tryTranslate = t('CLAIM_CHILD_BENEFIT');
       }
       // Set our translated header!
       setHeader(tryTranslate);
@@ -428,19 +450,23 @@ export default function Assignment(props) {
                 attributes={{ type: 'link' }}
               ></Button>
             ) : null
-          )} 
+          )}
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
-            arSecondaryButtons?.findIndex(button=>button.name === 'Previous') === -1
-            && appBacklinkProps.appBacklinkAction &&  <Button
-              variant='backlink'
-              onClick={e => {
-                e.target.blur();
-                appBacklinkProps.appBacklinkAction();
-              }}
-              key='createstagebacklink'
-              attributes={{ type: 'link' }}
-            >{appBacklinkProps.appBacklinkText}</Button>       
+            arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
+              appBacklinkProps.appBacklinkAction && (
+                <Button
+                  variant='backlink'
+                  onClick={e => {
+                    e.target.blur();
+                    appBacklinkProps.appBacklinkAction();
+                  }}
+                  key='createstagebacklink'
+                  attributes={{ type: 'link' }}
+                >
+                  {appBacklinkProps.appBacklinkText}
+                </Button>
+              )
           }
           <MainWrapper>
             {errorSummary && errorMessages.length > 0 && (

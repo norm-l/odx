@@ -23,7 +23,7 @@ import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import ClaimsList from '../../components/templates/ClaimsList';
-import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
@@ -88,17 +88,6 @@ export default function ChildBenefitsClaim() {
   const [timeoutID, setTimeoutID] = useState(null);
   const history = useHistory();
 
-  const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  const [switchLang, setSwitchLang] = useState(lang);
-
-  if (typeof PCore !== 'undefined') {
-    PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
-      setTimeout(() => {
-        setSwitchLang(langreference?.language);
-      }, 50);
-    });
-  }
-
   function resetAppDisplay() {
     setShowStartPage(false);
     setShowUserPortal(false);
@@ -132,10 +121,12 @@ export default function ChildBenefitsClaim() {
 
   const { t } = useTranslation();
   let operatorId = '';
+  const serviceName = t('CLAIM_CHILD_BENEFIT');
+  registerServiceName(serviceName);
 
   useEffect(() => {
     setPageTitle();
-  }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen, shutterServicePage]);
+  }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen, shutterServicePage, serviceName]);
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
@@ -625,7 +616,6 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenAssignment'
                 buttonContent={t('CONTINUE_CLAIM')}
                 caseId={caseId}
-                switchLang={switchLang}
               />
             )}
 
@@ -637,7 +627,6 @@ export default function ChildBenefitsClaim() {
                 rowClickAction='OpenCase'
                 buttonContent={t('VIEW_CLAIM')}
                 checkShuttered={checkShuttered}
-                switchLang={switchLang}
               />
             )}
           </UserPortal>
