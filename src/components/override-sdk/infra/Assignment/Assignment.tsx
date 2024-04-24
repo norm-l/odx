@@ -298,12 +298,12 @@ export default function Assignment(props) {
     const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
     if(dateField){
       dateField?.forEach(field => {
-        const childPagRef = children[0]?.props?.getPConnect().getPageReference();
+        const childPagRef = childPconnect.getPageReference();
         const pageRef = thePConn.getPageReference() === childPagRef ? thePConn.getPageReference() : childPagRef;
         const storedRefName = field.name?.replace(pageRef, '');
-        const storedDateValue = children[0]?.props?.getPConnect().getValue(`.${storedRefName}`);
+        const storedDateValue = childPconnect.getValue(`.${storedRefName}`);
         if(!dayjs(storedDateValue, 'YYYY-MM-DD', true).isValid()) {
-          children[0]?.props?.getPConnect().setValue(`.${storedRefName}`,'');
+          childPconnect.setValue(`.${storedRefName}`,'');
         }
       })
     }
