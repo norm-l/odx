@@ -137,19 +137,18 @@ export const triggerLogout = () => {
   }
 
   type responseType = { URLResourcePath2: string };
-
+  let logoutUrl: string;
   PCore.getDataPageUtils()
     .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
     // @ts-ignore
     .then((response: unknown) => {
-      const logoutUrl = (response as responseType).URLResourcePath2;
-
+      logoutUrl = (response as responseType).URLResourcePath2;
+    })
+    .finally(() => {
       logout().then(() => {
-        if (logoutUrl) {
-          // Clear previous sessioStorage values
-          sessionStorage.clear();
-          window.location.href = logoutUrl;
-        }
+        // Clear previous sessioStorage values
+        sessionStorage.clear();
+        window.location.href = logoutUrl || '/';
       });
     });
 };

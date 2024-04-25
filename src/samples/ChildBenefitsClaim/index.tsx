@@ -51,6 +51,9 @@ function initTimeout(setShowTimeoutModal) {
 
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
+    // Sends 'ping' to pega to keep session alive
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
+
     signoutTimeout = setTimeout(() => {
       triggerLogout();
     }, milisecondsTilSignout);
@@ -58,11 +61,9 @@ function initTimeout(setShowTimeoutModal) {
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
-  if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
-  }
+function staySignedIn(setShowTimeoutModal) {
   setShowTimeoutModal(false);
+  // initiates the timeout
   initTimeout(setShowTimeoutModal);
 }
 /* ******************************* */
@@ -462,7 +463,7 @@ export default function ChildBenefitsClaim() {
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal));
           initTimeout(setShowTimeoutModal);
         });
 
