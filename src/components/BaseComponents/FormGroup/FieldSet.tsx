@@ -16,7 +16,7 @@ export default function FieldSet({
   fieldsetElementProps,
   testProps,
   isAutoCompleteField,
-  isAutoCompleteLegendIsHeading,
+  isAutoCompleteLegendIsHeading
 }) {
   const { instructionText } = useContext(DefaultFormContext);
 
@@ -39,8 +39,12 @@ export default function FieldSet({
   }`.trim();
 
   // to updte legend style for Autocomplete
-  legendClasses =  isAutoCompleteField && !isAutoCompleteLegendIsHeading ? 'govuk-label' : legendClasses;
-  legendClasses =  isAutoCompleteField && isAutoCompleteLegendIsHeading ? 'govuk-fieldset__legend govuk-fieldset__legend--l': legendClasses ;
+  legendClasses =
+    isAutoCompleteField && !isAutoCompleteLegendIsHeading ? 'govuk-label' : legendClasses;
+  legendClasses =
+    isAutoCompleteField && isAutoCompleteLegendIsHeading
+      ? 'govuk-fieldset__legend govuk-fieldset__legend--l'
+      : legendClasses;
 
   const hintTextExists = !['none', '', null, undefined].includes(hintText);
 
@@ -62,7 +66,7 @@ export default function FieldSet({
       <fieldset className='govuk-fieldset' {...ariaDescBy} {...fieldsetElementProps}>
         <legend className={legendClasses}>
           <ConditionalWrapper
-            condition={legendIsHeading}
+            condition={legendIsHeading || isAutoCompleteLegendIsHeading}
             wrapper={child => <h1 className='govuk-fieldset__heading'>{child}</h1>}
             childrenToWrap={label}
           />
