@@ -7,7 +7,7 @@ import AppFooter from '../../components/AppComponents/AppFooter';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
-import { logout, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
+import { loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
 import { staySignedIn } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import { useStartMashup } from './reuseables/PegaSetup';
 import {
@@ -28,7 +28,7 @@ const ClaimPage: FunctionComponent<any> = () => {
     const [shutterServicePage, /* setShutterServicePage */] = useState(false);
     const [serviceNotAvailable, /* setServiceNotAvailable */] = useState(false);
     const [pCoreReady, setPCoreReady] = useState(false);
-    const [authType, setAuthType] = useState('gg');
+    const setAuthType = useState('gg')[1];
 
     const [currentDisplay, setCurrentDisplay] = useState<|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'|'loading'>('pegapage');
     const [summaryPageContent, setSummaryPageContent] = useState<{content:string|null, title:string|null, banner:string|null}>({content:null, title:null, banner:null})
