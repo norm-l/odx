@@ -55,9 +55,6 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
 
   // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
   applicationTimeout = setTimeout(() => {
-    // @ts-ignore
-    // send ping to pega
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
       if (!isAuthorised && !isConfirmationPage) {
