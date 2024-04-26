@@ -214,7 +214,7 @@ const ClaimPage: FunctionComponent<any> = () => {
       <AppHeader
         handleSignout={handleSignout}
         appname={t('HIGH_INCOME_BENEFITS')}
-        hasLanguageToggle={false}
+        hasLanguageToggle
         isPegaApp={showPega}
         languageToggleCallback={
           () => {} /* toggleNotificationProcess(
