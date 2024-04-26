@@ -15,8 +15,7 @@ export default function FieldSet({
   children,
   fieldsetElementProps,
   testProps,
-  isAutoCompleteField,
-  labelIsHeading
+  isAutoCompleteField
 }) {
   const { instructionText } = useContext(DefaultFormContext);
 
@@ -39,9 +38,9 @@ export default function FieldSet({
   }`.trim();
 
   // to updte legend style for Autocomplete
-  legendClasses = isAutoCompleteField && !labelIsHeading ? 'govuk-label' : legendClasses;
+  legendClasses = isAutoCompleteField && !legendIsHeading ? 'govuk-label' : legendClasses;
   legendClasses =
-    isAutoCompleteField && labelIsHeading
+    isAutoCompleteField && legendIsHeading
       ? 'govuk-fieldset__legend govuk-fieldset__legend--l'
       : legendClasses;
 

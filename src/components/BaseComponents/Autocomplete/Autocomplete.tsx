@@ -63,7 +63,6 @@ export default function AutoComplete(props) {
 
   const extraProps = {
     testProps: { 'data-test-id': testId },
-    labelIsHeading,
     isAutoCompleteField: true,
     legendIsHeading: labelIsHeading
   };
