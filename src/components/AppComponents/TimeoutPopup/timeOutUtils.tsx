@@ -20,7 +20,12 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = async (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
+export const initTimeout = async (
+  showTimeoutModal,
+  deleteData,
+  isAuthorised,
+  isConfirmationPage
+) => {
   // TODO - isAuthorised to be replaced by caseType from pega
   // Fetches timeout length config
   await settingTimer();
@@ -28,7 +33,7 @@ export const initTimeout = async (showTimeoutModal, deleteData, isAuthorised, is
   clearTimeout(signoutTimeout);
 
   // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
-  applicationTimeout = setTimeout(() => {    
+  applicationTimeout = setTimeout(() => {
     // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
@@ -50,7 +55,9 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
 
   // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
   applicationTimeout = setTimeout(() => {
-    // TODO - unauth and sessiontimeout functionality to be implemented
+    // @ts-ignore
+    // send ping to pega
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
       if (!isAuthorised && !isConfirmationPage) {
