@@ -81,7 +81,9 @@ export function staySignedIn(
 ) {
   if (refreshSignin && !!claimsListApi) {
     // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {
+      OperatorId: 'Model_Unauth@ChB'
+    });
   }
   setShowTimeoutModal(false);
   resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);

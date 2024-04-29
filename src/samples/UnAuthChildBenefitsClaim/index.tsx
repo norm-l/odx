@@ -48,7 +48,7 @@ export default function UnAuthChildBenefitsClaim() {
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
-  const claimsListApi = 'D_DummyChBSession';
+  const claimsListApi = 'D_ClaimantSubmittedChBCases';
 
   const { t } = useTranslation();
   const serviceName = t('CLAIM_CHILD_BENEFIT');
