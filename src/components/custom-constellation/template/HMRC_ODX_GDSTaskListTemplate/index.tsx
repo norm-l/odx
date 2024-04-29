@@ -1,5 +1,12 @@
 import React from 'react';
-import { Grid, Text, SummaryList, Status, withConfiguration } from '@pega/cosmos-react-core';
+import {
+  Grid,
+  Text,
+  SummaryList,
+  Status,
+  withConfiguration,
+  Button
+} from '@pega/cosmos-react-core';
 import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 import StyledHmrcOdxGdsTaskListTemplateWrapper from './styles';
 
@@ -75,6 +82,9 @@ function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemplateProps) {
           noItemsText='No items'
         ></SummaryList>
       </div>
+      <Button variant='primary' compact={false} onClick={() => handleOnClick('Save And Continue')}>
+        Save and continue
+      </Button>
       <Grid
         className='u-hide'
         container={{
