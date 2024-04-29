@@ -3,17 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
-
 import { loginIfNecessary, sdkSetAuthHeader, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ConfirmationPage from '../ChildBenefitsClaim/ConfirmationPage';
-import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
@@ -28,7 +26,11 @@ import {
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { getServiceShutteredStatus, scrollToTop } from '../../components/helpers/utils';
+import {
+  getServiceShutteredStatus,
+  scrollToTop,
+  triggerLogout
+} from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
 
@@ -46,9 +48,11 @@ export default function UnAuthChildBenefitsClaim() {
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
-  const claimsListApi = '';
+  const claimsListApi = 'D_ClaimantSubmittedChBCases';
 
   const { t } = useTranslation();
+  const serviceName = t('CLAIM_CHILD_BENEFIT');
+  registerServiceName(serviceName);
 
   function doRedirectDone() {
     history.push('/ua');
@@ -71,6 +75,20 @@ export default function UnAuthChildBenefitsClaim() {
     setCaseId(caseID);
   }
 
+  // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
+  function deleteData() {
+    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+    if (bShowPega && activeContainer) {
+      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
+    }
+
+    setShowTimeoutModal(false);
+    setShowStartPage(false);
+    setShowPega(false);
+    setShowResolutionScreen(false);
+    setShowDeletePage(true);
+  }
+
   function startNow() {
     // Check if PConn is created, and create case if it is
     if (pConn && !bShowPega) {
@@ -82,7 +100,12 @@ export default function UnAuthChildBenefitsClaim() {
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
-      if (!pyAssignmentID) {
+      if (sessionStorage.getItem('isRefreshFromDeleteScreen') === 'true') {
+        clearTimer();
+        deleteData();
+      } else if (sessionStorage.getItem('caseRefId')) {
+        setShowResolutionScreen(true);
+      } else if (!pyAssignmentID) {
         PCore.getMashupApi().createCase('HMRC-ChB-Work-Claim', PCore.getConstants().APP.APP, {
           startingFields
         });
@@ -111,7 +134,7 @@ export default function UnAuthChildBenefitsClaim() {
 
   useEffect(() => {
     setPageTitle();
-  }, [showStartPage, bShowPega, bShowResolutionScreen, shutterServicePage]);
+  }, [showStartPage, bShowPega, bShowResolutionScreen, shutterServicePage, serviceName]);
 
   function closeContainer() {
     PCore.getContainerUtils().closeContainerItem(
@@ -119,20 +142,6 @@ export default function UnAuthChildBenefitsClaim() {
       { skipDirtyCheck: true }
     );
     setShowPega(false);
-  }
-
-  // TODO - this function will have its pega counterpart for the feature to be completed - part of future story
-  function deleteData() {
-    const activeContainer = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
-    if (bShowPega && activeContainer) {
-      PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
-    }
-
-    setShowTimeoutModal(false);
-    setShowStartPage(false);
-    setShowPega(false);
-    setShowResolutionScreen(false);
-    setShowDeletePage(true);
   }
 
   function returnToPortalPage() {
@@ -505,14 +514,15 @@ export default function UnAuthChildBenefitsClaim() {
               claimsListApi,
               deleteData,
               false,
-              false,
+              true,
               bShowResolutionScreen
             );
           }}
           signoutHandler={() => {
             if (bShowResolutionScreen) {
-              logout();
+              triggerLogout();
             } else {
+              sessionStorage.setItem('hasSessionTimedOut', 'true');
               clearTimer();
               deleteData();
 

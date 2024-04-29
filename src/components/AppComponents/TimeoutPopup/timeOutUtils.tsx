@@ -1,4 +1,5 @@
-import { logout, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
+import { triggerLogout } from '../../helpers/utils';
 
 let milisecondsTilWarning = 780 * 1000;
 let milisecondsTilSignout = 115 * 1000;
@@ -19,10 +20,15 @@ export function clearTimer() {
   clearTimeout(signoutTimeout);
 }
 
-export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
+export const initTimeout = async (
+  showTimeoutModal,
+  deleteData,
+  isAuthorised,
+  isConfirmationPage
+) => {
   // TODO - isAuthorised to be replaced by caseType from pega
   // Fetches timeout length config
-  settingTimer();
+  await settingTimer();
   clearTimeout(applicationTimeout);
   clearTimeout(signoutTimeout);
 
@@ -31,14 +37,34 @@ export const initTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfir
     // TODO - unauth and sessiontimeout functionality to be implemented
     showTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      if (!isAuthorised && !isConfirmationPage) {
+      if (!isAuthorised && !isConfirmationPage && deleteData) {
+        // if the journey is not authorized or from confirmation page , the claim data gets deleted
+        deleteData();
+        clearTimer();
+        // session ends and deleteData() (pega)
+      }
+    }, milisecondsTilSignout);
+  }, milisecondsTilWarning);
+};
+
+export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
+  // TODO - isAuthorised to be replaced by caseType from pega
+  // Fetches timeout length config
+  clearTimeout(applicationTimeout);
+  clearTimeout(signoutTimeout);
+
+  // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
+  applicationTimeout = setTimeout(() => {
+    showTimeoutModal(true);
+    signoutTimeout = setTimeout(() => {
+      if (!isAuthorised && !isConfirmationPage && deleteData) {
         // if the journey is not authorized or from confirmation page , the claim data gets deleted
         deleteData();
         clearTimer();
       } else {
         // the logout case executes when entire timeout occurs after confirmation page or user clicks
         // exit survey link in pop after confirmation page
-        logout();
+        triggerLogout();
       }
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
@@ -55,8 +81,10 @@ export function staySignedIn(
 ) {
   if (refreshSignin && !!claimsListApi) {
     // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root');
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {
+      OperatorId: 'Model_Unauth@ChB'
+    });
   }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
+  resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
 }

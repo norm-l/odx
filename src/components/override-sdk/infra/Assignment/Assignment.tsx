@@ -21,6 +21,8 @@ import ShutterServicePage from '../../../../components/AppComponents/ShutterServ
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
+import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
+import dayjs from 'dayjs';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -43,6 +45,7 @@ export default function Assignment(props) {
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
+  const { appBacklinkProps } = useContext(AppContext);
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -97,6 +100,25 @@ export default function Assignment(props) {
     };
   }, [errorMessages]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Perform actions before the component unloads
+      sessionStorage.setItem('isAutocompleteRendered', 'false');
+
+      const assignmentID = thePConn.getCaseInfo().getAssignmentID();
+      sessionStorage.setItem('assignmentID', assignmentID);
+
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   let containerName;
 
   const caseInfo = thePConn.getDataObject().caseInfo;
@@ -107,19 +129,19 @@ export default function Assignment(props) {
 
   const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
 
-  PCore.getPubSubUtils().subscribe(
-    'languageToggleTriggered',
-    (langreference) => {
-      setSelectedLang(langreference?.language);
-    }
-  );
+  PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
+    setSelectedLang(langreference?.language);
+  });
 
   // To update the title when we toggle the language
   useEffect(() => {
     setTimeout(() => {
       let tryTranslate = localizedVal(containerName, '', 'HMRC-CHB-WORK-CLAIM!CASE!CLAIM');
-      if(tryTranslate === containerName){
+      if (tryTranslate === containerName) {
         tryTranslate = localizedVal(tryTranslate, '', headerLocaleLocation);
+      }
+      if (containerName.toLowerCase() === 'claim child benefit') {
+        tryTranslate = t('CLAIM_CHILD_BENEFIT');
       }
       // Set our translated header!
       setHeader(tryTranslate);
@@ -149,6 +171,20 @@ export default function Assignment(props) {
       }
     }
   }, [children]);
+
+  function sortErrorMessages(errorMsg) {
+    const formElements = document.forms[0].elements;
+    const sortedErrors = [];
+
+    for (let i = 0; i < formElements.length; i += 1) {
+      errorMsg.forEach(err => {
+        if (formElements[i]?.id === err?.message?.fieldId) {
+          sortedErrors.push(err);
+        }
+      });
+    }
+    return sortedErrors;
+  }
 
   function checkErrorMessages() {
     let errorStateProps = [];
@@ -197,7 +233,7 @@ export default function Assignment(props) {
 
           acc.push({
             message: {
-              message: removeRedundantString(validatemessage),
+              message: localizedVal(removeRedundantString(validatemessage)),
               pageRef,
               fieldId,
               clearMessageProperty
@@ -208,6 +244,10 @@ export default function Assignment(props) {
         return acc;
       }, []);
 
+    // To sort error message based on form field order
+    if (errorStateProps.length > 0) {
+      errorStateProps = sortErrorMessages(errorStateProps);
+    }
     setErrorMessages([...errorStateProps]);
   }
 
@@ -253,12 +293,29 @@ export default function Assignment(props) {
     });
   }
 
+  function handleBackLinkforInvalidDate(){
+    const childPconnect = children[0]?.props?.getPConnect();
+    const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
+    if(dateField){
+      dateField?.forEach(field => {
+        const childPagRef = childPconnect.getPageReference();
+        const pageRef = thePConn.getPageReference() === childPagRef ? thePConn.getPageReference() : childPagRef;
+        const storedRefName = field.name?.replace(pageRef, '');
+        const storedDateValue = childPconnect.getValue(`.${storedRefName}`);
+        if(!dayjs(storedDateValue, 'YYYY-MM-DD', true).isValid()) {
+          childPconnect.setValue(`.${storedRefName}`,'');
+        }
+      })
+    }
+  }
+
   async function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
 
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
+          handleBackLinkforInvalidDate(); // clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
           const navigatePromise = navigateToStep('previous', itemKey);
 
           clearErrors();
@@ -412,6 +469,23 @@ export default function Assignment(props) {
               ></Button>
             ) : null
           )}
+          {
+            // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
+            arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
+              appBacklinkProps.appBacklinkAction && (
+                <Button
+                  variant='backlink'
+                  onClick={e => {
+                    e.target.blur();
+                    appBacklinkProps.appBacklinkAction();
+                  }}
+                  key='createstagebacklink'
+                  attributes={{ type: 'link' }}
+                >
+                  {appBacklinkProps.appBacklinkText}
+                </Button>
+              )
+          }
           <MainWrapper>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary
@@ -421,8 +495,8 @@ export default function Assignment(props) {
               />
             )}
             {(!isOnlyFieldDetails.isOnlyField ||
-              containerName.toLowerCase().includes('check your answer') ||
-              containerName.toLowerCase().includes('declaration')) && (
+              containerName?.toLowerCase().includes('check your answer') ||
+              containerName?.toLowerCase().includes('declaration')) && (
               <h1 className='govuk-heading-l'>{header}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
