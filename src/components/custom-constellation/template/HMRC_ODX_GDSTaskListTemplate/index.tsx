@@ -81,10 +81,19 @@ function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemplateProps) {
           // loading={}
           noItemsText='No items'
         ></SummaryList>
+        {completedSections === totalSections ? (
+          <Button
+            variant='primary'
+            compact={false}
+            onClick={() => handleOnClick('Save And Continue')}
+          >
+            Save and continue
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
-      <Button variant='primary' compact={false} onClick={() => handleOnClick('Save And Continue')}>
-        Save and continue
-      </Button>
+
       <Grid
         className='u-hide'
         container={{
