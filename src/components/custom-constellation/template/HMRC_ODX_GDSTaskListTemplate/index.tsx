@@ -23,6 +23,7 @@ function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemplateProps) {
   const context = getPConnect().getContextName();
   const caseInfo = getPConnect().getCaseSummary();
   const data = caseInfo.content.CaseTaskList;
+  const caseType = caseInfo.content.CaseType;
 
   let totalSections = 0;
   let completedSections = 0;
@@ -85,9 +86,9 @@ function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemplateProps) {
           <Button
             variant='primary'
             compact={false}
-            onClick={() => handleOnClick('Save And Continue')}
+            onClick={() => handleOnClick(caseType === 'Auth' ? 'Save And Continue' : 'Continue')}
           >
-            Save and continue
+            {caseType === 'Auth' ? 'Save And Continue' : 'Continue'}
           </Button>
         ) : (
           <></>
