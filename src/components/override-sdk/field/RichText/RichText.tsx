@@ -6,12 +6,13 @@ export default function RichText({ value }) {
 
   return (
     <>
-      {containsParagraphTag && (
+      {containsParagraphTag ? (
         <div className='govuk-body'>
           <ParsedHTML htmlString={value} />
         </div>
+      ) : (
+        <ParsedHTML htmlString={value} />
       )}
-      {!containsParagraphTag && <ParsedHTML htmlString={value} />}
     </>
   );
 }
