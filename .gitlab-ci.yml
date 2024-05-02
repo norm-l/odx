@@ -21,6 +21,7 @@ include:
   - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/test-template.yml'
 
 test-job:
+  stage: test-job
   extends: .my-snippet
   script:
     - echo $(date) - Running pipeline commands
