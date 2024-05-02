@@ -1,49 +1,31 @@
-// require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
-
 const config = {
-  baseUrl: 'http://localhost:3502/portal',
+  baseUrl: 'http://localhost:3502/',
   apps: {
-    mediaCo: {
-      rep: {
-        username: 'rep@mediaco',
-        password: 'pega'
-      },
-      manager: {
-        username: 'manager@mediaco',
-        password: 'pega'
-      },
-      tech: {
-        username: 'tech@mediaco',
-        password: 'pega'
-      }
-    },
-    digv2: {
-      user: {
-        username: 'user.digv2',
-        password: 'pega'
+    paye: {
+      iabd: {
+        username: '618348224081',
+        password: 'Ve4VStVdMok2',
+        email: 'zoe.clarke@example.com',
+        vatdate: '2009-03-27',
+        selfAssesment: '6151763638',
+        individual: {
+          firstName: 'Zoe',
+          lastName: 'Clarke',
+          dateOfBirth: '1982-04-22',
+          address: {
+            line1: '5 Edgware Road',
+            line2: 'Uxbridge',
+            postcode: 'TS16 1PA'
+          }
+        },
+        groubID: '152758763227',
+        vatNumber: '968259170',
+        fullname: 'Zoe Clarke',
+        EORI: 'GB799359605368',
+        nino: 'XB531155D',
+        taxId: 'XDIT00518583644'
       }
     }
-  },
-  testsetting: {
-    // Enable network throttling(Default is false)
-    throttle: false,
-    // Simulate absence of connectivity
-    offline: false,
-    // Simulated download speed (bytes/s)
-    downloadThroughput: 500,
-    // Simulated upload speed (bytes/s)
-    uploadThroughput: 500,
-    // Simulated latency (ms)
-    latency: 20,
-
-    defaulttimeout: 60000,
-    jesttimeout: 300000,
-    slowmo: 120,
-    slowmof: 30,
-    width: 1920,
-    height: 1080,
-    headless: true,
-    devtools: false
   }
 };
 
