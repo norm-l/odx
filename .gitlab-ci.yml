@@ -4,7 +4,7 @@ stages:
 
 include:
   - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/validation.yml'
 
 test-job:
   stage: test-job
