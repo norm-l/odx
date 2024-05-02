@@ -18,7 +18,6 @@ stages:
   - test-job
 
 include:
-  remote: https://gitlab.com/myuser/snippets/-/raw/main/snippets.yml
   remote: https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/test-template.yml
 
 test-job:
