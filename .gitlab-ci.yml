@@ -1,27 +1,10 @@
-# Pipeline defaults
-default:
-  image: 
-    name: ccg-cmdg-automation-services-docker-local.artifactory.alm.corp.hmrc.gov.uk/ubuntu-terraform-vault:1.5.7-1.15.0
-    entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin'
-  retry: 
-    max: 2
-    when:
-      - runner_system_failure
-      - stuck_or_timeout_failure
-  timeout: 10 minutes
-  tags:
-      - cas-non-prod
-
 stages:
   - test-job
 
 include:
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/test-template.yml'
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
 
 test-job:
   stage: test-job
-  extends: .my-snippet
   script:
-    - echo $(date) - Running pipeline commands
+    - echo $(date) - ${TEST_VAR}
