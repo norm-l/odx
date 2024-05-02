@@ -1,10 +1,17 @@
 stages:
   - test-job
+  - validation-job
 
 include:
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
   - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
 
 test-job:
   stage: test-job
   script:
     - echo $(date) - ${TEST_VAR}
+
+validation-job:
+  stage: validation-job
+  script:
+    - echo $(date) - ${VALIDATION_VAR}
