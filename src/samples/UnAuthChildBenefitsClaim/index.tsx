@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
-
 import { loginIfNecessary, sdkSetAuthHeader, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -49,7 +48,7 @@ export default function UnAuthChildBenefitsClaim() {
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
-  const claimsListApi = '';
+  const claimsListApi = 'D_ClaimantSubmittedChBCases';
 
   const { t } = useTranslation();
   const serviceName = t('CLAIM_CHILD_BENEFIT');
@@ -515,7 +514,7 @@ export default function UnAuthChildBenefitsClaim() {
               claimsListApi,
               deleteData,
               false,
-              false,
+              true,
               bShowResolutionScreen
             );
           }}
