@@ -1,0 +1,74 @@
+{
+  "Service": {
+    "Service_Name": "chb",
+    "Subpath": "/child-benefit/make_a_claim"
+  },
+  "Development": {
+    "Environment": {
+      "Type": "static-ec2",
+      "Target_Account": "nonprod",
+      "Suffix": "/dev"
+    },
+    "Infrastructure": {
+      "Deploy_Infa": true,
+      "EC2_Type": "t3a.medium"
+    },
+    "Deployment": {
+      "Auto": true
+    },
+    "SDK_File": {
+      "Relative_Path": "sdk-configs/development.json"
+    }
+  },
+  "Staging": {
+    "Environment": {
+      "Type": "hpha-ec2",
+      "Target_Account": "prod",
+      "Suffix": "/staging"
+    },
+    "Infrastructure": {
+      "Deploy_Infa": true,
+      "EC2_Type": "t3a.medium"
+    },
+    "Deployment": {
+      "Auto": true
+    },
+    "SDK_File": {
+      "Relative_Path": "sdk-configs/staging.json"
+    }
+  },
+  "Production": {
+    "Environment": {
+      "Type": "hpha-ec2",
+      "Target_Account": "prod",
+      "Suffix": "/prod"
+    },
+    "Infrastructure": {
+      "Deploy_Infa": true,
+      "EC2_Type": "t3a.medium"
+    },
+    "Deployment": {
+      "Auto": false
+    },
+    "SDK_File": {
+      "Relative_Path": "sdk-configs/production.json"
+    }
+  },
+  "QA": {
+    "Environment": {
+      "Type": "hpha-ec2",
+      "Target_Account": "nonprod",
+      "Suffix": "/qa"
+    },
+    "Infrastructure": {
+      "Deploy_Infa": true,
+      "EC2_Type": "t3a.small"
+    },
+    "Deployment": {
+      "Auto": false
+    },
+    "SDK_File": {
+      "Relative_Path": "sdk-configs/qa.json"
+    }
+  }
+}

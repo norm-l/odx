@@ -1,17 +1,33 @@
-stages:
-  - test-job
-  - validation-job
+variables:
+  PROJECT_NAME: "$CI_PROJECT_NAME"
+  BRANCH_NAME: "$CI_COMMIT_BRANCH"
+  COMMIT: "$CI_COMMIT_SHORT_SHA"
+  PROJECT_ID: "$CI_PROJECT_ID"
 
 include:
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/pipeline-defaults.yml'
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/master/validation.yml'
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/pipeline-defaults.yml'
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/react-app-build.yml'
+  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/terraform-jobs.yml'
 
-test-job:
-  stage: test-job
-  script:
-    - echo $(date) - ${TEST_VAR}
+stages:
+  - templated-build
+  - templated-deployment
 
-validation-job:
-  stage: validation-job
-  script:
-    - echo $(date) - ${VALIDATION_VAR}
+app-build:
+  stage: templated-build
+  extends: [ .app-build ]
+
+container-build:
+  stage: templated-build
+  needs: [ app-build ]
+  extends: [ .container-build ]
+
+invoke-deployment-logic:
+  stage: templated-build
+  needs: [ container-build ]
+  extends: [ .invoke-deployment-logic ]
+
+plan-infrastructure:
+  stage: templated-deployment
+  needs: [ invoke-deployment-logic ]
+  extends: [ .plan ]
