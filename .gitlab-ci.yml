@@ -29,5 +29,5 @@ invoke-deployment-logic:
 
 plan-infrastructure:
   stage: templated-deployment
-  needs: [ invoke-deployment-logic ]
+  needs: [ invoke-deployment-logic, container-build ]
   extends: [ .plan ]
