@@ -1,6 +1,6 @@
 {
   "Service": {
-    "Service_Name": "chb",
+    "Name": "chb",
     "Subpath": "/child-benefit/make_a_claim"
   },
   "Development": {
@@ -10,7 +10,7 @@
       "Suffix": "/dev"
     },
     "Infrastructure": {
-      "Deploy_Infa": true,
+      "Deploy": true,
       "EC2_Type": "t3a.medium"
     },
     "Deployment": {
@@ -27,7 +27,7 @@
       "Suffix": "/staging"
     },
     "Infrastructure": {
-      "Deploy_Infa": true,
+      "Deploy": true,
       "EC2_Type": "t3a.medium"
     },
     "Deployment": {
@@ -44,7 +44,7 @@
       "Suffix": "/prod"
     },
     "Infrastructure": {
-      "Deploy_Infa": true,
+      "Deploy": true,
       "EC2_Type": "t3a.medium"
     },
     "Deployment": {
@@ -61,7 +61,7 @@
       "Suffix": "/qa"
     },
     "Infrastructure": {
-      "Deploy_Infa": true,
+      "Deploy": true,
       "EC2_Type": "t3a.small"
     },
     "Deployment": {
