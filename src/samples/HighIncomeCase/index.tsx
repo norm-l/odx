@@ -15,8 +15,12 @@ const HighIncomeCase: FunctionComponent<any> = () => {
   );
   const [shuttered, setShuttered] = useState(null);
 
-  const { t } = useTranslation();
-  registerServiceName(t('HIGH_INCOME_BENEFITS'));
+  const { t } = useTranslation();   
+
+  const serviceName =  t('HIGH_INCOME_BENEFITS');
+  registerServiceName(serviceName); 
+  setPageTitle();
+
   const landingPageProceedHandler = () => {
     localStorage.setItem('showLandingPage', 'false');
     setShowLandingPage(false);
@@ -26,7 +30,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     setShowLandingPage(true);
   };
 
-  useEffect(() => {
+  useEffect(() => {    
     getSdkConfig().then(config => {
       if (config.hicbcOptinConfig?.shutterService) {
         setShuttered(config.hicbcOptinConfig.shutterService);

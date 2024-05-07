@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
@@ -14,6 +14,7 @@ import CheckOnClaim from '../StaticPages/CheckOnClaim';
 import RecentlyClaimedChildBenefit from '../StaticPages/ChooseClaimService';
 
 const AppSelector = () => {
+  const [i18nLoaded, seti18nLoaded] = useState(false);
   i18n
     .use(Backend)
     .use(initReactI18next)
@@ -29,9 +30,14 @@ const AppSelector = () => {
       react: {
         useSuspense: false
       }
-    });
+    }).then(
+      () => {
+        seti18nLoaded(true)
+      }
+    );
 
   return (
+    !i18nLoaded ? null :
     <Switch>
       <Route exact path='/' component={ChildBenefitsClaim} />
       <Route exact path='/ua' component={UnAuthChildBenefitsClaim} />
