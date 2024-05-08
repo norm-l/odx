@@ -22,9 +22,8 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
   const chbOfficeLink = 'https://www.gov.uk/child-benefit-tax-charge/your-circumstances-change';
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  const sessionCaseId = sessionStorage.getItem('isNinoPresent')
-    ? ''
-    : sessionStorage.getItem('caseRefId');
+  const sessionCaseId =
+    (sessionStorage.getItem('isNinoPresent') && sessionStorage.getItem('caseRefId')) || '';
   const referenceNumber = refId || sessionCaseId?.replace('HMRC-CHB-WORK ', '');
 
   function getFeedBackLink() {
