@@ -1,3 +1,3 @@
-FROM nexus:5555/nginx:1.25.3
+FROM ccg-dx-api-docker-local.artifactory.alm.corp.hmrc.gov.uk/nginx:NGINX_VERSION
 
 COPY index.html /usr/share/nginx/html
