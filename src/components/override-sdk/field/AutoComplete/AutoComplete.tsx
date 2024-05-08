@@ -194,7 +194,9 @@ export default function AutoComplete(props: AutoCompleteProps) {
 
   useEffect(() => {
     const element = document.getElementById(formattedPropertyName) as HTMLInputElement;
-    const elementUl = document.getElementById(`${name}__listbox`) as HTMLInputElement;
+    const elementUl = document.getElementById(
+      `${formattedPropertyName}__listbox`
+    ) as HTMLInputElement;
 
     if (validatemessage) {
       element?.classList.add('govuk-input--error');
