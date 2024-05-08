@@ -52,6 +52,11 @@ export default function AutoComplete(props) {
       );
     });
 
+  useEffect(() => {
+    // Publish event so that errorSummary component can be updated with autocomplete field errors after rendering.
+    PCore.getPubSubUtils().publish('autoCompleteFieldPresent', { error: errorText });
+  }, [optionList, errorText]);
+
   const getDefaultValue = () => {
     return optionList.forEach(item => {
       if (item.key === selectedValue) {
