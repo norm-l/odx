@@ -14,7 +14,7 @@
   },
   "serverConfig": {
     "infinityRestServerUrl_comment": "Full path to Infinity REST server",
-    "infinityRestServerUrl": "https://hmrc-adviserui-dt1.pegacloud.net/prweb/",
+    "infinityRestServerUrl": "https://journey-dt1.hmrc.gov.uk/prweb/",
     "appAlias_comment": "appAlias of the application which operators will be accessing (e.g., MediaCo)",
     "appAlias": "sa-dev",
     "sdkContentServerUrl_comment": "If specified, the given URL will be used. If left blank, window.location.origin will be used.",
