@@ -62,7 +62,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
   } else {
     return (
       <AppContext.Provider
-        value={{ appBacklinkProps: { appBacklinkAction: toggleShowLandingPageTrue } }}
+        value={{appBacklinkProps:{}}}
       >
         {showLandingPage ? (
           <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
