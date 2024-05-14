@@ -35,10 +35,6 @@ const ClaimPage: FunctionComponent<any> = () => {
     
     const history = useHistory();
 
-     const redirectToLandingPage = () => {
-      triggerLogout();
-    }
-
     const [showTimeoutModal, setShowTimeoutModal] = useState(false);  
     const [showSignoutModal, setShowSignoutModal] = useState(false);
 

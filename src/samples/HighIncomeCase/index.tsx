@@ -21,11 +21,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     localStorage.setItem('showLandingPage', 'false');
     setShowLandingPage(false);
   };
-
-  const toggleShowLandingPageTrue = () => {
-    setShowLandingPage(true);
-  };
-
+  
   useEffect(() => {
     getSdkConfig().then(config => {
       if (config.hicbcOptinConfig?.shutterService) {
