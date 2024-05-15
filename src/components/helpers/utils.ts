@@ -153,3 +153,12 @@ export const triggerLogout = () => {
       });
     });
 };
+
+export const checkStatus = () => {
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
+  return status;
+};

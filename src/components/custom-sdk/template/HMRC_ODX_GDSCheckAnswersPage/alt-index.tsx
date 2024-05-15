@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+
 import { getInstructions } from './utils';
 import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 
@@ -38,54 +39,26 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   }
 
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
-  const dfChildren = arChildren.map((kid, idx) => {
-    kid.key = idx;
-    // @ts-ignore
-    return getPConnect().createComponent(kid.getPConnect().getRawMetadata());
-  });
-
-  // Create a ref to the mainer rendering container
-  const dfChildrenContainerRef = useRef(null);
+  const dfChildren = arChildren.map((kid, idx) =>
+    // eslint-disable-next-line react/no-array-index-key
+    // createElement(createPConnectComponent(), { ...kid, key: idx })
+    {
+      kid.key = idx;
+      // @ts-ignore
+      return getPConnect().createComponent(kid.getPConnect().getRawMetadata());
+    }
+  );
 
   function getSummaryListRows(htmlString) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
-    const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
+    const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row');
     return Array.from(summaryListRows);
   }
 
-  function updateHTML(htmlContent) {
-    // setReadOnlyRow(htmlContent);
-    const additionalProcessingResult = getSummaryListRows(htmlContent);
-    let htmlString = '';
-    let openDL = false;
-
-    additionalProcessingResult.forEach(elem => {
-      if (elem.tagName === 'H2') {
-        if (openDL) {
-          htmlString += `</dl>${elem.outerHTML}`;
-          openDL = false;
-        } else {
-          htmlString += elem.outerHTML;
-        }
-      } else if (elem.tagName === 'DIV') {
-        if (!openDL) {
-          openDL = true;
-          htmlString += `<dl class="govuk-summary-list govuk-!-margin-bottom-9">${elem.outerHTML}`;
-        } else {
-          htmlString += elem.outerHTML;
-        }
-      }
-    });
-
-    if (openDL) {
-      htmlString += '</dl>';
-    }
-    // Do something with the htmlString
-    if (dfChildrenContainerRef.current) {
-      dfChildrenContainerRef.current.innerHTML = htmlString;
-    }
-  }
+  // Create a ref
+  const dfChildrenContainerRef = useRef(null);
+  const [readOnlyRow, setReadOnlyRow] = useState('');
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -96,13 +69,16 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         // Check if children contain the expected content
         if (children && children.length > 0) {
           // Extract HTML content from the first child
-          // const htmlContent = children[0].innerHTML;
-          let htmlContent = '';
-          Array.from(children).forEach((child: unknown) => {
-            htmlContent += (child as HTMLElement).innerHTML;
-          });
+          const htmlContent = children[0].innerHTML;
+          // Update the state with the HTML content
+          setReadOnlyRow(htmlContent);
 
-          updateHTML(htmlContent);
+          // eslint-disable-next-line no-console
+          console.log('readOnlyRow', readOnlyRow);
+
+          const additionalProcessingResult = getSummaryListRows(readOnlyRow);
+          // eslint-disable-next-line no-console
+          console.log(additionalProcessingResult);
         }
       }
     }, 0);
