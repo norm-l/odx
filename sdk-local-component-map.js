@@ -28,6 +28,7 @@ import HmrcOdxGdsTaskListTemplate from './src/components/custom-sdk/template/HMR
 import AutoComplete from './src/components/override-sdk/field/AutoComplete/';
 import HmrcOdxGdsTextPresentation from './src/components/custom-sdk/field/HMRC_ODX_GDSTextPresentation/';
 import HmrcOdxGdsCheckAnswersScreen from './src/components/custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/';
+import RichText from './src/components/override-sdk/field/RichText/';
 /*import end - DO NOT REMOVE*/
 
 // localSdkComponentMap is the JSON object where we'll store the components that are
@@ -54,6 +55,7 @@ const localSdkComponentMap = {
   Group: TemplateFieldGroupTemplate,
   Details: TemplateDetails,
   ViewContainer: InfraViewContainer,
+  RichText: RichText,
   HMRC_ODX_GDSInfoPanel: HmrcOdxGdsInfoPanel,
   HMRC_ODX_GDSSummaryCard: HmrcOdxGdsSummaryCard,
   HMRC_ODX_GDSButton: HmrcOdxGdsButton,
