@@ -56,12 +56,10 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
           formattedValue || value
         )}{' '}
       </dd>
-      <dd>
-        <dd className='govuk-summary-list__actions'>
-          <a href='#' className='govuk-link' onClick={handleOnClick}>
-            Change<span className='govuk-visually-hidden'> {label}</span>
-          </a>
-        </dd>
+      <dd className='govuk-summary-list__actions'>
+        <a href='#' className='govuk-link' onClick={handleOnClick}>
+          Change<span className='govuk-visually-hidden'> {label}</span>
+        </a>
       </dd>
     </div>
   );
