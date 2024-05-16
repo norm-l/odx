@@ -57,13 +57,11 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
         )}{' '}
       </dd>
       <dd>
-        <div className='govuk-!-margin-bottom-9' style={{ display: 'flex', gap: '20px' }}>
-          <span style={{ marginLeft: 'auto', fontSize: '16px' }}>
-            <a href='#' className='govuk-link' onClick={handleOnClick}>
-              Change<span className='govuk-visually-hidden'> {label}</span>
-            </a>
-          </span>
-        </div>
+        <dd className='govuk-summary-list__actions'>
+          <a href='#' className='govuk-link' onClick={handleOnClick}>
+            Change<span className='govuk-visually-hidden'> {label}</span>
+          </a>
+        </dd>
       </dd>
     </div>
   );
