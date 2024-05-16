@@ -12,29 +12,16 @@ Email Address: gabi.lawrence@example.com
 1. Populate data
 
 - ~~Data from other classes/contexts~~
-- Read only group values
+- ~~Read only group values~~
 
 2. Clean up Pega branch
 3. ~~Discuss AppContext.ts file changes with Peter~~
 4. ~~Check errors when creating components~~
 5. ~~ Account for when conditions ~~
 6. Using <p> tags for comma separated text blocks - ensure margin is removed.
-7. Don't display the initial render
+7. ~~Don't display the initial render~~
 8. Is there a better way to ensure the initial render has taken place - currently setting a timeout.
-
-```
-    _isWhenExist: true
-
-    meta: Object { type: "reference", config: {…} }
-        config: Object { name: "CYAClaimantDetails1Auth", ruleClass: "HMRC-ChB-Work-Claim", type: "view", … }
-             inheritedProps: Array [ {…}, {…} ]
-​​​             name: "CYAClaimantDetails1Auth"
-​​​             ruleClass: "HMRC-ChB-Work-Claim"
-​​​             type: "view"
-​​​             visibility: "@W IsAuthJourney"
-```
-
-6. Welsh language support
+9. ~~Welsh language support~~
 
 ## View structure
 

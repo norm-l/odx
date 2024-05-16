@@ -47,43 +47,84 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   // Create a ref to the mainer rendering container
   const dfChildrenContainerRef = useRef(null);
 
-  function getSummaryListRows(htmlString) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
-    return Array.from(summaryListRows);
+  // function getSummaryListRows(htmlString) {
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(htmlString, 'text/html');
+  //   const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
+  //   return Array.from(summaryListRows);
+  // }
+
+  const pConn = getPConnect();
+  const actions = pConn.getActionsApi();
+  const containerItemID = pConn.getContextName();
+
+  function navigateToStep(event, stepId) {
+    event.preventDefault();
+    // eslint-disable-next-line no-console
+    console.log('navigation', stepId);
+    const navigateToStepPromise = actions.navigateToStep(stepId, containerItemID);
+
+    navigateToStepPromise
+      .then(() => {
+        //  navigate to step success handling
+        console.log('navigation successful'); // eslint-disable-line
+      })
+      .catch(error => {
+        // navigate to step failure handling
+        // eslint-disable-next-line no-console
+        console.log('Change link Navigation failed', error);
+      });
   }
 
   function updateHTML(htmlContent) {
-    // setReadOnlyRow(htmlContent);
-    const additionalProcessingResult = getSummaryListRows(htmlContent);
-    let htmlString = '';
-    let openDL = false;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
 
-    additionalProcessingResult.forEach(elem => {
+    const fragment = document.createDocumentFragment();
+    let openDL = false;
+    let currentDL;
+
+    summaryListRows.forEach(elem => {
       if (elem.tagName === 'H2') {
         if (openDL) {
-          htmlString += `</dl>${elem.outerHTML}`;
+          fragment.appendChild(currentDL);
+          fragment.appendChild(elem.cloneNode(true));
           openDL = false;
         } else {
-          htmlString += elem.outerHTML;
+          fragment.appendChild(elem.cloneNode(true));
         }
       } else if (elem.tagName === 'DIV') {
         if (!openDL) {
           openDL = true;
-          htmlString += `<dl class="govuk-summary-list govuk-!-margin-bottom-9">${elem.outerHTML}`;
+          currentDL = document.createElement('dl');
+          currentDL.className = 'govuk-summary-list govuk-!-margin-bottom-9';
+          currentDL.appendChild(elem.cloneNode(true));
         } else {
-          htmlString += elem.outerHTML;
+          currentDL.appendChild(elem.cloneNode(true));
         }
       }
     });
 
     if (openDL) {
-      htmlString += '</dl>';
+      fragment.appendChild(currentDL);
     }
-    // Do something with the htmlString
+
+    // Manually copy onClick handlers from React components to their clones
+    // const originalLinks = Array.from(summaryListRows);
+    fragment.querySelectorAll('a').forEach(cloneLink => {
+      const originalLink = cloneLink;
+      if (originalLink) {
+        const stepId = originalLink.getAttribute('data-step-id');
+        cloneLink.addEventListener('click', event => navigateToStep(event, stepId));
+      }
+    });
+
     if (dfChildrenContainerRef.current) {
-      dfChildrenContainerRef.current.innerHTML = htmlString;
+      // Clear existing content
+      dfChildrenContainerRef.current.innerHTML = '';
+      // Append the new content
+      dfChildrenContainerRef.current.appendChild(fragment);
     }
   }
 
@@ -121,7 +162,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           </div>
         )}
         <div ref={dfChildrenContainerRef} className={divClass}>
-          {dfChildren}
+          <div className='govuk-visually-hidden'>{dfChildren}</div>
         </div>
       </>
     </StyledHmrcOdxGdsCheckAnswersPageWrapper>

@@ -57,7 +57,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
         )}{' '}
       </dd>
       <dd className='govuk-summary-list__actions'>
-        <a href='#' className='govuk-link' onClick={handleOnClick}>
+        <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
           Change<span className='govuk-visually-hidden'> {label}</span>
         </a>
       </dd>
