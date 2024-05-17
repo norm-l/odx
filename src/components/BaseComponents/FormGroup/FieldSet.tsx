@@ -14,7 +14,8 @@ export default function FieldSet({
   hintText,
   children,
   fieldsetElementProps,
-  testProps
+  testProps,
+  isAutoCompleteField
 }) {
   const { instructionText } = useContext(DefaultFormContext);
 
@@ -30,18 +31,26 @@ export default function FieldSet({
   const formGroupDivClasses = `govuk-form-group ${
     errMessage ? 'govuk-form-group--error' : ''
   }`.trim();
-  const legendClasses = ` ${
+  let legendClasses = ` ${
     legendIsHeading
       ? 'govuk-fieldset__legend govuk-fieldset__legend--l'
       : 'govuk-label govuk-label--m'
   }`.trim();
+
+  // to updte legend style for Autocomplete
+  legendClasses = isAutoCompleteField && !legendIsHeading ? 'govuk-label' : legendClasses;
+  legendClasses =
+    isAutoCompleteField && legendIsHeading
+      ? 'govuk-fieldset__legend govuk-fieldset__legend--l'
+      : legendClasses;
+
   const hintTextExists = !['none', '', null, undefined].includes(hintText);
 
   // TODO Reconsider how to generate hintID and errorID for aria-described by
   const describedByIDs: Array<string> = [];
   const hintID = `${name}-hint`;
   const errorID = `${name}-error`;
-  if (hintText) {
+  if (hintTextExists) {
     describedByIDs.push(hintID);
   }
   if (errMessage) {

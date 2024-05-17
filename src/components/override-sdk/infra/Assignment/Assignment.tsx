@@ -21,10 +21,13 @@ import ShutterServicePage from '../../../../components/AppComponents/ShutterServ
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
+import dayjs from 'dayjs';
 
 export interface ErrorMessageDetails {
   message: string;
   fieldId: string;
+  pageRef: string;
+  clearMessageProperty: string;
 }
 
 interface OrderedErrorMessage {
@@ -65,6 +68,10 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
+  const [header, setHeader] = useState('');
+
+  const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+  const [selectedLang, setSelectedLang] = useState(lang);
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -91,13 +98,58 @@ export default function Assignment(props) {
     };
   }, [errorMessages]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Perform actions before the component unloads
+      sessionStorage.setItem('isAutocompleteRendered', 'false');
+
+      const assignmentID = thePConn.getCaseInfo().getAssignmentID();
+      sessionStorage.setItem('assignmentID', assignmentID);
+
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   let containerName;
-  if (
-    thePConn.getDataObject().caseInfo?.assignments &&
-    thePConn.getDataObject().caseInfo?.assignments.length > 0
-  ) {
-    containerName = thePConn.getDataObject().caseInfo?.assignments[0].name;
+
+  const caseInfo = thePConn.getDataObject().caseInfo;
+
+  if (caseInfo?.assignments?.length > 0) {
+    containerName = caseInfo.assignments[0].name;
   }
+
+  const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
+
+  PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
+    setSelectedLang(langreference?.language);
+  });
+
+  // To update the title when we toggle the language
+  useEffect(() => {
+    setTimeout(() => {
+      let tryTranslate;
+      if (containerName.toLowerCase() === 'Register for Self Assessment') {
+        tryTranslate = t('REGISTER_FOR_SELF_ASSESSMENT');
+      }
+      // Set our translated header!
+      setHeader(tryTranslate);
+    }, 300);
+  }, [selectedLang]);
+
+  useEffect(() => {
+    const headerFetch = setTimeout(() => {
+      setHeader(localizedVal(containerName, '', headerLocaleLocation));
+    }, 50);
+
+    return () => clearTimeout(headerFetch);
+  }, [headerLocaleLocation, containerName]);
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -114,6 +166,20 @@ export default function Assignment(props) {
       }
     }
   }, [children]);
+
+  function sortErrorMessages(errorMsg) {
+    const formElements = document.forms[0].elements;
+    const sortedErrors = [];
+
+    for (let i = 0; i < formElements.length; i += 1) {
+      errorMsg.forEach(err => {
+        if (formElements[i]?.id === err?.message?.fieldId) {
+          sortedErrors.push(err);
+        }
+      });
+    }
+    return sortedErrors;
+  }
 
   function checkErrorMessages() {
     let errorStateProps = [];
@@ -138,6 +204,8 @@ export default function Assignment(props) {
         }
 
         if (validatemessage) {
+          const clearMessageProperty = fieldC11nEnv?.getStateProps()?.value;
+          const pageRef = fieldC11nEnv?.getPageReference();
           const formattedPropertyName = fieldC11nEnv?.getStateProps()?.value?.split('.')?.pop();
           let fieldId =
             fieldC11nEnv.getStateProps().fieldId ||
@@ -160,8 +228,10 @@ export default function Assignment(props) {
 
           acc.push({
             message: {
-              message: removeRedundantString(validatemessage),
-              fieldId
+              message: localizedVal(removeRedundantString(validatemessage)),
+              pageRef,
+              fieldId,
+              clearMessageProperty
             },
             displayOrder: fieldComponent.props.displayOrder
           });
@@ -169,7 +239,23 @@ export default function Assignment(props) {
         return acc;
       }, []);
 
+    // To sort error message based on form field order
+    if (errorStateProps.length > 0) {
+      errorStateProps = sortErrorMessages(errorStateProps);
+    }
     setErrorMessages([...errorStateProps]);
+  }
+
+  function clearErrors() {
+    errorMessages.forEach(error =>
+      PCore.getMessageManager().clearMessages({
+        property: error.message.clearMessageProperty,
+        pageReference: error.message.pageRef,
+        category: 'Property',
+        context: containerID,
+        type: 'error'
+      })
+    );
   }
 
   // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
@@ -202,13 +288,32 @@ export default function Assignment(props) {
     });
   }
 
+  function handleBackLinkforInvalidDate(){
+    const childPconnect = children[0]?.props?.getPConnect();
+    const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
+    if(dateField){
+      dateField?.forEach(field => {
+        const childPagRef = childPconnect.getPageReference();
+        const pageRef = thePConn.getPageReference() === childPagRef ? thePConn.getPageReference() : childPagRef;
+        const storedRefName = field.name?.replace(pageRef, '');
+        const storedDateValue = childPconnect.getValue(`.${storedRefName}`);
+        if(!dayjs(storedDateValue, 'YYYY-MM-DD', true).isValid()) {
+          childPconnect.setValue(`.${storedRefName}`,'');
+        }
+      })
+    }
+  }
+
   async function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
 
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
+          handleBackLinkforInvalidDate(); // clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
           const navigatePromise = navigateToStep('previous', itemKey);
+
+          clearErrors();
 
           navigatePromise
             .then(() => {
@@ -368,23 +473,11 @@ export default function Assignment(props) {
               />
             )}
             {(!isOnlyFieldDetails.isOnlyField ||
-              containerName.toLowerCase().includes('check your answer') ||
-              containerName.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>
-                {localizedVal(containerName, '', localeReference)}
-              </h1>
+              containerName?.toLowerCase().includes('check your answer') ||
+              containerName?.toLowerCase().includes('declaration')) && (
+              <h1 className='govuk-heading-l'>{header}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
-            <a
-              href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-              className='govuk-link'
-              rel='noreferrer noopener'
-              target='_blank'
-            >
-              {t('ASK_HMRC_ONLINE')} {t('OPENS_IN_NEW_TAB')}
-            </a>
-            <br />
-            <br />
           </MainWrapper>
         </div>
       )}

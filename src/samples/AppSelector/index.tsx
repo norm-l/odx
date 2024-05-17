@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
-import SaReg from '../SaReg/index';
+import SAReg from '../SAReg/index';
 
 const AppSelector = () => {
   i18n
@@ -12,7 +12,6 @@ const AppSelector = () => {
     .init({
       lng: sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en',
       backend: {
-        /* translation file path */
         loadPath: `assets/i18n/{{lng}}.json`
       },
       fallbackLng: 'en',
@@ -25,7 +24,7 @@ const AppSelector = () => {
 
   return (
     <Switch>
-      <Route exact path='/' component={SaReg} />
+      <Route exact path='/' component={SAReg} />
     </Switch>
   );
 };

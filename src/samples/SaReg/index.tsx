@@ -10,20 +10,19 @@ import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react
 import {
   sdkIsLoggedIn,
   loginIfNecessary,
-  sdkSetAuthHeader
-} from '@pega/react-sdk-components/lib/components/helpers/authManager';
+  sdkSetAuthHeader,
+  getSdkConfig,
+  logout
+} from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
-import { logout } from '@pega/react-sdk-components/lib/components/helpers/authManager';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
-import StartPage from './StartPage';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
-import ClaimsList from '../../components/templates/ClaimsList';
+import RegistrationDetails from '../../components/templates/RegistrationDetails';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
@@ -43,8 +42,6 @@ let signoutTimeout = null;
 let milisecondsTilSignout = 115 * 1000;
 let milisecondsTilWarning = 780 * 1000;
 
-let secondsTillStartNowUnblocked = 30 * 1000;
-
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
 function initTimeout(setShowTimeoutModal) {
   clearTimeout(applicationTimeout);
@@ -61,7 +58,7 @@ function initTimeout(setShowTimeoutModal) {
 // Sends 'ping' to pega to keep session alive and then initiates the timout
 function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
   if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
+    PCore.getDataPageUtils().getDataAsync('D_RegistrantWorkAssignmentSACases', 'root');
   }
   setShowTimeoutModal(false);
   initTimeout(setShowTimeoutModal);
@@ -71,12 +68,11 @@ function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
 export default function SaReg() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
-  const [showStartPage, setShowStartPage] = useState(false);
+  // const [showStartPage, setShowStartPage] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(false);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
-  const [loadingsubmittedClaims, setLoadingSubmittedClaims] = useState(true);
-  const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
+  const [loadingInProgressRegistration, setLoadingInProgressRegistration] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
@@ -85,15 +81,15 @@ export default function SaReg() {
   const [caseId, setCaseId] = useState('');
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
-  const [isCreateCaseBlocked, setIsCreateCaseBlocked] = useState(false);
-  const [timeoutID, setTimeoutID] = useState(null);
+  const [inprogressRegistration, setInprogressRegistration] = useState([]);
   const history = useHistory();
+  const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
-  const featureID = 'ChB';
+  const featureID = 'SA';
   const featureType = 'Service';
 
   function resetAppDisplay() {
-    setShowStartPage(false);
+    // setShowStartPage(false);
     setShowUserPortal(false);
     setShowResolutionScreen(false);
     setShowPega(false);
@@ -109,10 +105,10 @@ export default function SaReg() {
     setShowUserPortal(true);
   }
 
-  function displayStartPage() {
-    resetAppDisplay();
-    setShowStartPage(true);
-  }
+  // function displayStartPage() {
+  //   resetAppDisplay();
+  //   setShowStartPage(true);
+  // }
 
   function displayServiceNotAvailable() {
     setServiceNotAvailable(true);
@@ -123,15 +119,9 @@ export default function SaReg() {
   //   setShowResolutionScreen(true);
   // }
 
-  const { t } = useTranslation();
-  let operatorId = '';
-
   useEffect(() => {
     setPageTitle();
-  }, [showStartPage, showUserPortal, bShowPega, bShowResolutionScreen]);
-
-  const [inprogressClaims, setInprogressClaims] = useState([]);
-  const [submittedClaims, setSubmittedClaims] = useState([]);
+  }, [showUserPortal, bShowPega, bShowResolutionScreen]);
 
   function doRedirectDone() {
     history.push('/');
@@ -146,35 +136,11 @@ export default function SaReg() {
     startingFields = {
       //  NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
     };
-    PCore.getMashupApi().createCase('HMRC-ChB-Work-TestCaseType', PCore.getConstants().APP.APP, {
+    PCore.getMashupApi().createCase('HMRC-SA-Work-Registration', PCore.getConstants().APP.APP, {
       startingFields
     });
   }
 
-  function startNow() {
-    if (!isCreateCaseBlocked) {
-      setIsCreateCaseBlocked(true);
-
-      // Check if PConn is created, and create case if it is
-      if (pConn) {
-        createCase();
-      }
-
-      if (typeof timeoutID === 'number') {
-        clearTimeout(timeoutID);
-      }
-      const timeout = setTimeout(() => {
-        setIsCreateCaseBlocked(false);
-      }, secondsTillStartNowUnblocked);
-      setTimeoutID(timeout);
-    }
-  }
-
-  function beginClaim() {
-    // Added to ensure that clicking begin claim restarts timeout
-    staySignedIn(setShowTimeoutModal);
-    displayStartPage();
-  }
   function returnToPortalPage() {
     staySignedIn(setShowTimeoutModal);
     setServiceNotAvailable(false);
@@ -184,7 +150,7 @@ export default function SaReg() {
       { skipDirtyCheck: true }
     );
   }
-  function getClaimsCaseID() {
+  function getRegistrationCaseID() {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
@@ -192,7 +158,7 @@ export default function SaReg() {
     setCaseId(caseID);
   }
   function assignmentFinished() {
-    // getClaimsCaseID();
+    getRegistrationCaseID();
     // PCore.getContainerUtils().closeContainerItem(
     //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
     //   { skipDirtyCheck: true }
@@ -204,26 +170,30 @@ export default function SaReg() {
     displayUserPortal();
   }
 
-  // Calls data page to fetch in progress claims, then for each result (limited to first 10), calls D_Claim to get extra details about each 'assignment'
-  // to display within the claim 'card' in the list. This then sets inprogress claims state value to the list of claims data.
-  // This funtion also sets 'isloading' value to true before making d_page calls, and sets it back to false after data claimed.
-  function fetchInProgressClaimsData() {
-    setLoadingInProgressClaims(true);
-    let inProgressClaimsData: any = [];
+  // Calls data page to fetch in progress registration, 
+  // This then sets inprogress registration state value to the registration details.
+  // This funtion also sets 'isloading' value to true before making d_page calls
+  function fetchInProgressRegistrationData() {
+    setLoadingInProgressRegistration(true);
+    let inProgressRegData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
-      .getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root')
+      .getDataAsync('D_RegistrantWorkAssignmentSACases', 'root')
       .then(resp => {
-        resp = resp.data.slice(0, 10);
-        inProgressClaimsData = resp;
-        setInprogressClaims(inProgressClaimsData);
-        setLoadingInProgressClaims(false);
+        if (!resp.resultCount) {
+          createCase();
+        } else {
+          resp = resp.data.slice(0, 10);
+          inProgressRegData = resp;
+          setInprogressRegistration(inProgressRegData);
+        }
+        setLoadingInProgressRegistration(false);
       });
   }
 
   function cancelAssignment() {
-    fetchInProgressClaimsData();
-    getClaimsCaseID();
+    fetchInProgressRegistrationData();
+    getRegistrationCaseID();
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
@@ -242,7 +212,7 @@ export default function SaReg() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        setShowStartPage(false);
+        // setShowStartPage(false);
         setShowUserPortal(false);
         setShowPega(false);
         const containername = PCore.getContainerUtils().getActiveContainerItemName(
@@ -266,7 +236,6 @@ export default function SaReg() {
       () => {
         cancelAssignment();
         setShowPortalBanner(true);
-        setIsCreateCaseBlocked(false);
       },
       'cancelAssignment'
     );
@@ -300,7 +269,6 @@ export default function SaReg() {
       () => {
         cancelAssignment();
         setShowPortalBanner(true);
-        setIsCreateCaseBlocked(false);
       },
       'savedCase'
     );
@@ -404,9 +372,6 @@ export default function SaReg() {
             milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
             milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
-          if (sdkConfig.timeoutConfig.secondsTillStartNowUnblocked)
-            secondsTillStartNowUnblocked =
-              sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000;
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
@@ -416,14 +381,14 @@ export default function SaReg() {
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      PCore.getLocaleUtils().resetLocaleStore();
-      PCore.getLocaleUtils().loadLocaleResources([
-        PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
-        '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
-      ]);
+      // PCore.getLocaleUtils().resetLocaleStore();
+      // PCore.getLocaleUtils().loadLocaleResources([
+      //   PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
+      //   '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
+      // ]);
       initialRender(renderObj);
 
-      operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
+      // operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
 
       /* Functionality to set the device id in the header for use in CIP.
       Device id is unique and will be stored on the user device / browser cookie */
@@ -441,16 +406,7 @@ export default function SaReg() {
             PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
           });
       }
-
-      setLoadingSubmittedClaims(true);
-      // @ts-ignore
-      PCore.getDataPageUtils()
-        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
-        .then(resp => {
-          setSubmittedClaims(resp.data.slice(0, 10));
-        })
-        .finally(() => setLoadingSubmittedClaims(false));
-      fetchInProgressClaimsData();
+      fetchInProgressRegistrationData();
     });
 
     // Initialize the SdkComponentMap (local and pega-provided)
@@ -555,15 +511,37 @@ export default function SaReg() {
   function signOut() {
     let authService;
     if (authType && authType === 'gg') {
-      authService = 'GovGateway';
-    } else if (authType && authType === 'gg-sa-dev') {
+      authService = 'GovGateway-SA';
+    } else if (authType && authType === 'gg-dev') {
       authService = 'GovGateway-Dev';
+    } else if (authType && authType === 'gg-sa') {
+      authService = 'GovGateway-SA';
+    } else if (authType && authType === 'gg-sa-dev') {
+      authService = 'GovGateway-SA-dev';
     }
+
+    // If the container / case is opened then close the container on signout to prevent locking.
+    const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+    if (activeCase) {
+      PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
+    }
+
+    type responseType = { URLResourcePath2: string };
+
     PCore.getDataPageUtils()
-      .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
-      .then(() => {
-        logout().then(() => {});
+    .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
+    // @ts-ignore
+    .then((response: unknown) => {
+      const logoutUrl = (response as responseType).URLResourcePath2;
+
+      logout().then(() => {
+        if (logoutUrl) {
+          // Clear previous sessioStorage values
+          sessionStorage.clear();
+          window.location.href = logoutUrl;
+        }
       });
+    });
   }
 
   function handleSignout() {
@@ -581,9 +559,35 @@ export default function SaReg() {
     staySignedIn(setShowTimeoutModal);
   };
 
-  const checkShuttered = (status: boolean) => {
-    setShutterServicePage(status);
-  };
+  const renderContent = () => {
+    if(serviceNotAvailable) {
+      return <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+    } else if(shutterServicePage) {
+      return <ShutterServicePage />
+    } else {
+      return (
+        <>
+        <div id='pega-part-of-page'>
+          <div id='pega-root'></div>
+        </div>
+
+        {showUserPortal && (
+          <UserPortal showPortalBanner={showPortalBanner}>
+            {!loadingInProgressRegistration && inprogressRegistration.length !== 0 && (
+              <RegistrationDetails
+                thePConn={pConn}
+                data={inprogressRegistration}
+                rowClickAction='OpenAssignment'
+                buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
+                caseId={caseId}
+              />
+            )}
+          </UserPortal>
+        )}
+        </>
+      )
+    }
+  }
 
   return (
     <>
@@ -596,7 +600,7 @@ export default function SaReg() {
 
       <AppHeader
         handleSignout={handleSignout}
-        appname={t('CLAIM_CHILD_BENEFIT')}
+        appname={t('REGISTER_FOR_SELF_ASSESSMENT')}
         hasLanguageToggle
         isPegaApp={bShowPega}
         languageToggleCallback={toggleNotificationProcess(
@@ -605,46 +609,7 @@ export default function SaReg() {
         )}
       />
       <div className='govuk-width-container'>
-        {shutterServicePage ? (
-          <ShutterServicePage />
-        ) : (
-          <>
-            <div id='pega-part-of-page'>
-              <div id='pega-root'></div>
-            </div>
-
-            {serviceNotAvailable && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
-
-            {showStartPage && <StartPage onStart={startNow} onBack={displayUserPortal} />}
-
-            {showUserPortal && (
-              <UserPortal beginClaim={beginClaim} showPortalBanner={showPortalBanner}>
-                {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
-                  <ClaimsList
-                    thePConn={pConn}
-                    data={inprogressClaims}
-                    title={t('CLAIMS_IN_PROGRESS')}
-                    rowClickAction='OpenAssignment'
-                    buttonContent={t('CONTINUE_CLAIM')}
-                    caseId={caseId}
-                  />
-                )}
-
-                {!loadingsubmittedClaims && submittedClaims.length !== 0 && (
-                  <ClaimsList
-                    thePConn={pConn}
-                    data={submittedClaims}
-                    title={t('SUBMITTED_CLAIMS')}
-                    rowClickAction='OpenCase'
-                    buttonContent={t('VIEW_CLAIM')}
-                    checkShuttered={checkShuttered}
-                  />
-                )}
-              </UserPortal>
-            )}
-          </>
-        )}
-
+        {renderContent()}
         {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={false} />}
       </div>
 

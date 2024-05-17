@@ -34,7 +34,7 @@ export default function AppFooter() {
             </li>
             <li className="govuk-footer__inline-list-item">
               <a className="govuk-footer__link" href="https://www.gov.uk/government/collections/child-benefit-forms" target="_blank" rel="noreferrer noopener">
-                {t("CHB_FORMS_GUIDANCE")} {t("OPENS_IN_NEW_TAB")}
+                {t("SAR_FORMS_GUIDANCE")} {t("OPENS_IN_NEW_TAB")}
               </a>
             </li>
             <li className="govuk-footer__inline-list-item">

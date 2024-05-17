@@ -1,4 +1,4 @@
-import { getSdkConfig } from '@pega/react-sdk-components/lib/components/helpers/config_access';
+import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
 
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
@@ -23,6 +23,15 @@ export const shouldRemoveFormTagForReadOnly = (pageName: string) => {
   return arrContainerNamesFormNotRequired.includes(pageName);
 };
 
+export const isUnAuthJourney = () => {
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
+  return caseType === 'Unauth' || window.location.href.includes('/ua');
+};
+
 export const getServiceShutteredStatus = async (): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
@@ -32,7 +41,7 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = 'ChB';
+    const featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
     const featureType = 'Service';
 
     const parameters = new URLSearchParams(
@@ -56,29 +65,22 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
         return response.data.Shuttered;
       })
       .catch((error: Error) => {
-        // eslint-disable-next-line no-console
         console.log(error);
         return false;
       });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(error);
     return false;
   }
 };
 
-export const isFieldSetReqiredForSelectComponent = (label: string) => {
-  const arrFieldSetNotRequiredForSelectComponent = ['name of building society'];
-  return !arrFieldSetNotRequiredForSelectComponent.includes(label.toLocaleLowerCase());
-};
-
-export const isUnAuthJourney = () => {
+export const isHICBCJourney = () => {
   const containername = PCore.getContainerUtils().getActiveContainerItemName(
     `${PCore.getConstants().APP.APP}/primary`
   );
-  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-  const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
-  return caseType === 'Unauth';
+  const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
+
+  return caseType === 'HMRC-ChB-Work-HICBCPreference';
 };
 
 export const isSingleEntity = (propReference: string, getPConnect) => {
@@ -114,4 +116,40 @@ export const removeRedundantString = (redundantString: string, separator: string
     }
   }
   return uniqueString;
+};
+
+export const triggerLogout = () => {
+  let authType = 'gg';
+  getSdkConfig().then(sdkConfig => {
+    const sdkConfigAuth = sdkConfig.authConfig;
+    authType = sdkConfigAuth.authService;
+  });
+  const authServiceList = {
+    gg: 'GovGateway',
+    'gg-dev': 'GovGateway-Dev'
+  };
+  const authService = authServiceList[authType];
+
+  // If the container / case is opened then close the container on signout to prevent locking.
+  const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
+  if (activeCase) {
+    PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
+  }
+
+  type responseType = { URLResourcePath2: string };
+
+  PCore.getDataPageUtils()
+    .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
+    // @ts-ignore
+    .then((response: unknown) => {
+      const logoutUrl = (response as responseType).URLResourcePath2;
+
+      logout().then(() => {
+        if (logoutUrl) {
+          // Clear previous sessioStorage values
+          sessionStorage.clear();
+          window.location.href = logoutUrl;
+        }
+      });
+    });
 };

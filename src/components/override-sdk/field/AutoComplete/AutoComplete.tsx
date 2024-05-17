@@ -70,7 +70,9 @@ export default function AutoComplete(props: AutoCompleteProps) {
     displayOrder,
     name
   } = props;
-  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const [isAutocompleteLoaded, setAutocompleteLoaded] = useState(false);
   const context = getPConnect().getContextName();
   let { listType, parameters, datasource = [], columns = [], label } = props;
@@ -82,6 +84,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps()['value'];
+  const formattedPropertyName = name || propName?.split('.')?.pop();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -93,12 +96,13 @@ export default function AutoComplete(props: AutoCompleteProps) {
     };
 
     return () => {
+      document.body.removeChild(script);
       sessionStorage.setItem('isAutocompleteRendered', 'false');
     };
   }, []);
 
   useEffect(() => {
-    setErrorMessage(validatemessage);
+    setErrorMessage(localizedVal(validatemessage));
   }, [validatemessage]);
   if (!isDeepEqual(datasource, theDatasource)) {
     // inbound datasource is different, so update theDatasource (to trigger useEffect)
@@ -173,11 +177,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
     });
-    if (selectedOptionKey[0]?.key) {
-      handleEvent(actionsApi, 'changeNblur', propName, selectedOptionKey[0]?.key);
-    } else {
-      thePConn.setValue(propName, '', '', false);
-    }
+    const selectedKey = selectedOptionKey[0]?.key || '';
+    handleEvent(actionsApi, 'changeNblur', propName, selectedKey);
   }
 
   function stopPropagation(event: MouseEvent, elementUl: HTMLInputElement) {
@@ -216,7 +217,14 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }
 
   if (readOnly) {
-    return <ReadOnlyDisplay label={label} value={value} name={name} />;
+    const selectedOption = options?.filter(item => {
+      return item?.key === value;
+    });
+    return (
+      selectedOption?.length > 0 && (
+        <ReadOnlyDisplay label={label} value={selectedOption[0]?.value} name={name} />
+      )
+    );
   }
 
   return (
@@ -230,7 +238,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId={testId}
         labelIsHeading={isOnlyField}
         errorText={errorMessage}
-        id={name}
+        id={formattedPropertyName}
       />
     )
   );

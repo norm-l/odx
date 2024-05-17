@@ -4,7 +4,8 @@ import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { DefaultFormContext, ErrorMsgContext } from '../../../helpers/HMRCAppContext';
-import { checkErrorMsgs } from '../../../helpers/utils';
+import { checkErrorMsgs, removeRedundantString } from '../../../helpers/utils';
+import { t } from 'i18next';
 
 export default function CheckboxComponent(props) {
   const { OverrideLabelValue } = useContext(DefaultFormContext);
@@ -29,8 +30,10 @@ export default function CheckboxComponent(props) {
  
   if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label; */
 
-  const [errorMessage, setErrorMessage] = useState(validatemessage);
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const { errorMsgs } = useContext(ErrorMsgContext);
+  
 
   // build name for id, allows for error message navigation to field
   const propertyContext = getPConnect().options.pageReference
@@ -42,7 +45,7 @@ export default function CheckboxComponent(props) {
   useEffect(() => {
     const found = checkErrorMsgs(errorMsgs, name);
     if (!found) {
-      setErrorMessage(validatemessage);
+      setErrorMessage(localizedVal(validatemessage));
     }
   }, [errorMsgs, validatemessage]);
 
@@ -62,14 +65,16 @@ export default function CheckboxComponent(props) {
 
   return (
     <>
-      {exclusiveOption && <div className='govuk-checkboxes__divider'>or</div>}
+      {exclusiveOption && (
+        <div className='govuk-checkboxes__divider'>{t('EXCLUSIVEOPTION_OR')}</div>
+      )}
 
       {/* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */}
       {OverrideLabelValue.trim().toLowerCase() === 'declaration' ? (
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
-              <span className='govuk-visually-hidden'>Error:</span> {errorMessage}
+              <span className='govuk-visually-hidden'>Error:</span> {removeRedundantString(errorMessage)}
             </p>
           )}
           <GDSCheckbox

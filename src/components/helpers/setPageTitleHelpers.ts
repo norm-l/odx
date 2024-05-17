@@ -1,5 +1,4 @@
-
-import i18n from "i18next";
+import i18n from 'i18next';
 
 /* 
   setPageTitle()
@@ -8,32 +7,42 @@ import i18n from "i18next";
   accepts optional param errorProperty and appends 'Error :' if there is error on page
 */
 
-export default function setPageTitle(errorProperty=false){
-  
-    // In case where there may be multiple H1s on page (e.g. breifly may have pega part of page and confirmation screen shown together)
-    // set up an interval to keep checking until we have only one H1, and then set the page title with the remaining H1
-    // This assumes we follow the best practice to only display one h1 on the page, and simply works around the 'gap' when our main
-    // page updates to hide/show components.
-    if(document.getElementsByTagName('h1').length > 1 || document.getElementsByTagName('h1')[0] === undefined){
-      const setPageTitleInterval = setInterval(
-        () => {
-          if(document.getElementsByTagName('h1').length === 1){
-            clearInterval(setPageTitleInterval);
-            setPageTitle();
-          }
-        }, 200)
-    }
+let serviceName = '';
 
-    const pageHeading = i18n.t(document.getElementsByTagName('h1')[0]?.innerText);
+export default function setPageTitle(errorProperty = false) {
+  // In case where there may be multiple H1s on page (e.g. breifly may have pega part of page and confirmation screen shown together)
+  // set up an interval to keep checking until we have only one H1, and then set the page title with the remaining H1
+  // This assumes we follow the best practice to only display one h1 on the page, and simply works around the 'gap' when our main
+  // page updates to hide/show components.
+  if (
+    document.getElementsByTagName('h1').length > 1 ||
+    document.getElementsByTagName('h1')[0] === undefined
+  ) {
+    const setPageTitleInterval = setInterval(() => {
+      if (document.getElementsByTagName('h1').length === 1) {
+        clearInterval(setPageTitleInterval);
+        setPageTitle();
+      }
+    }, 200);
+  }
 
-    // Scope to fetch serviceName dynamically from here
-    // TODO fetch serviceName dynamically
-    const serviceName = i18n.t("CLAIM_CHILD_BENEFIT");
+  const pageHeading = i18n.t(document.getElementsByTagName('h1')[0]?.innerText);
 
-  if(pageHeading){
-    const errorPrefix = errorProperty ? "Error: " : '';
+  // Scope to fetch serviceName dynamically from here
+  // TODO fetch serviceName dynamically
+  if(!serviceName || serviceName === ''){
+    serviceName = i18n.t('REGISTER_FOR_SELF_ASSESSMENT');
+  }   
+
+  if (pageHeading) {
+    const errorPrefix = errorProperty ? 'Error: ' : '';
     document.title = `${errorPrefix}${pageHeading} - ${serviceName} - GOV.UK`;
   } else {
     document.title = `${serviceName} - GOV.UK`;
   }
 }
+
+function registerServiceName(name){
+  serviceName = name;
+}
+export { registerServiceName }

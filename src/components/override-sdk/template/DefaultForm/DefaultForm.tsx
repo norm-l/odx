@@ -19,6 +19,8 @@ export default function DefaultForm(props) {
   const { instructionText: passedThroughInstructionText } = useContext(DefaultFormContext);
   const { t } = useTranslation();
 
+  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+
   const [declaration, setDeclaration] = useState({ text1: '', warning1: '' });
   let containerName = null;
   if (getPConnect().getDataObject().caseInfo?.assignments) {
@@ -109,6 +111,19 @@ export default function DefaultForm(props) {
     }
   }, [instructionExists]);
 
+  // Sets the localeReference property in the store for getting the translated title in Assignment.tsx
+  useEffect(() => {
+    PCore.getStore().dispatch({
+      type: 'SET_PROPERTY',
+      payload: {
+        reference: 'localeReference',
+        value: props.localeReference,
+        context: 'app',
+        isArrayDeepMerge: false
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (containerName === 'Declaration') {
       // Get current context
@@ -137,21 +152,6 @@ export default function DefaultForm(props) {
         setDeclaration({ text1: declarationText1, warning1: declarationWarning1 });
       }
     }
-  }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Perform actions before the component unloads
-      sessionStorage.setItem('isAutocompleteRendered', 'false');
-      PCore.getContainerUtils().closeContainerItem(
-        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-        { skipDirtyCheck: true }
-      );
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
   }, []);
 
   const dfChildren = arChildren?.map((kid, idx) => {
@@ -248,7 +248,7 @@ export default function DefaultForm(props) {
           value={{
             displayAsSingleQuestion: configAlternateDesignSystem?.hidePageLabel,
             DFName: props.localeReference,
-            OverrideLabelValue: containerName,
+            OverrideLabelValue: localizedVal(containerName, '', props.localeReference),
             instructionText:
               instructionExists && !singleQuestionPage
                 ? null
@@ -263,7 +263,14 @@ export default function DefaultForm(props) {
               <ParsedHTML htmlString={declaration.text1} />
             </div>
           )}
-          {dfChildren}
+          {cssClassHook === 'u-childRemove' ? (
+            <>
+              {dfChildren[0]}
+              <dl className='govuk-summary-list'>{dfChildren[1]}</dl>
+            </>
+          ) : (
+            <>{dfChildren}</>
+          )}
           {declaration.warning1 && DFName === -1 && (
             <div id='declarationWarning1' className='govuk-body'>
               <ParsedHTML htmlString={declaration.warning1} />
