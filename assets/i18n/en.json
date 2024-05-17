@@ -192,6 +192,7 @@
   "YOU_ARE_ABOUT_TO_SIGN_OUT": "You're about to sign out",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "For your security, we will sign you out in",
   "2_MINUTES": "2 minutes",
+  "MINUTES": "minutes",
   "FOR_YOUR_SECURITY": "For your security",
   "WE_WILL_DELETE_YOUR_CLAIM": "We will delete your claim in",
   "DELETE_YOUR_CLAIM": "Delete your claim",
@@ -248,8 +249,8 @@
   "HICBC_LANDINGPAGE_P1": "Use this service if you want to opt-in for Child Benefit payments.",
   "HICBC_LANDINGPAGE_P2": "You will need to:",
   "HICBC_LANDINGPAGE_LISTITEM_BE_CHB_CLAIMANT": "be a Child Benefit claimant",
-  "HICBC_LANDINGPAGE_LISTITEM_HAVE_PAYMENT_DETAILS_AVAILABLE": "have your bank or payment details available",  
-  "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE": "still be eligible for",  
+  "HICBC_LANDINGPAGE_LISTITEM_HAVE_PAYMENT_DETAILS_AVAILABLE": "have your bank or payment details available",
+  "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE": "still be eligible for",
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE_LINK_TEXT": "Child Benefit",
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "opt-in to receive Child Benefit payments within the next 3 months",
 

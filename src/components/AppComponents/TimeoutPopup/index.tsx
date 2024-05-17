@@ -1,11 +1,21 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import Modal from '../../BaseComponents/Modal/Modal';
 import Button from '../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 export default function TimeoutPopup(props) {
-  const { show, staySignedinHandler, signoutHandler, isAuthorised, isConfirmationPage, staySignedInButtonText, signoutButtonText, children } = props;
+  const {
+    show,
+    startCountdown,
+    staySignedinHandler,
+    signoutHandler,
+    isAuthorised,
+    isConfirmationPage,
+    staySignedInButtonText,
+    signoutButtonText,
+    children
+  } = props;
   const staySignedInCallback = useCallback(
     event => {
       if (event.key === 'Escape') staySignedinHandler();
@@ -13,6 +23,20 @@ export default function TimeoutPopup(props) {
     [staySignedinHandler]
   );
   const { t } = useTranslation();
+
+  const [timeRemaining, setTimeRemaining] = useState(59);
+
+  useEffect(() => {
+    if (startCountdown) {
+      if (timeRemaining === 0) return;
+
+      const timeRemainingInterval = setInterval(() => {
+        setTimeRemaining(prevTime => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(timeRemainingInterval);
+    }
+  }, [startCountdown]);
 
   useEffect(() => {
     if (show) {
@@ -79,21 +103,23 @@ export default function TimeoutPopup(props) {
       : unAuthTimeoutPopupContent();
   };
 
-  if(children){
-    return <Modal show={show} id='timeout-popup'>
-      <div>
-        {children}
-        <div className='govuk-button-group govuk-!-padding-top-4'>
-          <Button type='button' onClick={staySignedinHandler}>
-            {staySignedInButtonText}
-          </Button>
+  if (children) {
+    return (
+      <Modal show={show} id='timeout-popup'>
+        <div>
+          {children}
+          <div className='govuk-button-group govuk-!-padding-top-4'>
+            <Button type='button' onClick={staySignedinHandler}>
+              {staySignedInButtonText}
+            </Button>
 
-          <a id='modal-signout-btn' className='govuk-link' href='#' onClick={signoutHandler}>
-            {signoutButtonText}
-          </a>
+            <a id='modal-signout-btn' className='govuk-link' href='#' onClick={signoutHandler}>
+              {signoutButtonText}
+            </a>
+          </div>
         </div>
-      </div>  
-    </Modal>  
+      </Modal>
+    );
   }
 
   return (
@@ -105,7 +131,10 @@ export default function TimeoutPopup(props) {
           </h1>
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
-            <span className='govuk-!-font-weight-bold'>{t('2_MINUTES')}</span>
+            <span className='govuk-!-font-weight-bold'>
+              {startCountdown && `${timeRemaining} ${t('MINUTES')}`}
+              {!startCountdown && t('2_MINUTES')}
+            </span>
           </p>
           <div className='govuk-button-group govuk-!-padding-top-4'>
             <Button type='button' onClick={staySignedinHandler}>
@@ -126,6 +155,7 @@ export default function TimeoutPopup(props) {
 
 TimeoutPopup.propTypes = {
   show: PropTypes.bool,
+  startCountdown: PropTypes.bool,
   staySignedinHandler: PropTypes.func,
   signoutHandler: PropTypes.func,
   isAuthorised: PropTypes.bool,

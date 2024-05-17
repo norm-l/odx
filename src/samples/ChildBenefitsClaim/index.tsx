@@ -38,30 +38,39 @@ declare const myLoadMashup: any;
 /* Time out modal functionality */
 let applicationTimeout = null;
 let signoutTimeout = null;
+let countdownTimeout = null;
 // Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
 let milisecondsTilSignout = 115 * 1000;
-let milisecondsTilWarning = 780 * 1000;
+let milisecondsTilWarning = 30 * 1000;
+let milisecondsTilCountdown = 115 * 1000 - 59 * 1000;
 
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
-function initTimeout(setShowTimeoutModal) {
+function initTimeout(setShowTimeoutModal, setStartSignoutCountdown) {
   clearTimeout(applicationTimeout);
   clearTimeout(signoutTimeout);
+  clearTimeout(countdownTimeout);
 
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
+
     signoutTimeout = setTimeout(() => {
       triggerLogout();
+
+      countdownTimeout = setTimeout(() => {
+        setStartSignoutCountdown(true);
+      }, milisecondsTilCountdown);
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
+function staySignedIn(setShowTimeoutModal, setStartSignoutCountdown, refreshSignin = true) {
   if (refreshSignin) {
     PCore.getDataPageUtils().getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root');
   }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal);
+  initTimeout(setShowTimeoutModal, setStartSignoutCountdown);
+  setStartSignoutCountdown(false);
 }
 /* ******************************* */
 
@@ -76,6 +85,7 @@ export default function ChildBenefitsClaim() {
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [startSignoutCountdown, setStartSignoutCountdown] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [caseId, setCaseId] = useState('');
@@ -163,11 +173,11 @@ export default function ChildBenefitsClaim() {
 
   function beginClaim() {
     // Added to ensure that clicking begin claim restarts timeout
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, setStartSignoutCountdown);
     displayStartPage();
   }
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, setStartSignoutCountdown);
     setServiceNotAvailable(false);
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
@@ -269,7 +279,8 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        if (!assignmentFinishedFlag) { // Temporary workaround to restrict infinite update calls
+        if (!assignmentFinishedFlag) {
+          // Temporary workaround to restrict infinite update calls
           setShowStartPage(false);
           setShowUserPortal(false);
           setShowPega(false);
@@ -454,8 +465,10 @@ export default function ChildBenefitsClaim() {
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
-          initTimeout(setShowTimeoutModal);
+          PCore.getStore().subscribe(() =>
+            staySignedIn(setShowTimeoutModal, setStartSignoutCountdown, false)
+          );
+          initTimeout(setShowTimeoutModal, setStartSignoutCountdown);
         });
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -588,7 +601,7 @@ export default function ChildBenefitsClaim() {
     e.preventDefault();
     setShowSignoutModal(false);
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, setStartSignoutCountdown);
   };
 
   const checkShuttered = (status: boolean) => {
@@ -643,8 +656,9 @@ export default function ChildBenefitsClaim() {
     <>
       <TimeoutPopup
         show={showTimeoutModal}
-        staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
+        staySignedinHandler={() => staySignedIn(setShowTimeoutModal, setStartSignoutCountdown)}
         signoutHandler={() => triggerLogout()}
+        startCountdown={startSignoutCountdown}
         isAuthorised
       />
 
