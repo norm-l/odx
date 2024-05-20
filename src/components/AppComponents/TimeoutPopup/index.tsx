@@ -31,7 +31,14 @@ export default function TimeoutPopup(props) {
       if (timeRemaining === 0) return;
 
       const timeRemainingInterval = setInterval(() => {
-        setTimeRemaining(prevTime => prevTime - 1);
+        setTimeRemaining(prevTime => {
+          if (prevTime === 0) {
+            clearInterval(timeRemainingInterval);
+            return 0; // Ensure timer never goes below 0
+          } else {
+            return prevTime - 1;
+          }
+        });
       }, 1000);
 
       return () => clearInterval(timeRemainingInterval);
@@ -132,7 +139,7 @@ export default function TimeoutPopup(props) {
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
             <span className='govuk-!-font-weight-bold'>
-              {startCountdown && `${timeRemaining} ${t('MINUTES')}`}
+              {startCountdown && `${timeRemaining} ${t('SECONDS')}`}
               {!startCountdown && t('2_MINUTES')}
             </span>
           </p>
