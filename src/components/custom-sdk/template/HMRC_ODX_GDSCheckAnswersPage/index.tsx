@@ -86,7 +86,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     let currentDL;
 
     summaryListRows.forEach(elem => {
-      if (elem.tagName === 'H2') {
+      if (elem.tagName === 'H1' || elem.tagName === 'H2' || elem.tagName === 'H3') {
         if (openDL) {
           fragment.appendChild(currentDL);
           fragment.appendChild(elem.cloneNode(true));
@@ -129,26 +129,28 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   }
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      // Access the DOM elements through the ref
-      if (dfChildrenContainerRef.current && dfChildren && dfChildren.length > 0) {
-        // Access the children of the container
-        const children = dfChildrenContainerRef.current.children;
-        // Check if children contain the expected content
-        if (children && children.length > 0) {
-          // Extract HTML content from the first child
-          // const htmlContent = children[0].innerHTML;
+    if (dfChildrenContainerRef.current) {
+      const checkChildren = () => {
+        const container = dfChildrenContainerRef.current;
+        const summaryListElement = container?.querySelector('.govuk-summary-list');
+
+        if (summaryListElement) {
           let htmlContent = '';
-          Array.from(children).forEach((child: unknown) => {
-            htmlContent += (child as HTMLElement).innerHTML;
+          Array.from(container.children).forEach(child => {
+            if (child instanceof HTMLElement) {
+              htmlContent += child.innerHTML;
+            }
           });
 
           updateHTML(htmlContent);
+        } else {
+          // Retry until a child with the class "govuk-summary-list" is rendered
+          requestAnimationFrame(checkChildren);
         }
-      }
-    }, 0);
+      };
 
-    return () => clearTimeout(timerId); // Cleanup the timer
+      checkChildren();
+    }
   }, [dfChildren]);
 
   return (

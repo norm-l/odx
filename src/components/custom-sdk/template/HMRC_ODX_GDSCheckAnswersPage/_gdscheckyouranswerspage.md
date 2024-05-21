@@ -20,7 +20,8 @@ Email Address: gabi.lawrence@example.com
 5. ~~ Account for when conditions ~~
 6. Using <p> tags for comma separated text blocks - ensure margin is removed.
 7. ~~Don't display the initial render~~
-8. Is there a better way to ensure the initial render has taken place - currently setting a timeout.
+8. ~~ Is there a better way to ensure the initial render has taken place - currently setting a timeout.
+   - switched to a check for child elements, only runs the update if a summary list row is detected - signalling that rendering is complete. ~~
 9. ~~Welsh language support~~
 
 ## View structure
