@@ -139,8 +139,7 @@ export default function TimeoutPopup(props) {
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
             <span className='govuk-!-font-weight-bold'>
-              {startCountdown && `${timeRemaining} ${t('SECONDS')}`}
-              {!startCountdown && t('2_MINUTES')}
+              {startCountdown ? `${timeRemaining} ${t('SECONDS')}` : t('2_MINUTES')}
             </span>
           </p>
           <div className='govuk-button-group govuk-!-padding-top-4'>
