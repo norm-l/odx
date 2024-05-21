@@ -95,8 +95,7 @@
       "format": "TEXT",
       "name": "stepId",
       "label": "stepId for Changelink",
-      "required": false,
-      "visibility": "$this.ShowChangeLink"
+      "required": false
     }
   ],
   "defaultConfig": {
