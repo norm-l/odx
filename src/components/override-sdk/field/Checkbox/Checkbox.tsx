@@ -6,7 +6,7 @@ import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDis
 import { DefaultFormContext, ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import { checkErrorMsgs, checkStatus, removeRedundantString } from '../../../helpers/utils';
 import { t } from 'i18next';
-import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {

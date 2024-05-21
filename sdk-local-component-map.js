@@ -27,7 +27,6 @@ import HmrcOdxGdsTaskList from './src/components/custom-sdk/widget/HMRC_ODX_GDST
 import HmrcOdxGdsTaskListTemplate from './src/components/custom-sdk/template/HMRC_ODX_GDSTaskListTemplate/';
 import AutoComplete from './src/components/override-sdk/field/AutoComplete/';
 import HmrcOdxGdsTextPresentation from './src/components/custom-sdk/field/HMRC_ODX_GDSTextPresentation/';
-import HmrcOdxGdsCheckAnswersScreen from './src/components/custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/';
 import RichText from './src/components/override-sdk/field/RichText/';
 import HmrcOdxGdsCheckAnswersPage from './src/components/custom-sdk/template/HMRC_ODX_GDSCheckAnswersPage/';
 /*import end - DO NOT REMOVE*/
@@ -64,7 +63,6 @@ const localSdkComponentMap = {
   AutoComplete: AutoComplete,
   HMRC_ODX_GDSTextPresentation: HmrcOdxGdsTextPresentation,
   HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate,
-  HMRC_ODX_GDSCheckAnswersScreen: HmrcOdxGdsCheckAnswersScreen,
   HMRC_ODX_GDSCheckAnswersPage: HmrcOdxGdsCheckAnswersPage
   /*map end - DO NOT REMOVE*/
 };

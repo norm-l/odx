@@ -3,7 +3,7 @@ import FieldSet from '../../../BaseComponents/FormGroup/FieldSet';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
-import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import { checkStatus } from '../../../helpers/utils';
 

@@ -8,7 +8,7 @@ import {
 } from '../../../helpers/formatters/DateErrorFormatter';
 import { GBdate, checkStatus } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
-import GDSCheckAnswers from '../../../custom-sdk/field/HMRC_ODX_GDSCheckAnswersScreen/index';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 declare const global;
@@ -74,10 +74,11 @@ export default function Date(props) {
   useEffect(() => {
     setEditedValidateMessage(
       localizedVal(
-      DateErrorFormatter(
-        validatemessage,
-        getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label
-      ))
+        DateErrorFormatter(
+          validatemessage,
+          getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label
+        )
+      )
     );
     const errorTargets = DateErrorTargetFields(validatemessage);
     let specificError: any = null;
