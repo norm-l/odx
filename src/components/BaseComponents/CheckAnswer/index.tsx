@@ -20,10 +20,14 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const actions = pConn.getActionsApi();
   const containerItemID = pConn.getContextName();
   const { t } = useTranslation();
+  let isCSV = false;
+
+  if (name && name.includes(COMMA_DELIMITED_FIELD) && value.includes(',')) {
+    isCSV = true;
+  }
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/prefer-includes
-    if (name && name.indexOf(COMMA_DELIMITED_FIELD) !== -1 && value.indexOf(',') !== -1) {
+    if (name && name.includes(COMMA_DELIMITED_FIELD) && value.includes(',')) {
       const formatValue = value.split(',').map((item: string) => item.trim());
       setFormattedValue(formatValue);
     }
@@ -46,20 +50,28 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   return (
     <div className='govuk-summary-list__row'>
       <dt className='govuk-summary-list__key'>{label}</dt>
-
-      <dd className='govuk-summary-list__value'>
+      <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
         {Array.isArray(formattedValue) ? (
-          <ul className='govuk-list'>
-            {formattedValue.map(valueItem => (
-              <li key={valueItem}>{valueItem}</li>
+          <>
+            {formattedValue.map(item => (
+              <React.Fragment key={item}>
+                {item}
+                <br />
+              </React.Fragment>
             ))}
-          </ul>
+          </>
         ) : (
           formattedValue || value
-        )}{' '}
+        )}
       </dd>
       <dd className='govuk-summary-list__actions'>
-        <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+        <a
+          href='#'
+          className='govuk-link'
+          onClick={handleOnClick}
+          data-step-id={stepId}
+          data-is-csv={isCSV}
+        >
           {t('GDS_ACTION_CHANGE')}
           <span className='govuk-visually-hidden'> {label}</span>
         </a>
