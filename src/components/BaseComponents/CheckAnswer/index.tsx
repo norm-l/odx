@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { PConnFieldProps } from '@pega/react-sdk-components/lib/types/PConnProps';
+import { useTranslation } from 'react-i18next';
 
 interface HmrcOdxTestProps extends PConnFieldProps {
   // If any, enter additional props that only exist on this componentName
@@ -18,6 +19,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
   const containerItemID = pConn.getContextName();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/prefer-includes
@@ -58,7 +60,8 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       </dd>
       <dd className='govuk-summary-list__actions'>
         <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
-          Change<span className='govuk-visually-hidden'> {label}</span>
+          {t('GDS_ACTION_CHANGE')}
+          <span className='govuk-visually-hidden'> {label}</span>
         </a>
       </dd>
     </div>
