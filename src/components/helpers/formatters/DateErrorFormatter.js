@@ -12,7 +12,7 @@ const _DateErrorFormatter = message => {
     // When some 'parts' are missing
     let missingPartMessage = '';
     if (day === '') {
-      missingPartMessage += `_A_DAY`;
+      missingPartMessage += '_A_DAY';
       targets.push('day');
     }
     if (month === '') {
@@ -21,8 +21,8 @@ const _DateErrorFormatter = message => {
       targets.push('month');
     }
     if (year === '') {
-      if (missingPartMessage.length > 0) missingPartMessage += `_AND_A_YEAR`;
-      else missingPartMessage += `_A_YEAR`;
+      if (missingPartMessage.length > 0) missingPartMessage += '_AND_A_YEAR';
+      else missingPartMessage += '_A_YEAR';
       targets.push('year');
     }
     const shortPropertyName = 'DATE';
