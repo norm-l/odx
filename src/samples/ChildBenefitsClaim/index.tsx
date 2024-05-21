@@ -352,7 +352,7 @@ export default function ChildBenefitsClaim() {
   }
 
   useEffect(() => {
-    const milisecondsTilCountdown = milisecondsTilSignout - 59000;
+    const milisecondsTilCountdown = milisecondsTilSignout - 60000;
     let countdownTimeout;
 
     if (showTimeoutModal) {

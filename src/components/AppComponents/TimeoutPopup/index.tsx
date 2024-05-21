@@ -24,10 +24,14 @@ export default function TimeoutPopup(props) {
   );
   const { t } = useTranslation();
 
-  const [timeRemaining, setTimeRemaining] = useState(59);
+  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [screenReaderCountdown, setScreenReaderCountdown] = useState('');
+  const [alertScreenReaderCountdown, setAlertScreenReaderCountdown] = useState(false);
 
   useEffect(() => {
     if (startCountdown) {
+      setScreenReaderCountdown(t('1_MINUTE'));
+
       if (timeRemaining === 0) return;
 
       const timeRemainingInterval = setInterval(() => {
@@ -36,14 +40,26 @@ export default function TimeoutPopup(props) {
             clearInterval(timeRemainingInterval);
             return 0; // Ensure timer never goes below 0
           } else {
+            // Check if prevTime is a multiple of 20 and trigger alert if true
+            if (prevTime % 20 === 0) {
+              setAlertScreenReaderCountdown(true);
+              setTimeout(() => {
+                setAlertScreenReaderCountdown(false);
+              }, 1000); // Reset alert after 1 second
+            }
             return prevTime - 1;
           }
         });
       }, 1000);
-
       return () => clearInterval(timeRemainingInterval);
     }
   }, [startCountdown]);
+
+  useEffect(() => {
+    if (alertScreenReaderCountdown) {
+      setScreenReaderCountdown(`${timeRemaining} ${t('SECONDS')}`);
+    }
+  }, [alertScreenReaderCountdown]);
 
   useEffect(() => {
     if (show) {
@@ -134,12 +150,17 @@ export default function TimeoutPopup(props) {
       {isAuthorised ? (
         <div>
           <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
-            {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
+            {t('YOURE_ABOUT_TO_BE_SIGNED_OUT')}
           </h1>
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
             <span className='govuk-!-font-weight-bold'>
-              {startCountdown ? `${timeRemaining} ${t('SECONDS')}` : t('2_MINUTES')}
+              <div className='govuk-visually-hidden'>{screenReaderCountdown}</div>
+              {startCountdown && timeRemaining === 60
+                ? t('1_MINUTE')
+                : startCountdown && timeRemaining < 60
+                ? `${timeRemaining} ${t('SECONDS')}`
+                : t('2_MINUTES')}
             </span>
           </p>
           <div className='govuk-button-group govuk-!-padding-top-4'>
