@@ -150,7 +150,9 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
                           className='govuk-task-list__status'
                           id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
                         >
-                          <strong className='govuk-tag govuk-tag--blue'>{labelStatusMapping(task.TaskStatus)}</strong>
+                          <strong className='govuk-tag govuk-tag--blue'>
+                            {labelStatusMapping(task.TaskStatus)}
+                          </strong>
                         </div>
                       )}
 
@@ -195,6 +197,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
       ) : (
         <></>
       )}
+
       <Grid
         className='govuk-!-display-none'
         container={{
