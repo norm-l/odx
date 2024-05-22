@@ -5,6 +5,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import { formatter } from '../../components/override-sdk/template/DefaultForm/DefaultFormUtils';
 
 declare const PCore: any;
 
@@ -22,16 +23,45 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
   const chbOfficeLink = 'https://www.gov.uk/child-benefit-tax-charge/your-circumstances-change';
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+  const sessionCaseId =
+    (sessionStorage.getItem('isNinoPresent') && sessionStorage.getItem('caseRefId')) || '';
+  const referenceNumber = refId || sessionCaseId?.replace('HMRC-CHB-WORK ', '');
 
   function getFeedBackLink() {
     return isUnAuth
       ? 'https://www.tax.service.gov.uk/feedback/ODXCHBUA'
       : 'https://www.tax.service.gov.uk/feedback/ODXCHB';
   }
+
+  function removeSpacesFromName(finalText, textToBeReplaced, textToBeFormatted) {
+    return finalText.replaceAll(
+      textToBeReplaced,
+      `<span class="govuk-hidespace">${textToBeFormatted.trim()}</span>`
+    );
+  }
+
+  function formatAndSetListData(listData) {
+    const finalText = formatter(
+      listData,
+      `<span class="govuk-hidespace">`,
+      `</span>`,
+      removeSpacesFromName
+    );
+    setDocumentList(finalText);
+  }
   useEffect(() => {
-    if (caseId && isUnAuth) {
-      sessionStorage.setItem('caseRefId', caseId);
-    }
+    const handleBeforeUnload = () => {
+      // Perform actions before the component unloads
+      if (caseId && isUnAuth) {
+        sessionStorage.setItem('caseRefId', caseId);
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+  useEffect(() => {
     setPageTitle();
   }, [lang]);
 
@@ -50,9 +80,11 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
           setIsBornAbroadOrAdopted(true);
         }
         setLoading(false);
-        setDocumentList(listData.DocumentContentHTML);
+        formatAndSetListData(listData.DocumentContentHTML);
         if (listData.DocumentContentHTML.includes('data-ninopresent="false"')) {
           setIsCaseRefRequired(true);
+        } else {
+          sessionStorage.setItem('isNinoPresent', 'true');
         }
       })
       .catch(err => {
@@ -93,8 +125,6 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   };
 
   const getBirthChildPanelContent = () => {
-    const sessionCaseId = sessionStorage.getItem('caseRefId');
-    const referenceNumber = refId || sessionCaseId?.replace('HMRC-CHB-WORK ', '');
     return (
       <>
         <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
@@ -115,7 +145,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         <p className='govuk-body'> {t('WE_HAVE_SENT_YOUR_APPLICATION')}</p>
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
         {isUnAuth && isCaseRefRequired && <p className='govuk-body'>{t('PRINT_THIS_INFO')}</p>}
-        <p className='govuk-body'> {t('WE_WILL_TELL_YOU_IN_14_DAYS')}</p>
+        <p className='govuk-body'> {t('WE_WILL_TELL_YOU_IN_28_DAYS')}</p>
         <p className='govuk-body'>
           <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
             {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} {t('OPENS_IN_NEW_TAB')}
@@ -129,11 +159,11 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
     return (
       <>
         <h1 className='govuk-panel__title'>{t('APPLICATION_RECEIVED')}</h1>
-        {isUnAuth && isCaseRefRequired && (
+        {isUnAuth && (isCaseRefRequired || sessionCaseId) && (
           <div className='govuk-panel__body govuk-!-margin-bottom-5'>
             {t('YOUR_REF_NUMBER')}
             <br></br>
-            <strong>{refId}</strong>
+            <strong>{referenceNumber}</strong>
           </div>
         )}
         <br />
@@ -257,11 +287,11 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         <MainWrapper>
           <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-7'>
             <h1 className='govuk-panel__title'> {t('APPLICATION_RECEIVED')}</h1>
-            {isUnAuth && isCaseRefRequired && (
+            {isUnAuth && (isCaseRefRequired || sessionCaseId) && (
               <div className='govuk-panel__body'>
                 {t('YOUR_REF_NUMBER')}
                 <br></br>
-                <strong>{refId}</strong>
+                <strong>{referenceNumber}</strong>
               </div>
             )}
             <div className='govuk-panel__body'>

@@ -18,8 +18,8 @@ import SummaryPage from '../../components/AppComponents/SummaryPage';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
-import AppContext from './reuseables/AppContext';
 import { triggerLogout } from '../../components/helpers/utils';
+import AppContext from './reuseables/AppContext';
 
 // declare const myLoadMashup;
 
@@ -28,19 +28,15 @@ const ClaimPage: FunctionComponent<any> = () => {
     const [shutterServicePage, /* setShutterServicePage */] = useState(false);
     const [serviceNotAvailable, /* setServiceNotAvailable */] = useState(false);
     const [pCoreReady, setPCoreReady] = useState(false);
+    const {showLanguageToggle} = useContext(AppContext);
+
     const setAuthType = useState('gg')[1];
 
     const [currentDisplay, setCurrentDisplay] = useState<|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'|'loading'>('pegapage');
     const [summaryPageContent, setSummaryPageContent] = useState<{content:string|null, title:string|null, banner:string|null}>({content:null, title:null, banner:null})
-    const { appBacklinkProps } = useContext(AppContext);
     const { t } = useTranslation();
     
     const history = useHistory();
-
-     const redirectToLandingPage = () => {
-      triggerLogout();
-      appBacklinkProps.appBacklinkAction();
-    }
 
     const [showTimeoutModal, setShowTimeoutModal] = useState(false);  
     const [showSignoutModal, setShowSignoutModal] = useState(false);
@@ -48,18 +44,20 @@ const ClaimPage: FunctionComponent<any> = () => {
     const { hmrcURL } = useHMRCExternalLinks();
 
     useEffect(() => 
-        {initTimeout(setShowTimeoutModal, false, true, false) }  
-    , []);
+        {
+          initTimeout(setShowTimeoutModal, false, true, false)         
+        }        
+    , []);    
     
     function doRedirectDone() {
         history.push('/hicbc/opt-in');
         // appName and mainRedirect params have to be same as earlier invocation
         loginIfNecessary({ appName: 'embedded', mainRedirect: true });        
     } 
-    
-    const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{appBacklinkAction: redirectToLandingPage}});
-    
 
+    const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
+    
+    
     useEffect(() => {
       if(showPega){setCurrentDisplay('pegapage')}
       else if(showResolutionPage){
@@ -199,7 +197,7 @@ const ClaimPage: FunctionComponent<any> = () => {
       <AppHeader
         handleSignout={handleSignout}
         appname={t('HIGH_INCOME_BENEFITS')}
-        hasLanguageToggle={false}
+        hasLanguageToggle={showLanguageToggle}
         isPegaApp={showPega}
         languageToggleCallback={
           () => {} /* toggleNotificationProcess(
@@ -221,8 +219,7 @@ const ClaimPage: FunctionComponent<any> = () => {
               summaryPageContent.content}
               summaryTitle={summaryPageContent.title}
               summaryBanner={summaryPageContent.banner}
-              backlinkProps={{backlinkAction:redirectToLandingPage,
-                              backlinkText:t('BACK_TO_START_PAGE')}}  
+              backlinkProps={{}}  
             />}        
           </>
         )}

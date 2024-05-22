@@ -3,9 +3,10 @@ import { bool, func, string } from 'prop-types';
 
 import HintTextComponent from '../../helpers/formatters/ParsedHtml';
 import FieldSet from '../FormGroup/FieldSet';
+import FormGroup from '../FormGroup/FormGroup';
 
 function makeHintId(identifier) {
-  return `${identifier}-hint`;
+  return `${identifier}__assistiveHint`;
 }
 
 declare global {
@@ -15,16 +16,7 @@ declare global {
 }
 
 export default function AutoComplete(props) {
-  const {
-    optionList,
-    instructionText,
-    selectedValue,
-    testId,
-    helperText,
-    errorText,
-    id,
-    labelIsHeading
-  } = props;
+  const { optionList, instructionText, selectedValue, testId, helperText, errorText, id } = props;
   const inputClasses = `govuk-input ${errorText ? 'govuk-input--error' : ''}`.trim();
 
   useEffect(() => {
@@ -38,6 +30,9 @@ export default function AutoComplete(props) {
         selectElement: document.getElementById(id),
         defaultValue: ''
       });
+
+      // Publish event so that errorSummary component can be updated with autocomplete field errors after rendering.
+      PCore.getPubSubUtils().publish('autoCompleteFieldPresent', { error: errorText });
     }
   }, [optionList]);
   const arrOptions =
@@ -61,14 +56,8 @@ export default function AutoComplete(props) {
     });
   };
 
-  const extraProps = {
-    testProps: { 'data-test-id': testId },
-    isAutoCompleteField: true,
-    legendIsHeading: labelIsHeading
-  };
-
   return (
-    <FieldSet {...props} {...extraProps}>
+    <FormGroup {...props}>
       {helperText && (
         <div id={makeHintId(id)} className='govuk-hint'>
           <HintTextComponent htmlString={helperText} />
@@ -95,7 +84,7 @@ export default function AutoComplete(props) {
       ) : (
         <></>
       )}
-    </FieldSet>
+    </FormGroup>
   );
 }
 
