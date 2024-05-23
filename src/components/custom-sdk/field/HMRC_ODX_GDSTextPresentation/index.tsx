@@ -10,6 +10,7 @@ import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import { checkStatus } from '../../../helpers/utils';
 
 interface HmrcOdxGdsTextPresentationProps extends PConnFieldProps {
+  stepId: any;
   fieldMetadata?: any;
   configAlternateDesignSystem;
   displayOrder?: any;
@@ -32,6 +33,7 @@ export default function HmrcOdxGdsTextPresentation(props: HmrcOdxGdsTextPresenta
     name,
     fieldMetadata,
     helperText,
+    getPConnect,
     configAlternateDesignSystem
   } = props;
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
@@ -67,17 +69,13 @@ export default function HmrcOdxGdsTextPresentation(props: HmrcOdxGdsTextPresenta
       .trim();
   };
   const inprogressStatus = checkStatus();
-  if (
-    hasBeenWrapped &&
-    configAlternateDesignSystem?.ShowChangeLink &&
-    inprogressStatus === 'Open-InProgress'
-  ) {
+  if (hasBeenWrapped && props.stepId && inprogressStatus === 'Open-InProgress') {
     return (
       <GDSCheckAnswers
         label={label}
         value={formatValue(value)}
         name={name}
-        stepId={configAlternateDesignSystem.stepId}
+        stepId={props.stepId}
         getPConnect={getPConnect}
         required={false}
         disabled={false}
