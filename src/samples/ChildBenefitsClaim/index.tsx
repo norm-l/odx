@@ -76,7 +76,6 @@ export default function ChildBenefitsClaim() {
   const [loadinginProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
-  const [startSignoutCountdown, setStartSignoutCountdown] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [caseId, setCaseId] = useState('');
@@ -350,20 +349,6 @@ export default function ChildBenefitsClaim() {
       'continueCase'
     );
   }
-
-  useEffect(() => {
-    const milisecondsTilCountdown = milisecondsTilSignout - 60000;
-    let countdownTimeout;
-
-    if (showTimeoutModal) {
-      countdownTimeout = setTimeout(() => {
-        setStartSignoutCountdown(true);
-      }, milisecondsTilCountdown);
-    }
-    return () => {
-      clearTimeout(countdownTimeout);
-    };
-  }, [showTimeoutModal]);
 
   useEffect(() => {
     // Update when bShowAppName changes
@@ -661,7 +646,7 @@ export default function ChildBenefitsClaim() {
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
         signoutHandler={() => triggerLogout()}
-        startCountdown={startSignoutCountdown}
+        milisecondsTilSignout={milisecondsTilSignout}
         isAuthorised
       />
 

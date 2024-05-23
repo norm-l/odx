@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export default function TimeoutPopup(props) {
   const {
     show,
-    startCountdown,
+    milisecondsTilSignout,
     staySignedinHandler,
     signoutHandler,
     isAuthorised,
@@ -24,12 +24,33 @@ export default function TimeoutPopup(props) {
   );
   const { t } = useTranslation();
 
+  const [startSignoutCountdown, setStartSignoutCountdown] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(60);
   const [screenReaderCountdown, setScreenReaderCountdown] = useState('');
   const [alertScreenReaderCountdown, setAlertScreenReaderCountdown] = useState(false);
 
   useEffect(() => {
-    if (startCountdown) {
+    if (!show) {
+      // Reset countdown and related states if show is false
+      setTimeRemaining(60);
+      setScreenReaderCountdown('');
+      setAlertScreenReaderCountdown(false);
+      setStartSignoutCountdown(false);
+    } else {
+      // Start the countdown only if show is true
+      const milisecondsTilCountdown = milisecondsTilSignout - 60000;
+      const countdownTimeout = setTimeout(() => {
+        setStartSignoutCountdown(true);
+      }, milisecondsTilCountdown);
+
+      return () => {
+        clearTimeout(countdownTimeout); // Clear the timeout when component unmounts or show changes
+      };
+    }
+  }, [show]);
+
+  useEffect(() => {
+    if (startSignoutCountdown) {
       setScreenReaderCountdown(t('1_MINUTE'));
 
       if (timeRemaining === 0) return;
@@ -53,7 +74,7 @@ export default function TimeoutPopup(props) {
       }, 1000);
       return () => clearInterval(timeRemainingInterval);
     }
-  }, [startCountdown]);
+  }, [startSignoutCountdown]);
 
   useEffect(() => {
     if (alertScreenReaderCountdown) {
@@ -155,10 +176,12 @@ export default function TimeoutPopup(props) {
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
             <span className='govuk-!-font-weight-bold'>
-              <div className='govuk-visually-hidden'>{screenReaderCountdown}</div>
-              {startCountdown && timeRemaining === 60
+              <div className='govuk-visually-hidden' aria-live='polite'>
+                {screenReaderCountdown}
+              </div>
+              {startSignoutCountdown && timeRemaining === 60
                 ? t('1_MINUTE')
-                : startCountdown && timeRemaining < 60
+                : startSignoutCountdown && timeRemaining < 60
                 ? `${timeRemaining} ${t('SECONDS')}`
                 : t('2_MINUTES')}
             </span>
@@ -182,7 +205,7 @@ export default function TimeoutPopup(props) {
 
 TimeoutPopup.propTypes = {
   show: PropTypes.bool,
-  startCountdown: PropTypes.bool,
+  milisecondsTilSignout: PropTypes.number,
   staySignedinHandler: PropTypes.func,
   signoutHandler: PropTypes.func,
   isAuthorised: PropTypes.bool,
