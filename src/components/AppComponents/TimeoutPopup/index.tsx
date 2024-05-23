@@ -51,9 +51,9 @@ export default function TimeoutPopup(props) {
 
   useEffect(() => {
     if (startSignoutCountdown) {
-      setScreenReaderCountdown(t('1_MINUTE'));
-
       if (timeRemaining === 0) return;
+
+      setScreenReaderCountdown(t('1_MINUTE'));
 
       const timeRemainingInterval = setInterval(() => {
         setTimeRemaining(prevTime => {
@@ -61,7 +61,7 @@ export default function TimeoutPopup(props) {
             clearInterval(timeRemainingInterval);
             return 0; // Ensure timer never goes below 0
           } else {
-            // Check if prevTime is a multiple of 20 and trigger alert if true
+            // Check if prevTime is a multiple of 20 and trigger screen reader alert if true
             if (prevTime % 20 === 0) {
               setAlertScreenReaderCountdown(true);
               setTimeout(() => {
@@ -72,6 +72,7 @@ export default function TimeoutPopup(props) {
           }
         });
       }, 1000);
+
       return () => clearInterval(timeRemainingInterval);
     }
   }, [startSignoutCountdown]);
@@ -176,9 +177,9 @@ export default function TimeoutPopup(props) {
           <p className='govuk-body'>
             {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
             <span className='govuk-!-font-weight-bold'>
-              <div className='govuk-visually-hidden' aria-live='polite'>
+              <span className='govuk-visually-hidden' aria-live='polite'>
                 {screenReaderCountdown}
-              </div>
+              </span>
               {startSignoutCountdown && timeRemaining === 60
                 ? t('1_MINUTE')
                 : startSignoutCountdown && timeRemaining < 60
