@@ -12,6 +12,7 @@ import AreYouSureToContinueWithoutSignIn from '../StaticPages/AreYouSureToContin
 import DoYouWantToSignIn from '../StaticPages/DoYouWantToSignIn/doYouWantToSignIn';
 import CheckOnClaim from '../StaticPages/CheckOnClaim';
 import RecentlyClaimedChildBenefit from '../StaticPages/ChooseClaimService';
+import AppHeader from '../HighIncomeCase/reuseables/AppHeader'
 
 const AppSelector = () => {
 
@@ -21,19 +22,21 @@ const AppSelector = () => {
     .use(Backend)
     .use(initReactI18next)
     .init({
-      lng: sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en',      
-      
+      lng: sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en', 
+      ns: ['common'],
+      fallbackNS: 'common',
       backend: {
-        loadPath: `assets/i18n/{{lng}}.json`
+        loadPath: `assets/i18n/{{ns}}/{{lng}}.json`
       },
       fallbackLng: 'en',
       debug: false,
-      returnNull: false,
+      returnNull: true,
       react: {
         useSuspense: false
       }
-    }).finally(() => {
+    }).finally(() => {      
       seti18nloaded(true);
+
     });
 
   return (

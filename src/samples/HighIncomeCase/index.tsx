@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import LandingPage from './LandingPage';
 import ClaimPage from './ClaimPage';
@@ -15,8 +15,17 @@ const HighIncomeCase: FunctionComponent<any> = () => {
   );
   const [shuttered, setShuttered] = useState(null);  
   const [showLanguageToggle, setShowLanguageToggle] = useState(false);
+  const [hicbcTranslationLoaded, setHicbcTranslationLoaded] = useState(false);
 
-  const { t } = useTranslation();
+  const { t, i18n} = useTranslation('hicbc');
+  useEffect( () => {
+    i18n.loadNamespaces(['hicbc'], (err) => {
+      setPageTitle()
+      setHicbcTranslationLoaded(true)}
+      )
+    }  
+  , []);
+
   registerServiceName(t('HIGH_INCOME_BENEFITS'));
   const landingPageProceedHandler = () => {
     localStorage.setItem('showLandingPage', 'false');
@@ -42,10 +51,10 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     return null;
   } else if (shuttered) {
     setPageTitle();
-    return (
-      <>
-        <AppHeader appname={t('HIGH_INCOME_BENEFITS')} hasLanguageToggle={false} />
-        <div className='govuk-width-container'>
+    return (  
+      <>    
+        {hicbcTranslationLoaded && <AppHeader appname={t('hicbc:HIGH_INCOME_BENEFITS')} hasLanguageToggle={false} />}
+        <div className='govuk-width-container'>          
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
             <p className='govuk-body'>Try again later.</p>
@@ -58,7 +67,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
             </p>
           </MainWrapper>
         </div>
-        <AppFooter />
+        <AppFooter /> 
       </>
     );
   } else {

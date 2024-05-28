@@ -96,7 +96,7 @@ module.exports = (env, argv) => {
           }
         },
         {
-          from: './assets/i18n/*',
+          from: './assets/i18n/**/*',
           to: './'
         },
         {

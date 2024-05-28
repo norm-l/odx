@@ -24,7 +24,7 @@ export default function LandingPage(props){
     setPageTitle(!!errorText)
     }, [errorText] )
 
-    const {t} = useTranslation()
+    const {t} = useTranslation('hicbc')
     const changeHandler = (evt) => {
         setSelectedOption(evt.target.value);        
     }
