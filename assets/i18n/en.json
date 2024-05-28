@@ -280,5 +280,8 @@
   "YOUR_DETAILS": "Your details",
   "RELATIONSHIP_DETAILS": "Relationship details",
   "CHILD_DETAILS": "Child details",
-  "INCOME_DETAILS": "Income details"
+  "INCOME_DETAILS": "Income details",
+
+  "EDUCATION_START": "Education Start"
+
 }

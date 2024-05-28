@@ -277,5 +277,8 @@
   "YOUR_DETAILS": "Eich manylion",
   "RELATIONSHIP_DETAILS": "Manylion perthynas",
   "CHILD_DETAILS": "Manylion y plentyn",
-  "INCOME_DETAILS": "Manylion incwm"
+  "INCOME_DETAILS": "Manylion incwm",
+
+  "EDUCATION_START": "Education Start"
+
 }
