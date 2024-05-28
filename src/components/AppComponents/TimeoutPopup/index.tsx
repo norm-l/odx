@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useReducer } from 'react';
+import React, { useEffect, useCallback, useReducer } from 'react';
 import Modal from '../../BaseComponents/Modal/Modal';
 import Button from '../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
@@ -106,6 +106,21 @@ export default function TimeoutPopup(props) {
       window.removeEventListener('keydown', staySignedInCallback);
     };
   }, [show]);
+
+  const timeoutText = () => {
+    let timeoutValue;
+
+    if (timeoutState.countdownStart && timeoutState.timeRemaining === 60) {
+      timeoutValue = `${t('1_MINUTE')}.`;
+    } else if (timeoutState.countdownStart && timeoutState.timeRemaining < 60) {
+      timeoutValue = `${timeoutState.timeRemaining} ${t('SECONDS')}.`;
+    } else {
+      timeoutValue = `${t('2_MINUTES')}.`;
+    }
+
+    return timeoutValue;
+  };
+
   const unAuthTimeoutPopupContent = () => {
     return (
       <div>
@@ -189,13 +204,7 @@ export default function TimeoutPopup(props) {
           </h1>
           <p className='govuk-body'>
             {`${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} `}
-            <span className='govuk-!-font-weight-bold'>
-              {timeoutState.countdownStart && timeoutState.timeRemaining === 60
-                ? `${t('1_MINUTE')}.`
-                : timeoutState.countdownStart && timeoutState.timeRemaining < 60
-                ? `${timeoutState.timeRemaining} ${t('SECONDS')}.`
-                : `${t('2_MINUTES')}.`}
-            </span>
+            <span className='govuk-!-font-weight-bold'>{timeoutText()}</span>
             {timeoutState.countdownStart && (
               <span className='govuk-visually-hidden' aria-live='polite'>
                 {timeoutState.screenReaderCountdown}
