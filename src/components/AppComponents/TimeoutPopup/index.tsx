@@ -24,11 +24,6 @@ export default function TimeoutPopup(props) {
   );
   const { t } = useTranslation();
 
-  // const [startSignoutCountdown, setStartSignoutCountdown] = useState(false);
-  // const [timeRemaining, setTimeRemaining] = useState(60);
-  // const [screenReaderCountdown, setScreenReaderCountdown] = useState('');
-  // const [alertScreenReaderCountdown, setAlertScreenReaderCountdown] = useState(false);
-
   const initialTimeoutState = {
     countdownStart: false,
     timeRemaining: 60,
@@ -44,8 +39,6 @@ export default function TimeoutPopup(props) {
         return { ...state, timeRemaining: action.payload };
       case 'UPDATE_SCREEN_READER_COUNTDOWN':
         return { ...state, screenReaderCountdown: action.payload };
-      // case 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN':
-      //   return { ...state, alertScreenReaderCountdown: action.payload };
       default:
         return state;
     }
@@ -101,78 +94,7 @@ export default function TimeoutPopup(props) {
         )}`
       });
     }
-    // else {
-    //   dispatch({ type: 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN', payload: false });
-    // }
   }, [timeoutState.timeRemaining]);
-
-  // useEffect(() => {
-  //   if (timeoutState.alertScreenReaderCountdown) {
-  //     dispatch({
-  //       type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-  //       payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
-  //         'SECONDS'
-  //       )}`
-  //     });
-  //   }
-  // }, [timeoutState.alertScreenReaderCountdown, timeoutState.timeRemaining]);
-
-  // useEffect(() => {
-  //   if (!show) {
-  //     // Reset countdown and related states if show is false
-  //     setTimeRemaining(60);
-  //     setScreenReaderCountdown('');
-  //     setAlertScreenReaderCountdown(false);
-  //     setStartSignoutCountdown(false);
-  //   } else {
-  //     // Start the countdown only if show is true
-  //     const milisecondsTilCountdown = milisecondsTilSignout - 60000;
-  //     const countdownTimeout = setTimeout(() => {
-  //       setStartSignoutCountdown(true);
-  //     }, milisecondsTilCountdown);
-
-  //     return () => {
-  //       clearTimeout(countdownTimeout); // Clear the timeout when component unmounts or show changes
-  //     };
-  //   }
-  // }, [show]);
-
-  // useEffect(() => {
-  //   if (startSignoutCountdown) {
-  //     if (timeRemaining === 0) return;
-
-  //     setScreenReaderCountdown(`${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`);
-
-  //     const timeRemainingInterval = setInterval(() => {
-  //       setTimeRemaining(prevTime => {
-  //         if (prevTime === 0) {
-  //           clearInterval(timeRemainingInterval);
-  //           return 0; // Ensure timer never goes below 0
-  //         } else {
-  //           return prevTime - 1;
-  //         }
-  //       });
-  //     }, 1000);
-
-  //     return () => clearInterval(timeRemainingInterval);
-  //   }
-  // }, [startSignoutCountdown]);
-
-  // useEffect(() => {
-  //   if (timeRemaining < 60 && timeRemaining % 20 === 0) {
-  //     setAlertScreenReaderCountdown(true);
-  //   } else {
-  //     setAlertScreenReaderCountdown(false);
-  //   }
-  // }, [timeRemaining]);
-
-  // useEffect(() => {
-  //   if (alertScreenReaderCountdown) {
-  //     setScreenReaderCountdown(
-  //       `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeRemaining} ${t('SECONDS')}`
-  //     );
-  //   }
-  // }, [alertScreenReaderCountdown]);
 
   useEffect(() => {
     if (show) {
