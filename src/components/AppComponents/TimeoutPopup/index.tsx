@@ -32,8 +32,8 @@ export default function TimeoutPopup(props) {
   const initialTimeoutState = {
     countdownStart: false,
     timeRemaining: 60,
-    screenReaderCountdown: '',
-    alertScreenReaderCountdown: false
+    screenReaderCountdown: ''
+    // alertScreenReaderCountdown: false
   };
 
   const reducer = (state, action) => {
@@ -44,8 +44,8 @@ export default function TimeoutPopup(props) {
         return { ...state, timeRemaining: action.payload };
       case 'UPDATE_SCREEN_READER_COUNTDOWN':
         return { ...state, screenReaderCountdown: action.payload };
-      case 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN':
-        return { ...state, alertScreenReaderCountdown: action.payload };
+      // case 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN':
+      //   return { ...state, alertScreenReaderCountdown: action.payload };
       default:
         return state;
     }
@@ -75,12 +75,15 @@ export default function TimeoutPopup(props) {
 
   useEffect(() => {
     if (timeoutState.countdownStart) {
-      dispatch({
-        type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-        payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
-      });
+      if (timeoutState.timeRemaining === 60) {
+        dispatch({
+          type: 'UPDATE_SCREEN_READER_COUNTDOWN',
+          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
+        });
+      }
 
       if (timeoutState.timeRemaining === 0) return;
+
       const timeRemainingInterval = setInterval(() => {
         dispatch({ type: 'UPDATE_TIME_REMAINING', payload: timeoutState.timeRemaining - 1 });
       }, 1000);
@@ -91,14 +94,6 @@ export default function TimeoutPopup(props) {
 
   useEffect(() => {
     if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
-      dispatch({ type: 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN', payload: true });
-    } else {
-      dispatch({ type: 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN', payload: false });
-    }
-  }, [timeoutState.timeRemaining]);
-
-  useEffect(() => {
-    if (timeoutState.alertScreenReaderCountdown) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
         payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
@@ -106,7 +101,21 @@ export default function TimeoutPopup(props) {
         )}`
       });
     }
-  }, [timeoutState.alertScreenReaderCountdown, timeoutState.timeRemaining]);
+    // else {
+    //   dispatch({ type: 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN', payload: false });
+    // }
+  }, [timeoutState.timeRemaining]);
+
+  // useEffect(() => {
+  //   if (timeoutState.alertScreenReaderCountdown) {
+  //     dispatch({
+  //       type: 'UPDATE_SCREEN_READER_COUNTDOWN',
+  //       payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
+  //         'SECONDS'
+  //       )}`
+  //     });
+  //   }
+  // }, [timeoutState.alertScreenReaderCountdown, timeoutState.timeRemaining]);
 
   // useEffect(() => {
   //   if (!show) {
@@ -259,15 +268,17 @@ export default function TimeoutPopup(props) {
           <p className='govuk-body'>
             {`${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} `}
             <span className='govuk-!-font-weight-bold'>
-              <span className='govuk-visually-hidden' aria-live='polite'>
-                {initialTimeoutState.screenReaderCountdown}
-              </span>
-              {initialTimeoutState.countdownStart && initialTimeoutState.timeRemaining === 60
-                ? t('1_MINUTE')
-                : initialTimeoutState.countdownStart && initialTimeoutState.timeRemaining < 60
-                ? `${initialTimeoutState.timeRemaining} ${t('SECONDS')}`
-                : t('2_MINUTES')}
+              {timeoutState.countdownStart && timeoutState.timeRemaining === 60
+                ? `${t('1_MINUTE')}.`
+                : timeoutState.countdownStart && timeoutState.timeRemaining < 60
+                ? `${timeoutState.timeRemaining} ${t('SECONDS')}.`
+                : `${t('2_MINUTES')}.`}
             </span>
+            {timeoutState.countdownStart && (
+              <span className='govuk-visually-hidden' aria-live='polite'>
+                {timeoutState.screenReaderCountdown}
+              </span>
+            )}
           </p>
           <div className='govuk-button-group govuk-!-padding-top-4'>
             <Button type='button' onClick={staySignedinHandler}>
