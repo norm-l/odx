@@ -108,7 +108,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         if (!openDL) {
           openDL = true;
           currentDL = document.createElement('dl');
-          currentDL.className = 'govuk-summary-list govuk-!-margin-bottom-9';
+          //  currentDL.className = 'govuk-summary-list govuk-!-margin-bottom-9';
+          currentDL.className = 'govuk-summary-list';
           currentDL.appendChild(elem.cloneNode(true));
         } else {
           currentDL.appendChild(elem.cloneNode(true));
