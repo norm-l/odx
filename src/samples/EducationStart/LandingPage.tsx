@@ -54,45 +54,28 @@ export default function LandingPage(props) {
       />
       <div className='govuk-width-container'>
         <MainWrapper>
-          <span className='govuk-caption-xl'>{operatorName}</span>
-          <h1 className='govuk-heading-xl'>
-            Extend your Child Benefit payments while a young person stays in education
-          </h1>
-          <p className='govuk-body'>Use this form if they will be studying:</p>
+          {/* <span className='govuk-caption-xl'>{operatorName}</span> */}
+          <h1 className='govuk-heading-l'>{t('EDUCATION_START_H1')}</h1>
+          <p className='govuk-body'>{t('EDUCATION_START_P1')}</p>
           <ul className='govuk-list govuk-list--bullet'>
-            <li>GCSEs or A levels</li>
-            <li>BTECs, level 1, 2 or 3</li>
-            <li>T levels</li>
-            <li>NVQs, level 1, 2 or 3</li>
-            <li>International Baccalaureate</li>
-            <li>
-              Scottish Highers — up to and including level 7 (apart from HNC level 7 or the
-              Certificate of Higher Education level 7, because these are advanced courses)
-            </li>
+            <li>{t('COURCES_1')}</li>
+            <li>{t('COURCES_2')}</li>
+            <li>{t('COURCES_3')}</li>
+            <li>{t('COURCES_4')}</li>
+            <li>{t('COURCES_5')}</li>
+            <li>{t('COURCES_6')}</li>
+            <li>{t('COURCES_7')}</li>
           </ul>
-          <p className='govuk-body'>
-            <a
-              className='govuk-link'
-              href='https://www.gov.uk/government/publications/child-benefit-child-continuing-in-approved-education-or-training-ch297'
-              target='_blank'
-              rel='noreferrer noopener'
-            >
-              If they&#39;ll be studying something else, you can still extend your payments
-            </a>{' '}
-            but you need to use a different form.
-          </p>
-          <p className='govuk-body'>The young person will need to be:</p>
+          <p className='govuk-body'>{t('EDUCATION_START_P2')}</p>
           <ul className='govuk-list govuk-list--bullet'>
-            <li>GCSEs or A levels</li>
-            <li>BTECs, level 1, 2 or 3</li>
-            <li>T levels</li>
-            <li>NVQs, level 1, 2 or 3</li>
-            <li>International Baccalaureate</li>
-            <li>
-              Scottish Highers — up to and including level 7 (apart from HNC level 7 or the
-              Certificate of Higher Education level 7, because these are advanced courses)
-            </li>
+            <li>{t('ELIGIBILITY_1')}</li>
+            <li>{t('ELIGIBILITY_2')}</li>
+            <li>{t('ELIGIBILITY_3')}</li>
+            <li>{t('ELIGIBILITY_4')}</li>
           </ul>
+          <p className='govuk-body'>{t('EDUCATION_START_P3')}</p>
+          <p className='govuk-body'>{t('EDUCATION_START_P4')}</p>
+
           <Button id='continueToOptin' onClick={onContinue} variant='start'>
             {t('CONTINUE')}
           </Button>
