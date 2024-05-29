@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, Suspense } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LandingPage from './LandingPage';
 import ClaimPage from './ClaimPage';

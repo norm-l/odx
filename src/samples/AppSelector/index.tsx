@@ -12,7 +12,6 @@ import AreYouSureToContinueWithoutSignIn from '../StaticPages/AreYouSureToContin
 import DoYouWantToSignIn from '../StaticPages/DoYouWantToSignIn/doYouWantToSignIn';
 import CheckOnClaim from '../StaticPages/CheckOnClaim';
 import RecentlyClaimedChildBenefit from '../StaticPages/ChooseClaimService';
-import AppHeader from '../HighIncomeCase/reuseables/AppHeader'
 
 const AppSelector = () => {
 
