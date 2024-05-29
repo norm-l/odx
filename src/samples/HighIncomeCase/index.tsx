@@ -19,10 +19,11 @@ const HighIncomeCase: FunctionComponent<any> = () => {
 
   const { t, i18n} = useTranslation('hicbc');
   useEffect( () => {
-    i18n.loadNamespaces(['hicbc'], (err) => {
-      setPageTitle()
-      setHicbcTranslationLoaded(true)}
-      )
+    i18n.loadNamespaces(['hicbc'], (err) => { 
+      if(!err){    
+        setPageTitle()
+      }      
+      setHicbcTranslationLoaded(true)})
     }  
   , []);
 
