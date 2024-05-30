@@ -199,8 +199,8 @@
   "YOURE_ABOUT_TO_BE_SIGNED_OUT": "Rydych ar fin cael eich allgofnodi",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "Er eich diogelwch, byddwn yn eich allgofnodi cyn pen",
   "2_MINUTES": "2 funud",
-  "1_MINUTE": "1 munud",
-  "SECONDS": "eiliadau",
+  "1_MINUTE": "1 minute",
+  "SECONDS": "seconds",
   "FOR_YOUR_SECURITY": "Er eich diogelwch",
   "WE_WILL_DELETE_YOUR_CLAIM": "Byddwn yn dileu’ch hawliad ymhen",
   "DELETE_YOUR_CLAIM": "Dileu eich hawliad",
@@ -299,5 +299,4 @@
   "ELIGIBILITY_4": "on a course provided by a school or college",
   "EDUCATION_START_P3": "The young person must be accepted onto their course before they turn 19.",
   "EDUCATION_START_P4": "You may need to provide us with the expected registration, start and end dates for the course or training."
-
 }
