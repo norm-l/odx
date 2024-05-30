@@ -28,7 +28,6 @@ export default function TimeoutPopup(props) {
     countdownStart: false,
     timeRemaining: 60,
     screenReaderCountdown: ''
-    // alertScreenReaderCountdown: false
   };
 
   const reducer = (state, action) => {
@@ -51,7 +50,6 @@ export default function TimeoutPopup(props) {
       // Reset countdown and related states if show is false
       dispatch({ type: 'UPDATE_TIME_REMAINING', payload: 60 });
       dispatch({ type: 'UPDATE_SCREEN_READER_COUNTDOWN', payload: '' });
-      dispatch({ type: 'UPDATE_ALERT_SCREEN_READER_COUNTDOWN', payload: false });
       dispatch({ type: 'START_COUNTDOWN', payload: false });
     } else {
       // Start the countdown only if show is true
