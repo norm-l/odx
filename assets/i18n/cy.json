@@ -111,9 +111,9 @@
   "EXCLUSIVEOPTION_OR": "neu",
 
   "THE_DATE_YOU_BECAME_SELF_EMPLOYED": "The date you became self-employed",
-  "THE_DATE_YOU_GET_INCOME_FROM_LAND_PROPERTY": "The date you recieved or expect to recieve income from land and property in the UK",
-  "THE_DATE_YOU_RECEIVE_FOREIGN_INCOME": "The date you first recieved or expect to recieve foreign income",
-  "THE_DATE_YOU_RECEIVE_SAVINGS_INVESTMENTS_DIVIDENDS": "The date you first recieved income from savings, investments or dividends",
+  "THE_DATE_YOU_RECEIVE_INCOME_FROM_LAND_PROPERTY": "The date you received or expect to receive income from land and property in the UK",
+  "THE_DATE_YOU_RECEIVE_FOREIGN_INCOME": "The date you first received or expect to receive foreign income",
+  "THE_DATE_YOU_RECEIVE_SAVINGS_INVESTMENTS_DIVIDENDS": "The date you first received income from savings, investments or dividends",
   "THE_DATE_YOU_BECAME_LIABLE_FOR_HICBC": "The date you became liable for HICBC",
   "THE_DATE_YOU_RECEIVE_INCOME_TO_PAY_CAPITAL_GAIN_TAX": "The date that you first received income that you have to pay Capital Gain Tax on",
   "THE_DATE_YOU_RECEIVE_OTHER_UNTAXED_INCOME": "The date you first received any other untaxed income"
