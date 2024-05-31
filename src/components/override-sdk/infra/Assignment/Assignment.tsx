@@ -178,6 +178,28 @@ export default function Assignment(props) {
     }
   }, [children]);
 
+  const pConn = getPConnect();
+  const actions = pConn.getActionsApi();
+  const containerItemID = pConn.getContextName();
+
+  function navigateToCYA(event, stepId, container) {
+    event.preventDefault();
+    // eslint-disable-next-line no-console
+    console.log('TO CYA', stepId);
+    const navigateToStepPromise = actions.navigateToStep(stepId, container);
+
+    navigateToStepPromise
+      .then(() => {
+        //  navigate to step success handling
+        console.log('navigation to CYA successful'); // eslint-disable-line
+      })
+      .catch(error => {
+        // navigate to step failure handling
+        // eslint-disable-next-line no-console
+        console.log('CYA Navigation failed', error);
+      });
+  }
+
   function sortErrorMessages(errorMsg) {
     const formElements = document.forms[0].elements;
     const sortedErrors = [];
@@ -471,6 +493,16 @@ export default function Assignment(props) {
         <ShutterServicePage />
       ) : (
         <div id='Assignment'>
+          <a
+            className='govuk-back-link'
+            href='#main-content'
+            onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
+              navigateToCYA(event, 'SubProcessSF3', containerItemID)
+            }
+          >
+            Back to CYA
+          </a>
+          <br />
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' ? (
               <Button
