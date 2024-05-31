@@ -23,7 +23,7 @@ export default function UserPortal(props) {
           </div>
         </div>
         <div className='govuk-grid-row'>
-          <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body'>
+        <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>
 
             {/* SA Registration */}
             <div className='govuk-grid-column-two-thirds'>
