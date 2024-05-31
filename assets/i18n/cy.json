@@ -116,5 +116,21 @@
   "THE_DATE_YOU_RECEIVE_SAVINGS_INVESTMENTS_DIVIDENDS": "The date you first received income from savings, investments or dividends",
   "THE_DATE_YOU_BECAME_LIABLE_FOR_HICBC": "The date you became liable for HICBC",
   "THE_DATE_YOU_RECEIVE_INCOME_TO_PAY_CAPITAL_GAIN_TAX": "The date that you first received income that you have to pay Capital Gain Tax on",
-  "THE_DATE_YOU_RECEIVE_OTHER_UNTAXED_INCOME": "The date you first received any other untaxed income"
+  "THE_DATE_YOU_RECEIVE_OTHER_UNTAXED_INCOME": "The date you first received any other untaxed income",
+
+  "WHAT_HAPPENS_NEXT": "What happens next",
+  "WE_HAVE_SENT_YOUR_APPLICATION": "We have sent you a confirmation if you provided an email address or phone number. You will also receive a confirmation letter by post.",
+  "YOU_WILL_SEE_DETAILS_IN_24_HOURS": "You will see details about your Self Assessment in your HMRC online services account within 24 hours. This includes your Unique Taxpayer Reference (UTR), which you need before you can fill out and send a return.",
+  "WANT_TO_SEE_MORE_INFO": "If you want to see more information about your Self Assessment, you can also",
+  "USE_THE_HMRC_APP": "use the HMRC app",
+  "GO_TO_YOUR_TAX_ACCOUNT": "Go to your tax account",
+  "YOUR_HMRC_ONLINE_SERVICES": "Your HMRC online services",
+  "SEE_YOUR": "see your",
+  "VIEW_AN": "view an",
+  "UPDATE": "update ",
+  "NATIONAL_INSURANCE_CONTRIBUTIONS": "National Insurance contributions",
+  "ESTIMATION_OF_YOUR_STATE_PENSION": "estimation of your state pension",
+  "YOUR_ADDRESS": "your address",
+  "WHAT_DID_YOU_THINK_OF_THIS_SERVICE": "What did you think of this service?"
+
 }

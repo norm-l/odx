@@ -68,7 +68,6 @@ function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
 export default function SaReg() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
-  // const [showStartPage, setShowStartPage] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(false);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
@@ -89,7 +88,6 @@ export default function SaReg() {
   const featureType = 'Service';
 
   function resetAppDisplay() {
-    // setShowStartPage(false);
     setShowUserPortal(false);
     setShowResolutionScreen(false);
     setShowPega(false);
@@ -105,19 +103,14 @@ export default function SaReg() {
     setShowUserPortal(true);
   }
 
-  // function displayStartPage() {
-  //   resetAppDisplay();
-  //   setShowStartPage(true);
-  // }
-
-  function displayServiceNotAvailable() {
+   function displayServiceNotAvailable() {
     setServiceNotAvailable(true);
   }
 
-  // function displayResolutionScreen() {
-  //   resetAppDisplay();
-  //   setShowResolutionScreen(true);
-  // }
+  function displayResolutionScreen() {
+    resetAppDisplay();
+    setShowResolutionScreen(true);
+  }
 
   useEffect(() => {
     setPageTitle();
@@ -159,11 +152,13 @@ export default function SaReg() {
   }
   function assignmentFinished() {
     getRegistrationCaseID();
-    // PCore.getContainerUtils().closeContainerItem(
-    //   PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-    //   { skipDirtyCheck: true }
-    // );
-    // displayResolutionScreen();
+    if (!bShowResolutionScreen) {
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    }
+    displayResolutionScreen();
   }
 
   function closeContainer() {
@@ -212,7 +207,6 @@ export default function SaReg() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        // setShowStartPage(false);
         setShowUserPortal(false);
         setShowPega(false);
         const containername = PCore.getContainerUtils().getActiveContainerItemName(
@@ -610,7 +604,7 @@ export default function SaReg() {
       />
       <div className='govuk-width-container'>
         {renderContent()}
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={false} />}
+        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
       </div>
 
       <LogoutPopup
