@@ -18,12 +18,14 @@ import {
 } from '@pega/auth/lib/sdk-auth-manager';
 
 declare const myLoadMashup: any;
+declare const PCore: any;
 
 export function establishPCoreSubscriptions({
   setShowPega,
   setShowResolutionPage,
   setCaseId,
-  setCaseStatus
+  setCaseStatus,
+  // setOperatorName
 }) {
   /* ********************************************
    * Registers close active container on end of assignment processing
@@ -170,7 +172,7 @@ export function RootComponent(props) {
  * is ready to be rendered
  * @param inRenderObj the initial, top-level PConnect object to render
  */
-function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: AppContextValues) {
+function initialRender(inRenderObj, _AppContextValues: AppContextValues) {
   // loadMashup does its own thing so we don't need to do much/anything here
   // // modified from react_root.js render
   const {
@@ -206,17 +208,22 @@ function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: Ap
       {...props}
       portalTarget={portalTarget}
       styleSheetTarget={styleSheetTarget}
-      contextExtensionValues={{ setAssignmentPConnect }}
+      contextExtensionValues={{ setAssignmentPConnect: () => {} }}
     />
   );
 
   // Initial render of component passed in (which should be a RootContainer)
-  render(
-    <AppContext.Provider value={_AppContextValues}>
-      <React.Fragment>{theComponent}</React.Fragment>
-    </AppContext.Provider>,
-    target
-  );
+  try {
+    render(
+      <AppContext.Provider value={_AppContextValues}>
+        <React.Fragment>{theComponent}</React.Fragment>
+      </AppContext.Provider>,
+      target
+    );
+  } catch {
+    // eslint-disable-next-line no-console
+    console.log('Error');
+  }
 
   /* const root = render(target); // createRoot(container!) if you use TypeScript
     root.render(<>{theComponent}</>); */
@@ -229,7 +236,7 @@ function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: Ap
  * kick off the application's portal that we're trying to serve up
  */
 export function startMashup(
-  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
+  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName },
   _AppContextValues: AppContextValues
 ) {
   // NOTE: When loadMashup is complete, this will be called.
@@ -237,6 +244,9 @@ export function startMashup(
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
     establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus });
+    const name = PCore.getEnvironmentInfo().getOperatorName();
+    setOperatorName(name);
+
     // PM!! setShowAppName(true);
 
     // Fetches timeout length config
@@ -265,7 +275,7 @@ export function startMashup(
       PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
       '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
     ]);
-    initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
+    initialRender(renderObj, _AppContextValues);
 
     // PM!! operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
 
@@ -343,8 +353,8 @@ export const useStartMashup = (
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
   const [caseId, setCaseId] = useState('');
+  const [operatorName, setOperatorName] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
-  const [assignmentPConn, setAssignmentPConnect] = useState(null);
 
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
@@ -380,7 +390,7 @@ export const useStartMashup = (
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup(
-        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
+        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName },
         _AppContextValues
       );
     });
@@ -394,10 +404,11 @@ export const useStartMashup = (
     //  component is unmounted (in function returned from this effect)
 
     return function cleanupSubscriptions() {
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
-        'cancelAssignment'
-      );
+      if (typeof PCore !== 'undefined')
+        PCore?.getPubSubUtils().unsubscribe(
+          PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
+          'cancelAssignment'
+        );
     };
     // PM!!
     /*
@@ -423,5 +434,5 @@ export const useStartMashup = (
     }; */
   }, []);
 
-  return { showPega, setShowPega, showResolutionPage, setShowResolutionPage, caseId, caseStatus, assignmentPConn };
+  return { showPega, setShowPega, showResolutionPage, setShowResolutionPage, caseId, caseStatus, operatorName };
 };
