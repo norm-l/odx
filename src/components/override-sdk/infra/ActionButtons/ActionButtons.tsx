@@ -4,7 +4,7 @@ import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 
 export default function ActionButtons(props) {
-  const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC } = props;
+  const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth } = props;
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   const { t } = useTranslation();
@@ -26,9 +26,7 @@ export default function ActionButtons(props) {
               key={mButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {!isUnAuth && !isHICBC && mButton.name === 'Continue'
-                ? t('SAVE_AND_CONTINUE')
-                : localizedVal(mButton.name, localeCategory)}
+              {localizedVal(mButton.name, localeCategory)}
             </Button>
           ) : null
         )}
@@ -61,7 +59,6 @@ ActionButtons.propTypes = {
   arSecondaryButtons: PropTypes.array,
   onButtonPress: PropTypes.func,
   isUnAuth: PropTypes.bool,
-  isHICBC: PropTypes.bool
   // buildName: PropTypes.string
 };
 
