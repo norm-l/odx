@@ -497,7 +497,7 @@ export default function Assignment(props) {
             className='govuk-back-link'
             href='#main-content'
             onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-              navigateToCYA(event, 'SubProcessSF3', containerItemID)
+              navigateToCYA(event, 'SubProcessSF3SubProcessSF4_AssignmentSF13', containerItemID)
             }
           >
             Back to CYA
