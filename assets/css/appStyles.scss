@@ -74,9 +74,9 @@ div.MuiGrid-root.MuiGrid-item .govuk-summary-list:last-of-type ~ br {
   border-radius: 50%;
 }
 
-// ul.govuk-list.govuk-list--bullet li > span:nth-child(2) {
-//   margin-left: 0 !important;
-// }
+ul.govuk-list.govuk-list--bullet li > span:nth-child(2) {
+  margin-left: 0 !important;
+}
 
 @keyframes spin {
   0% {
