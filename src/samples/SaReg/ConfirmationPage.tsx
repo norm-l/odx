@@ -62,7 +62,7 @@ const ConfirmationPage = ({ caseStatus }) => {
             </a></li>
           <li>{t('VIEW_AN')} {' '}
             <a href='' target='_blank' rel='noreferrer noopener'>
-              {t('NATIONAL_INSURANCE_CONTRIBUTIONS')} {t('OPENS_IN_NEW_TAB')}
+              {t('ESTIMATION_OF_YOUR_STATE_PENSION')} {t('OPENS_IN_NEW_TAB')}
             </a></li>
           <li>{t('UPDATE')} {' '} 
             <a href='' target='_blank' rel='noreferrer noopener'>
