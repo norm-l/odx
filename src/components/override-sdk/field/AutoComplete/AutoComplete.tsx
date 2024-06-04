@@ -196,7 +196,11 @@ export default function AutoComplete(props: AutoCompleteProps) {
       e.preventDefault();
     }
   };
-
+  useEffect(() => {
+    if (selectedOption[0]?.value) {
+      PCore.getPubSubUtils().publish('rerenderCYA', {});
+    }
+  });
   useEffect(() => {
     const element = document.getElementById(formattedPropertyName) as HTMLInputElement;
     const elementUl = document.getElementById(
@@ -225,6 +229,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const selectedOption = options?.filter(item => {
     return item?.key === value;
   });
+
   const inprogressStatus = checkStatus();
 
   if (

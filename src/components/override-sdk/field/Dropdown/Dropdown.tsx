@@ -49,6 +49,17 @@ export default function Dropdown(props) {
   }, [validatemessage]);
 
   useEffect(() => {
+    const dropdownvalue = thePConn.getLocalizedValue(
+      displayValue,
+      localePath,
+      thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+    );
+    if (dropdownvalue) {
+      PCore.getPubSubUtils().publish('rerenderCYA', {});
+    }
+  });
+
+  useEffect(() => {
     function fetchData() {
       try {
         const optionsList = [...Utils.getOptionList(props, getPConnect().getDataObject())];

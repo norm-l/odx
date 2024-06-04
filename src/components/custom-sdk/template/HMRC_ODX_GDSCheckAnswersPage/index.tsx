@@ -160,7 +160,14 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         }
       };
 
-      checkChildren();
+      //  checkChildren();
+      PCore.getPubSubUtils().subscribe(
+        'rerenderCYA',
+        () => {
+          checkChildren();
+        },
+        'rerenderCYA'
+      );
     }
   }, [dfChildren]);
 
