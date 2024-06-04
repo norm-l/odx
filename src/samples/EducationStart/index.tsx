@@ -225,7 +225,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
       <>
         <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
         <div className='govuk-width-container'>
-          <MainWrapper showPageNotWorkingLink={false} pageNotWorkingURL={pageNotWorkingURL}>
+          <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
             <p className='govuk-body'>Try again later.</p>
             <p className='govuk-body'>
@@ -288,7 +288,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
                 <div id='pega-root'></div>
               </div>
               {showLandingPage && (
-                <MainWrapper  showPageNotWorkingLink={false} pageNotWorkingURL={pageNotWorkingURL}>
+                <MainWrapper showPageNotWorkingLink={false} pageNotWorkingURL={pageNotWorkingURL}>
                   <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
 
                   {serviceNotAvailable && <ServiceNotAvailable />}
