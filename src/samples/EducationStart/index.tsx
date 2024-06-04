@@ -25,7 +25,7 @@ import { useHistory } from 'react-router-dom';
 const EducationStartCase: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [shuttered, setShuttered] = useState(null);
-  
+
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
@@ -216,6 +216,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
+  const pageNotWorkingURL = `${hmrcURL}contact/report-technical-problem?newTab=true&service=claim-child-benefit&referrerUrl=${window.location}`;
   if (shuttered === null) {
     return null;
   } else if (shuttered) {
@@ -224,7 +225,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
       <>
         <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
         <div className='govuk-width-container'>
-          <MainWrapper showPageNotWorkingLink={false}>
+          <MainWrapper pageNotWorkingURL={pageNotWorkingURL}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
             <p className='govuk-body'>Try again later.</p>
             <p className='govuk-body'>
@@ -287,7 +288,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
                 <div id='pega-root'></div>
               </div>
               {showLandingPage && (
-                <MainWrapper showPageNotWorkingLink={showLandingPage}>
+                <MainWrapper pageNotWorkingURL={pageNotWorkingURL}>
                   <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
 
                   {serviceNotAvailable && <ServiceNotAvailable />}
