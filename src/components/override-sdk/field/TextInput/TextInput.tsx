@@ -3,7 +3,6 @@ import GDSTextInput from '../../../BaseComponents/TextInput/TextInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
-import { isHICBCJourney } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 
 export default function TextInput(props) {
@@ -26,13 +25,8 @@ export default function TextInput(props) {
   
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
-  const isHICBC = isHICBCJourney();
-
-  if (isHICBC) {
-    registerNonEditableField();
-  } else {
-    registerNonEditableField(!!disabled);
-  }
+  
+  registerNonEditableField(!!disabled);
 
   useEffect(() => {
     setErrorMessage(localizedVal(validatemessage));

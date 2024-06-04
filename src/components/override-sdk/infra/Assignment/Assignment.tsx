@@ -146,7 +146,9 @@ export default function Assignment(props) {
   useEffect(() => {
     const headerFetch = setTimeout(() => {
       setHeader(localizedVal(containerName, '', headerLocaleLocation));
-    }, 50);
+      if (!header || header === '') setHeader(localizedVal(containerName, '', PCore.getLocaleUtils().GENERIC_BUNDLE_KEY));
+      if (!header || header === '') setHeader(containerName);
+    }, 200);
 
     return () => clearTimeout(headerFetch);
   }, [headerLocaleLocation, containerName]);

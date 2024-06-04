@@ -6,7 +6,6 @@ import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreCon
 import { isEmptyObject } from '@pega/react-sdk-components/lib/components/helpers/common-utils';
 import Button from '../../../BaseComponents/Button/Button';
 import setPageTitle from '../../../helpers/setPageTitleHelpers';
-import { isHICBCJourney } from '../../../helpers/utils';
 
 //
 // WARNING:  It is not expected that this file should be modified.  It is part of infrastructure code that works with
@@ -113,7 +112,6 @@ export default function ViewContainer(props) {
   // debugging/investigation help
   // console.log(`ViewContainer props: ${JSON.stringify(props)}`);
   const theBuildName = buildName();
-  const isHICBC = isHICBCJourney();
   const { CREATE_DETAILS_VIEW_NAME } = PCore.getConstants();
   if (routingInfo) {
     const { accessedOrder, items } = routingInfo;
@@ -147,7 +145,7 @@ export default function ViewContainer(props) {
             {!PCore.getStore()
               .getState()
               .data[routingInfo.accessedOrder[0]].caseInfo.status.startsWith('Open') &&
-              !isHICBC && (
+              (
                 <Button
                   variant='backlink'
                   onClick={e => {
