@@ -219,8 +219,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
       }
     });
   }, []);
-
   const pageNotWorkingURL = `${hmrcURL}contact/report-technical-problem?newTab=true&service=claim-child-benefit&referrerUrl=${window.location}`;
+
   if (shuttered === null) {
     return null;
   } else if (shuttered) {
@@ -268,7 +268,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
             .
           </p>
         </TimeoutPopup>
-
         <AppHeader
           handleSignout={handleSignout}
           appname={t('EDUCATION_START')}
@@ -282,7 +281,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
           }
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
         />
-
         <div className='govuk-width-container'>
           {shutterServicePage ? (
             <ShutterServicePage />
@@ -291,7 +289,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
               <div id='pega-part-of-page'>
                 <div id='pega-root'></div>
               </div>
-              <MainWrapper>
+              <MainWrapper pageNotWorkingURL={pageNotWorkingURL}>
                 {showLandingPage && (
                   <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
                 )}
@@ -323,6 +321,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
         </LogoutPopup>
         <AppFooter />
+        as
       </AppContext.Provider>
     );
   }
