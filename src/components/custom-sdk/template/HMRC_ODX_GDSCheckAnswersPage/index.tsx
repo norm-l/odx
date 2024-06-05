@@ -140,6 +140,12 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   }
 
   useEffect(() => {
+    window.addEventListener('storage', () => {
+      // When local storage changes, dump the list to// the console.
+      console.log('checkinggg=====', JSON.parse(window.localStorage.getItem('isAuto')));
+    });
+  }, []);
+  useEffect(() => {
     if (dfChildrenContainerRef.current) {
       const checkChildren = () => {
         const container = dfChildrenContainerRef.current;
@@ -159,15 +165,26 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           requestAnimationFrame(checkChildren);
         }
       };
+      const isAuto = window.sessionStorage.getItem('isAuto');
+      console.log('isAuto', isAuto);
 
-      //  checkChildren();
-      PCore.getPubSubUtils().subscribe(
-        'rerenderCYA',
-        () => {
+      //  setTimeout(() => {
+      if (isAuto === 'true') {
+        PCore.getPubSubUtils().subscribe(
+          'rerenderCYA',
+          () => {
+            window.sessionStorage.setItem('isAuto', 'false');
+            checkChildren();
+            PCore?.getPubSubUtils().unsubscribe('rerenderCYA');
+          },
+          'rerenderCYA'
+        );
+      } else {
+        setTimeout(() => {
           checkChildren();
-        },
-        'rerenderCYA'
-      );
+        }, 2000);
+      }
+      //   }, 1000);
     }
   }, [dfChildren]);
 

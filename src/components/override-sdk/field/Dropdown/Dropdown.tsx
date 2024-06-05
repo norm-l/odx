@@ -55,9 +55,10 @@ export default function Dropdown(props) {
       thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
     );
     if (dropdownvalue) {
+      window.sessionStorage.setItem('isAuto', 'true');
       PCore.getPubSubUtils().publish('rerenderCYA', {});
     }
-  });
+  }, [displayValue]);
 
   useEffect(() => {
     function fetchData() {
