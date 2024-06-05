@@ -59,6 +59,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   const containerItemID = pConn.getContextName();
 
   function navigateToStep(event, stepId) {
+    // TODO - Update redux with the current CYA view value and the stepID of the view we are navigating to
     event.preventDefault();
     // eslint-disable-next-line no-console
     console.log('navigation', stepId);

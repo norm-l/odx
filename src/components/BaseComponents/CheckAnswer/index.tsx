@@ -33,6 +33,8 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
     }
   }, []);
   const handleOnClick = () => {
+    // TODO - Update redux with the current CYA view value and the stepID of the view we are navigating to
+
     const navigateToStepPromise = actions.navigateToStep(stepId, containerItemID);
 
     navigateToStepPromise

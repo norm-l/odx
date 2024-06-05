@@ -180,13 +180,13 @@ export default function Assignment(props) {
 
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
-  const containerItemID = pConn.getContextName();
+  // const containerItemID = pConn.getContextName();
 
-  function navigateToCYA(event, stepId, container) {
+  function navigateToCYA(event, stepId) {
     event.preventDefault();
     // eslint-disable-next-line no-console
     console.log('TO CYA', stepId);
-    const navigateToStepPromise = actions.navigateToStep(stepId, container);
+    const navigateToStepPromise = actions.navigateToStep(stepId, containerID);
 
     navigateToStepPromise
       .then(() => {
@@ -493,16 +493,6 @@ export default function Assignment(props) {
         <ShutterServicePage />
       ) : (
         <div id='Assignment'>
-          <a
-            className='govuk-back-link'
-            href='#main-content'
-            onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-              navigateToCYA(event, 'SubProcessSF3SubProcessSF4_AssignmentSF13', containerItemID)
-            }
-          >
-            Back to CYA
-          </a>
-          <br />
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' ? (
               <Button
@@ -516,8 +506,22 @@ export default function Assignment(props) {
               ></Button>
             ) : null
           )}
+          {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 ? (
+            <a
+              className='govuk-back-link'
+              href='#main-content'
+              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
+                navigateToCYA(event, 'SubProcessSF4_AssignmentSF13')
+              }
+            >
+              Back to CYA
+            </a>
+          ) : null}
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
+
+            // TODO add logic for testing CYA back link requirement
+            // Check the Redux store for CYA ID and the ID of the view which served as the entry point.
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
               appBacklinkProps.appBacklinkAction && (
                 <Button
