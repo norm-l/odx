@@ -202,7 +202,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   // setDisplayValue(selectedOption[0]?.value);
   useEffect(() => {
     if (selectedOption[0]?.value) {
-      window.sessionStorage.setItem('isAuto', 'true');
+      window.sessionStorage.setItem('hasAutocompleteLoaded', 'true');
       PCore.getPubSubUtils().publish('rerenderCYA', {});
     }
   }, [selectedOption[0]?.value]);
