@@ -199,7 +199,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const selectedOption = options?.filter(item => {
     return item?.key === value;
   });
-  // setDisplayValue(selectedOption[0]?.value);
+
   useEffect(() => {
     if (selectedOption[0]?.value) {
       window.sessionStorage.setItem('hasAutocompleteLoaded', 'true');
