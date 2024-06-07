@@ -260,12 +260,12 @@
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "rydych am optio i mewn neu optio allan cyn pen y 3 mis nesaf",
   "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "Gall y gwasanaeth hwn dim ond cael ei ddefnyddio gan y person sy’n hawlio Budd-dal Plant",
   
-  "HICBC_LANDINGPAGE_BEFORE_6_APRIL_OPTION_LABEL": "Before 6 April 2024",
-  "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "On or after 6 April 2024",
-  "HICBC_LANDINGPAGE_QUESTION_LABEL": "When do you want to opt-in to Child Benefit payments?",
-  "HICBC_LANDINGPAGE_NO_OPTION_SELECTED_ERROR_MESSAGE": "Select a date to opt-in",
+  "HICBC_LANDINGPAGE_BEFORE_6_APRIL_OPTION_LABEL": "Cyn 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "Ar neu ar ôl 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_QUESTION_LABEL": "Pryd ydych chi am optio i mewn i daliadau Budd-dal Plant?",
+  "HICBC_LANDINGPAGE_NO_OPTION_SELECTED_ERROR_MESSAGE": "Dewiswch ddyddiad i optio i mewn",
 
-  "BACK_TO_START_PAGE": "Back to start page",
+  "BACK_TO_START_PAGE": "Yn ôl i’r dudalen cychwyn",
 
   "SELECT_CHILD_BENEFIT_SERVICE": "Dewiswch pa wasanaeth Budd-dal Plant yr hoffech ei ddefnyddio",
   "AUTOMATICALLY_CLOSE_IN": "Bydd y dudalen hon yn cau’n awtomatig mewn",
