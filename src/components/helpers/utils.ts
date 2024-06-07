@@ -23,15 +23,6 @@ export const shouldRemoveFormTagForReadOnly = (pageName: string) => {
   return arrContainerNamesFormNotRequired.includes(pageName);
 };
 
-export const isUnAuthJourney = () => {
-  const containername = PCore.getContainerUtils().getActiveContainerItemName(
-    `${PCore.getConstants().APP.APP}/primary`
-  );
-  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-  const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
-  return caseType === 'Unauth' || window.location.href.includes('/ua');
-};
-
 export const getServiceShutteredStatus = async (): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
@@ -41,7 +32,7 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
+    const featureID = 'SaReg';
     const featureType = 'Service';
 
     const parameters = new URLSearchParams(

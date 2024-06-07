@@ -3,13 +3,11 @@ import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 // import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks'
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
-import { DefaultFormContext, ErrorMsgContext } from '../../../helpers/HMRCAppContext';
+import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import { checkErrorMsgs, removeRedundantString } from '../../../helpers/utils';
 import { t } from 'i18next';
 
 export default function CheckboxComponent(props) {
-  const { OverrideLabelValue } = useContext(DefaultFormContext);
-
   const { getPConnect, inputProps, validatemessage, hintText, readOnly, value } = props;
 
   // let label = props.label;
@@ -40,7 +38,8 @@ export default function CheckboxComponent(props) {
     ? getPConnect().options.pageReference.split('.').pop()
     : '';
   const propertyName = getPConnect().getStateProps().value.split('.').pop();
-  const name = `${propertyContext}-${propertyName}`;
+  /* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */
+  const name = getPConnect().viewName.toLowerCase() === 'declaration' ? `${propertyName}` : `${propertyContext}-${propertyName}`;
 
   useEffect(() => {
     const found = checkErrorMsgs(errorMsgs, name);
@@ -70,7 +69,7 @@ export default function CheckboxComponent(props) {
       )}
 
       {/* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */}
-      {OverrideLabelValue.trim().toLowerCase() === 'declaration' ? (
+      {getPConnect().viewName.toLowerCase() === 'declaration' ? (
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
