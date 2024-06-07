@@ -138,9 +138,13 @@ const EducationStartCase: FunctionComponent<any> = () => {
   function removeHmrcLink() {
     const hmrcLink = document.querySelector(
       '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
-    );
-    if (hmrcLink) {
-      hmrcLink.remove();
+    );    
+    const breakTag = document.querySelectorAll('br');
+
+    if (hmrcLink || breakTag.length) {
+      hmrcLink?.remove();
+      breakTag[0]?.remove();
+      breakTag[1]?.remove();
     } else {
       requestAnimationFrame(removeHmrcLink);
     }
