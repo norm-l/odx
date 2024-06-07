@@ -34,7 +34,7 @@ export default function LandingPage(props) {
       <p className='govuk-body'>{t('EDUCATION_START_P4')}</p>
 
       <Button id='continueToOptin' onClick={onContinue} variant='start'>
-        {t('CONTINUE')}
+        {t('START_NOW')}
       </Button>
       <br />
     </>
