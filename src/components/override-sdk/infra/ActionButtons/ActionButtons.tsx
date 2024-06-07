@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
 
 export default function ActionButtons(props) {
-  const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth } = props;
+  const { arMainButtons, arSecondaryButtons, onButtonPress } = props;
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -30,7 +30,7 @@ export default function ActionButtons(props) {
         )}
       </div>
 
-      {!isUnAuth &&
+      {
         arSecondaryButtons.map(sButton =>
           sButton.actionID !== 'back' &&
           sButton.name !== 'Hidden' &&
@@ -55,8 +55,7 @@ export default function ActionButtons(props) {
 ActionButtons.propTypes = {
   arMainButtons: PropTypes.array,
   arSecondaryButtons: PropTypes.array,
-  onButtonPress: PropTypes.func,
-  isUnAuth: PropTypes.bool,
+  onButtonPress: PropTypes.func
   // buildName: PropTypes.string
 };
 
