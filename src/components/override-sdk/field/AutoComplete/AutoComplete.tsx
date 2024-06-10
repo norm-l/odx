@@ -103,6 +103,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
     return () => {
       document.body.removeChild(script);
       sessionStorage.setItem('isAutocompleteRendered', 'false');
+      window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
     };
   }, []);
 

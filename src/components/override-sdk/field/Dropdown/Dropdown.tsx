@@ -49,6 +49,11 @@ export default function Dropdown(props) {
   }, [validatemessage]);
 
   useEffect(() => {
+    return () => {
+      window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
+    };
+  }, []);
+  useEffect(() => {
     function fetchData() {
       try {
         const optionsList = [...Utils.getOptionList(props, getPConnect().getDataObject())];
