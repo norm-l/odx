@@ -513,7 +513,11 @@ export default function ChildBenefitsClaim() {
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
   }
 
+  useEffect(() => {
+    window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
+  });
   // One time (initialization) subscriptions and related unsubscribe
+
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
       const sdkConfigAuth = sdkConfig.authConfig;
