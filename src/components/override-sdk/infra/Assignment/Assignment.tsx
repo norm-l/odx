@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import {
   getServiceShutteredStatus,
   scrollToTop,
@@ -41,7 +40,6 @@ export default function Assignment(props) {
   const thePConn = getPConnect();
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
   const [actionButtons, setActionButtons] = useState<any>({});
-  const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
 
@@ -139,10 +137,7 @@ export default function Assignment(props) {
   // To update the title when we toggle the language
   useEffect(() => {
     setTimeout(() => {
-      let tryTranslate;
-      if (containerName.toLowerCase() === 'Register for Self Assessment') {
-        tryTranslate = t('REGISTER_FOR_SELF_ASSESSMENT');
-      }
+      const tryTranslate = localizedVal(containerName, '', PCore.getLocaleUtils().GENERIC_BUNDLE_KEY);
       // Set our translated header!
       setHeader(tryTranslate);
     }, 300);

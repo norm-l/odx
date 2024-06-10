@@ -8,8 +8,7 @@ import {
 } from '../../../helpers/formatters/DateErrorFormatter';
 import { GBdate } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
-
-declare const global;
+import dayjs from 'dayjs';
 
 export default function Date(props) {
   const {
@@ -117,7 +116,7 @@ export default function Date(props) {
   }
 
   if (readOnly) {
-    return <ReadOnlyDisplay label={label} value={new global.Date(value).toLocaleDateString()} />;
+    return <ReadOnlyDisplay label={label} value={dayjs(value).format('DD MM YYYY')} />;
   }
 
   const extraProps = { testProps: { 'data-test-id': testId } };
