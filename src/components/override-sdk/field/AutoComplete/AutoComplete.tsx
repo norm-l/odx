@@ -191,10 +191,21 @@ export default function AutoComplete(props: AutoCompleteProps) {
       e.preventDefault();
     }
   };
+  const selectedOption = options?.filter(item => {
+    return item?.key === value;
+  });
 
   useEffect(() => {
-    const element = document.getElementById(name) as HTMLInputElement;
-    const elementUl = document.getElementById(`${name}__listbox`) as HTMLInputElement;
+    if (selectedOption[0]?.value) {
+      window.sessionStorage.setItem('hasAutocompleteLoaded', 'true');
+      // PCore.getPubSubUtils().publish('rerenderCYA', {});
+    }
+  }, [selectedOption[0]?.value]);
+  useEffect(() => {
+    const element = document.getElementById(formattedPropertyName) as HTMLInputElement;
+    const elementUl = document.getElementById(
+      `${formattedPropertyName}__listbox`
+    ) as HTMLInputElement;
 
     if (validatemessage) {
       element?.classList.add('govuk-input--error');
@@ -217,9 +228,6 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }
 
   if (readOnly) {
-    const selectedOption = options?.filter(item => {
-      return item?.key === value;
-    });
     return (
       selectedOption?.length > 0 && (
         <ReadOnlyDisplay label={label} value={selectedOption[0]?.value} name={name} />

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
+import { t } from 'i18next';
 
 export default function ActionButtons(props) {
-  const { arMainButtons, arSecondaryButtons, onButtonPress } = props;
+  const { arMainButtons, arSecondaryButtons, onButtonPress, isSaveAndContinueButton } = props;
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -24,7 +25,9 @@ export default function ActionButtons(props) {
               key={mButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {localizedVal(mButton.name, localeCategory)}
+              {isSaveAndContinueButton
+                ? t('SAVE_AND_CONTINUE')
+                : localizedVal(mButton.name, localeCategory)}
             </Button>
           ) : null
         )}
@@ -55,7 +58,8 @@ export default function ActionButtons(props) {
 ActionButtons.propTypes = {
   arMainButtons: PropTypes.array,
   arSecondaryButtons: PropTypes.array,
-  onButtonPress: PropTypes.func
+  onButtonPress: PropTypes.func,
+  isSaveAndContinueButton: PropTypes.bool,
   // buildName: PropTypes.string
 };
 
