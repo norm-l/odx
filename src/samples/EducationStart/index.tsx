@@ -21,6 +21,7 @@ import {
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import { useStartMashup } from './reuseables/PegaSetup';
 import { useHistory } from 'react-router-dom';
+import Button from '../../components/BaseComponents/Button/Button';
 
 const EducationStartCase: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
@@ -289,6 +290,12 @@ const EducationStartCase: FunctionComponent<any> = () => {
               <div id='pega-part-of-page'>
                 <div id='pega-root'></div>
               </div>
+              <Button
+                variant='backlink'
+                onClick={() =>  history.goBack()} // Todo: this will be removed with portal story implementation 
+                key='StartPageBacklink'
+                attributes={{ type: 'link' }}
+              />
               <MainWrapper>
                 {showLandingPage && (
                   <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
