@@ -72,6 +72,7 @@ export default function Assignment(props) {
 
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const [selectedLang, setSelectedLang] = useState(lang);
+  const [hasAutoCompleteError, setHasAutoCompleteError] = useState('');
 
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
@@ -110,6 +111,10 @@ export default function Assignment(props) {
         PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
         { skipDirtyCheck: true }
       );
+
+      PCore.getPubSubUtils().unsubscribe('autoCompleteFieldPresent', errorMessage => {
+        setHasAutoCompleteError(errorMessage);
+      });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
@@ -260,13 +265,19 @@ export default function Assignment(props) {
     );
   }
 
+  // When screen has autocomplete it is re-rendered to present field errors. This means the error is missed in the error summary.
+  // Using the subscription below it checks for an error and if present sets the auto complete error.
+  PCore.getPubSubUtils().subscribe('autoCompleteFieldPresent', errorMessage => {
+    setHasAutoCompleteError(errorMessage);
+  });
+
   // Fetches and filters any validatemessages on fields on the page, ordering them correctly based on the display order set in DefaultForm.
   // Also adds the relevant fieldID for each field to allow error summary links to move focus when clicked. This process uses the
   // name prop on the input field in most cases, however where there is a deviation (for example, in Date component, where the first field
   // has -day appended), a fieldId stateprop will be defined and this will be used instead.
   useEffect(() => {
     checkErrorMessages();
-  }, [children]);
+  }, [children, hasAutoCompleteError]);
 
   useEffect(() => {
     if (!errorSummary) {
