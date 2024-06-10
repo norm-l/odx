@@ -2,20 +2,14 @@ import i18n from 'i18next';
 
 const _DateErrorFormatter = (message, propertyName) => {
   // Function to check if the user has entered hyphens into the input
-  function checkNumberOfHyphens(message) {
-    // Split the string by hyphens
-    const parts = message.split('-');
-    // Check if the number of hyphens are over three
-    return parts.length > 3;
-  }
-
-  const hasMoreThenThreeHyphens = checkNumberOfHyphens(message);
+  const hasMoreThanThreeHyphens = msg => msg.split('-').length > 3;
   const dateRegExp = /(\d*-\d*-\d*)/;
   const matchedDates = message.match(dateRegExp);
   const originalDate = matchedDates?.length > 0 ? matchedDates[0] : null;
   const targets = [];
+  const isDateOfBirth = propertyName?.toLowerCase().includes('date of birth');
 
-  if (originalDate && !hasMoreThenThreeHyphens) {
+  if (originalDate && !hasMoreThanThreeHyphens(message)) {
     const [year, month, day] = originalDate.split('-');
 
     // When some 'parts' are missing
@@ -44,13 +38,20 @@ const _DateErrorFormatter = (message, propertyName) => {
     }
 
     if (message.search(i18n.t('IS_NOT_A_VALID_DATE'))) {
-      return { message: i18n.t(`${shortPropertyName}_MUST_BE_A_REAL_DATE`), targets };
+      return {
+        message: isDateOfBirth
+          ? `${i18n.t('DATE_OF_BIRTH')} ${i18n.t('MUST_BE_A_REAL_DATE')}`
+          : i18n.t(`${shortPropertyName}_MUST_BE_A_REAL_DATE`),
+        targets
+      };
     }
-  } else if (hasMoreThenThreeHyphens) {
-    if (propertyName?.toLowerCase().includes('date of birth')) {
-      return { message: `${i18n.t(`DATE_OF_BIRTH`)} ${i18n.t(`MUST_BE_A_REAL_DATE`)} `, targets };
-    }
-    return { message: i18n.t(`DATE_MUST_BE_A_REAL_DATE`), targets };
+  } else if (hasMoreThanThreeHyphens(message)) {
+    return {
+      message: isDateOfBirth
+        ? `${i18n.t('DATE_OF_BIRTH')} ${i18n.t('MUST_BE_A_REAL_DATE')}`
+        : i18n.t('DATE_MUST_BE_A_REAL_DATE'),
+      targets
+    };
   }
   return { message, targets };
 };
