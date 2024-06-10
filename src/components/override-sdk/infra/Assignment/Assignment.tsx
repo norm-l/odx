@@ -21,7 +21,8 @@ import ShutterServicePage from '../../../../components/AppComponents/ShutterServ
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
-import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
+import AppContext from '../../../../samples/EducationStart/reuseables/AppContext';
+// import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
 
 export interface ErrorMessageDetails {
@@ -45,7 +46,7 @@ export default function Assignment(props) {
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
-  const { appBacklinkProps } = useContext(AppContext);
+  const { appBacklinkProps, pageNotWorkingUrl} = useContext(AppContext);
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -501,7 +502,7 @@ export default function Assignment(props) {
                 </Button>
               )
           }
-          <MainWrapper>
+          <MainWrapper pageNotWorkingUrl={pageNotWorkingUrl}>11111
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary
                 errors={errorMessages.map(item =>
