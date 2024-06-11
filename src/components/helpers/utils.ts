@@ -108,7 +108,8 @@ export const triggerLogout = () => {
   });
   const authServiceList = {
     gg: 'GovGateway',
-    'gg-dev': 'GovGateway-Dev'
+    'gg-dev': 'GovGateway-Dev',
+    'gg-sa-dev': 'GovGateway-SA-dev'
   };
   const authService = authServiceList[authType];
 
