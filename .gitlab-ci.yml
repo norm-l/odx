@@ -1,9 +1,3 @@
-variables:
-  PROJECT_NAME: "$CI_PROJECT_NAME"
-  BRANCH_NAME: "$CI_COMMIT_BRANCH"
-  COMMIT: "$CI_COMMIT_SHORT_SHA"
-  PROJECT_ID: "$CI_PROJECT_ID"
-
 include:
   - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/pipeline-defaults.yml'
   - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/react-app-build.yml'
@@ -17,17 +11,36 @@ app-build:
   stage: templated-build
   extends: [ .app-build ]
 
-container-build:
+build-control-scripts:
+  stage: templated-build
+  extends: [ .build-control-scripts ]
+
+dockerfile:
   stage: templated-build
   needs: [ app-build ]
-  extends: [ .container-build ]
+  extends: [ .dockerfile ]
 
-invoke-deployment-logic:
+container-build:
   stage: templated-build
-  # needs: [ container-build ]
-  extends: [ .invoke-deployment-logic ]
+  needs: [ dockerfile ]
+  extends: [ .container-build ]
 
 plan-infrastructure:
   stage: templated-deployment
-  needs: [ invoke-deployment-logic, container-build ]
+  needs: [ build-control-scripts ]
   extends: [ .plan ]
+
+apply-infrastructure:
+  stage: templated-deployment
+  needs: [ plan-infrastructure, container-build ]
+  extends: [ .apply ]
+
+destroy-infrastructure:
+  stage: templated-deployment
+  needs: [ plan-infrastructure ]
+  extends: [ .destroy ]
+
+deploy-image:
+  stage: templated-deployment
+  needs: [ apply-infrastructure ]
+  extends: [ .deploy-image ]

@@ -1,74 +1,34 @@
 {
   "Service": {
-    "Name": "chb",
-    "Subpath": "/child-benefit/make_a_claim"
+    "Name": "hicbc",
+    "Subpath": "/hicbc/opt-in"
   },
   "Development": {
     "Environment": {
       "Type": "static-ec2",
-      "Target_Account": "nonprod",
-      "Suffix": "/dev"
+      "Routing" : "internal",
+      "Suffix": "/"
     },
     "Infrastructure": {
-      "Deploy": true,
-      "EC2_Type": "t3a.medium"
+      "EC2_Type": "c5a.large"
     },
-    "Deployment": {
-      "Auto": true
-    },
-    "SDK_File": {
-      "Relative_Path": "sdk-configs/development.json"
-    }
-  },
-  "Staging": {
-    "Environment": {
-      "Type": "hpha-ec2",
-      "Target_Account": "prod",
-      "Suffix": "/staging"
-    },
-    "Infrastructure": {
-      "Deploy": true,
-      "EC2_Type": "t3a.medium"
-    },
-    "Deployment": {
-      "Auto": true
-    },
-    "SDK_File": {
-      "Relative_Path": "sdk-configs/staging.json"
+    "Build": {
+      "SDK_Path": "sdk-configs/development.json",
+      "Build_Command": "npm run build:prod:ci"
     }
   },
   "Production": {
     "Environment": {
       "Type": "hpha-ec2",
-      "Target_Account": "prod",
-      "Suffix": "/prod"
+      "Routing" : "external",
+      "Suffix": "/"
     },
     "Infrastructure": {
-      "Deploy": true,
-      "EC2_Type": "t3a.medium"
+      "EC2_Type": "c5a.xlarge"
     },
-    "Deployment": {
-      "Auto": false
-    },
-    "SDK_File": {
-      "Relative_Path": "sdk-configs/production.json"
-    }
-  },
-  "QA": {
-    "Environment": {
-      "Type": "hpha-ec2",
-      "Target_Account": "nonprod",
-      "Suffix": "/qa"
-    },
-    "Infrastructure": {
-      "Deploy": true,
-      "EC2_Type": "t3a.small"
-    },
-    "Deployment": {
-      "Auto": false
-    },
-    "SDK_File": {
-      "Relative_Path": "sdk-configs/qa.json"
+    "Build": {
+      "SDK_Path": "sdk-configs/development.json",
+      "Build_Command": "npm run build:prod:ci"
     }
   }
 }
