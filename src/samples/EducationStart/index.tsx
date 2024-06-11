@@ -290,27 +290,18 @@ const EducationStartCase: FunctionComponent<any> = () => {
               <div id='pega-part-of-page'>
                 <div id='pega-root'></div>
               </div>
-              <Button
-                variant='backlink'
-                onClick={() =>  history.goBack()} // Todo: this will be removed with portal story implementation 
-                key='StartPageBacklink'
-                attributes={{ type: 'link' }}
-              />
-              <MainWrapper>
-                {showLandingPage && (
-                  <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
-                )}
-
-                {serviceNotAvailable && <ServiceNotAvailable />}
-                {currentDisplay === 'resolutionpage' && (
-                  <SummaryPage
-                    summaryContent={summaryPageContent.content}
-                    summaryTitle={summaryPageContent.title}
-                    summaryBanner={summaryPageContent.banner}
-                    backlinkProps={{}}
-                  />
-                )}
-              </MainWrapper>
+              {showLandingPage && (
+                <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
+              )}
+              {serviceNotAvailable && <ServiceNotAvailable />}
+              {currentDisplay === 'resolutionpage' && (
+                <SummaryPage
+                  summaryContent={summaryPageContent.content}
+                  summaryTitle={summaryPageContent.title}
+                  summaryBanner={summaryPageContent.banner}
+                  backlinkProps={{}}
+                />
+              )}
             </>
           )}
         </div>
