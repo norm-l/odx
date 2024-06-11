@@ -10,7 +10,9 @@
       "Suffix": "/"
     },
     "Infrastructure": {
-      "EC2_Type": "c5a.large"
+      "EC2_Type": "c5a.large",
+      "EC2_Minimum_Hosts" : "1",
+      "EC2_Maximum_Hosts" : "1"
     },
     "Build": {
       "SDK_Path": "sdk-configs/development.json",
@@ -24,7 +26,9 @@
       "Suffix": "/"
     },
     "Infrastructure": {
-      "EC2_Type": "c5a.xlarge"
+      "EC2_Type": "c5a.xlarge",
+      "EC2_Minimum_Hosts" : "1",
+      "EC2_Maximum_Hosts" : "4"
     },
     "Build": {
       "SDK_Path": "sdk-configs/production.json",
