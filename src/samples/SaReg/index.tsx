@@ -11,8 +11,7 @@ import {
   sdkIsLoggedIn,
   loginIfNecessary,
   sdkSetAuthHeader,
-  getSdkConfig,
-  logout
+  getSdkConfig
 } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
@@ -32,6 +31,7 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
+import { triggerLogout } from '../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 
@@ -50,7 +50,7 @@ function initTimeout(setShowTimeoutModal) {
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      logout();
+      triggerLogout();
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 }
@@ -76,7 +76,6 @@ export default function SaReg() {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
-  const [authType, setAuthType] = useState('gg');
   const [caseId, setCaseId] = useState('');
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
@@ -439,7 +438,6 @@ export default function SaReg() {
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
       const sdkConfigAuth = sdkConfig.authConfig;
-      setAuthType(sdkConfigAuth.authService);
       if (!sdkConfigAuth.mashupClientId && sdkConfigAuth.customAuthType === 'Basic') {
         // Service package to use custom auth with Basic
         const sB64 = window.btoa(
@@ -502,47 +500,12 @@ export default function SaReg() {
     };
   }, []);
 
-  function signOut() {
-    let authService;
-    if (authType && authType === 'gg') {
-      authService = 'GovGateway-SA';
-    } else if (authType && authType === 'gg-dev') {
-      authService = 'GovGateway-Dev';
-    } else if (authType && authType === 'gg-sa') {
-      authService = 'GovGateway-SA';
-    } else if (authType && authType === 'gg-sa-dev') {
-      authService = 'GovGateway-SA-dev';
-    }
-
-    // If the container / case is opened then close the container on signout to prevent locking.
-    const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
-    if (activeCase) {
-      PCore.getContainerUtils().closeContainerItem(activeCase, { skipDirtyCheck: true });
-    }
-
-    type responseType = { URLResourcePath2: string };
-
-    PCore.getDataPageUtils()
-    .getPageDataAsync('D_AuthServiceLogout', 'root', { AuthService: authService })
-    // @ts-ignore
-    .then((response: unknown) => {
-      const logoutUrl = (response as responseType).URLResourcePath2;
-
-      logout().then(() => {
-        if (logoutUrl) {
-          // Clear previous sessioStorage values
-          sessionStorage.clear();
-          window.location.href = logoutUrl;
-        }
-      });
-    });
-  }
 
   function handleSignout() {
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
-      signOut();
+      triggerLogout();
     }
   }
 
@@ -588,7 +551,7 @@ export default function SaReg() {
       <TimeoutPopup
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
-        signoutHandler={() => logout()}
+        signoutHandler={() => triggerLogout()}
         isAuthorised
       />
 
@@ -610,7 +573,7 @@ export default function SaReg() {
       <LogoutPopup
         show={showSignoutModal && !showTimeoutModal}
         hideModal={() => setShowSignoutModal(false)}
-        handleSignoutModal={signOut}
+        handleSignoutModal={triggerLogout}
         handleStaySignIn={handleStaySignIn}
       />
       <AppFooter />
