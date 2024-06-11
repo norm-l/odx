@@ -1,7 +1,7 @@
 {
   "Service": {
-    "Name": "hicbc",
-    "Subpath": "/hicbc/opt-in"
+    "Name": "service",
+    "Subpath": "/url/suffix"
   },
   "Development": {
     "Environment": {
@@ -27,7 +27,7 @@
       "EC2_Type": "c5a.xlarge"
     },
     "Build": {
-      "SDK_Path": "sdk-configs/development.json",
+      "SDK_Path": "sdk-configs/production.json",
       "Build_Command": "npm run build:prod:ci"
     }
   }
