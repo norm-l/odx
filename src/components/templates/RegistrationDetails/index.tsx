@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from 'prop-types';
 import { scrollToTop } from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 declare const PCore: any;
 
@@ -59,7 +59,7 @@ export default function RegistrationDetails(props) {
     data.forEach(item => {
       const dataItem = {
         SARegRef: item.pyID,
-        dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
+        dateCreated: dayjs(item.pxCreateDateTime).format('DD MMMM YYYY'),
         dateUpdated: item.pxUpdateDateTime,
         registrantAdded: item.SARegistration.Registrant.pyFirstName !== null,
         actionButton: (
