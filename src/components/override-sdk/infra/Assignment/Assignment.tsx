@@ -485,6 +485,62 @@ export default function Assignment(props) {
       </ErrorMsgContext.Provider>
     );
   }
+// let currentStepID="";
+//   const getStepId=(steps):string=>{
+//   steps.forEach(element => {
+//     if(element.visited_status === "current"){
+//       if(Array.isArray(element.steps)){
+//         getStepId(element.steps);
+//       }else{
+//         currentStepID= element.ID;
+//       }
+//     }
+//   });
+//   return currentStepID;
+// }
+
+useEffect(()=>{
+  // console.log("assignment id",thePConn.getCaseInfo().getAssignmentID());
+  
+const isEditMode = sessionStorage.getItem("isEditMode");
+if(isEditMode === "true"){
+  sessionStorage.setItem("isEditMode","false");
+ // const assignmentID = thePConn.getCaseInfo().getAssignmentID();
+ const containername = PCore.getContainerUtils().getActiveContainerItemName(
+  `${PCore.getConstants().APP.APP}/primary`
+);
+const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+ const flowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
+  sessionStorage.setItem("flowActionId",flowActionId);
+}
+
+});
+
+  // const getCurrentStepID=():string=>{
+  //   const containername = PCore.getContainerUtils().getActiveContainerItemName(
+  //     `${PCore.getConstants().APP.APP}/primary`
+  //   );
+  //   const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  //   const steps = PCore.getStoreValue('.steps', 'caseInfo.navigation', contextWorkarea);
+
+  //   const currentStepID= getStepId(steps);
+  //   return currentStepID;
+
+    // let currentStepID="";
+    // steps.forEach(arrStep => {
+    //   if(arrStep.visited_status === "current"){
+       
+        
+    //       arrStep.steps.forEach(element => {
+    //         if(element.visited_status === "current"){
+    //         currentStepID= element.ID;
+    //         }
+    //       });
+    //     }
+    //   }
+    // );
+    // return currentStepID;
+  // }
 
   const shouldRemoveFormTag = shouldRemoveFormTagForReadOnly(containerName);
   return (
@@ -499,7 +555,24 @@ export default function Assignment(props) {
                 variant='backlink'
                 onClick={e => {
                   e.target.blur();
-                  _onButtonPress(sButton['jsAction'], 'secondary');
+                  // const currentStepID = getCurrentStepID();
+                  // const storedStepId = sessionStorage.getItem("stepId");
+                  const storedStepIDCYA = sessionStorage.getItem("stepIDCYA");
+
+                  // const currentAssignmentID = thePConn.getCaseInfo().getAssignmentID();
+                  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+                    `${PCore.getConstants().APP.APP}/primary`
+                  );
+                  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+                   const currentFlowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
+
+                  const storedFlowActionId = sessionStorage.getItem("flowActionId");
+                  if(currentFlowActionId === storedFlowActionId){
+                    navigateToCYA(e, storedStepIDCYA);
+                  }else{
+                     _onButtonPress(sButton['jsAction'], 'secondary');
+                  }
+                 
                 }}
                 key={sButton['actionID']}
                 attributes={{ type: 'link' }}
@@ -510,8 +583,11 @@ export default function Assignment(props) {
             <a
               className='govuk-back-link'
               href='#main-content'
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>
-                navigateToCYA(event, 'SubProcessSF4_AssignmentSF13')
+              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>{
+                const stepIDCYA= sessionStorage.getItem("stepIDCYA");
+                navigateToCYA(event, stepIDCYA);
+              }
+              
               }
             >
               Back to CYA

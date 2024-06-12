@@ -77,6 +77,41 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  let currentStepID="";
+  const getStepId=(steps):string=>{
+  steps.forEach(element => {
+    if(element.visited_status === "current"){
+      if(Array.isArray(element.steps)){
+        getStepId(element.steps);
+      }else{
+        currentStepID= element.ID;
+      }
+    }
+  });
+  return currentStepID;
+}
+
+  const getCurrentCYAStepID=():string=>{
+    const containername = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+    const steps = PCore.getStoreValue('.steps', 'caseInfo.navigation', contextWorkarea);
+     const CYAID=getStepId(steps);
+     return CYAID;
+     
+    // steps.forEach(arrStep => {
+    //   if(arrStep.visited_status === "current"){
+    //     arrStep.steps.forEach(element => {
+    //       if(arrStep.visited_status === "current"){
+    //       CYAID= element.ID;
+    //       }
+    //     });
+    //   }
+    // });
+    // return CYAID;
+  }
+
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -128,7 +163,13 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const originalLink = cloneLink;
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
-        cloneLink.addEventListener('click', event => navigateToStep(event, stepId));
+        cloneLink.addEventListener('click', event => {
+            const stepIDCYA= getCurrentCYAStepID();
+            sessionStorage.setItem("stepIDCYA",stepIDCYA);
+            // sessionStorage.setItem("stepId",stepId);
+            sessionStorage.setItem("isEditMode","true");
+            navigateToStep(event, stepId)
+          });
       }
     });
 
