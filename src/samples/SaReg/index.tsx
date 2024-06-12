@@ -22,7 +22,7 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import RegistrationDetails from '../../components/templates/RegistrationDetails';
-import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
@@ -111,9 +111,11 @@ export default function SaReg() {
     setShowResolutionScreen(true);
   }
 
+  const serviceName = t('REGISTER_FOR_SELF_ASSESSMENT');
+  registerServiceName(serviceName);
   useEffect(() => {
     setPageTitle();
-  }, [showUserPortal, bShowPega, bShowResolutionScreen]);
+  }, [showUserPortal, bShowPega, bShowResolutionScreen, serviceName]);
 
   function doRedirectDone() {
     history.push('/');
