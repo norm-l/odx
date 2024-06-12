@@ -45,6 +45,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
@@ -60,6 +61,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     history.push('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    setIsLoggedIn(true);
   }
 
   const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
@@ -236,7 +238,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
-  if (shuttered === null) {
+  if (!isLoggedIn || shuttered === null) {
     return null;
   } else if (shuttered) {
     setPageTitle();
@@ -295,7 +297,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           assignmentPConn 
           ) */
           }
-          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
 
         <div className='govuk-width-container'>
@@ -307,19 +309,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
                 <div id='pega-root'></div>
               </div>
               {showLandingPage && (
-                <MainWrapper>
-                  <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
-
-                  {serviceNotAvailable && <ServiceNotAvailable />}
-                  {currentDisplay === 'resolutionpage' && (
-                    <SummaryPage
-                      summaryContent={summaryPageContent.content}
-                      summaryTitle={summaryPageContent.title}
-                      summaryBanner={summaryPageContent.banner}
-                      backlinkProps={{}}
-                    />
-                  )}
-                </MainWrapper>
+                <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
+              )}
+              {serviceNotAvailable && <ServiceNotAvailable />}
+              {currentDisplay === 'resolutionpage' && (
+                <SummaryPage
+                  summaryContent={summaryPageContent.content}
+                  summaryTitle={summaryPageContent.title}
+                  summaryBanner={summaryPageContent.banner}
+                  backlinkProps={{}}
+                />
               )}
             </>
           )}
