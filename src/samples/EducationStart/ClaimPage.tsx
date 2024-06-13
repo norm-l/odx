@@ -17,7 +17,7 @@ import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { triggerLogout } from '../../components/helpers/utils';
-import AppContext from './reuseables/AppContext';
+import AppContext1 from './reuseables/AppContext1';
 import { useHistory } from 'react-router-dom';
 import { loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
 
@@ -27,7 +27,7 @@ const ClaimPage: FunctionComponent<any> = () => {
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
-  const { showLanguageToggle } = useContext(AppContext);
+  const { showLanguageToggle } = useContext(AppContext1);
 
   const setAuthType = useState('gg')[1];
 

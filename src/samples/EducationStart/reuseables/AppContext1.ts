@@ -6,14 +6,16 @@ export interface AppContextValues {
     appBacklinkText?: String | null;
   };
   showLanguageToggle?: boolean;
+  pageNotWorkingUrl?: string;
 }
 
-const AppContext = createContext<AppContextValues>({
+const AppContext1 = createContext<AppContextValues>({
   appBacklinkProps: {
     appBacklinkAction: null,
     appBacklinkText: null
   },
-  showLanguageToggle: false
+  showLanguageToggle: false,
+  pageNotWorkingUrl: ''
 });
 
-export { AppContext as default };
+export { AppContext1 as default };

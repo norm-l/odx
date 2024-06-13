@@ -9,7 +9,7 @@ import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import { checkCookie, setCookie } from '../../../components/helpers/cookie';
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../../sdk-local-component-map';
-import AppContext, { AppContextValues } from './AppContext';
+import AppContext1, { AppContextValues } from './AppContext1';
 
 import {
   // sdkIsLoggedIn,
@@ -215,9 +215,9 @@ function initialRender(inRenderObj, _AppContextValues: AppContextValues) {
   // Initial render of component passed in (which should be a RootContainer)
   try {
     render(
-      <AppContext.Provider value={_AppContextValues}>
+      <AppContext1.Provider value={_AppContextValues}>
         <React.Fragment>{theComponent}</React.Fragment>
-      </AppContext.Provider>,
+      </AppContext1.Provider>,
       target
     );
   } catch {
