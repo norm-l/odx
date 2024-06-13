@@ -22,7 +22,7 @@ import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import AppContext1 from '../../../../samples/EducationStart/reuseables/AppContext1'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
-// import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
+import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
 
 export interface ErrorMessageDetails {
@@ -46,7 +46,8 @@ export default function Assignment(props) {
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
-  const { appBacklinkProps, pageNotWorkingUrl } = useContext(AppContext1);
+  const { appBacklinkProps } = useContext(AppContext);
+  const { pageNotWorkingUrl } = useContext(AppContext1); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
