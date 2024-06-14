@@ -16,21 +16,14 @@ export default function RadioButtons(props) {
     <FieldSet {...props}>
       <div className={radioDivClasses} data-module='govuk-radios'>
         {options.map((option, index) => {
-          let lableOverride = option.label;
-          let hintTextOverride = '';
-          if (option.label.indexOf('!!hint!!')) {
-            const [mainLabel, hintText] = option.label.split('!!hint!!');
-            lableOverride = mainLabel;
-            hintTextOverride = hintText;
-          }
           const itemId = `${name}${index > 0 ? `-${index}` : ''}`.trim();
           const itemHintId = `${itemId}-item-hint`;
           let ariaDescBy = {};
-          if (hintTextOverride) {
+          if (option.hintText) {
             ariaDescBy = { 'aria-describedby': itemHintId };
           }
           return (
-            <div key={`${name}_${option.label}`} className='govuk-radios__item'>
+            <div key={`${name}_${option.value}`} className='govuk-radios__item'>
               <input
                 className='govuk-radios__input'
                 id={itemId}
@@ -42,11 +35,11 @@ export default function RadioButtons(props) {
                 {...ariaDescBy}
               />
               <label className='govuk-label govuk-radios__label' htmlFor={itemId}>
-                {lableOverride || option.label}
+                {option.label}
               </label>
-              {hintTextOverride && (
+              {option.hintText && (
                 <div id={itemHintId} className='govuk-hint govuk-radios__hint'>
-                  <HintTextComponent htmlString={hintTextOverride} />
+                  <HintTextComponent htmlString={option.hintText} />
                 </div>
               )}
             </div>
