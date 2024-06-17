@@ -19,7 +19,7 @@ export default function RadioButtons(props) {
           let lableOverride = option.label;
           let hintTextOverride = '';
           if (option.label.indexOf('!!hint!!')) {
-            // TODO If the label contains '!!hint!!', split the label into mainlabel and hintText as described here:https://design-system.service.gov.uk/components/radios/hint/
+            // If the label contains '!!hint!!', split the label into mainlabel and hintText as described here:https://design-system.service.gov.uk/components/radios/hint/
             const [mainLabel, hintText] = option.label.split('!!hint!!');
             lableOverride = mainLabel;
             hintTextOverride = hintText;
