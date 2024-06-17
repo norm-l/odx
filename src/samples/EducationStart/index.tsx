@@ -6,7 +6,7 @@ import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager'
 import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
-import AppContext1 from './reuseables/AppContext1';
+import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 import { triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -29,7 +29,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
-  const { showLanguageToggle } = useContext(AppContext1);
+  const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
 
   const setAuthType = useState('gg')[1];
@@ -265,7 +265,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContext1.Provider
+      <AppContextEducation.Provider
         value={{
           appBacklinkProps: {},
           showLanguageToggle,
@@ -344,7 +344,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
         </LogoutPopup>
         <AppFooter />
-      </AppContext1.Provider>
+      </AppContextEducation.Provider>
     );
   }
 };

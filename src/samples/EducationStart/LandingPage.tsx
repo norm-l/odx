@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Button from '../../components/BaseComponents/Button/Button';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
-import AppContext1 from './reuseables/AppContext1'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
+import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
 
 export default function LandingPage(props) {
   const { onProceedHandler } = props;
   const { t } = useTranslation();
   const history = useHistory();
-  const { pageNotWorkingUrl } = useContext(AppContext1);
+  const { pageNotWorkingUrl } = useContext(AppContextEducation);
 
   const onContinue = () => {
     onProceedHandler();
