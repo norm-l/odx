@@ -31,7 +31,7 @@ export default function RadioButtons(props) {
             ariaDescBy = { 'aria-describedby': itemHintId };
           }
           return (
-            <div key={`${name}_${option.label}`} className='govuk-radios__item'>
+            <div key={`${name}_${option.value}`} className='govuk-radios__item'>
               <input
                 className='govuk-radios__input'
                 id={itemId}
