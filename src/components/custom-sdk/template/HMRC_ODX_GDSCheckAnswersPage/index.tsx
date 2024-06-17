@@ -164,10 +164,17 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-            const stepIDCYA= getCurrentCYAStepID();
+            // const stepIDCYA= getCurrentCYAStepID();
+          const getconfigAlternateDesignSystem = getPConnect().getChildren()[0].getPConnect().getMetadata().children[1].config.configAlternateDesignSystem;
+
+          if (getconfigAlternateDesignSystem) {
+            let stepIDCYA = getconfigAlternateDesignSystem?.stepId;
+            stepIDCYA = stepIDCYA.split(' ')[1];
             sessionStorage.setItem("stepIDCYA",stepIDCYA);
             // sessionStorage.setItem("stepId",stepId);
-            sessionStorage.setItem("isEditMode","true");
+            sessionStorage.setItem("isEditMode","true"); 
+          }
+            
             navigateToStep(event, stepId)
           });
       }
