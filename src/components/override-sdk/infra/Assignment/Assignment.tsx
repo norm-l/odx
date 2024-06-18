@@ -469,13 +469,12 @@ export default function Assignment(props) {
     );
   }
 
-  function triggerBack(e: any) {
-    e.target.blur();
+  function triggerBack() {
     if (typeof appBacklinkProps.appBacklinkAction === 'function') {
       appBacklinkProps.appBacklinkAction();
     }
     if (typeof appBacklinkPropsEducation.appBacklinkAction === 'function') {
-      appBacklinkPropsEducation!.appBacklinkAction();
+      appBacklinkPropsEducation.appBacklinkAction();
     }
   }
 
@@ -507,9 +506,7 @@ export default function Assignment(props) {
                 appBacklinkPropsEducation.appBacklinkAction) && (
                 <Button
                   variant='backlink'
-                  onClick={e => {
-                    triggerBack(e);
-                  }}
+                  onClick={triggerBack}
                   key='createstagebacklink'
                   attributes={{ type: 'link' }}
                 >

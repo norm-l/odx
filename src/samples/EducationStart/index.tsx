@@ -274,19 +274,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContextEducation.Provider
-        value={{
-          appBacklinkProps: {
-            appBacklinkAction: () => {
-              setShowPega(false);
-              setShowLandingPage(true);
-            },
-            appBacklinkText: 'BACK'
-          },
-          showLanguageToggle,
-          pageNotWorkingUrl: educationFlowPageNotWorkingUrl
-        }}
-      >
+      <>
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() =>
@@ -360,7 +348,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
         </LogoutPopup>
         <AppFooter />
-      </AppContextEducation.Provider>
+      </>
     );
   }
 };
