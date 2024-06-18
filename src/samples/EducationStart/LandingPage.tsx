@@ -46,10 +46,7 @@ export default function LandingPage(props) {
         <p className='govuk-body'>{t('EDUCATION_START_P3')}</p>
         <p className='govuk-body'>{t('EDUCATION_START_P4')}</p>
         <WarningText className='govuk-body'>
-          {' '}
-          {t(
-            'EDUCATION_START_UNIVERSAL_CREDIT_WARNING'
-          )}
+          {t('EDUCATION_START_UNIVERSAL_CREDIT_WARNING')}
         </WarningText>
 
         <Button id='continueToOptin' onClick={onContinue} variant='start'>
