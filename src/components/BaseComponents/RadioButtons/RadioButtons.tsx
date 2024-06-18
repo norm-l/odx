@@ -31,7 +31,7 @@ export default function RadioButtons(props) {
           return (
             <> 
               {arrayExclusiveOptions.includes(option?.label?.toLowerCase()) && (
-                <div className='govuk-checkboxes__divider'>{t('EXCLUSIVEOPTION_OR')}</div>
+                <div className='govuk-radios__divider'>{t('EXCLUSIVEOPTION_OR')}</div>
               )}
 
               <div key={`${name}_${option.value}`} className='govuk-radios__item'>
