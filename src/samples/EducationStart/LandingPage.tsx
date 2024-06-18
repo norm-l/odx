@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '../../components/BaseComponents/Button/Button';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
+import WarningText from './reuseables/WarningText';
 
 export default function LandingPage(props) {
   const { onProceedHandler } = props;
@@ -23,7 +24,7 @@ export default function LandingPage(props) {
         key='StartPageBacklink'
         attributes={{ type: 'link' }}
       />
-        <MainWrapper pageNotWorkingUrl={pageNotWorkingUrl}>
+      <MainWrapper pageNotWorkingUrl={pageNotWorkingUrl}>
         <h1 className='govuk-heading-l'>{t('EDUCATION_START_H1')}</h1>
         <p className='govuk-body'>{t('EDUCATION_START_P1')}</p>
         <ul className='govuk-list govuk-list--bullet'>
@@ -44,6 +45,12 @@ export default function LandingPage(props) {
         </ul>
         <p className='govuk-body'>{t('EDUCATION_START_P3')}</p>
         <p className='govuk-body'>{t('EDUCATION_START_P4')}</p>
+        <WarningText className='govuk-body'>
+          {' '}
+          {t(
+            'EDUCATION_START_LANDINGPAGE_WARNING_UNIVERSAL_CREDIT_CANNOT_APPLY_EXTENSION_PAYMENTS'
+          )}
+        </WarningText>
 
         <Button id='continueToOptin' onClick={onContinue} variant='start'>
           {t('START_NOW')}
