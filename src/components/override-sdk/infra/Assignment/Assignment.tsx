@@ -21,7 +21,7 @@ import ShutterServicePage from '../../../../components/AppComponents/ShutterServ
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
-import AppContext1 from '../../../../samples/EducationStart/reuseables/AppContext1'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
+import AppContextEducation from '../../../../samples/EducationStart/reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
 import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
 
@@ -47,7 +47,8 @@ export default function Assignment(props) {
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
   const { appBacklinkProps } = useContext(AppContext);
-  const { appBacklinkProps1, pageNotWorkingUrl } = useContext(AppContext1); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
+  const { appBacklinkProps: appBacklinkPropsEducation, pageNotWorkingUrl } =
+    useContext(AppContextEducation); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -473,8 +474,8 @@ export default function Assignment(props) {
     if (typeof appBacklinkProps.appBacklinkAction === 'function') {
       appBacklinkProps.appBacklinkAction();
     }
-    if (typeof appBacklinkProps1.appBacklinkAction === 'function') {
-      appBacklinkProps1!.appBacklinkAction();
+    if (typeof appBacklinkPropsEducation.appBacklinkAction === 'function') {
+      appBacklinkPropsEducation!.appBacklinkAction();
     }
   }
 
@@ -502,7 +503,8 @@ export default function Assignment(props) {
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-              (appBacklinkProps.appBacklinkAction || appBacklinkProps1.appBacklinkAction) && (
+              (appBacklinkProps.appBacklinkAction ||
+                appBacklinkPropsEducation.appBacklinkAction) && (
                 <Button
                   variant='backlink'
                   onClick={e => {
@@ -513,7 +515,7 @@ export default function Assignment(props) {
                 >
                   {t(
                     (appBacklinkProps.appBacklinkText as string) ||
-                      (appBacklinkProps1.appBacklinkText as string)
+                      (appBacklinkPropsEducation.appBacklinkText as string)
                   )}
                 </Button>
               )
