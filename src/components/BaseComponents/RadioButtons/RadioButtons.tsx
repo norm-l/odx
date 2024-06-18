@@ -30,7 +30,6 @@ export default function RadioButtons(props) {
           }
           return (
             <> 
-            {/* TODO: Strict check to add by comparing string !!OR!! */}
               {arrayExclusiveOptions.includes(option?.label?.toLowerCase()) && (
                 <div className='govuk-checkboxes__divider'>{t('EXCLUSIVEOPTION_OR')}</div>
               )}
