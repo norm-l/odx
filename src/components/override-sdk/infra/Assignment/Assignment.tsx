@@ -47,7 +47,7 @@ export default function Assignment(props) {
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
   const { appBacklinkProps } = useContext(AppContext);
-  const { pageNotWorkingUrl } = useContext(AppContext1); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
+  const { appBacklinkProps1, pageNotWorkingUrl } = useContext(AppContext1); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -468,7 +468,18 @@ export default function Assignment(props) {
     );
   }
 
+  function triggerBack(e: any) {
+    e.target.blur();
+    if (typeof appBacklinkProps.appBacklinkAction === 'function') {
+      appBacklinkProps.appBacklinkAction();
+    }
+    if (typeof appBacklinkProps1.appBacklinkAction === 'function') {
+      appBacklinkProps1!.appBacklinkAction();
+    }
+  }
+
   const shouldRemoveFormTag = shouldRemoveFormTagForReadOnly(containerName);
+
   return (
     <>
       {serviceShutteredStatus ? (
@@ -491,17 +502,19 @@ export default function Assignment(props) {
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-              appBacklinkProps.appBacklinkAction && (
+              (appBacklinkProps.appBacklinkAction || appBacklinkProps1.appBacklinkAction) && (
                 <Button
                   variant='backlink'
                   onClick={e => {
-                    e.target.blur();
-                    appBacklinkProps.appBacklinkAction();
+                    triggerBack(e);
                   }}
                   key='createstagebacklink'
                   attributes={{ type: 'link' }}
                 >
-                  {t(appBacklinkProps.appBacklinkText as string)}
+                  {t(
+                    (appBacklinkProps.appBacklinkText as string) ||
+                      (appBacklinkProps1.appBacklinkText as string)
+                  )}
                 </Button>
               )
           }

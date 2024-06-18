@@ -69,7 +69,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
     setAuthType,
     doRedirectDone,
-    { appBacklinkProps: {}, pageNotWorkingUrl: educationFlowPageNotWorkingUrl }
+    {
+      appBacklinkProps1: {
+        appBacklinkAction: () => {
+          setShowPega(false);
+          setShowLandingPage(true);
+        },
+        appBacklinkText: 'BACK'
+      },
+      pageNotWorkingUrl: educationFlowPageNotWorkingUrl
+    }
   );
 
   useEffect(() => {
@@ -267,12 +276,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
     return (
       <AppContext1.Provider
         value={{
-          appBacklinkProps: {},
-          showLanguageToggle,
-          pageNotWorkingUrl: educationFlowPageNotWorkingUrl
+          appBacklinkProps1: {
+            appBacklinkAction: () => {
+              setShowPega(false);
+              setShowLandingPage(true);
+            },
+            appBacklinkText: 'BACK'
+          },
+          showLanguageToggle
         }}
       >
-        {' '}
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() =>
@@ -312,21 +325,23 @@ const EducationStartCase: FunctionComponent<any> = () => {
             <ShutterServicePage />
           ) : (
             <>
-              <div id='pega-part-of-page'>
-                <div id='pega-root'></div>
-              </div>
-                {showLandingPage && (
-                  <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
-                )}
-                {serviceNotAvailable && <ServiceNotAvailable />}
-                {currentDisplay === 'resolutionpage' && (
-                  <SummaryPage
-                    summaryContent={summaryPageContent.content}
-                    summaryTitle={summaryPageContent.title}
-                    summaryBanner={summaryPageContent.banner}
-                    backlinkProps={{}}
-                  />
-                )}
+              {showPega && (
+                <div id='pega-part-of-page'>
+                  <div id='pega-root'></div>
+                </div>
+              )}
+              {showLandingPage && (
+                <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
+              )}
+              {serviceNotAvailable && <ServiceNotAvailable />}
+              {currentDisplay === 'resolutionpage' && (
+                <SummaryPage
+                  summaryContent={summaryPageContent.content}
+                  summaryTitle={summaryPageContent.title}
+                  summaryBanner={summaryPageContent.banner}
+                  backlinkProps={{}}
+                />
+              )}
             </>
           )}
         </div>

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 export interface AppContextValues {
-  appBacklinkProps: {
+  appBacklinkProps1: {
     appBacklinkAction?: Function | null;
     appBacklinkText?: String | null;
   };
@@ -10,7 +10,7 @@ export interface AppContextValues {
 }
 
 const AppContext1 = createContext<AppContextValues>({
-  appBacklinkProps: {
+  appBacklinkProps1: {
     appBacklinkAction: null,
     appBacklinkText: null
   },
