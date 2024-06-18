@@ -198,8 +198,11 @@
   "IT_HAS_NOT_BEEN_TESTED": "It has not been tested for compliance with WCAG 2.2 AA. The service will book a full accessibility audit by 1 February 2024.",
 
   "YOU_ARE_ABOUT_TO_SIGN_OUT": "You're about to sign out",
+  "YOURE_ABOUT_TO_BE_SIGNED_OUT": "You're about to be signed out",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "For your security, we will sign you out in",
   "2_MINUTES": "2 minutes",
+  "1_MINUTE": "1 minute",
+  "SECONDS": "seconds",
   "FOR_YOUR_SECURITY": "For your security",
   "WE_WILL_DELETE_YOUR_CLAIM": "We will delete your claim in",
   "DELETE_YOUR_CLAIM": "Delete your claim",
@@ -284,7 +287,7 @@
   "CHILD_DETAILS": "Child details",
   "INCOME_DETAILS": "Income details",
 
-  "EDUCATION_START": "Education Start",
+  "EDUCATION_START": "Update Child Benefit Education or Training",
   "EDUCATION_START_H1": "Extend your Child Benefit while a young person stays in non-advanced education or approved training",
   "EDUCATION_START_P1": "This can include some of the following courses or approved training:",
   "COURCES_1": "GCSEs, A levels or similar",

@@ -12,6 +12,11 @@ export default function RadioButtons(props) {
     useSmallRadios ? 'gobuk-radios--small' : ''
   }`.trim();
 
+  const arrayExclusiveOptions = [
+    'none of the above',
+    "dim un o'r uchod"
+  ];
+
   return (
     <FieldSet {...props}>
       <div className={radioDivClasses} data-module='govuk-radios'>
@@ -31,26 +36,32 @@ export default function RadioButtons(props) {
             ariaDescBy = { 'aria-describedby': itemHintId };
           }
           return (
-            <div key={`${name}_${option.value}`} className='govuk-radios__item'>
-              <input
-                className='govuk-radios__input'
-                id={itemId}
-                name={name}
-                type='radio'
-                onChange={onChange}
-                value={option.value}
-                defaultChecked={option.value === value}
-                {...ariaDescBy}
-              />
-              <label className='govuk-label govuk-radios__label' htmlFor={itemId}>
-                {lableOverride || option.label}
-              </label>
-              {hintTextOverride && (
-                <div id={itemHintId} className='govuk-hint govuk-radios__hint'>
-                  <HintTextComponent htmlString={hintTextOverride} />
-                </div>
+            <> 
+              {arrayExclusiveOptions.includes(option?.label?.toLowerCase()) && (
+                <div className='govuk-radios__divider'>{t('EXCLUSIVEOPTION_OR')}</div>
               )}
-            </div>
+
+              <div key={`${name}_${option.value}`} className='govuk-radios__item'>
+                <input
+                  className='govuk-radios__input'
+                  id={itemId}
+                  name={name}
+                  type='radio'
+                  onChange={onChange}
+                  value={option.value}
+                  defaultChecked={option.value === value}
+                  {...ariaDescBy}
+                />
+                <label className='govuk-label govuk-radios__label' htmlFor={itemId}>
+                  {lableOverride || option.label}
+                </label>
+                {hintTextOverride && (
+                  <div id={itemHintId} className='govuk-hint govuk-radios__hint'>
+                    <HintTextComponent htmlString={hintTextOverride} />
+                  </div>
+                )}
+              </div>
+            </>
           );
         })}
       </div>
