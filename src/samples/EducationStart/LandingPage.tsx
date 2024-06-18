@@ -48,7 +48,7 @@ export default function LandingPage(props) {
         <WarningText className='govuk-body'>
           {' '}
           {t(
-            'EDUCATION_START_LANDINGPAGE_WARNING_UNIVERSAL_CREDIT_CANNOT_APPLY_EXTENSION_PAYMENTS'
+            'EDUCATION_START_UNIVERSAL_CREDIT_WARNING'
           )}
         </WarningText>
 
