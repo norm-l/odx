@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from 'i18next';
 
 export default function WarningText(props) {
   const { children } = props;
@@ -9,7 +10,7 @@ export default function WarningText(props) {
         !
       </span>
       <strong className='govuk-warning-text__text'>
-        <span className='govuk-visually-hidden'>Warning</span>
+        <span className='govuk-visually-hidden'> {t('WARNING')}</span>
         {children}
       </strong>
     </div>
