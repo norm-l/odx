@@ -91,7 +91,7 @@ export default function RegistrationDetails(props) {
           <dl className='govuk-summary-list'>
             <div className='govuk-summary-list__row govuk-summary-list__row'>
               <dt className='govuk-summary-list__key govuk-!-width-one-third'>
-                {t('CREATED_DATE')}
+                {t('DATE_CREATED')}
               </dt>
               <dd className='govuk-summary-list__value govuk-!-width-one-third'>
                 {dataItem.dateCreated}
