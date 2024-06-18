@@ -14,7 +14,7 @@ export default function CookiePage() {
 
   return (
     <>
-      <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle isPegaApp={false} />
+      <AppHeader appname={t('REGISTER_FOR_SELF_ASSESSMENT')} hasLanguageToggle isPegaApp={false} />
       <div className='govuk-width-container'>
         <MainWrapper>
           <h1 className='govuk-heading-l'>{t('COOKIES')}</h1>

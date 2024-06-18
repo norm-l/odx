@@ -3,7 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
-import SAReg from '../SAReg/index';
+import SAReg from '../SaReg/index';
+import CookiePage from '../SaReg/cookiePage/index';
+import Accessibility from '../SaReg/AccessibilityPage';
 
 const AppSelector = () => {
   i18n
@@ -25,6 +27,8 @@ const AppSelector = () => {
   return (
     <Switch>
       <Route exact path='/' component={SAReg} />
+      <Route path='/cookies' component={CookiePage} />
+      <Route path='/accessibility' component={Accessibility} />
     </Switch>
   );
 };
