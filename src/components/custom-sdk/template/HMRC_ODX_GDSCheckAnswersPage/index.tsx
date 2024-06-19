@@ -96,9 +96,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       `${PCore.getConstants().APP.APP}/primary`
     );
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-    const steps = PCore.getStoreValue('.steps', 'caseInfo.navigation', contextWorkarea);
-     const CYAID=getStepId(steps);
-     return CYAID;
+    const CYAStepID = PCore.getStoreValue('.CYAStepID', 'caseInfo.content', contextWorkarea);
+     // const CYAID=getStepId(steps);
+     return CYAStepID;
      
     // steps.forEach(arrStep => {
     //   if(arrStep.visited_status === "current"){
@@ -164,12 +164,12 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-            // const stepIDCYA= getCurrentCYAStepID();
-          const getconfigAlternateDesignSystem = getPConnect().getChildren()[0].getPConnect().getMetadata().children[1].config.configAlternateDesignSystem;
+             const stepIDCYA= getCurrentCYAStepID();
+         // const getconfigAlternateDesignSystem = getPConnect().getChildren()[0].getPConnect().getMetadata().children[1].config.configAlternateDesignSystem;
 
-          if (getconfigAlternateDesignSystem) {
-            let stepIDCYA = getconfigAlternateDesignSystem?.stepId;
-            stepIDCYA = stepIDCYA.split(' ')[1];
+          if (stepIDCYA) {
+            // let stepIDCYA = getconfigAlternateDesignSystem?.stepId;
+            // stepIDCYA = stepIDCYA.split(' ')[1];
             sessionStorage.setItem("stepIDCYA",stepIDCYA);
             // sessionStorage.setItem("stepId",stepId);
             sessionStorage.setItem("isEditMode","true"); 
