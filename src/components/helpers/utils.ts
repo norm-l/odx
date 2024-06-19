@@ -32,7 +32,7 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = 'SaReg';
+    const featureID = 'SA';
     const featureType = 'Service';
 
     const parameters = new URLSearchParams(
