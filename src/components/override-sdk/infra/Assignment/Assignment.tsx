@@ -520,9 +520,19 @@ export default function Assignment(props) {
                   const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
                   const currentFlowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
                   const storedFlowActionId = sessionStorage.getItem("flowActionId");
+                  const isComingFromPortal= sessionStorage.getItem("isComingFromPortal");
+                  const isComingFromTasklist= sessionStorage.getItem("isComingFromTasklist");
 
-                  if(currentFlowActionId === storedFlowActionId){
-                    navigateToCYA(e, storedStepIDCYA);
+                  if(currentFlowActionId === storedFlowActionId){ 
+                    if(storedStepIDCYA){
+                      // coming from cya
+                      navigateToCYA(e, storedStepIDCYA);
+                    }else if(isComingFromPortal === "true"){
+                      // coming from portal
+                    }else if(isComingFromTasklist === "true"){
+                      // coming from tasklist
+                    }
+                    
                   }else{
                      _onButtonPress(sButton['jsAction'], 'secondary');
                   }

@@ -148,6 +148,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           if (stepIDCYA) {
             sessionStorage.setItem("stepIDCYA",stepIDCYA);
             sessionStorage.setItem("isEditMode","true"); 
+
+            sessionStorage.removeItem("isComingFromPortal");
+            sessionStorage.removeItem("isComingFromTasklist");
           }
           navigateToStep(event, stepId,originalLink);
        });
