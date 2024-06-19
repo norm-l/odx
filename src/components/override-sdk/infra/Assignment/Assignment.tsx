@@ -328,6 +328,37 @@ export default function Assignment(props) {
     }
   }
 
+  function navigateToCYA(event, stepId) {
+    event.preventDefault();
+    const pConn = getPConnect();
+    const actions = pConn.getActionsApi()
+    const navigateToStepPromise = actions.navigateToStep(stepId, containerID);
+    navigateToStepPromise
+      .then(() => {
+        //  navigate to step success handling
+        // eslint-disable-next-line no-console
+        console.log('navigation to CYA successful'); 
+      })
+      .catch(error => {
+        // navigate to step failure handling
+        // eslint-disable-next-line no-console
+        console.log('CYA Navigation failed', error);
+      });
+  }
+
+  useEffect(()=>{
+    const isEditMode = sessionStorage.getItem("isEditMode");
+    if(isEditMode === "true"){
+      sessionStorage.setItem("isEditMode","false");
+      const containername = PCore.getContainerUtils().getActiveContainerItemName(
+        `${PCore.getConstants().APP.APP}/primary`
+      );
+      const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+      const flowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
+      sessionStorage.setItem("flowActionId",flowActionId);
+    }
+  });
+
   async function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
 
@@ -481,13 +512,40 @@ export default function Assignment(props) {
                 variant='backlink'
                 onClick={e => {
                   e.target.blur();
-                  _onButtonPress(sButton['jsAction'], 'secondary');
+
+                  const storedStepIDCYA = sessionStorage.getItem("stepIDCYA");
+                  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+                    `${PCore.getConstants().APP.APP}/primary`
+                  );
+                  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+                  const currentFlowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
+                  const storedFlowActionId = sessionStorage.getItem("flowActionId");
+
+                  if(currentFlowActionId === storedFlowActionId){
+                    navigateToCYA(e, storedStepIDCYA);
+                  }else{
+                     _onButtonPress(sButton['jsAction'], 'secondary');
+                  }
+
                 }}
                 key={sButton['actionID']}
                 attributes={{ type: 'link' }}
               ></Button>
             ) : null
           )}
+          {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 ? (
+            <a
+              className='govuk-back-link'
+              href='#main-content'
+              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>{
+                const stepIDCYA= sessionStorage.getItem("stepIDCYA");
+                navigateToCYA(event, stepIDCYA);
+                }
+              }
+            >
+              Back to CYA
+            </a>
+          ) : null}
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&

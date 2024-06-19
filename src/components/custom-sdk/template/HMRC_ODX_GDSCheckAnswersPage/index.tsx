@@ -80,6 +80,16 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  const getCurrentCYAStepID=():string=>{
+    const containername = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+    const CYAStepID = PCore.getStoreValue('.CYAStepID', 'caseInfo.content', contextWorkarea);
+     
+     return CYAStepID;
+  }
+
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -133,9 +143,16 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const originalLink = cloneLink;
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
-        cloneLink.addEventListener('click', event => navigateToStep(event, stepId, originalLink));
-      }
-    });
+        cloneLink.addEventListener('click', event => {
+          const stepIDCYA= getCurrentCYAStepID();
+          if (stepIDCYA) {
+            sessionStorage.setItem("stepIDCYA",stepIDCYA);
+            sessionStorage.setItem("isEditMode","true"); 
+          }
+          navigateToStep(event, stepId,originalLink);
+       });
+   }
+ });
 
     if (dfChildrenContainerRef.current) {
       // Clear existing content
