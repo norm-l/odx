@@ -59,7 +59,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   // Construct the final URL for the education flow page not working
   const educationStartParam = 'claim-child-benefit';
-  const educationFlowPageNotWorkingUrl = `${hmrcURL}contact/report-technical-problem?newTab=true&service=${educationStartParam}&referrerUrl=${baseUrl}`;
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -75,7 +74,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
     setAuthType,
     doRedirectDone,
-    { appBacklinkProps: {}, pageNotWorkingUrl: educationFlowPageNotWorkingUrl }
+    { appBacklinkProps: {}, serviceParam: educationStartParam }
   );
 
   useEffect(() => {
@@ -225,7 +224,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = () => {
+  const landingPageProceedHandler = (e) => {
+    e.preventDefault();
     setShowLandingPage(false);
     startClaim();
   };
@@ -275,7 +275,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
         value={{
           appBacklinkProps: {},
           showLanguageToggle,
-          pageNotWorkingUrl: educationFlowPageNotWorkingUrl
+          serviceParam: educationStartParam
         }}
       >
         {' '}
@@ -322,7 +322,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
                 <div id='pega-root' className='education-start'></div>
               </div>
               {showLandingPage && (
-                <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
+                <LandingPage onProceedHandler={(e) => landingPageProceedHandler(e)} />
               )}
               {serviceNotAvailable && <ServiceNotAvailable />}
               {currentDisplay === 'resolutionpage' && (
