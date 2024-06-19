@@ -137,20 +137,26 @@ export const triggerLogout = () => {
     });
 };
 
-// This function check is to manipulate the continue button to "Save and continue" 
+// This function check is to manipulate the continue button to "Save and continue"
 // Becasue the manual address screen is having the button which is comign as "Continue" instead  "Save and continue"
 // As this is common component andd used in otehr application the pega unable to chang it.
 // So we have used this function and manipulating the button to "Save and continue"
 export const isSaveAndContinueButton = () => {
-  const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(`${PCore.getConstants().APP.APP}/primary`)
-  const containerName = PCore.getContainerUtils().getActiveContainerItemName(`${primaryContainer}/workarea`);
+  const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const containerName = PCore.getContainerUtils().getActiveContainerItemName(
+    `${primaryContainer}/workarea`
+  );
   const formFieldC11nEnv = PCore.getFormUtils().getEditableFields(containerName);
-  if(formFieldC11nEnv?.length > 0) {
-    const pageViewName = formFieldC11nEnv[0].fieldC11nEnv.viewName;
-    const continueButtonPageNames = ["YourDetailsInstruction"];
+  if (formFieldC11nEnv?.length > 0) {
+    const pageViewName =
+      formFieldC11nEnv?.length === 1
+        ? formFieldC11nEnv[0]?.fieldC11nEnv?.viewName
+        : formFieldC11nEnv[formFieldC11nEnv?.length - 1]?.fieldC11nEnv?.viewName;
+    const continueButtonPageNames = ['YourDetailsInstruction', 'Declaration'];
     return !(continueButtonPageNames.indexOf(pageViewName) > -1);
   } else {
     return false;
   }
-}
-
+};
