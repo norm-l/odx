@@ -250,7 +250,8 @@
   "YOU_NEED_TO_SIGN_IN_TO_ACCESS_INFO": "Bydd angen i chi mewngofnodi i gael at yr wybodaeth hon. Os nad oes gennych fanylion mewngofnodi, gallwch eu creu (yn agor tab newydd).",
   "EXCLUSIVEOPTION_OR": "neu",
 
-  "HIGH_INCOME_BENEFITS": "Opt-in for Child Benefit Payment",
+  "HICBC_LANDINGPAGE_HEADING": "Dechrau cael taliadau Budd-dal Plant, neu roi’r gorau i wneud hynny",
+  "HICBC_APP_NAME": "Taliadau Budd-dal Plant",
   "HICBC_LANDINGPAGE_P1": "Defnyddiwch y gwasanaeth hwn os ydych am optio i mewn i daliadau Budd-dal Plant.",
   "HICBC_LANDINGPAGE_P2": "Bydd angen i chi:",
   "HICBC_LANDINGPAGE_LISTITEM_BE_CHB_CLAIMANT": "fod yn hawliwr Budd-dal Plant",
