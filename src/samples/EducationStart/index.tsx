@@ -53,10 +53,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   registerServiceName(t('EDUCATION_START'));
 
-  // Get the current URL and strip out the ?code part
-  const currentUrl = window.location.href;
-  const baseUrl = currentUrl.split('?code')[0];
-
   // Construct the final URL for the education flow page not working
   const educationStartParam = 'claim-child-benefit';
 
