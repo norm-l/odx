@@ -4,12 +4,21 @@ import GDSCheckbox from '../../../BaseComponents/Checkboxes/Checkbox';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
-import { checkErrorMsgs, removeRedundantString } from '../../../helpers/utils';
+import { checkErrorMsgs, checkStatus, removeRedundantString } from '../../../helpers/utils';
 import { t } from 'i18next';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
-  const { getPConnect, inputProps, validatemessage, hintText, readOnly, value } = props;
-
+  const {
+    getPConnect,
+    inputProps,
+    validatemessage,
+    hintText,
+    readOnly,
+    value,
+    configAlternateDesignSystem
+  } = props;
   // let label = props.label;
 
   // These two properties should be passed to individual checkbox components via pconnet registerAdditionalProps
@@ -27,6 +36,7 @@ export default function CheckboxComponent(props) {
   /* retaining for future reference, incase changes need to be reverted
  
   if(isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label; */
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
@@ -53,6 +63,31 @@ export default function CheckboxComponent(props) {
   const { caption } = theConfigProps;
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={value ? props.trueLabel : props.falseLabel}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
 
   if (readOnly) {
     return <ReadOnlyDisplay value={value ? props.trueLabel : props.falseLabel} label={caption} />;
@@ -73,7 +108,8 @@ export default function CheckboxComponent(props) {
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
-              <span className='govuk-visually-hidden'>Error:</span> {removeRedundantString(errorMessage)}
+               <span className='govuk-visually-hidden'>Error:</span>{' '}
+               {removeRedundantString(errorMessage)}
             </p>
           )}
           <GDSCheckbox
