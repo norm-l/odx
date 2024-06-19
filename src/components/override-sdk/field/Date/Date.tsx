@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useEffect, useContext } from 'react';
 import DateInput from '../../../BaseComponents/DateInput/DateInput';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
@@ -6,9 +6,11 @@ import {
   DateErrorFormatter,
   DateErrorTargetFields
 } from '../../../helpers/formatters/DateErrorFormatter';
-import { GBdate } from '../../../helpers/utils';
+import { GBdate, checkStatus } from '../../../helpers/utils';
 import handleEvent from '@pega/react-sdk-components/lib/components/helpers/event-utils';
 import dayjs from 'dayjs';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function Date(props) {
   const {
@@ -38,6 +40,7 @@ export default function Date(props) {
     )
   );
   const [specificErrors, setSpecificErrors] = useState<any>(null);
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
 
@@ -69,10 +72,11 @@ export default function Date(props) {
   useEffect(() => {
     setEditedValidateMessage(
       localizedVal(
-      DateErrorFormatter(
-        validatemessage,
-        getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label
-      ))
+        DateErrorFormatter(
+          validatemessage,
+          getPConnect().resolveConfigProps(getPConnect().getMetadata().config).label
+        )
+      )
     );
     const errorTargets = DateErrorTargetFields(validatemessage);
     let specificError: any = null;
@@ -113,6 +117,32 @@ export default function Date(props) {
 
   if (props.disabled && value.length > 9) {
     return <span className='govuk-body govuk-!-font-weight-bold'>{GBdate(value)}</span>;
+  }
+
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={dayjs(value).format('DD MM YYYY')}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
   }
 
   if (readOnly) {

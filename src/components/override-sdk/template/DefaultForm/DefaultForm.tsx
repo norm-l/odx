@@ -224,7 +224,7 @@ export default function DefaultForm(props) {
       const key = `${getPConnect().getMetadata().name}-${index}`;
       return (
         <ConditionalWrapper
-          condition={childGroup.wrapWithDl && !hasBeenWrapped}
+          condition={!hasBeenWrapped}
           wrapper={children => (
             <ReadOnlyDefaultFormContext.Provider value={{ hasBeenWrapped: true }}>
               <dl className='govuk-summary-list'>{children}</dl>
