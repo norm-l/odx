@@ -49,9 +49,6 @@ function initTimeout(setShowTimeoutModal) {
 
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
-    signoutTimeout = setTimeout(() => {
-      triggerLogout();
-    }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 }
 
