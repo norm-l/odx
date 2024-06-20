@@ -47,7 +47,7 @@ export default function Assignment(props) {
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
   const { appBacklinkProps } = useContext(AppContext);
-  const { appBacklinkProps: appBacklinkPropsEducation, pageNotWorkingUrl } =
+  const { appBacklinkProps: appBacklinkPropsEducation, serviceParam } =
     useContext(AppContextEducation); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -517,7 +517,7 @@ export default function Assignment(props) {
                 </Button>
               )
           }
-          <MainWrapper pageNotWorkingUrl={pageNotWorkingUrl}>
+          <MainWrapper serviceParam={serviceParam}>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary
                 errors={errorMessages.map(item =>
