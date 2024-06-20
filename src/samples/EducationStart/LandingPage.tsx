@@ -10,11 +10,7 @@ export default function LandingPage(props) {
   const { onProceedHandler } = props;
   const { t } = useTranslation();
   const history = useHistory();
-  const { pageNotWorkingUrl } = useContext(AppContextEducation);
-
-  const onContinue = () => {
-    onProceedHandler();
-  };
+  const { serviceParam } = useContext(AppContextEducation);
 
   return (
     <>
@@ -24,7 +20,7 @@ export default function LandingPage(props) {
         key='StartPageBacklink'
         attributes={{ type: 'link' }}
       />
-      <MainWrapper pageNotWorkingUrl={pageNotWorkingUrl}>
+      <MainWrapper serviceParam={serviceParam}>
         <h1 className='govuk-heading-l'>{t('EDUCATION_START_H1')}</h1>
         <p className='govuk-body'>{t('EDUCATION_START_P1')}</p>
         <ul className='govuk-list govuk-list--bullet'>
@@ -49,7 +45,7 @@ export default function LandingPage(props) {
           {t('EDUCATION_START_UNIVERSAL_CREDIT_WARNING')}
         </WarningText>
 
-        <Button id='continueToOptin' onClick={onContinue} variant='start'>
+        <Button id='continueToOptin' onClick={onProceedHandler} variant='start'>
           {t('START_NOW')}
         </Button>
         <br />
