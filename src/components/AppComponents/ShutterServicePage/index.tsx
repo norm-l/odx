@@ -10,7 +10,7 @@ export default function ShutterServicePage() {
     setPageTitle();
   }, [lang]);
   return (
-    <MainWrapper>
+    <MainWrapper showPageNotWorkingLink={false}>
       <h1 className='govuk-heading-l'>{t('SHUTTER_SERVICE_UNAVAILABLE')}</h1>
       <p className='govuk-body'>{t('SHUTTER_USE_SERVICE_LATER_MESSAGE')}</p>
     </MainWrapper>

@@ -30,8 +30,7 @@ const ConfirmationPage = ({ caseStatus }) => {
     );
   };
 
-  const _clickToTaxAccount = () => {
-  }
+  const _clickToTaxAccount = () => {};
 
   const getBodyContentofSubmittedReg = () => {
     return (
@@ -39,35 +38,48 @@ const ConfirmationPage = ({ caseStatus }) => {
         <p className='govuk-body'> {t('WE_HAVE_SENT_YOUR_APPLICATION')}</p>
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
         <p className='govuk-body'> {t('YOU_WILL_SEE_DETAILS_IN_24_HOURS')}</p>
-        <p className='govuk-body'> {t('WANT_TO_SEE_MORE_INFO')} {' '}
-          <a href='https://www.gov.uk/guidance/download-the-hmrc-app' target='_blank' rel='noreferrer noopener'>
+        <p className='govuk-body'>
+          {' '}
+          {t('WANT_TO_SEE_MORE_INFO')}{' '}
+          <a
+            href='https://www.gov.uk/guidance/download-the-hmrc-app'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
             {t('USE_THE_HMRC_APP')} {t('OPENS_IN_NEW_TAB')}
           </a>
         </p>
         <Button
-            attributes={{ className: 'govuk-!-margin-top-4' }}
-            variant='primary'
-            onClick={() => {
-              _clickToTaxAccount();
-            }}
-          >
+          attributes={{ className: 'govuk-!-margin-top-4' }}
+          variant='primary'
+          onClick={() => {
+            _clickToTaxAccount();
+          }}
+        >
           {t('GO_TO_YOUR_TAX_ACCOUNT')}
-        </Button> <br />
-        <hr className="govuk-section-break govuk-section-break--visible govuk-!-padding-top-2"></hr>
+        </Button>{' '}
+        <br />
+        <hr className='govuk-section-break govuk-section-break--visible govuk-!-padding-top-2'></hr>
         <h2 className='govuk-heading-m govuk-!-padding-top-6'> {t('YOUR_HMRC_ONLINE_SERVICES')}</h2>
-        <ul className="govuk-list govuk-list--bullet">
-          <li>{t('SEE_YOUR')} {' '} 
+        <ul className='govuk-list govuk-list--bullet'>
+          <li>
+            {t('SEE_YOUR')}{' '}
             <a href='' target='_blank' rel='noreferrer noopener'>
               {t('NATIONAL_INSURANCE_CONTRIBUTIONS')} {t('OPENS_IN_NEW_TAB')}
-            </a></li>
-          <li>{t('VIEW_AN')} {' '}
+            </a>
+          </li>
+          <li>
+            {t('VIEW_AN')}{' '}
             <a href='' target='_blank' rel='noreferrer noopener'>
               {t('ESTIMATION_OF_YOUR_STATE_PENSION')} {t('OPENS_IN_NEW_TAB')}
-            </a></li>
-          <li>{t('UPDATE')} {' '} 
+            </a>
+          </li>
+          <li>
+            {t('UPDATE')}{' '}
             <a href='' target='_blank' rel='noreferrer noopener'>
               {t('YOUR_ADDRESS')} {t('OPENS_IN_NEW_TAB')}
-            </a></li>
+            </a>
+          </li>
         </ul>
         <p className='govuk-body govuk-!-padding-top-6'>
           <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
@@ -79,11 +91,11 @@ const ConfirmationPage = ({ caseStatus }) => {
   };
 
   const getPanelContent = () => {
-      return getPanelContentOfSubmittedReg();
+    return getPanelContentOfSubmittedReg();
   };
 
   const getBodyContent = () => {
-      return getBodyContentofSubmittedReg();
+    return getBodyContentofSubmittedReg();
   };
 
   if (loading && caseStatus === undefined) {
@@ -93,7 +105,7 @@ const ConfirmationPage = ({ caseStatus }) => {
   } else {
     return (
       <>
-        <MainWrapper>
+        <MainWrapper showPageNotWorkingLink={false}>
           <div className='govuk-panel govuk-panel--confirmation govuk-!-padding-bottom-9 govuk-!-margin-bottom-7'>
             {getPanelContent()}
           </div>

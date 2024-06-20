@@ -472,7 +472,7 @@ export default function Assignment(props) {
               ></Button>
             ) : null
           )}
-          <MainWrapper>
+          <MainWrapper showPageNotWorkingLink={false}>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary
                 errors={errorMessages.map(item =>
