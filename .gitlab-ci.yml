@@ -1,7 +1,7 @@
 include:
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/pipeline-defaults.yml'
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/react-app-build.yml'
-  - remote: 'https://tooling.a.cas.corp.hmrc.gov.uk/gitlab/odx-api/automation/pipeline-templates/-/raw/Production/terraform-jobs.yml'
+  - remote: 'https://gitlab.alm.corp.hmrc.gov.uk/cmdg-public-repos/pipeline-templates/odx-api-pipeline-templates/-/raw/Production/pipeline-defaults.yml'
+  - remote: 'https://gitlab.alm.corp.hmrc.gov.uk/cmdg-public-repos/pipeline-templates/odx-api-pipeline-templates/-/raw/Production/react-app-build.yml'
+  - remote: 'https://gitlab.alm.corp.hmrc.gov.uk/cmdg-public-repos/pipeline-templates/odx-api-pipeline-templates/-/raw/Production/terraform-jobs.yml'
 
 stages:
   - templated-build
