@@ -21,7 +21,7 @@ export default function Accessibility() {
     <>
       <AppHeader appname={t('REGISTER_FOR_SELF_ASSESSMENT')} hasLanguageToggle isPegaApp={false} />
       <div className='govuk-width-container'>
-        <MainWrapper>
+        <MainWrapper showPageNotWorkingLink={false}>
           <h1 className='govuk-heading-xl'>{t('ACCESSIBLITY_STATEMENT_FOR_CHB_SERVICE')}</h1>
           <p className='govuk-body-l'>{t('THIS_AS_EXPLAINS_HOW')}</p>
           <p className='govuk-body'>

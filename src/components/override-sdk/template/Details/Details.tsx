@@ -41,7 +41,9 @@ export default function Details(props) {
         !PCore.getStore().getState().data[containerName].caseInfo?.status.startsWith('Open') &&
         !Object.getOwnPropertyNames(inheritedConfig).length
       }
-      wrapper={childrenForWrap => <MainWrapper>{childrenForWrap}</MainWrapper>}
+      wrapper={childrenForWrap => (
+        <MainWrapper showPageNotWorkingLink={false}>{childrenForWrap}</MainWrapper>
+      )}
       childrenToWrap={
         <>
           {label && context && (
