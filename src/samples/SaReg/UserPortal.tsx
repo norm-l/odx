@@ -18,13 +18,7 @@ export default function UserPortal(props) {
           <NotificationBanner content={t('PORTAL_NOTIFICATION_BANNER_CONTENT')} />
         )}
         <div className='govuk-grid-row'>
-          <div className='govuk-grid-column-two-thirds'>
-            <h1 className='govuk-heading-l'>{t('YOUR_REGISTRATION')}</h1>
-          </div>
-        </div>
-        <div className='govuk-grid-row'>
-        <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>
-
+          <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>
             {/* SA Registration */}
             <div className='govuk-grid-column-two-thirds'>
               <>{children}</>
