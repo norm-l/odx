@@ -34,10 +34,9 @@ const ClaimPage: FunctionComponent<any> = () => {
     const setAuthType = useState('gg')[1];
 
     const [currentDisplay, setCurrentDisplay] = useState<|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'|'loading'>('pegapage');
-    //Holds relevant summary page content (specific language)
+    // Holds relevant summary page content (specific language)
     const [summaryPageContent, setSummaryPageContent] = useState<any>({content:null, title:null, banner:null})    
-    //Holds all current summarypage data (welsh and english translations)
-    const [summaryPageData, setSummaryPageData] = useState<any>(null)
+    // Holds all current summarypage data (welsh and english translations)
     const { t } = useTranslation();
     
     const history = useHistory();
@@ -80,23 +79,18 @@ const ClaimPage: FunctionComponent<any> = () => {
               .then((response) => {     
               PCore.getPubSubUtils().unsubscribe('languageToggleTriggered', 'summarypageLanguageChange');
 
-              const summaryData:Array<any> = response.data.data.caseInfo.content.StaticContent.StaticContentList;
-              /*const summaryData={
+              const summaryData:Array<any> = response.data.data.caseInfo.content.ScreenContent.LocalisedContent;
+              /* const summaryData={
                 en:{content:'English content', title: 'English Title', banner:null},
                 cy:{content:'Welsh content', banner: 'Welsh Banner', title:null},
-              }*/
-              setSummaryPageData(summaryData);
-              
-              const summaryPageContent = summaryData.find(data => data.Language == sessionStorage.getItem('rsdk_locale').slice(0,2).toUpperCase());
-              setSummaryPageContent(summaryPageContent);
-                              
+              } */
+              // setSummaryPageData(summaryData);
+               
+              setSummaryPageContent(summaryData.find(data => data.Language === sessionStorage.getItem('rsdk_locale').slice(0,2).toUpperCase()));                              
               
               PCore.getPubSubUtils().subscribe('languageToggleTriggered', ({language}) => {
-                setSummaryPageContent(summaryData.find(data => data.Language==language.toUpperCase()));             
+                setSummaryPageContent(summaryData.find(data => data.Language === language.toUpperCase()));             
               }, 'summarypageLanguageChange');
-            })
-            .catch(() => {                            
-              return false;
             })
       })}
       else if(shutterServicePage){setCurrentDisplay('shutterpage')}      
@@ -127,10 +121,10 @@ const ClaimPage: FunctionComponent<any> = () => {
 
   const startClaim = () => {
     setShowPega(true);
-    let startingFields = {};
+    /* let startingFields = {};
     startingFields = {
       NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
-    };
+    }; */
     PCore.getMashupApi().createCase('HMRC-ChB-Work-HICBCPreference', PCore.getConstants().APP.APP);
     // { startingFields });
   };

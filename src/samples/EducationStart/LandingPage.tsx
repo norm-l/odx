@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
@@ -9,8 +8,6 @@ import AppFooter from '../../components/AppComponents/AppFooter';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 // import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import AppContext from './reuseables/AppContext';
-import { loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
-import { useStartMashup } from './reuseables/PegaSetup';
 import { triggerLogout } from '../../components/helpers/utils';
 
 export default function LandingPage(props) {
@@ -18,30 +15,12 @@ export default function LandingPage(props) {
   const { showLanguageToggle } = useContext(AppContext);
 
   const { hmrcURL } = useHMRCExternalLinks();
-  const history = useHistory();
-  const setAuthType = useState('gg')[1];
-
-  const { operatorName } = useStartMashup(
-    setAuthType,
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    doRedirectDone,
-    { appBacklinkProps: {} }
-  );
 
   const { t } = useTranslation();
 
   const onContinue = () => {
     onProceedHandler();
-  };
-
-  function doRedirectDone() {
-    history.push('/education/start');
-    // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-    // eslint-disable-next-line no-console
-    // TODO - Need to cover with future userstory
-    console.log(operatorName);
-  }
+  };  
 
   function handleSignout() {
     triggerLogout();
