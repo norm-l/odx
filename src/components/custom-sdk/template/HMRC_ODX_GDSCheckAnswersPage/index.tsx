@@ -162,6 +162,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
+          // pConn.setValue('.CYAStepID', '', '', false);
           const stepIDCYA = getCurrentCYAStepID();
           if (stepIDCYA) {
             sessionStorage.setItem('stepIDCYA', stepIDCYA);

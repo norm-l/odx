@@ -505,6 +505,38 @@ export default function Assignment(props) {
     );
   }
 
+  function navigate(e, sButton) {
+    const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
+    const containername = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${containername}/workarea`
+    );
+    const currentFlowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+    const storedFlowActionId = sessionStorage.getItem('flowActionId');
+    const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
+    const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
+
+    if (currentFlowActionId === storedFlowActionId || sButton === null) {
+      if (storedStepIDCYA) {
+        // coming from cya
+        navigateToStepId(e, storedStepIDCYA);
+      } else if (isComingFromPortal === 'true') {
+        // coming from portal
+        PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
+      } else if (isComingFromTasklist === 'true') {
+        // coming from tasklist
+        const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
+        navigateToStepId(e, stepIdTasklist);
+      }
+    } else if (sButton) _onButtonPress(sButton['jsAction'], 'secondary');
+  }
+
   const shouldRemoveFormTag = shouldRemoveFormTagForReadOnly(containerName);
   return (
     <>
@@ -518,52 +550,21 @@ export default function Assignment(props) {
                 variant='backlink'
                 onClick={e => {
                   e.target.blur();
-
-                  const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
-                  const containername = PCore.getContainerUtils().getActiveContainerItemName(
-                    `${PCore.getConstants().APP.APP}/primary`
-                  );
-                  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-                    `${containername}/workarea`
-                  );
-                  const currentFlowActionId = PCore.getStoreValue(
-                    '.ID',
-                    'caseInfo.assignments[0].actions[0]',
-                    contextWorkarea
-                  );
-                  const storedFlowActionId = sessionStorage.getItem('flowActionId');
-                  const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
-                  const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
-
-                  if (currentFlowActionId === storedFlowActionId) {
-                    if (storedStepIDCYA) {
-                      // coming from cya
-                      navigateToStepId(e, storedStepIDCYA);
-                    } else if (isComingFromPortal === 'true') {
-                      // coming from portal
-                      PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
-                    } else if (isComingFromTasklist === 'true') {
-                      // coming from tasklist
-                      const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
-                      navigateToStepId(e, stepIdTasklist);
-                    }
-                  } else {
-                    _onButtonPress(sButton['jsAction'], 'secondary');
-                  }
+                  navigate(e, sButton);
                 }}
                 key={sButton['actionID']}
                 attributes={{ type: 'link' }}
               ></Button>
             ) : null
           )}
+
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
           containerName !== 'Claim Child Benefit' ? (
             <a
               className='govuk-back-link'
               href='#main-content'
               onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
-                const stepIDCYA = sessionStorage.getItem('stepIDCYA');
-                navigateToStepId(event, stepIDCYA);
+                navigate(event, null);
               }}
             >
               Back(R)

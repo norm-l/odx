@@ -64,6 +64,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
     event.preventDefault();
 
     sessionStorage.setItem('isComingFromTasklist', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
     sessionStorage.removeItem('isComingFromPortal');
     sessionStorage.removeItem('stepIDCYA');
 

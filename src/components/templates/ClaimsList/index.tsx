@@ -51,9 +51,10 @@ export default function ClaimsList(props) {
     const container = thePConn.getContainerName();
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
-    sessionStorage.setItem("isComingFromPortal","true");
-    sessionStorage.removeItem("isComingFromTasklist");
-    sessionStorage.removeItem("stepIDCYA");
+    sessionStorage.setItem('isComingFromPortal', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('isComingFromTasklist');
+    sessionStorage.removeItem('stepIDCYA');
 
     if (rowClickAction === 'OpenAssignment') {
       resetContainer();
