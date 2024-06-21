@@ -71,7 +71,7 @@ export default function SaReg() {
   const [showUserPortal, setShowUserPortal] = useState(false);
   const [bShowAppName, setShowAppName] = useState(false);
   const [bShowResolutionScreen, setShowResolutionScreen] = useState(false);
-  const [loadingInProgressRegistration, setLoadingInProgressRegistration] = useState(true);
+  // const [loadingInProgressRegistration, setLoadingInProgressRegistration] = useState(true);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
@@ -102,7 +102,7 @@ export default function SaReg() {
     setShowUserPortal(true);
   }
 
-   function displayServiceNotAvailable() {
+  function displayServiceNotAvailable() {
     setServiceNotAvailable(true);
   }
 
@@ -166,11 +166,11 @@ export default function SaReg() {
     displayUserPortal();
   }
 
-  // Calls data page to fetch in progress registration, 
+  // Calls data page to fetch in progress registration,
   // This then sets inprogress registration state value to the registration details.
   // This funtion also sets 'isloading' value to true before making d_page calls
   function fetchInProgressRegistrationData() {
-    setLoadingInProgressRegistration(true);
+    // setLoadingInProgressRegistration(true);
     let inProgressRegData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
@@ -183,7 +183,7 @@ export default function SaReg() {
           inProgressRegData = resp;
           setInprogressRegistration(inProgressRegData);
         }
-        setLoadingInProgressRegistration(false);
+        // setLoadingInProgressRegistration(false);
       });
   }
 
@@ -502,7 +502,6 @@ export default function SaReg() {
     };
   }, []);
 
-
   function handleSignout() {
     if (bShowPega) {
       setShowSignoutModal(true);
@@ -519,34 +518,33 @@ export default function SaReg() {
   };
 
   const renderContent = () => {
-    if(serviceNotAvailable) {
-      return <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
-    } else if(shutterServicePage) {
-      return <ShutterServicePage />
+    if (serviceNotAvailable) {
+      return <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />;
+    } else if (shutterServicePage) {
+      return <ShutterServicePage />;
     } else {
       return (
         <>
-        <div id='pega-part-of-page'>
-          <div id='pega-root'></div>
-        </div>
-
-        {showUserPortal && (
-          <UserPortal showPortalBanner={showPortalBanner}>
-            {!loadingInProgressRegistration && inprogressRegistration.length !== 0 && (
-              <RegistrationDetails
-                thePConn={pConn}
-                data={inprogressRegistration}
-                rowClickAction='OpenAssignment'
-                buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
-                caseId={caseId}
-              />
-            )}
-          </UserPortal>
-        )}
+          <div id='pega-part-of-page'>
+            <div id='pega-root'></div>
+          </div>
+          {showUserPortal && (
+            <UserPortal showPortalBanner={showPortalBanner}>
+              {inprogressRegistration.length > 0 && (
+                <RegistrationDetails
+                  thePConn={pConn}
+                  data={inprogressRegistration}
+                  rowClickAction='OpenAssignment'
+                  buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
+                  caseId={caseId}
+                />
+              )}
+            </UserPortal>
+          )}
         </>
-      )
+      );
     }
-  }
+  };
 
   return (
     <>

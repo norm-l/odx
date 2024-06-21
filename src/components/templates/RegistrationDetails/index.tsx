@@ -18,7 +18,7 @@ export default function RegistrationDetails(props) {
         return { text: t('SAVED'), tagColour: 'blue' };
       case 'Resolved-Completed':
       case 'Resolved-Rejected':
-          return { text: t('REGISTRATION_RECEIVED'), tagColour: 'purple' };
+        return { text: t('REGISTRATION_RECEIVED'), tagColour: 'purple' };
       default:
         return { text: status, tagColour: 'grey' };
     }
@@ -51,7 +51,7 @@ export default function RegistrationDetails(props) {
           scrollToTop();
         })
         .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
-    } 
+    }
   }
 
   function getSARegistraion() {
@@ -86,6 +86,11 @@ export default function RegistrationDetails(props) {
 
   return (
     <>
+      <div className='govuk-grid-row'>
+        <div className='govuk-grid-column-two-thirds'>
+          <h1 className='govuk-heading-l'>{t('YOUR_REGISTRATION')}</h1>
+        </div>
+      </div>
       {registration.map(dataItem => (
         <React.Fragment key={dataItem.SARegRef}>
           <dl className='govuk-summary-list'>
@@ -105,7 +110,6 @@ export default function RegistrationDetails(props) {
           </dl>
 
           {dataItem.actionButton}
-
         </React.Fragment>
       ))}
     </>
