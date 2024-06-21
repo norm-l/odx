@@ -328,16 +328,16 @@ export default function Assignment(props) {
     }
   }
 
-  function navigateToCYA(event, stepId) {
+  function navigateToStepId(event, stepId) {
     event.preventDefault();
     const pConn = getPConnect();
-    const actions = pConn.getActionsApi()
+    const actions = pConn.getActionsApi();
     const navigateToStepPromise = actions.navigateToStep(stepId, containerID);
     navigateToStepPromise
       .then(() => {
         //  navigate to step success handling
         // eslint-disable-next-line no-console
-        console.log('navigation to CYA successful'); 
+        console.log('navigation to CYA successful');
       })
       .catch(error => {
         // navigate to step failure handling
@@ -346,16 +346,22 @@ export default function Assignment(props) {
       });
   }
 
-  useEffect(()=>{
-    const isEditMode = sessionStorage.getItem("isEditMode");
-    if(isEditMode === "true"){
-      sessionStorage.setItem("isEditMode","false");
+  useEffect(() => {
+    const isEditMode = sessionStorage.getItem('isEditMode');
+    if (isEditMode === 'true') {
+      sessionStorage.setItem('isEditMode', 'false');
       const containername = PCore.getContainerUtils().getActiveContainerItemName(
         `${PCore.getConstants().APP.APP}/primary`
       );
-      const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-      const flowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
-      sessionStorage.setItem("flowActionId",flowActionId);
+      const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+        `${containername}/workarea`
+      );
+      const flowActionId = PCore.getStoreValue(
+        '.ID',
+        'caseInfo.assignments[0].actions[0]',
+        contextWorkarea
+      );
+      sessionStorage.setItem('flowActionId', flowActionId);
     }
   });
 
@@ -513,47 +519,54 @@ export default function Assignment(props) {
                 onClick={e => {
                   e.target.blur();
 
-                  const storedStepIDCYA = sessionStorage.getItem("stepIDCYA");
+                  const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
                   const containername = PCore.getContainerUtils().getActiveContainerItemName(
                     `${PCore.getConstants().APP.APP}/primary`
                   );
-                  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-                  const currentFlowActionId=  PCore.getStoreValue('.ID', 'caseInfo.assignments[0].actions[0]', contextWorkarea);
-                  const storedFlowActionId = sessionStorage.getItem("flowActionId");
-                  const isComingFromPortal= sessionStorage.getItem("isComingFromPortal");
-                  const isComingFromTasklist= sessionStorage.getItem("isComingFromTasklist");
+                  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+                    `${containername}/workarea`
+                  );
+                  const currentFlowActionId = PCore.getStoreValue(
+                    '.ID',
+                    'caseInfo.assignments[0].actions[0]',
+                    contextWorkarea
+                  );
+                  const storedFlowActionId = sessionStorage.getItem('flowActionId');
+                  const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
+                  const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
 
-                  if(currentFlowActionId === storedFlowActionId){ 
-                    if(storedStepIDCYA){
+                  if (currentFlowActionId === storedFlowActionId) {
+                    if (storedStepIDCYA) {
                       // coming from cya
-                      navigateToCYA(e, storedStepIDCYA);
-                    }else if(isComingFromPortal === "true"){
+                      navigateToStepId(e, storedStepIDCYA);
+                    } else if (isComingFromPortal === 'true') {
                       // coming from portal
-                    }else if(isComingFromTasklist === "true"){
+                      PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
+                    } else if (isComingFromTasklist === 'true') {
                       // coming from tasklist
+                      const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
+                      navigateToStepId(e, stepIdTasklist);
                     }
-                    
-                  }else{
-                     _onButtonPress(sButton['jsAction'], 'secondary');
+                  } else {
+                    _onButtonPress(sButton['jsAction'], 'secondary');
                   }
-
                 }}
                 key={sButton['actionID']}
                 attributes={{ type: 'link' }}
               ></Button>
             ) : null
           )}
-          {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 ? (
+          {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
+          containerName !== 'Claim Child Benefit' ? (
             <a
               className='govuk-back-link'
               href='#main-content'
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) =>{
-                const stepIDCYA= sessionStorage.getItem("stepIDCYA");
-                navigateToCYA(event, stepIDCYA);
-                }
-              }
+              onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+                const stepIDCYA = sessionStorage.getItem('stepIDCYA');
+                navigateToStepId(event, stepIDCYA);
+              }}
             >
-              Back to CYA
+              Back(R)
             </a>
           ) : null}
           {

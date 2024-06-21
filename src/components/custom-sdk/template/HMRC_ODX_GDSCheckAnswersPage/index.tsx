@@ -80,15 +80,33 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
-  const getCurrentCYAStepID=():string=>{
+  const searchKey = 'CYAStepID';
+  let cyaStepId = '';
+
+  function getCYAStepId(item) {
+    Object.keys(item).forEach(key => {
+      if (typeof item[key] === 'object') {
+        getCYAStepId(item[key]);
+      }
+      if (typeof item[key] === 'string' && key === searchKey) {
+        cyaStepId = item[key];
+      }
+    });
+    return cyaStepId;
+  }
+
+  const getCurrentCYAStepID = (): string => {
     const containername = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
-    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
-    const CYAStepID = PCore.getStoreValue('.CYAStepID', 'caseInfo.content', contextWorkarea);
-     
-     return CYAStepID;
-  }
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${containername}/workarea`
+    );
+    const content = PCore.getStoreValue('.content', 'caseInfo', contextWorkarea);
+
+    const CYAStepID = getCYAStepId(content);
+    return CYAStepID;
+  };
 
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
@@ -144,18 +162,18 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-          const stepIDCYA= getCurrentCYAStepID();
+          const stepIDCYA = getCurrentCYAStepID();
           if (stepIDCYA) {
-            sessionStorage.setItem("stepIDCYA",stepIDCYA);
-            sessionStorage.setItem("isEditMode","true"); 
+            sessionStorage.setItem('stepIDCYA', stepIDCYA);
+            sessionStorage.setItem('isEditMode', 'true');
 
-            sessionStorage.removeItem("isComingFromPortal");
-            sessionStorage.removeItem("isComingFromTasklist");
+            sessionStorage.removeItem('isComingFromPortal');
+            sessionStorage.removeItem('isComingFromTasklist');
           }
-          navigateToStep(event, stepId,originalLink);
-       });
-   }
- });
+          navigateToStep(event, stepId, originalLink);
+        });
+      }
+    });
 
     if (dfChildrenContainerRef.current) {
       // Clear existing content

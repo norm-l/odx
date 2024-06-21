@@ -63,9 +63,9 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
   const handleOnClick = (section: string, event) => {
     event.preventDefault();
 
-    sessionStorage.setItem("isComingFromTasklist","true");
-    sessionStorage.removeItem("isComingFromPortal");
-    sessionStorage.removeItem("stepIDCYA");
+    sessionStorage.setItem('isComingFromTasklist', 'true');
+    sessionStorage.removeItem('isComingFromPortal');
+    sessionStorage.removeItem('stepIDCYA');
 
     window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
     getPConnect().setValue('.SelectedTask', section, '', false);
