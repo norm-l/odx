@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 import InstructionComp from '../../../helpers/formatters/ParsedHtml';
+import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
 
 interface SimpleTableManualProps extends PConnProps {
   referenceList?: [any];
@@ -37,7 +38,7 @@ export default function SimpleTableManual(props: PropsWithChildren<SimpleTableMa
   const headingList = children[0].children.map(child => child.config.label);
 
   if(props.authorContext === '.ScreenContent.LocalisedContent'){
-    
+    registerNonEditableField();    
     return <InstructionComp htmlString={referenceList.find(element => element.Language === currentLang.toUpperCase()).Content} />
   }
 
