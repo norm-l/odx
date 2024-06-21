@@ -1,11 +1,13 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
+import InstructionComp from '../../../helpers/formatters/ParsedHtml';
 
 interface SimpleTableManualProps extends PConnProps {
   referenceList?: [any];
   label?: string;
   showLabel?: boolean;
   propertyLabel?: string;
+  authorContext?: string;
 }
 
 export default function SimpleTableManual(props: PropsWithChildren<SimpleTableManualProps>) {
@@ -23,8 +25,21 @@ export default function SimpleTableManual(props: PropsWithChildren<SimpleTableMa
   if (propsToUse.showLabel === false) {
     propsToUse.label = '';
   }
+  
+  const [currentLang, setCurrentLang] = useState(sessionStorage.getItem('rsdk_locale')?.substring(0, 2).toUpperCase() || 'EN',);
+  useEffect(() => {
+    const subId = `scalarList_${label}`;
+    PCore.getPubSubUtils().subscribe('languageToggleTriggered', ({language}) => {
+      setCurrentLang(language.toUpperCase());
+    }, subId,)
+  }, [])
 
   const headingList = children[0].children.map(child => child.config.label);
+
+  if(props.authorContext === '.ScreenContent.LocalisedContent'){
+    
+    return <InstructionComp htmlString={referenceList.find(element => element.Language === currentLang.toUpperCase()).Content} />
+  }
 
   const renderTh = list => {
     return (

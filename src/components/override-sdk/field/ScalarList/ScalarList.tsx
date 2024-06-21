@@ -72,7 +72,7 @@ export default function ScalarList(props: ScalarListProps) {
   const languageValues = PCore.getStoreValue(metadata.config.value.split(' ').slice(1).join().split('.').slice(0,-1).join('.'), getPConnect().options.pageReference, 'app/primary_1/workarea_1');
   
 
-  return <InstructionComp  htmlString={languageValues.find((value => value.Language === currentLang.toUpperCase()))}/>
+  return <InstructionComp  htmlString={languageValues.find((value => value.Language === currentLang.toUpperCase())).Content}/>
   
 
   /*

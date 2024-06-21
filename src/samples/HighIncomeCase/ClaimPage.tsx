@@ -59,7 +59,7 @@ const ClaimPage: FunctionComponent<any> = () => {
         loginIfNecessary({ appName: 'embedded', mainRedirect: true });        
     } 
 
-    const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn} = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
+    const { showPega, setShowPega, showResolutionPage, caseId} = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
 
     useEffect(() => {
       if(showPega){setCurrentDisplay('pegapage')}
