@@ -22,6 +22,7 @@ import { triggerLogout } from '../../components/helpers/utils';
 import AppContext from './reuseables/AppContext';
 
 // declare const myLoadMashup;
+declare const PCore: any;
 
 const ClaimPage: FunctionComponent<any> = () => {
     // const [bShowPega, setShowPega] = useState(false);
@@ -33,7 +34,10 @@ const ClaimPage: FunctionComponent<any> = () => {
     const setAuthType = useState('gg')[1];
 
     const [currentDisplay, setCurrentDisplay] = useState<|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'|'loading'>('pegapage');
-    const [summaryPageContent, setSummaryPageContent] = useState<{content:string|null, title:string|null, banner:string|null}>({content:null, title:null, banner:null})
+    //Holds relevant summary page content (specific language)
+    const [summaryPageContent, setSummaryPageContent] = useState<any>({content:null, title:null, banner:null})    
+    //Holds all current summarypage data (welsh and english translations)
+    const [summaryPageData, setSummaryPageData] = useState<any>(null)
     const { t } = useTranslation();
     
     const history = useHistory();
@@ -55,13 +59,14 @@ const ClaimPage: FunctionComponent<any> = () => {
         loginIfNecessary({ appName: 'embedded', mainRedirect: true });        
     } 
 
-    const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
-    
-    
+    const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn} = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
+
     useEffect(() => {
       if(showPega){setCurrentDisplay('pegapage')}
-      else if(showResolutionPage){
-        setCurrentDisplay('resolutionpage')
+      else if(showResolutionPage){        
+        setCurrentDisplay('resolutionpage');
+
+        
         getSdkConfig().then((config)=>{
           PCore.getRestClient().invokeCustomRestApi(
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
@@ -72,17 +77,28 @@ const ClaimPage: FunctionComponent<any> = () => {
               withoutDefaultHeaders: false,
             },
             '')
-            .then((response) => {
-              const summaryData = response.data.data.caseInfo.content;
-              setSummaryPageContent({content:summaryData.SubmissionContent, title:summaryData.SubmissionTitle, banner:summaryData.SubmissionBanner})
+              .then((response) => {     
+              PCore.getPubSubUtils().unsubscribe('languageToggleTriggered', 'summarypageLanguageChange');
+
+              const summaryData:Array<any> = response.data.data.caseInfo.content.StaticContent.StaticContentList;
+              /*const summaryData={
+                en:{content:'English content', title: 'English Title', banner:null},
+                cy:{content:'Welsh content', banner: 'Welsh Banner', title:null},
+              }*/
+              setSummaryPageData(summaryData);
+              
+              const summaryPageContent = summaryData.find(data => data.Language == sessionStorage.getItem('rsdk_locale').slice(0,2).toUpperCase());
+              setSummaryPageContent(summaryPageContent);
+                              
+              
+              PCore.getPubSubUtils().subscribe('languageToggleTriggered', ({language}) => {
+                setSummaryPageContent(summaryData.find(data => data.Language==language.toUpperCase()));             
+              }, 'summarypageLanguageChange');
             })
             .catch(() => {                            
               return false;
-            });
-        }
-
-        )
-      }
+            })
+      })}
       else if(shutterServicePage){setCurrentDisplay('shutterpage')}      
       else if(serviceNotAvailable){setCurrentDisplay('servicenotavailable')}
       else {
@@ -111,7 +127,12 @@ const ClaimPage: FunctionComponent<any> = () => {
 
   const startClaim = () => {
     setShowPega(true);
+    let startingFields = {};
+    startingFields = {
+      NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
+    };
     PCore.getMashupApi().createCase('HMRC-ChB-Work-HICBCPreference', PCore.getConstants().APP.APP);
+    // { startingFields });
   };
 
   /* ***
@@ -216,9 +237,9 @@ const ClaimPage: FunctionComponent<any> = () => {
             </div>
             { serviceNotAvailable && <ServiceNotAvailable /> }            
             { currentDisplay === 'resolutionpage' && <SummaryPage summaryContent={
-              summaryPageContent.content}
-              summaryTitle={summaryPageContent.title}
-              summaryBanner={summaryPageContent.banner}
+              summaryPageContent.Content}
+              summaryTitle={summaryPageContent.Title}
+              summaryBanner={summaryPageContent.Banner}
               backlinkProps={{}}  
             />}        
           </>
