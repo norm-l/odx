@@ -573,8 +573,7 @@ export default function Assignment(props) {
               onClick={event => {
                 navigate(event, null);
               }}
-              key='createMissinglink'
-              attributes={{ type: 'link' }}
+              key='createMissingBacklink'
             >
               {t('BACK')}(R)
             </Button>
