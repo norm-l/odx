@@ -6,7 +6,7 @@ import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager'
 import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
-import AppContext from './reuseables/AppContext';
+import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 import { triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -29,7 +29,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
-  const { showLanguageToggle } = useContext(AppContext);
+  const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
 
   const setAuthType = useState('gg')[1];
@@ -53,6 +53,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   registerServiceName(t('EDUCATION_START'));
 
+  // Construct the final URL for the education flow page not working
+  const educationStartParam = 'claim-child-benefit';
+
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
   }, []);
@@ -67,7 +70,10 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
     setAuthType,
     doRedirectDone,
-    { appBacklinkProps: {} }
+    {
+      appBacklinkProps: {},
+      serviceParam: educationStartParam
+    }
   );
 
   useEffect(() => {
@@ -135,12 +141,12 @@ const EducationStartCase: FunctionComponent<any> = () => {
    *
    * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
    */
-  
+
   // TODO - This function will be removed with US-13518 implementation.
   function removeHmrcLink() {
     const hmrcLink = document.querySelector(
       '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
-    );    
+    );
     const breakTag = document.querySelectorAll('br');
 
     if (hmrcLink || breakTag.length) {
@@ -156,7 +162,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   useEffect(() => {
     if (showPega && pCoreReady) {
       PCore.getMashupApi().createCase('HMRC-ChB-Work-EducationStart', PCore.getConstants().APP.APP);
-      requestAnimationFrame(removeHmrcLink);  // TODO - To be removed with US-13518 implementation.
+      requestAnimationFrame(removeHmrcLink); // TODO - To be removed with US-13518 implementation.
     }
   }, [pCoreReady, showPega]);
 
@@ -217,7 +223,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = () => {
+  const landingPageProceedHandler = e => {
+    e.preventDefault();
     setShowLandingPage(false);
     startClaim();
   };
@@ -263,7 +270,13 @@ const EducationStartCase: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContext.Provider value={{ appBacklinkProps: {}, showLanguageToggle }}>
+      <AppContextEducation.Provider
+        value={{
+          appBacklinkProps: {},
+          showLanguageToggle,
+          serviceParam: educationStartParam
+        }}
+      >
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() =>
@@ -285,7 +298,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
             .
           </p>
         </TimeoutPopup>
-
         <AppHeader
           handleSignout={handleSignout}
           appname={t('EDUCATION_START')}
@@ -299,17 +311,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
           }
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
-
         <div className='govuk-width-container'>
           {shutterServicePage ? (
             <ShutterServicePage />
           ) : (
             <>
               <div id='pega-part-of-page'>
-                <div id='pega-root'></div>
+                <div id='pega-root' className='education-start'></div>
               </div>
               {showLandingPage && (
-                <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
+                <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
               )}
               {serviceNotAvailable && <ServiceNotAvailable />}
               {currentDisplay === 'resolutionpage' && (
@@ -337,7 +348,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
         </LogoutPopup>
         <AppFooter />
-      </AppContext.Provider>
+      </AppContextEducation.Provider>
     );
   }
 };
