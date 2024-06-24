@@ -351,11 +351,8 @@ export default function Assignment(props) {
     const isEditMode = sessionStorage.getItem('isEditMode');
     if (isEditMode === 'true') {
       sessionStorage.setItem('isEditMode', 'false');
-      const containername = PCore.getContainerUtils().getActiveContainerItemName(
-        `${PCore.getConstants().APP.APP}/primary`
-      );
       const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-        `${containername}/workarea`
+        `${PCore.getConstants().APP.APP}/primary`
       );
       const flowActionId = PCore.getStoreValue(
         '.ID',
@@ -508,11 +505,8 @@ export default function Assignment(props) {
 
   function navigate(e, sButton) {
     const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
-    const containername = PCore.getContainerUtils().getActiveContainerItemName(
-      `${PCore.getConstants().APP.APP}/primary`
-    );
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-      `${containername}/workarea`
+      `${PCore.getConstants().APP.APP}/primary`
     );
     const currentFlowActionId = PCore.getStoreValue(
       '.ID',

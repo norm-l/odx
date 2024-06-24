@@ -347,7 +347,9 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'showPortalScreenOnBackPress',
       () => {
-        displayUserPortal();
+        cancelAssignment();
+        setShowPortalBanner(true);
+        setIsCreateCaseBlocked(false);
       },
       'showPortalScreenOnBackPress'
     );

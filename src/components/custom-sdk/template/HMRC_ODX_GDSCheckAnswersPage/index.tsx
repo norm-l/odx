@@ -96,11 +96,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   }
 
   const getCurrentCYAStepID = (): string => {
-    const containername = PCore.getContainerUtils().getActiveContainerItemName(
-      `${PCore.getConstants().APP.APP}/primary`
-    );
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-      `${containername}/workarea`
+      `${PCore.getConstants().APP.APP}/primary`
     );
     const content = PCore.getStoreValue('.content', 'caseInfo', contextWorkarea);
 
