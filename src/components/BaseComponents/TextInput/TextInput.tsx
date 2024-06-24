@@ -51,6 +51,7 @@ export default function TextInput(props) {
       <input
         className={textInputClassesWithWidth(maxLength)}
         {...inputProps}
+        type={inputProps?.type || 'text'}
         id={id}
         name={name}
         onBlur={onBlur}
