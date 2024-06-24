@@ -570,7 +570,7 @@ export default function Assignment(props) {
               onClick={event => {
                 navigate(event, null);
               }}
-              key='createstagebacklink'
+              key='createMissinglink'
               attributes={{ type: 'link' }}
             >
               {t('BACK')}(R)
