@@ -565,15 +565,16 @@ export default function Assignment(props) {
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
           containerName !== 'Claim Child Benefit' ? (
-            <a
-              className='govuk-back-link'
-              href='#main-content'
-              onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+            <Button
+              variant='backlink'
+              onClick={event => {
                 navigate(event, null);
               }}
+              key='createstagebacklink'
+              attributes={{ type: 'link' }}
             >
-              Back(R)
-            </a>
+              {t('BACK')}(R)
+            </Button>
           ) : null}
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
