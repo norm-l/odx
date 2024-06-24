@@ -6,7 +6,7 @@ import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager'
 import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
-import AppContext from './reuseables/AppContext';
+import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 import { triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -29,7 +29,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
-  const { showLanguageToggle } = useContext(AppContext);
+  const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
 
   const setAuthType = useState('gg')[1];
@@ -45,12 +45,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
 
   registerServiceName(t('EDUCATION_START'));
+
+  // Construct the final URL for the education flow page not working
+  const educationStartParam = 'claim-child-benefit';
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -60,12 +64,22 @@ const EducationStartCase: FunctionComponent<any> = () => {
     history.push('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    setIsLoggedIn(true);
   }
 
   const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
     setAuthType,
     doRedirectDone,
-    { appBacklinkProps: {} }
+    {
+      appBacklinkProps: {
+        appBacklinkAction: () => {
+          setShowPega(false);
+          setShowLandingPage(true);
+        },
+        appBacklinkText: 'BACK'
+      },
+      serviceParam: educationStartParam
+    }
   );
 
   useEffect(() => {
@@ -134,10 +148,27 @@ const EducationStartCase: FunctionComponent<any> = () => {
    * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
    */
 
+  // TODO - This function will be removed with US-13518 implementation.
+  function removeHmrcLink() {
+    const hmrcLink = document.querySelector(
+      '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
+    );
+    const breakTag = document.querySelectorAll('br');
+
+    if (hmrcLink || breakTag.length) {
+      hmrcLink?.remove();
+      breakTag[0]?.remove();
+      breakTag[1]?.remove();
+    } else {
+      requestAnimationFrame(removeHmrcLink);
+    }
+  }
+
   // And clean up
   useEffect(() => {
     if (showPega && pCoreReady) {
       PCore.getMashupApi().createCase('HMRC-ChB-Work-EducationStart', PCore.getConstants().APP.APP);
+      requestAnimationFrame(removeHmrcLink); // TODO - To be removed with US-13518 implementation.
     }
   }, [pCoreReady, showPega]);
 
@@ -198,7 +229,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = () => {
+  const landingPageProceedHandler = e => {
+    e.preventDefault();
     setShowLandingPage(false);
     startClaim();
   };
@@ -219,7 +251,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
-  if (shuttered === null) {
+  if (!isLoggedIn || shuttered === null) {
     return null;
   } else if (shuttered) {
     setPageTitle();
@@ -244,7 +276,13 @@ const EducationStartCase: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContext.Provider value={{ appBacklinkProps: {}, showLanguageToggle }}>
+      <AppContextEducation.Provider
+        value={{
+          appBacklinkProps: {},
+          showLanguageToggle,
+          serviceParam: educationStartParam
+        }}
+      >
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() =>
@@ -266,7 +304,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
             .
           </p>
         </TimeoutPopup>
-
         <AppHeader
           handleSignout={handleSignout}
           appname={t('EDUCATION_START')}
@@ -278,32 +315,30 @@ const EducationStartCase: FunctionComponent<any> = () => {
           assignmentPConn 
           ) */
           }
-          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
-
         <div className='govuk-width-container'>
           {shutterServicePage ? (
             <ShutterServicePage />
           ) : (
             <>
-              <div id='pega-part-of-page'>
-                <div id='pega-root'></div>
-              </div>
-              <MainWrapper>
-                {showLandingPage && (
-                  <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
-                )}
-
-                {serviceNotAvailable && <ServiceNotAvailable />}
-                {currentDisplay === 'resolutionpage' && (
-                  <SummaryPage
-                    summaryContent={summaryPageContent.content}
-                    summaryTitle={summaryPageContent.title}
-                    summaryBanner={summaryPageContent.banner}
-                    backlinkProps={{}}
-                  />
-                )}
-              </MainWrapper>
+              {showPega && (
+                <div id='pega-part-of-page'>
+                  <div id='pega-root'></div>
+                </div>
+              )}
+              {showLandingPage && (
+                <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
+              )}
+              {serviceNotAvailable && <ServiceNotAvailable />}
+              {currentDisplay === 'resolutionpage' && (
+                <SummaryPage
+                  summaryContent={summaryPageContent.content}
+                  summaryTitle={summaryPageContent.title}
+                  summaryBanner={summaryPageContent.banner}
+                  backlinkProps={{}}
+                />
+              )}
             </>
           )}
         </div>
@@ -321,7 +356,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
         </LogoutPopup>
         <AppFooter />
-      </AppContext.Provider>
+      </AppContextEducation.Provider>
     );
   }
 };
