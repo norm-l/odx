@@ -4,12 +4,28 @@ import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 
 export default function ActionButtons(props) {
-  const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC } = props;
+  const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
+    props;
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
+  const taskListStepId = 'SubProcessSF7_AssignmentSF1';
+  const thePConn = getPConnect();
+  const _containerName = thePConn.getContainerName();
+  const _context = thePConn.getContextName();
+  const caseInfo = thePConn.getDataObject().caseInfo;
+  const screenName = caseInfo?.assignments?.length > 0 ? caseInfo.assignments[0].name : '';
+  const containerID = PCore.getContainerUtils()
+    .getContainerAccessOrder(`${_context}/${_containerName}`)
+    .at(-1);
+  const isDeclarationPage = screenName?.toLowerCase().includes('declaration');
+
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {
     onButtonPress(sAction, sButtonType);
+  }
+  function navigateToTaskList(event) {
+    event.preventDefault();
+    thePConn.getActionsApi().navigateToStep(taskListStepId, containerID);
   }
 
   return (
@@ -31,6 +47,16 @@ export default function ActionButtons(props) {
                 : localizedVal(mButton.name, localeCategory)}
             </Button>
           ) : null
+        )}
+        {isDeclarationPage && (
+          <button
+            type='submit'
+            className='govuk-button-group govuk-button govuk-button--secondary'
+            data-module='govuk-button'
+            onClick={e => navigateToTaskList(e)}
+          >
+            {t('RETURN_TO_CHANGE_CLAIM')}
+          </button>
         )}
       </div>
 
@@ -61,7 +87,8 @@ ActionButtons.propTypes = {
   arSecondaryButtons: PropTypes.array,
   onButtonPress: PropTypes.func,
   isUnAuth: PropTypes.bool,
-  isHICBC: PropTypes.bool
+  isHICBC: PropTypes.bool,
+  getPConnect: PropTypes.func.isRequired
   // buildName: PropTypes.string
 };
 

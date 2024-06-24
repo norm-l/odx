@@ -262,8 +262,11 @@
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE": "rydych yn dal i fod yn gymwys i gael",
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE_LINK_TEXT": "Budd-dal Plant",
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "rydych am optio i mewn neu optio allan cyn pen y 3 mis nesaf",
-
-  "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "Gall y gwasanaeth hwn dim ond cael ei ddefnyddio gan y person sy’n hawlio Budd-dal Plant" ,
+  "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "Gall y gwasanaeth hwn dim ond cael ei ddefnyddio gan y person sy’n hawlio Budd-dal Plant",
+  "HICBC_LANDINGPAGE_BEFORE_6_APRIL_OPTION_LABEL": "Cyn 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "Ar neu ar ôl 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_QUESTION_LABEL": "Pryd ydych chi am optio i mewn i daliadau Budd-dal Plant?",
+  "HICBC_LANDINGPAGE_NO_OPTION_SELECTED_ERROR_MESSAGE": "Dewiswch ddyddiad i optio i mewn",
 
   "BACK_TO_START_PAGE": "Yn ôl i’r dudalen cychwyn",
 
@@ -297,5 +300,6 @@
   "ELIGIBILITY_4": "on a course provided by a school or college",
   "EDUCATION_START_P3": "The young person must be accepted onto their course or training before they turn 19.",
   "EDUCATION_START_P4": "You may need to provide us with the expected registration, start and end dates for the course or training.",
-  "EDUCATION_START_UNIVERSAL_CREDIT_WARNING": "If the young person is receiving Universal Credit you cannot apply for an extension to their payments."
+  "EDUCATION_START_UNIVERSAL_CREDIT_WARNING": "If the young person is receiving Universal Credit you cannot apply for an extension to their payments.",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim"
 }
