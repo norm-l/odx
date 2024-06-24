@@ -516,6 +516,7 @@ export default function Assignment(props) {
     const storedFlowActionId = sessionStorage.getItem('flowActionId');
     const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
     const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
+    const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
     if (currentFlowActionId === storedFlowActionId || sButton === null) {
       if (storedStepIDCYA) {
@@ -526,7 +527,9 @@ export default function Assignment(props) {
         PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
       } else if (isComingFromTasklist === 'true') {
         // coming from tasklist
-        const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
+        navigateToStepId(e, stepIdTasklist);
+      } else {
+        // For inflight cases, None of above then move to tasklist as of now, will change this code in furure enhancement
         navigateToStepId(e, stepIdTasklist);
       }
     } else if (sButton) _onButtonPress(sButton['jsAction'], 'secondary');
