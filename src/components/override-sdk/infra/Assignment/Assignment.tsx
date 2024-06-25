@@ -554,7 +554,7 @@ export default function Assignment(props) {
         <div id='Assignment'>
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' &&
-            containerName.toLowerCase() !== 'claim child benefit' ? (
+            containerName?.toLowerCase() !== 'claim child benefit' ? (
               <Button
                 variant='backlink'
                 onClick={e => {
@@ -568,7 +568,7 @@ export default function Assignment(props) {
           )}
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-          containerName.toLowerCase() !== 'claim child benefit' ? (
+          containerName?.toLowerCase() !== 'claim child benefit' ? (
             <Button
               variant='backlink'
               onClick={event => {
