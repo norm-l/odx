@@ -187,5 +187,9 @@
   "HOW_WE_TESTED_THIS": "How we tested this service",
   "THIS_SERVICE_HAS_NOT_BEEN_TESTED": "The service has not been tested for compliance with WCAG 2.2 AA.",
   "PREPARED_AND_LAST_UPDATED": "This page was prepared on 24 August 2023. It was last updated on 25 November 2023.",
-  "IT_HAS_NOT_BEEN_TESTED": "It has not been tested for compliance with WCAG 2.2 AA. The service will book a full accessibility audit by 1 February 2024."
+  "IT_HAS_NOT_BEEN_TESTED": "It has not been tested for compliance with WCAG 2.2 AA. The service will book a full accessibility audit by 1 February 2024.",
+
+  "CALL_HMRC_TO_REGISTER_FOR_SELF_ASSESSMENT": "Call HMRC to register for Self Assessment",
+  "YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS": "You need to be older than 15 years and 9 months to register for Self Assessment online.",
+  "IF_YOU_NEED_TO_REGISTER_CALL_HMRC": "If you need to register, call HMRC."
 }
