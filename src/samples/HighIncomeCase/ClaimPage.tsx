@@ -84,9 +84,9 @@ const ClaimPage: FunctionComponent<any> = () => {
                 en:{content:'English content', title: 'English Title', banner:null},
                 cy:{content:'Welsh content', banner: 'Welsh Banner', title:null},
               } */
-              // setSummaryPageData(summaryData);
+              // setSummaryPageData(summaryData);            
                
-              setSummaryPageContent(summaryData.find(data => data.Language === sessionStorage.getItem('rsdk_locale').slice(0,2).toUpperCase()));                              
+              setSummaryPageContent(summaryData.find(data => data.Language === sessionStorage.getItem('rsdk_locale')?.slice(0,2).toUpperCase() || 'EN'));                              
               
               PCore.getPubSubUtils().subscribe('languageToggleTriggered', ({language}) => {
                 setSummaryPageContent(summaryData.find(data => data.Language === language.toUpperCase()));             
