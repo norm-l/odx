@@ -186,5 +186,9 @@
   "HOW_WE_TESTED_THIS": "Sut gwnaethom brofi’r gwasanaeth hwn",
   "THIS_SERVICE_HAS_NOT_BEEN_TESTED": "Nid yw’r gwasanaeth wedi’i brofi i sicrhau ei fod yn cydymffurfio â safon ‘AA’ Canllawiau Hygyrchedd Cynnwys y We, fersiwn 2.2.",
   "PREPARED_AND_LAST_UPDATED": "Paratowyd y dudalen hon ar 24 Awst 2023. Cafodd ei diweddaru ddiwethaf ar 25 Tachwedd 2023.",
-  "IT_HAS_NOT_BEEN_TESTED": "Ni wiriwyd ei fod yn cydymffurfio â safon ‘AA’ Canllawiau Hygyrchedd Cynnwys y We, fersiwn 2.2. Bydd y gwasanaeth yn trefnu archwiliad hygyrchedd llawn erbyn 01 Chwefror 2024."
+  "IT_HAS_NOT_BEEN_TESTED": "Ni wiriwyd ei fod yn cydymffurfio â safon ‘AA’ Canllawiau Hygyrchedd Cynnwys y We, fersiwn 2.2. Bydd y gwasanaeth yn trefnu archwiliad hygyrchedd llawn erbyn 01 Chwefror 2024.",
+
+  "CALL_HMRC_TO_REGISTER_FOR_SELF_ASSESSMENT": "Call HMRC to register for Self Assessment",
+  "YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS": "You need to be older than 15 years and 9 months to register for Self Assessment online.",
+  "IF_YOU_NEED_TO_REGISTER_CALL_HMRC": "If you need to register, call HMRC."
 }

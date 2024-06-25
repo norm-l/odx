@@ -31,7 +31,8 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
-import { triggerLogout } from '../../components/helpers/utils';
+import { triggerLogout, checkStatus } from '../../components/helpers/utils';
+import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
 
 declare const myLoadMashup: any;
 
@@ -80,16 +81,19 @@ export default function SaReg() {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [inprogressRegistration, setInprogressRegistration] = useState([]);
+  const [showAgeRestrictionInfo, setshowAgeRestrictionInfo] = useState(false);
   const history = useHistory();
   const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'SA';
   const featureType = 'Service';
+  const caseStatusForRestrictedUser = 'resolved-rejecteddob';
 
   function resetAppDisplay() {
     setShowUserPortal(false);
     setShowResolutionScreen(false);
     setShowPega(false);
+    setshowAgeRestrictionInfo(false);
   }
 
   function displayPega() {
@@ -111,6 +115,11 @@ export default function SaReg() {
     setShowResolutionScreen(true);
   }
 
+  function displayShowAgeRestrictionInfo() {
+    resetAppDisplay();
+    setshowAgeRestrictionInfo(true);
+  }
+
   const serviceName = t('REGISTER_FOR_SELF_ASSESSMENT');
   registerServiceName(serviceName);
   useEffect(() => {
@@ -130,9 +139,16 @@ export default function SaReg() {
     startingFields = {
       //  NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
     };
-    PCore.getMashupApi().createCase('HMRC-SA-Work-Registration', PCore.getConstants().APP.APP, {
-      startingFields
-    });
+    PCore.getMashupApi()
+      .createCase('HMRC-SA-Work-Registration', PCore.getConstants().APP.APP, {
+        startingFields
+      })
+      .then(() => {
+        const status = checkStatus();
+        if (status?.toLowerCase() === caseStatusForRestrictedUser) {
+          displayShowAgeRestrictionInfo();
+        }
+      });
   }
 
   function returnToPortalPage() {
@@ -522,6 +538,8 @@ export default function SaReg() {
       return <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />;
     } else if (shutterServicePage) {
       return <ShutterServicePage />;
+    } else if (showAgeRestrictionInfo) {
+      return <RegistrationAgeRestrictionInfo />;
     } else {
       return (
         <>
