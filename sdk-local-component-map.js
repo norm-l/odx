@@ -30,7 +30,6 @@ import HmrcOdxGdsTextPresentation from './src/components/custom-sdk/field/HMRC_O
 import RichText from './src/components/override-sdk/field/RichText/';
 import HmrcOdxGdsCheckAnswersPage from './src/components/custom-sdk/template/HMRC_ODX_GDSCheckAnswersPage/';
 import SimpleTableManual from './src/components/override-sdk/template/SimpleTableManual/';
-import ScalarList from './src/components/override-sdk/field/ScalarList/'
 /*import end - DO NOT REMOVE*/
 
 // localSdkComponentMap is the JSON object where we'll store the components that are
@@ -67,7 +66,6 @@ const localSdkComponentMap = {
   HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate,
   HMRC_ODX_GDSCheckAnswersPage: HmrcOdxGdsCheckAnswersPage,
   SimpleTableManual: SimpleTableManual,
-  ScalarList: ScalarList
   /*map end - DO NOT REMOVE*/
 };
 
