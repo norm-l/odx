@@ -103,8 +103,8 @@ export const removeRedundantString = (redundantString: string, separator: string
   const list = redundantString.split(separator);
   const newList = [];
   let uniqueString = '';
-
-  const checkEmail = redundantString.includes('name@example.com');
+  const emailPattern = new RegExp(/\S+@\S+\.\S+/);
+  const checkEmail = emailPattern.test(redundantString);
   if (list.length > 0) {
     list.forEach(item => {
       if (!newList.includes(item.trim())) {
