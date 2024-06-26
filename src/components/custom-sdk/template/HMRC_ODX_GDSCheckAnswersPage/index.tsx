@@ -80,11 +80,12 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
-  const getCYAStepId = () => {
+  const getCYAStepId = (event, originalLink) => {
     interface ResponseType {
       CYAStepID: string;
     }
     let stepIDCYA;
+    const stepId = originalLink.getAttribute('data-step-id');
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
@@ -93,17 +94,20 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       'caseInfo.assignments[0].actions[0]',
       contextWorkarea
     );
+    const options = {
+      invalidateCache: true
+    };
 
-    const dataPagePromise: any = PCore.getDataPageUtils().getPageDataAsync(
-      'D_GetCurrentCYAStepID',
-      'root',
-      {
-        FlowActionName: currentFlowActionId,
-        CaseID: pConn.getCaseSummary().content.pyID
-      }
-    );
-
-    dataPagePromise
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_GetCurrentCYAStepID',
+        'root',
+        {
+          FlowActionName: currentFlowActionId,
+          CaseID: pConn.getCaseSummary().content.pyID
+        },
+        options
+      ) // @ts-ignore
       .then((pageData: ResponseType) => {
         stepIDCYA = pageData?.CYAStepID;
         if (stepIDCYA) {
@@ -117,6 +121,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       .catch(err => {
         // eslint-disable-next-line no-console
         console.error(err);
+      })
+      .finally(() => {
+        navigateToStep(event, stepId, originalLink);
       });
   };
 
@@ -172,10 +179,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     fragment.querySelectorAll('a').forEach(cloneLink => {
       const originalLink = cloneLink;
       if (originalLink) {
-        const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-          getCYAStepId();
-          navigateToStep(event, stepId, originalLink);
+          getCYAStepId(event, originalLink);
         });
       }
     });
