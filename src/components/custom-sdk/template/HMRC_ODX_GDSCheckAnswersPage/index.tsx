@@ -80,6 +80,46 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  const getCYAStepId = () => {
+    interface ResponseType {
+      CYAStepID: string;
+    }
+    let stepIDCYA;
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const currentFlowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+
+    const dataPagePromise: any = PCore.getDataPageUtils().getPageDataAsync(
+      'D_GetCurrentCYAStepID',
+      'root',
+      {
+        FlowActionName: currentFlowActionId,
+        CaseID: pConn.getCaseSummary().content.pyID
+      }
+    );
+
+    dataPagePromise
+      .then((pageData: ResponseType) => {
+        stepIDCYA = pageData?.CYAStepID;
+        if (stepIDCYA) {
+          sessionStorage.setItem('stepIDCYA', stepIDCYA);
+          sessionStorage.setItem('isEditMode', 'true');
+
+          sessionStorage.removeItem('isComingFromPortal');
+          sessionStorage.removeItem('isComingFromTasklist');
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
+  };
+
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -134,35 +174,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-          const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-            `${PCore.getConstants().APP.APP}/primary`
-          );
-          const currentFlowActionId = PCore.getStoreValue(
-            '.ID',
-            'caseInfo.assignments[0].actions[0]',
-            contextWorkarea
-          );
-          let stepIDCYA;
-          PCore.getDataPageUtils()
-            .getPageDataAsync('D_GetCurrentCYAStepID', 'root', {
-              FlowActionName: currentFlowActionId,
-              CaseID: pConn.getCaseSummary().content.pyID
-            })
-            .then(pageData => {
-              stepIDCYA = pageData?.CYAStepID;
-              if (stepIDCYA) {
-                sessionStorage.setItem('stepIDCYA', stepIDCYA);
-                sessionStorage.setItem('isEditMode', 'true');
-
-                sessionStorage.removeItem('isComingFromPortal');
-                sessionStorage.removeItem('isComingFromTasklist');
-              }
-            })
-            .catch(err => {
-              // eslint-disable-next-line no-console
-              console.error(err);
-            });
-
+          getCYAStepId();
           navigateToStep(event, stepId, originalLink);
         });
       }
