@@ -80,31 +80,6 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
-  const searchKey = 'CYAStepID';
-  let cyaStepId = '';
-
-  function getCYAStepId(item) {
-    Object.keys(item).forEach(key => {
-      if (typeof item[key] === 'object') {
-        getCYAStepId(item[key]);
-      }
-      if (typeof item[key] === 'string' && key === searchKey) {
-        cyaStepId = item[key];
-      }
-    });
-    return cyaStepId;
-  }
-
-  const getCurrentCYAStepID = (): string => {
-    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-      `${PCore.getConstants().APP.APP}/primary`
-    );
-    const content = PCore.getStoreValue('.content', 'caseInfo', contextWorkarea);
-
-    const CYAStepID = getCYAStepId(content);
-    return CYAStepID;
-  };
-
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -159,14 +134,35 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       if (originalLink) {
         const stepId = originalLink.getAttribute('data-step-id');
         cloneLink.addEventListener('click', event => {
-          const stepIDCYA = getCurrentCYAStepID();
-          if (stepIDCYA) {
-            sessionStorage.setItem('stepIDCYA', stepIDCYA);
-            sessionStorage.setItem('isEditMode', 'true');
+          const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+            `${PCore.getConstants().APP.APP}/primary`
+          );
+          const currentFlowActionId = PCore.getStoreValue(
+            '.ID',
+            'caseInfo.assignments[0].actions[0]',
+            contextWorkarea
+          );
+          let stepIDCYA;
+          PCore.getDataPageUtils()
+            .getPageDataAsync('D_GetCurrentCYAStepID', 'root', {
+              FlowActionName: currentFlowActionId,
+              CaseID: pConn.getCaseSummary().content.pyID
+            })
+            .then(pageData => {
+              stepIDCYA = pageData?.CYAStepID;
+              if (stepIDCYA) {
+                sessionStorage.setItem('stepIDCYA', stepIDCYA);
+                sessionStorage.setItem('isEditMode', 'true');
 
-            sessionStorage.removeItem('isComingFromPortal');
-            sessionStorage.removeItem('isComingFromTasklist');
-          }
+                sessionStorage.removeItem('isComingFromPortal');
+                sessionStorage.removeItem('isComingFromTasklist');
+              }
+            })
+            .catch(err => {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            });
+
           navigateToStep(event, stepId, originalLink);
         });
       }
