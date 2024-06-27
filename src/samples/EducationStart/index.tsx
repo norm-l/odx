@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import LandingPage from './LandingPage';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
@@ -238,11 +238,15 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = e => {
-    e.preventDefault();
-    setShowLandingPage(false);
-    startClaim();
-  };
+  // Handler to hide landing page and start the claim process
+  const landingPageProceedHandler = useCallback(
+    e => {
+      e.preventDefault();
+      setShowLandingPage(false);
+      startClaim();
+    },
+    [startClaim]
+  );
 
   useEffect(() => {
     getSdkConfig().then(config => {
