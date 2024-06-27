@@ -46,7 +46,7 @@ export default function LandingPage(props) {
         {bulletSections.map((section) => (
           // Generate a unique key using titleKey and a unique identifier from bulletPoints
           <BulletListSection
-            key={`${section.titleKey}-${section.bulletPoints[0]}`} // Using titleKey and first bullet point as a unique key
+            key={`${section.titleKey}-${section.bulletPoints[0]}`} 
             titleKey={section.titleKey}
             bulletPoints={section.bulletPoints}
           />
