@@ -87,6 +87,15 @@ div.MuiGrid-root.MuiGrid-item .govuk-summary-list:last-of-type ~ br {
   display: none;
 }
 
+@media (min-width: 48.0625em) {
+  .education-start-header .govuk-header__logo {
+    width: 25%;
+  }
+  .education-start-header .govuk-header__content {
+    width: 75%;
+  }
+}
+
  // TODO - Above style will be removed with US-13518 implementation.
 
 

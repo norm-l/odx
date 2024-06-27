@@ -266,7 +266,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setPageTitle();
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <AppHeader customClass='education-start-header' appname={t('EDUCATION_START')} hasLanguageToggle={false} />
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
@@ -315,6 +315,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
         </TimeoutPopup>
         <AppHeader
           handleSignout={handleSignout}
+          customClass='education-start-header' 
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
           isPegaApp={showPega}

@@ -3,15 +3,19 @@ import { useTranslation } from 'react-i18next';
 import LanguageToggle from '../../../components/AppComponents/LanguageToggle';
 
 export default function AppHeader(props) {
-  const { handleSignout, appname, hasLanguageToggle, languageToggleCallback, betafeedbackurl} = props;
-  const { t } = useTranslation();  
+  const { handleSignout, appname, hasLanguageToggle, languageToggleCallback, betafeedbackurl, customClass} = props;
+  const { t } = useTranslation();
 
+  const headerClassName = {};
+  if(customClass) {
+    headerClassName['className'] =  customClass;
+  }
   return (
     <>
       <a href='#main-content' className='govuk-skip-link' data-module='govuk-skip-link'>
         {t('SKIP_TO_MAIN')}
       </a>
-      <header role='banner'>
+      <header role='banner' {...headerClassName}>
         <div
           className='govuk-header hmrc-header  hmrc-header--with-additional-navigation'
           data-module='govuk-header'
