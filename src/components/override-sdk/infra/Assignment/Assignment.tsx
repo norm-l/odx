@@ -359,7 +359,10 @@ export default function Assignment(props) {
         'caseInfo.assignments[0].actions[0]',
         contextWorkarea
       );
-      sessionStorage.setItem('flowActionId', flowActionId);
+      const screenContext =
+        PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
+      const uniqueValueForEveryScreen = flowActionId + screenContext;
+      sessionStorage.setItem('uniqueValueForEveryScreen', uniqueValueForEveryScreen);
     }
   });
 
@@ -513,12 +516,16 @@ export default function Assignment(props) {
       'caseInfo.assignments[0].actions[0]',
       contextWorkarea
     );
-    const storedFlowActionId = sessionStorage.getItem('flowActionId');
+    const currentScreenContext =
+      PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
+    const currentUniqueValueForEveryScreen = currentFlowActionId + currentScreenContext;
+
+    const storedUniqueValueForEveryScreen = sessionStorage.getItem('uniqueValueForEveryScreen');
     const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
     const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
-    if (currentFlowActionId === storedFlowActionId || sButton === null) {
+    if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen || sButton === null) {
       if (storedStepIDCYA) {
         // coming from cya
         navigateToStepId(e, storedStepIDCYA);
