@@ -525,21 +525,25 @@ export default function Assignment(props) {
     const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
-    if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen || sButton === null) {
-      if (storedStepIDCYA) {
-        // coming from cya
-        navigateToStepId(e, storedStepIDCYA);
+    if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+      if (isComingFromTasklist === 'true') {
+        // coming from tasklist
+        navigateToStepId(e, stepIdTasklist);
       } else if (isComingFromPortal === 'true') {
         // coming from portal
         PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
-      } else if (isComingFromTasklist === 'true') {
-        // coming from tasklist
-        navigateToStepId(e, stepIdTasklist);
+      } else if (storedStepIDCYA) {
+        // coming from cya
+        navigateToStepId(e, storedStepIDCYA);
       } else {
         // For inflight cases, None of above then move to tasklist as of now, will change this code in furure enhancement
         navigateToStepId(e, stepIdTasklist);
       }
-    } else if (sButton) _onButtonPress(sButton['jsAction'], 'secondary');
+    } else if (sButton) {
+      _onButtonPress(sButton['jsAction'], 'secondary');
+    } else {
+      navigateToStep('previous', itemKey);
+    }
   }
 
   function triggerBack() {
@@ -583,7 +587,7 @@ export default function Assignment(props) {
               }}
               key='createMissingBacklink'
             >
-              {t('BACK')}(R)
+              {t('BACK')}
             </Button>
           ) : null}
           {
