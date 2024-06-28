@@ -49,7 +49,11 @@ export default function ActionButtons(props) {
           ) : null
         )}
         {isDeclarationPage && (
-          <Button variant='secondary' onClick={e => navigateToTaskList(e)}>
+          <Button
+            variant='secondary'
+            attributes={{ type: 'button' }}
+            onClick={e => navigateToTaskList(e)}
+          >
             {t('RETURN_TO_CHANGE_CLAIM')}
           </Button>
         )}
