@@ -27,7 +27,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [shuttered, setShuttered] = useState(null);
 
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
-  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
+  // const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -68,7 +68,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setIsLoggedIn(true);
   }
 
-  const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
+  const { showPega, setShowPega, showResolutionPage, caseId, serviceNotAvailable } = useStartMashup(
     setAuthType,
     doRedirectDone,
     {
@@ -146,6 +146,17 @@ const EducationStartCase: FunctionComponent<any> = () => {
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
     staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
   };
+
+  function returnToPortalPage() {
+    setShowSignoutModal(false);
+    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
+    setCurrentDisplay('loading');
+    setShowLandingPage(true);
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  }
 
   const startClaim = () => {
     setShowPega(true);
@@ -337,7 +348,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
               {showLandingPage && (
                 <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
               )}
-              {serviceNotAvailable && <ServiceNotAvailable />}
+              {currentDisplay === 'servicenotavailable' && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage
                   summaryContent={summaryPageContent.Content}
