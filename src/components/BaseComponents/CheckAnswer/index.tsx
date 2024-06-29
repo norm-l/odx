@@ -56,7 +56,8 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
     (!!value && value !== ' ' && formattedValue !== 'Invalid Date' && value?.length > 0);
 
   return (
-    isValueNotBlank && (
+    isValueNotBlank &&
+    !value?.includes(',,') && (
       <div className='govuk-summary-list__row'>
         <dt className='govuk-summary-list__key'>{label}</dt>
         <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
