@@ -265,7 +265,7 @@
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE_LINK_TEXT": "Child Benefit",
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "want to opt-in or opt-out within the next 3 months",
 
-  "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "This service can only be completed by the person who claims Child Benefit." ,
+  "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "This service can only be completed by the person who claims Child Benefit.",
 
   "HICBC_LANDINGPAGE_BEFORE_6_APRIL_OPTION_LABEL": "Before 6 April 2024",
   "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "On or after 6 April 2024",
@@ -305,5 +305,6 @@
   "ELIGIBILITY_4": "on a course provided by a school or college",
   "EDUCATION_START_P3": "The young person must be accepted onto their course or training before they turn 19.",
   "EDUCATION_START_P4": "You may need to provide us with the expected registration, start and end dates for the course or training.",
-  "EDUCATION_START_UNIVERSAL_CREDIT_WARNING": "If the young person is receiving Universal Credit you cannot apply for an extension to their payments."
+  "EDUCATION_START_UNIVERSAL_CREDIT_WARNING": "If the young person is receiving Universal Credit you cannot apply for an extension to their payments.",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim"
 }

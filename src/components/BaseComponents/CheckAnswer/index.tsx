@@ -47,29 +47,40 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       });
   };
 
+  // This is teporary solution from react for back link issue and it will be handled by pega in coming sprint
+  const isValueNotBlank =
+    (!!formattedValue &&
+      formattedValue !== ' ' &&
+      formattedValue !== 'Invalid Date' &&
+      formattedValue?.length > 0) ||
+    (!!value && value !== ' ' && formattedValue !== 'Invalid Date' && value?.length > 0);
+
   return (
-    <div className='govuk-summary-list__row'>
-      <dt className='govuk-summary-list__key'>{label}</dt>
-      <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
-        {Array.isArray(formattedValue) ? (
-          <>
-            {formattedValue.map(item => (
-              <React.Fragment key={item}>
-                {item}
-                <br />
-              </React.Fragment>
-            ))}
-          </>
-        ) : (
-          formattedValue || value
-        )}
-      </dd>
-      <dd className='govuk-summary-list__actions'>
-        <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
-          {t('GDS_ACTION_CHANGE')}
-          <span className='govuk-visually-hidden'> {label}</span>
-        </a>
-      </dd>
-    </div>
+    isValueNotBlank &&
+    !value?.includes(',,') && (
+      <div className='govuk-summary-list__row'>
+        <dt className='govuk-summary-list__key'>{label}</dt>
+        <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
+          {Array.isArray(formattedValue) ? (
+            <>
+              {formattedValue.map(item => (
+                <React.Fragment key={item}>
+                  {item}
+                  <br />
+                </React.Fragment>
+              ))}
+            </>
+          ) : (
+            formattedValue || value
+          )}
+        </dd>
+        <dd className='govuk-summary-list__actions'>
+          <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+            {t('GDS_ACTION_CHANGE')}
+            <span className='govuk-visually-hidden'> {label}</span>
+          </a>
+        </dd>
+      </div>
+    )
   );
 }
