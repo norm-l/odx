@@ -304,8 +304,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
         >
           <h1 id='hmrc-timeout-heading' className='govuk-heading-m push--top'>
             You’re about to be signed out
-          </h1>
-          <p className='govuk-body hmrc-timeout-dialog__message' aria-hidden='true'>
+          </h1>            
+          <p className='govuk-body hmrc-timeout-dialog__message'> {/* Todo Aria-hidden will be added back with US-13474 implementation */}
             For your security, we will sign you out in{' '}
             <span id='hmrc-timeout-countdown' className='hmrc-timeout-dialog__countdown'>
               2 minutes
