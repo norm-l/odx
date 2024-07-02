@@ -191,5 +191,24 @@
 
   "CALL_HMRC_TO_REGISTER_FOR_SELF_ASSESSMENT": "Call HMRC to register for Self Assessment",
   "YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS": "You need to be older than 15 years and 9 months to register for Self Assessment online.",
-  "IF_YOU_NEED_TO_REGISTER_CALL_HMRC": "If you need to register, call HMRC."
+  "IF_YOU_NEED_TO_REGISTER_CALL_HMRC": "If you need to register, call HMRC.",
+
+  "YOU_HAVE_PREVIOUSLY_REGISTERED_FOR_SELF_ASSESSMENT": "You've previously registered for Self Assessment.",
+  "IT_LOOKS_LIKE_YOU_ARE_ALREADY_REGISTERED": "It looks like you're already registered for Self Assessment or were registered in the past. This service is in Beta and can't process your request at the moment.",
+  "YOU_CAN_REACTIVATE_YOUR_ONLINE_ACCOUNT": "You can reactivate your online account for Self Assessment.",
+  "YOU_WILL_NEED": "You'll need:",
+  "YOUR_GOVERNMENT_GATEWAY_USER_ID_AND_PASSWORD_TO_SIGN_IN": "Your Government Gateway user ID and password to sign in.",
+  "YOUR": "Your ",
+  "YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Unique Taxpayer Reference (UTR) number",
+  "IF_YOU_CANNOT_US_THE_ONLINE_FORM": "If you cannot us the online form",
+  "YOU_CAN_COMPLETE": "You can complete ",
+  "FORM_CWF1": "form CWF1",
+  "TO_REACTIVATE_YOUR_ACCOUNT": " to reactivate your account.",
+  "SEND_THE_COMPLETED_FORM_TO": "Send the completed form to:",
+  "SELF_ASSESSMENT": "Self Assessment",
+  "HM_REVENUE_AND_CUSTOMS": "HM Revenue and Customs",
+  "BX9_1AN": "BX9 1AN",
+  "UNITED_KINGDOM": "United Kingdom",
+  "YOU_WILL_NEED_YOUR": "You'll need your ",
+  "YOU_WILL_NEED_YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Unique Taxpayer Reference (UTR) number."
 }
