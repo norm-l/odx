@@ -54,13 +54,20 @@ export const getServiceShutteredStatus = async (targetCase = null): Promise<bool
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    let featureID; let featureType;
-    if(isEduStartJourney(targetCase)){
+    
+    let featureID; let featureType = 'Service';
+    switch(true) {
+      case isUnAuthJourney():
+        featureID = 'UnauthChB';
+        break;
+      case isEduStartJourney(targetCase):
         featureID = 'EdStart';
         featureType = 'EdStartService';
-    } else {
-        featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
-        featureType = 'Service';
+        break;
+      case true:
+      default:
+        featureID = 'ChB';
+        break;
     }
 
     const parameters = new URLSearchParams(

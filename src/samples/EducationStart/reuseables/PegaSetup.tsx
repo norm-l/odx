@@ -38,8 +38,7 @@ export function establishPCoreSubscriptions({
   setShowPega,
   setShowResolutionPage,
   setCaseId,
-  setCaseStatus,
-  setShutterServicePage
+  setCaseStatus
   // setOperatorName
 }) {
   /* ********************************************
@@ -258,7 +257,7 @@ export function startMashup(
   PCore.onPCoreReady(renderObj => {
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
-    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setShutterServicePage });
+    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus });
     const name = PCore.getEnvironmentInfo().getOperatorName();
     setOperatorName(name);
 
