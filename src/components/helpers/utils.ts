@@ -32,7 +32,20 @@ export const isUnAuthJourney = () => {
   return caseType === 'Unauth' || window.location.href.includes('/ua');
 };
 
-export const getServiceShutteredStatus = async (): Promise<boolean> => {
+export const isEduStartJourney = (targetCase = null) => {
+  const caseTypeName = 'HMRC-ChB-Work-EducationStart';
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  if(!containername) {
+    return targetCase? caseTypeName === targetCase : false;
+  } else {
+    const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
+    return caseType === caseTypeName;
+  }
+};
+
+export const getServiceShutteredStatus = async (targetCase = null): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
   }
@@ -41,8 +54,14 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
-    const featureType = 'Service';
+    let featureID; let featureType;
+    if(isEduStartJourney(targetCase)){
+        featureID = 'EdStart';
+        featureType = 'EdStartService';
+    } else {
+        featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
+        featureType = 'Service';
+    }
 
     const parameters = new URLSearchParams(
       `{FeatureID: ${featureID}, FeatureType: ${featureType}}`
