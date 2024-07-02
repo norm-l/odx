@@ -55,6 +55,7 @@ export default function ClaimsList(props) {
     sessionStorage.setItem('isEditMode', 'true');
     sessionStorage.removeItem('isComingFromTasklist');
     sessionStorage.removeItem('stepIDCYA');
+    sessionStorage.setItem('isTasklistScreen', 'false');
 
     if (rowClickAction === 'OpenAssignment') {
       resetContainer();

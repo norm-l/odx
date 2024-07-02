@@ -39,6 +39,10 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
     sessionStorage.removeItem('isTasklistClicked');
   }, []);
 
+  useEffect(() => {
+    sessionStorage.setItem('isTasklistScreen', 'true');
+  }, []);
+
   let cssHooks = '';
   if (caseType === 'Auth') {
     cssHooks = 'auth';
@@ -73,6 +77,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
     getPConnect().getActionsApi().finishAssignment(context);
     PCore.getPubSubUtils().publish('assignmentFinishedOnTaskListClicked', {});
     sessionStorage.setItem('isTasklistClicked', 'true');
+    sessionStorage.setItem('isTasklistScreen', 'false');
   };
 
   const labelStatusMapping = status => {
