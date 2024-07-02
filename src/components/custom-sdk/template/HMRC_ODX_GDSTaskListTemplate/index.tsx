@@ -36,11 +36,8 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
   }, []);
 
   useEffect(() => {
-    sessionStorage.removeItem('isTasklistClicked');
-  }, []);
-
-  useEffect(() => {
     sessionStorage.setItem('isTasklistScreen', 'true');
+    sessionStorage.removeItem('isTasklistClicked');
   }, []);
 
   let cssHooks = '';
