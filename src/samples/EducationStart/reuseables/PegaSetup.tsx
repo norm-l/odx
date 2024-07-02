@@ -19,7 +19,6 @@ import {
 
 declare const myLoadMashup: any;
 declare const PCore: any;
-let assignmentFinishedFlag = false;
 
 export function establishPCoreSubscriptions({
   setShowPega,
@@ -52,8 +51,6 @@ export function establishPCoreSubscriptions({
    * closes container item if case is resolved-discarded, on assignmentFinished
    ******************************************** */
   function handleServiceNotAvailable() {
-    if (!assignmentFinishedFlag) {
-      // console.log('SUBEVENT! handleServiceNotAvailableOnAssignmentFinished');
       const containername = PCore.getContainerUtils().getActiveContainerItemName(
         `${PCore.getConstants().APP.APP}/primary`
       );
@@ -66,7 +63,7 @@ export function establishPCoreSubscriptions({
         setServiceNotAvailable(true);
         PCore.getContainerUtils().closeContainerItem(context);
         //  Temporary workaround to restrict infinite update calls
-        assignmentFinishedFlag = true;
+        PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
         PCore?.getPubSubUtils().unsubscribe(
           PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
           'assignmentFinished'
@@ -74,7 +71,6 @@ export function establishPCoreSubscriptions({
       } else {
         showResolutionScreen();
       }
-    }
   }
 
   PCore.getPubSubUtils().subscribe(
@@ -401,7 +397,6 @@ export const useStartMashup = (
 
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
-      setShowResolutionPage
       startMashup(
         { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setServiceNotAvailable },
         _AppContextValues
