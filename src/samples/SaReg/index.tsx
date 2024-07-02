@@ -33,6 +33,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { triggerLogout, checkStatus } from '../../components/helpers/utils';
 import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
+import AlreadyRegisteredUserMessage from './AlreadyRegisteredUserMessage';
 
 declare const myLoadMashup: any;
 
@@ -82,18 +83,22 @@ export default function SaReg() {
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [inprogressRegistration, setInprogressRegistration] = useState([]);
   const [showAgeRestrictionInfo, setshowAgeRestrictionInfo] = useState(false);
+  const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
+
   const history = useHistory();
   const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'SA';
   const featureType = 'Service';
   const caseStatusForRestrictedUser = 'resolved-rejecteddob';
+  const caseStatusForAlreadyRegisteredUser = 'resolved-rejectedutractive';
 
   function resetAppDisplay() {
     setShowUserPortal(false);
     setShowResolutionScreen(false);
     setShowPega(false);
     setshowAgeRestrictionInfo(false);
+    setShowAlreadyRegisteredUserMessage(false);
   }
 
   function displayPega() {
@@ -118,6 +123,11 @@ export default function SaReg() {
   function displayShowAgeRestrictionInfo() {
     resetAppDisplay();
     setshowAgeRestrictionInfo(true);
+  }
+
+  function displayShowAlreadyRegisteredUserMessage() {
+    resetAppDisplay();
+    setShowAlreadyRegisteredUserMessage(true);
   }
 
   const serviceName = t('REGISTER_FOR_SELF_ASSESSMENT');
@@ -147,6 +157,8 @@ export default function SaReg() {
         const status = checkStatus();
         if (status?.toLowerCase() === caseStatusForRestrictedUser) {
           displayShowAgeRestrictionInfo();
+        } else if (status?.toLowerCase() === caseStatusForAlreadyRegisteredUser) {
+          displayShowAlreadyRegisteredUserMessage();
         }
       });
   }
@@ -540,6 +552,8 @@ export default function SaReg() {
       return <ShutterServicePage />;
     } else if (showAgeRestrictionInfo) {
       return <RegistrationAgeRestrictionInfo />;
+    } else if (showAlreadyRegisteredUserMessage) {
+      return <AlreadyRegisteredUserMessage />;
     } else {
       return (
         <>
