@@ -87,13 +87,6 @@ export function establishPCoreSubscriptions({
     'handleServiceNotAvailableOnAssignmentFinished'
   );
 
-  PCore.getPubSubUtils().subscribe(
-    'assignmentFinishedOnTaskListClicked',
-    () => {
-      checkShutterService({setShutterServicePage});
-    },
-    'assignmentFinishedOnTaskListClicked'
-  );
   /* ********************************
    * On Cancel event, ?
    ******************************** */
