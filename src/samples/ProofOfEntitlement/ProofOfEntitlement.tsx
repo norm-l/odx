@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { loginIfNecessary, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
+import ReadOnlyDisplay from '../../components/BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { useTranslation } from 'react-i18next';
 
 
@@ -32,6 +33,25 @@ export default function ProofOfEntitlement(){
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
                             <h1 className="govuk-heading-l">{t('PROOF_ENTITLEMENT_HEADING')}</h1>
+
+                            <p className='govuk-body'>Placeholder confirmation text</p>
+                            <h2 className='govuk-heading-m'>{t('CLAIMANTS_ENTITLEMENT_DETAILS')}</h2>
+                            <p className='govuk-body'>Placeholder if your details are incorrect</p>
+
+                            <dl className='govuk-summary-list'>
+                                <ReadOnlyDisplay label='Name' value='A Name'/>                            
+                                <ReadOnlyDisplay label='Address' value='123 Street, London, LN12 3ST' name='CSV'/>                            
+                                <ReadOnlyDisplay label='Amount' value='$22.00 Per Day'/>                            
+                                <ReadOnlyDisplay label='Start date' value='01 June 2024'/>                            
+                                <ReadOnlyDisplay label='End Date' value='01 June 2025'/>  
+                            </dl>
+                            
+                            <h2 className='govuk-heading-m'>{t('CLAIMANTS_ENTITLEMENT_DETAILS')}</h2>                          
+                            <dl className='govuk-summary-list'>
+                                <ReadOnlyDisplay label='Date of birth' value='4 March 2022'/>                            
+                                <ReadOnlyDisplay label='Start date' value='01 June 2024'/>                            
+                                <ReadOnlyDisplay label='End date' value='01 June 2025'/>  
+                            </dl>
                         </div>
                     </div>
                 </main>            
