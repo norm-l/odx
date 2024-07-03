@@ -1,5 +1,7 @@
 import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
+import { t } from 'i18next';
 
+let appServiceName = null;
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
   document.body.scrollTop = position;
@@ -32,20 +34,20 @@ export const isUnAuthJourney = () => {
   return caseType === 'Unauth' || window.location.href.includes('/ua');
 };
 
-export const isEduStartJourney = (targetCase = null) => {
+export const isEduStartJourney = () => {
   const caseTypeName = 'HMRC-ChB-Work-EducationStart';
   const containername = PCore.getContainerUtils().getActiveContainerItemName(
     `${PCore.getConstants().APP.APP}/primary`
   );
   if(!containername) {
-    return targetCase? caseTypeName === targetCase : false;
+    return appServiceName === t('EDUCATION_START');
   } else {
     const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
     return caseType === caseTypeName;
   }
 };
 
-export const getServiceShutteredStatus = async (targetCase = null): Promise<boolean> => {
+export const getServiceShutteredStatus = async (): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
   }
@@ -60,7 +62,7 @@ export const getServiceShutteredStatus = async (targetCase = null): Promise<bool
       case isUnAuthJourney():
         featureID = 'UnauthChB';
         break;
-      case isEduStartJourney(targetCase):
+      case isEduStartJourney():
         featureID = 'EdStart';
         featureType = 'EdStartService';
         break;
@@ -190,3 +192,7 @@ export const triggerLogout = () => {
       });
     });
 };
+
+export const setAppServiceName = (serviceName) => {
+  appServiceName = serviceName || null;
+}

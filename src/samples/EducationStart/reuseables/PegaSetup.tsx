@@ -26,7 +26,7 @@ declare const PCore: any;
   */
  async function checkShutterService({setShutterServicePage}) {
   try {
-    const status = await getServiceShutteredStatus('HMRC-ChB-Work-EducationStart');
+    const status = await getServiceShutteredStatus();
     setShutterServicePage(status);
   } catch (error) {
     // Handle error appropriately, e.g., log it or show a notification
