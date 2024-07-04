@@ -57,14 +57,13 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
     
-    let featureID; let featureType = 'Service';
+    let featureID = 'ChB'; let featureType = 'Service';
     switch(true) {
       case isUnAuthJourney():
         featureID = 'UnauthChB';
         break;
       case isEduStartJourney():
         featureID = 'EdStart';
-        featureType = 'EdStartService';
         break;
       case true:
       default:
