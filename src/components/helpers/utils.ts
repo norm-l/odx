@@ -39,7 +39,6 @@ export const isEduStartJourney = () => {
   const containername = PCore.getContainerUtils().getActiveContainerItemName(
     `${PCore.getConstants().APP.APP}/primary`
   );
-  // --- this check happens only at landing page for shutter call, we are not having Pcore container at initial stage
   if(!containername) {
     return appServiceName === t('EDUCATION_START');
   } else {
