@@ -29,6 +29,7 @@ declare const PCore: any;
     const status = await getServiceShutteredStatus();
     setShutterServicePage(status);
   } catch (error) {
+    setShutterServicePage(false);
     // Handle error appropriately, e.g., log it or show a notification
     console.error('Error setting shutter status:', error); // eslint-disable-line
   }
