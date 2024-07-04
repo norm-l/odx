@@ -26,7 +26,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [shuttered, setShuttered] = useState(null);
 
-  // const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);

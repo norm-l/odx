@@ -39,7 +39,7 @@ export const isEduStartJourney = () => {
   const containername = PCore.getContainerUtils().getActiveContainerItemName(
     `${PCore.getConstants().APP.APP}/primary`
   );
-  //--- this check happens only at landing page for shutter call, we are not having Pcore container at initial stage
+  // --- this check happens only at landing page for shutter call, we are not having Pcore container at initial stage
   if(!containername) {
     return appServiceName === t('EDUCATION_START');
   } else {
@@ -59,19 +59,11 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     ).href;
     
     let featureID = 'ChB'; const featureType = 'Service';
-    switch(true) {
-      case isUnAuthJourney():
-        featureID = 'UnauthChB';
-        break;
-      case isEduStartJourney():
-        featureID = 'EdStart';
-        break;
-      case true:
-      default:
-        featureID = 'ChB';
-        break;
-    }
-
+    if(isUnAuthJourney())
+      featureID = 'UnauthChB';
+    else if(isEduStartJourney())
+      featureID = 'EdStart';
+    
     const parameters = new URLSearchParams(
       `{FeatureID: ${featureID}, FeatureType: ${featureType}}`
     );
