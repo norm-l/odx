@@ -39,7 +39,7 @@ export const isEduStartJourney = () => {
   const containername = PCore.getContainerUtils().getActiveContainerItemName(
     `${PCore.getConstants().APP.APP}/primary`
   );
-  if(!containername) {
+  if (!containername) {
     return appServiceName === t('EDUCATION_START');
   } else {
     const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
@@ -56,13 +56,12 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    
-    let featureID = 'ChB'; const featureType = 'Service';
-    if(isUnAuthJourney())
-      featureID = 'UnauthChB';
-    else if(isEduStartJourney())
-      featureID = 'EdStart';
-    
+
+    let featureID = 'ChB';
+    const featureType = 'Service';
+    if (isUnAuthJourney()) featureID = 'UnauthChB';
+    else if (isEduStartJourney()) featureID = 'EdStart';
+
     const parameters = new URLSearchParams(
       `{FeatureID: ${featureID}, FeatureType: ${featureType}}`
     );
@@ -184,6 +183,6 @@ export const triggerLogout = () => {
     });
 };
 
-export const setAppServiceName = (serviceName) => {
+export const setAppServiceName = serviceName => {
   appServiceName = serviceName || null;
-}
+};
