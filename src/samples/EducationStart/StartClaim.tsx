@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import Button from '../../components/BaseComponents/Button/Button';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
-import WarningText from './reuseables/WarningText';
+import WarningText from './reuseables/WarningText/WarningText';
 
-export default function LandingPage(props) {
-  const { onProceedHandler } = props;
+export default function StartClaim({onProceedHandler}) {
   const { t } = useTranslation();
   const history = useHistory();
   const { serviceParam } = useContext(AppContextEducation);
@@ -45,7 +44,7 @@ export default function LandingPage(props) {
           {t('EDUCATION_START_UNIVERSAL_CREDIT_WARNING')}
         </WarningText>
 
-        <Button id='continueToOptin' onClick={onProceedHandler} variant='start'>
+        <Button id='continueToOptin' onClick={onProceedHandler} variant='start' data-prevent-double-click="true">
           {t('START_NOW')}
         </Button>
         <br />

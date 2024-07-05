@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import LandingPage from './LandingPage';
+import Landing from './Landing';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from './reuseables/AppHeader';
@@ -68,7 +68,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setIsLoggedIn(true);
   }
 
-  const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
+  const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn } = useStartMashup(
     setAuthType,
     doRedirectDone,
     {
@@ -238,7 +238,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = e => {
+  const onProceedHandler = e => {
     e.preventDefault();
     setShowLandingPage(false);
     startClaim();
@@ -334,8 +334,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
               <div id='pega-part-of-page'>
                 <div id='pega-root' className='education-start'></div>
               </div>
-              {showLandingPage && (
-                <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
+              {showLandingPage && pCoreReady && (
+                <Landing onProceedHandler={onProceedHandler} assignmentPConn={assignmentPConn}/>
               )}
               {serviceNotAvailable && <ServiceNotAvailable />}
               {currentDisplay === 'resolutionpage' && (

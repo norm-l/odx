@@ -164,3 +164,11 @@ export const triggerLogout = () => {
       });
     });
 };
+
+export const getClaimsCaseId = ()=> {
+  const context = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const caseId = PCore.getStoreValue('.ID', 'caseInfo', context) || '';
+  return caseId;
+}

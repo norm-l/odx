@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
-import Button from '../../../components/BaseComponents/Button/Button';
 import PropTypes from 'prop-types';
-import { scrollToTop, GBdate, getServiceShutteredStatus } from '../../helpers/utils';
+import { scrollToTop, GBdate, getServiceShutteredStatus } from '../../components/helpers/utils';
 import { useTranslation } from 'react-i18next';
-import WarningText from '../../BaseComponents/WarningText/WarningText';
+import Button from '../../components/BaseComponents/Button/Button';
 
 declare const PCore: any;
 
 export default function ClaimsList(props) {
-  const { thePConn, data, title, rowClickAction, buttonContent, caseId, checkShuttered } = props;
+  const {
+    thePConn,
+    data,
+    title,
+    rowClickAction,
+    buttonContent,
+    caseId,
+    checkShuttered,
+    onProceedHandler
+  } = props;
   const { t } = useTranslation();
   const [claims, setClaims] = useState([]);
   const statusMapping = status => {
@@ -45,7 +53,7 @@ export default function ClaimsList(props) {
     });
   };
 
-  async function _rowClick(row: any) {
+  async function _rowClick(row: any, e) {
     const { pzInsKey, pyAssignmentID } = row;
 
     const container = thePConn.getContainerName();
@@ -72,6 +80,7 @@ export default function ClaimsList(props) {
           });
       }
     }
+    onProceedHandler(e);
   }
 
   function extractChildren(childrenJSON: string) {
@@ -91,8 +100,8 @@ export default function ClaimsList(props) {
           <Button
             attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
             variant='secondary'
-            onClick={() => {
-              _rowClick(item);
+            onClick={e => {
+              _rowClick(item, e);
             }}
           >
             {buttonContent}
@@ -123,44 +132,78 @@ export default function ClaimsList(props) {
     return claimsData;
   }
 
-  useEffect(() => {
-    setClaims([...getClaims()]);
-  }, [data, title]);
+  function getCurrentDate(date) {
+    return DateFormatter.Date(date, { format: 'DD MMM YYYY' });
+  }
 
   function renderChildDetails(claimItem) {
     return claimItem.children.map((child, index) => (
-      <dl className='govuk-summary-list' key={child.firstName}>
-        <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-          <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-0'>
-            {t('CHILD_NAME')}
-          </dt>
-          <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-0'>
-            {child.firstName} {child.lastName}
-          </dd>
-          <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-0'>
-            {/* If this is the first entry add the status */}
-            {index === 0 ? (
-              <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
-                {claimItem.status.text}
-              </strong>
-            ) : (
-              <span className='govuk-visually-hidden'>No action</span>
-            )}
-          </dd>
-        </div>
-        {child.dob && (
+      <>
+        <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child.firstName}>
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-            <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-0'>
-              {t('DATE_OF_BIRTH')}
+            <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {t('YOUNG_PERSON_NAME')}
             </dt>
-            <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-0'>
-              {child.dob}
+            <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {child.firstName} {child.lastName}
+            </dd>
+            <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {/* If this is the first entry add the status */}
+              {index === 0 ? (
+                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
+                  {claimItem.status.text}
+                </strong>
+              ) : (
+                <span className='govuk-visually-hidden'>No action</span>
+              )}
             </dd>
           </div>
-        )}
-      </dl>
+          {child.dob && (
+            <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+              <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {t('DATE_OF_BIRTH')}
+              </dt>
+              <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {child.dob}
+              </dd>
+            </div>
+          )}
+
+          <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+            <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {t('CREATED_DATE')}
+            </dt>
+            <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {claimItem.dateCreated}
+            </dd>
+            <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {!claimItem.childrenAdded && (
+                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
+                  {claimItem.status.text}
+                </strong>
+              )}
+            </dd>
+          </div>
+        </dl>
+        {claimItem.actionButton}
+        {!caseId?.includes(claimItem.claimRef) &&
+          (claimItem?.status?.text === 'In Progress' || claimItem?.status?.text === 'Ar Waith') && (
+            <p className='govuk-body'>
+              {t('PORTAL_WARNING_TEXT')} {getCurrentDate(claimItem?.dateUpdated)}{' '}
+              {t('EDUCATION_PORTAL_WARNING_TEXT2')}
+            </p>
+          )}
+        <hr
+          className='govuk-section-break govuk-section-break--l govuk-section-break--visible'
+          aria-hidden='true'
+        ></hr>
+      </>
     ));
   }
+
+  useEffect(() => {
+    setClaims([...getClaims()]);
+  }, [data, title]);
 
   return (
     <>
@@ -168,39 +211,7 @@ export default function ClaimsList(props) {
 
       {claims.map(claimItem => (
         <React.Fragment key={claimItem.claimRef}>
-          {!caseId?.includes(claimItem.claimRef) &&
-            (claimItem?.status?.text === 'In Progress' ||
-              claimItem?.status?.text === 'Ar Waith') && (
-              <WarningText date={claimItem?.dateUpdated} />
-            )}
-
-          {claimItem.childrenAdded && <h3 className='govuk-heading-m'>{t('CHILDREN_ADDED')}</h3>}
-
           {claimItem.childrenAdded && renderChildDetails(claimItem)}
-
-          <dl className='govuk-summary-list'>
-            <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-              <dt className='govuk-summary-list__key govuk-!-width-one-third'>
-                {t('CREATED_DATE')}
-              </dt>
-              <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                {claimItem.dateCreated}
-              </dd>
-              <dd className='govuk-summary-list__actions govuk-!-width-one-third'>
-                {!claimItem.childrenAdded && (
-                  <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
-                    {claimItem.status.text}
-                  </strong>
-                )}
-              </dd>
-            </div>
-          </dl>
-
-          {claimItem.actionButton}
-          <hr
-            className='govuk-section-break govuk-section-break--xl govuk-section-break--visible'
-            aria-hidden='true'
-          ></hr>
         </React.Fragment>
       ))}
     </>
@@ -213,5 +224,6 @@ ClaimsList.propTypes = {
   title: PropTypes.string,
   rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
   buttonContent: PropTypes.string,
-  caseId: PropTypes.string
+  caseId: PropTypes.string,
+  onProceedHandler: PropTypes.func
 };
