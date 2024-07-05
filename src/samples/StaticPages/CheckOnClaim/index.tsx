@@ -14,7 +14,7 @@ export default function CheckOnClaim() {
   const history = useHistory();
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const [errorMsg, setErrorMsg] = useState('');
-  const errorHref = `#serviceType`;
+  const errorHref = `#typeOfClaimCheck`;
 
   useEffect(() => {
     const setPageTitleInterval = setInterval(() => {
@@ -35,20 +35,18 @@ export default function CheckOnClaim() {
   ];
 
   function routeToService() {
-    const selectedOption = document.querySelector('input[name="serviceType"]:checked');
+    const selectedOption = document.querySelector('input[name="typeOfClaimCheck"]:checked');
 
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
 
       switch (selectedOptionValue) {
         case 'viewmysavedorsubmittedclaims':
-          window.location.assign(
-            'https://www.tax.service.gov.uk/child-benefit/view-proof-entitlement'
-          );
+          window.location.assign('/');
           break;
         case 'checkwhenicanexpectareply':
           window.location.assign(
-            'https://www.tax.service.gov.uk/child-benefit/view-proof-entitlement'
+            'https://www.gov.uk/guidance/check-when-you-can-expect-a-reply-from-hmrc'
           );
           break;
         default:
@@ -73,12 +71,12 @@ export default function CheckOnClaim() {
           <StaticPageErrorSummary errorSummary={errorMsg} linkHref={errorHref} />
           <form>
             <RadioButtons
-              name='serviceType'
+              name='typeOfClaimCheck'
               displayInline={false}
               value=''
               useSmallRadios={false}
               options={radioOptions}
-              label={t('WHICH_CHBS_DO_YOU_WANT_TO_USE')}
+              label={t('HOW_DO_YOU_WANT_TO_CHECK_ON_YOUR_CLAIM')}
               legendIsHeading
               hintText=''
               errorText={errorMsg}
