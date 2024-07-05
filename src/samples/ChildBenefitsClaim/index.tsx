@@ -88,6 +88,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function displayPega() {
+    const pegaElem = document.getElementById('pega-part-of-page');
+    pegaElem.style.display = 'block';
     resetAppDisplay();
     setShowPega(true);
   }
@@ -189,6 +191,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function closeContainer() {
+    const pegaElem = document.getElementById('pega-part-of-page');
+    pegaElem.style.display = 'none';
     displayUserPortal();
   }
 
