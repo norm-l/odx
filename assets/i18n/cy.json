@@ -192,7 +192,7 @@
   "YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS": "You need to be older than 15 years and 9 months to register for Self Assessment online.",
   "IF_YOU_NEED_TO_REGISTER_CALL_HMRC": "If you need to register, call HMRC.",
 
-  "YOU_HAVE_PREVIOUSLY_REGISTERED_FOR_SELF_ASSESSMENT": "You've previously registered for Self Assessment.",
+  "YOU_HAVE_PREVIOUSLY_REGISTERED_FOR_SELF_ASSESSMENT": "You've previously registered for Self Assessment",
   "IT_LOOKS_LIKE_YOU_ARE_ALREADY_REGISTERED": "It looks like you're already registered for Self Assessment or were registered in the past. This service is in Beta and can't process your request at the moment.",
   "YOU_CAN_REACTIVATE_YOUR_ONLINE_ACCOUNT": "You can reactivate your online account for Self Assessment.",
   "YOU_WILL_NEED": "You'll need:",
@@ -209,5 +209,7 @@
   "BX9_1AN": "BX9 1AN",
   "UNITED_KINGDOM": "United Kingdom",
   "YOU_WILL_NEED_YOUR": "You'll need your ",
-  "YOU_WILL_NEED_YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Unique Taxpayer Reference (UTR) number."
+  "YOU_WILL_NEED_YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Unique Taxpayer Reference (UTR) number.",
+
+  "I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONs": "i don't work in any of these positions"
 }
