@@ -163,7 +163,7 @@ export const isSaveAndContinueButton = () => {
       formFieldC11nEnv?.length === 1
         ? formFieldC11nEnv[0]?.fieldC11nEnv?.viewName
         : formFieldC11nEnv[formFieldC11nEnv?.length - 1]?.fieldC11nEnv?.viewName;
-    const continueButtonPageNames = ['YourDetailsInstruction', 'Declaration'];
+    const continueButtonPageNames = ['YourDetailsInstruction', 'DeclarationContent'];
     return !(continueButtonPageNames.indexOf(pageViewName) > -1);
   } else {
     return false;

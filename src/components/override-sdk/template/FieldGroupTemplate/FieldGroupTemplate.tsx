@@ -6,6 +6,7 @@ import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDis
 import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import { checkStatus } from '../../../helpers/utils';
+import { useTranslation } from 'react-i18next';
 
 declare const PCore: any;
 
@@ -21,6 +22,7 @@ export default function Group(props) {
   const formattedContext = thePConn.options.pageReference
     ? thePConn.options.pageReference.split('.').pop()
     : '';
+  const { t } = useTranslation();
 
   // Doesn't seem that state change on children (checkboxes) causes refresh on the containing group,
   // working around with this for now
@@ -142,10 +144,8 @@ export default function Group(props) {
           index
         });
 
-        const arrayExclusiveOptions = [
-          "i do not work in any positions or industries that affect how i'm taxed",
-          "i do not work in any positions or industries that affect how i'm taxed"
-        ];
+        const arrayExclusiveOptions = [t('I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONs')];
+
         if (arrayExclusiveOptions.includes(resolvedProps.caption.toLowerCase())) {
           exclusiveOptionPropName = childPConnect.getStateProps().value;
           childPConnect.registerAdditionalProps({
