@@ -80,6 +80,53 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  const getCYAStepId = (event, originalLink) => {
+    interface ResponseType {
+      CYAStepID: string;
+    }
+    let stepIDCYA;
+    const stepId = originalLink.getAttribute('data-step-id');
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const currentFlowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+    const options = {
+      invalidateCache: true
+    };
+
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_GetCurrentCYAStepID',
+        'root',
+        {
+          FlowActionName: currentFlowActionId,
+          CaseID: pConn.getCaseSummary().content.pyID
+        },
+        options
+      ) // @ts-ignore
+      .then((pageData: ResponseType) => {
+        stepIDCYA = pageData?.CYAStepID;
+        if (stepIDCYA) {
+          sessionStorage.setItem('stepIDCYA', stepIDCYA);
+          sessionStorage.setItem('isEditMode', 'true');
+
+          sessionStorage.removeItem('isComingFromPortal');
+          sessionStorage.removeItem('isComingFromTasklist');
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      })
+      .finally(() => {
+        navigateToStep(event, stepId, originalLink);
+      });
+  };
+
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -132,8 +179,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     fragment.querySelectorAll('a').forEach(cloneLink => {
       const originalLink = cloneLink;
       if (originalLink) {
-        const stepId = originalLink.getAttribute('data-step-id');
-        cloneLink.addEventListener('click', event => navigateToStep(event, stepId, originalLink));
+        cloneLink.addEventListener('click', event => {
+          getCYAStepId(event, originalLink);
+        });
       }
     });
 
