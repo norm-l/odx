@@ -277,9 +277,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
       <>
         <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
         <div className='govuk-width-container'>
-          <MainWrapper showPageNotWorkingLink={false}>
-            <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
-          </MainWrapper>
+          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         </div>
         <AppFooter />
       </>
