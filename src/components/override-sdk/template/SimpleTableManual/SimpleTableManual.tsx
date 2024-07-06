@@ -38,7 +38,7 @@ export default function SimpleTableManual(props: PropsWithChildren<SimpleTableMa
     }, subId,)
   }, [])
 
-  if(props.authorContext === '.ScreenContent.LocalisedContent'){
+  if(props.authorContext === '.LocalisedContent'){
     registerNonEditableField();
     return <InstructionComp htmlString={referenceList.find(element => element.Language === currentLang.toUpperCase()).Content} />
   }
