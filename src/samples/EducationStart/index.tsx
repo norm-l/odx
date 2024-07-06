@@ -273,6 +273,18 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   if (!isLoggedIn || shuttered === null) {
     return null;
+  } else if (currentDisplay === 'servicenotavailable') {
+    return (
+      <>
+        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <div className='govuk-width-container'>
+          <MainWrapper showPageNotWorkingLink={false}>
+            <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+          </MainWrapper>
+        </div>
+        <AppFooter />
+      </>
+    );
   } else if (shuttered) {
     setPageTitle();
     return (
@@ -348,7 +360,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
               {showLandingPage && (
                 <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
               )}
-              {currentDisplay === 'servicenotavailable' && <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage
                   summaryContent={summaryPageContent.Content}
