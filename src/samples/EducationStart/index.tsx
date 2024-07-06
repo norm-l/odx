@@ -7,7 +7,7 @@ import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
-import { triggerLogout } from '../../components/helpers/utils';
+import { setAppServiceName, triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
@@ -26,7 +26,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [shuttered, setShuttered] = useState(null);
 
-  const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);
@@ -53,6 +52,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const history = useHistory();
 
   registerServiceName(t('EDUCATION_START'));
+  setAppServiceName(t('EDUCATION_START'));
 
   // Construct the final URL for the education flow page not working
   const educationStartParam = 'claim-child-benefit';
@@ -68,7 +68,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setIsLoggedIn(true);
   }
 
-  const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
+  const { showPega, setShowPega, showResolutionPage, caseId, shutterServicePage } = useStartMashup(
     setAuthType,
     doRedirectDone,
     {
@@ -76,7 +76,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
       serviceParam: educationStartParam
     }
   );
-
+  
   useEffect(() => {
     if (showPega) {
       setCurrentDisplay('pegapage');
@@ -327,7 +327,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>
-          {shutterServicePage ? (
+          {currentDisplay === 'shutterpage' ? (
             <ShutterServicePage />
           ) : (
             <>
