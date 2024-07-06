@@ -59,7 +59,6 @@ export function establishPCoreSubscriptions({
       );
       const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
       if (status === 'Resolved-Discarded') {
-        // PM!! displayServiceNotAvailable();
         setServiceNotAvailable(true);
         PCore.getContainerUtils().closeContainerItem(context);
         //  Temporary workaround to restrict infinite update calls
