@@ -275,7 +275,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   } else if (currentDisplay === 'servicenotavailable') {
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <AppHeader appname={t('EDUCATION_START')} />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         </div>
@@ -286,7 +286,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setPageTitle();
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <AppHeader appname={t('EDUCATION_START')} />
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
