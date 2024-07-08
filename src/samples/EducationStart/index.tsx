@@ -27,7 +27,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [shuttered, setShuttered] = useState(null);
 
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
-  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -68,7 +67,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setIsLoggedIn(true);
   }
 
-  const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
+  const { showPega, setShowPega, showResolutionPage, caseId, serviceNotAvailable } = useStartMashup(
     setAuthType,
     doRedirectDone,
     {
@@ -146,6 +145,17 @@ const EducationStartCase: FunctionComponent<any> = () => {
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
     staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
   };
+
+  function returnToPortalPage() {
+    setShowSignoutModal(false);
+    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
+    setCurrentDisplay('loading');
+    setShowLandingPage(true);
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  }
 
   const startClaim = () => {
     setShowPega(true);
@@ -262,6 +272,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   if (!isLoggedIn || shuttered === null) {
     return null;
+  } else if (currentDisplay === 'servicenotavailable') {
+    return (
+      <>
+        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <div className='govuk-width-container'>
+          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+        </div>
+        <AppFooter />
+      </>
+    );
   } else if (shuttered) {
     setPageTitle();
     return (
@@ -337,7 +357,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
               {showLandingPage && (
                 <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
               )}
-              {serviceNotAvailable && <ServiceNotAvailable />}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage
                   summaryContent={summaryPageContent.Content}

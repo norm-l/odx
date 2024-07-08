@@ -24,7 +24,8 @@ export function establishPCoreSubscriptions({
   setShowPega,
   setShowResolutionPage,
   setCaseId,
-  setCaseStatus
+  setCaseStatus,
+  setServiceNotAvailable
   // setOperatorName
 }) {
   /* ********************************************
@@ -59,8 +60,14 @@ export function establishPCoreSubscriptions({
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
     if (status === 'Resolved-Discarded') {
-      // PM!! displayServiceNotAvailable();
+      setServiceNotAvailable(true);
       PCore.getContainerUtils().closeContainerItem(context);
+      //  Temporary workaround to restrict infinite update calls
+      PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
+      PCore?.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
+        'assignmentFinished'
+      );
     } else {
       showResolutionScreen();
     }
@@ -236,14 +243,14 @@ function initialRender(inRenderObj, _AppContextValues: AppContextValues) {
  * kick off the application's portal that we're trying to serve up
  */
 export function startMashup(
-  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName },
+  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setServiceNotAvailable },
   _AppContextValues: AppContextValues
 ) {
   // NOTE: When loadMashup is complete, this will be called.
   PCore.onPCoreReady(renderObj => {
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
-    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus });
+    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setServiceNotAvailable });
     const name = PCore.getEnvironmentInfo().getOperatorName();
     setOperatorName(name);
 
@@ -352,6 +359,7 @@ export const useStartMashup = (
 ) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
+  const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [caseId, setCaseId] = useState('');
   const [operatorName, setOperatorName] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
@@ -390,7 +398,7 @@ export const useStartMashup = (
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup(
-        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName },
+        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setServiceNotAvailable },
         _AppContextValues
       );
     });
@@ -441,6 +449,8 @@ export const useStartMashup = (
     setShowResolutionPage,
     caseId,
     caseStatus,
+    serviceNotAvailable,
+    setServiceNotAvailable,
     operatorName
   };
 };
