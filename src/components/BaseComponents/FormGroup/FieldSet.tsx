@@ -60,7 +60,7 @@ export default function FieldSet({
     describedByIDs.length !== 0 ? { 'aria-describedby': describedByIDs.join(' ') } : {};
 
   const getErrMessagePCore = () => {
-    if (typeof PCore !== 'undefined') {
+    if (typeof PCore !== 'undefined' && errMessage) {
       return PCore.getLocaleUtils().getLocaleValue(
         removeRedundantString(errMessage),
         'Messages',
