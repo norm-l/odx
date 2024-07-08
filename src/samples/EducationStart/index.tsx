@@ -150,7 +150,13 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   function returnToPortalPage() {
     setShowSignoutModal(false);
-    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
+    staySignedIn(setShowTimeoutModal, claimsListApi, null, false, true, (currentDisplay === 'resolutionpage'));
+    setCurrentDisplay('loading');
+    setShowLandingPage(true);
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
   };
 
   const startClaim = () => {
