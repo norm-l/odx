@@ -1,7 +1,5 @@
 import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
-import { t } from 'i18next';
 
-let appServiceName = null;
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
   document.body.scrollTop = position;
