@@ -103,7 +103,6 @@ export default function RecentlyClaimedChildBenefit() {
               options={radioOptions}
               label={t('WHICH_CHBS_DO_YOU_WANT_TO_USE')}
               legendIsHeading
-              hintText=''
               errorText={errorMsg}
             ></RadioButtons>
             <button

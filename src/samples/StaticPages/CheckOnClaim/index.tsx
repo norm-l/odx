@@ -78,7 +78,6 @@ export default function CheckOnClaim() {
               options={radioOptions}
               label={t('HOW_DO_YOU_WANT_TO_CHECK_ON_YOUR_CLAIM')}
               legendIsHeading
-              hintText=''
               errorText={errorMsg}
             ></RadioButtons>
             <button
