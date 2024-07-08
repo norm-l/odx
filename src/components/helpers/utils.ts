@@ -174,3 +174,12 @@ export const getWorkareaContainerName = () => {
   );
   return containerName;
 }
+
+export const isMultipleDateInput = () => {
+  const containerName = getWorkareaContainerName();
+  const formEditablefields = PCore.getFormUtils().getEditableFields(containerName);
+  if(formEditablefields?.length > 1) {
+    return formEditablefields.filter(field => field.type.toLowerCase() === 'date').length > 1 ? true : false;;
+  }
+  return false;
+}

@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { getWorkareaContainerName } from './../utils';
+import { isMultipleDateInput } from './../utils';
 
 const _DateErrorFormatter = (message, propertyName) => {
   // Function to check if the user has entered hyphens into the input
@@ -32,8 +32,8 @@ const _DateErrorFormatter = (message, propertyName) => {
     }
     let missingPartErrorMessage = i18n.t(`DATE_MUST_INCLUDE${missingPartMessage}`);
     if(isMultipleDateInput()) {
-      missingPartErrorMessage = `${i18n.t('THE')} ` + propertyName?.toLowerCase() + ' ' +i18n.t(`MUST_INCLUDE${missingPartMessage}`);
-      invalidDateErrorMsgByField = propertyName + ` ${i18n.t('MUST_BE_A_REAL_DATE')}`;
+      missingPartErrorMessage = `${i18n.t('THE')} ${propertyName?.toLowerCase()} ${i18n.t(`MUST_INCLUDE${missingPartMessage}`)}`;
+      invalidDateErrorMsgByField = `${i18n.t('THE')} ${propertyName?.toLowerCase()} ${i18n.t('MUST_BE_A_REAL_DATE')}`;
     }
 
     if (missingPartMessage.length > 0) {
@@ -44,7 +44,7 @@ const _DateErrorFormatter = (message, propertyName) => {
     }
 
     if (message.search(i18n.t('IS_NOT_A_VALID_DATE'))) {
-      let invalidDateErrorMsg = invalidDateErrorMsgByField ? invalidDateErrorMsgByField : i18n.t(`DATE_MUST_BE_A_REAL_DATE`);
+      const invalidDateErrorMsg = invalidDateErrorMsgByField || i18n.t(`DATE_MUST_BE_A_REAL_DATE`);
       return {
         message: isDateOfBirth
           ? `${i18n.t('DATE_OF_BIRTH')} ${i18n.t('MUST_BE_A_REAL_DATE')}`
@@ -71,12 +71,3 @@ export const DateErrorFormatter = (message, propertyName) => {
 export const DateErrorTargetFields = message => {
   return _DateErrorFormatter(message).targets;
 };
-
-const isMultipleDateInput = () => {
-  const containerName = getWorkareaContainerName();
-  const formEditablefields = PCore.getFormUtils().getEditableFields(containerName);
-  if(formEditablefields?.length > 1) {
-    return formEditablefields.filter(field => field.type.toLowerCase() === 'date').length > 1 ? true : false;;
-  }
-  return false;
-}
