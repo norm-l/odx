@@ -16,9 +16,24 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
+import { getServiceShutteredStatus } from '../../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 declare const PCore: any;
+
+ /*
+  * This fucntion is to invoke shuttering service
+  */
+ async function checkShutterService({setShutterServicePage}) {
+  try {
+    const status = await getServiceShutteredStatus();
+    setShutterServicePage(status);
+  } catch (error) {
+    setShutterServicePage(false);
+    // Handle error appropriately, e.g., log it or show a notification
+    console.error('Error setting shutter status:', error); // eslint-disable-line
+  }
+}
 
 export function establishPCoreSubscriptions({
   setShowPega,
@@ -243,7 +258,7 @@ function initialRender(inRenderObj, _AppContextValues: AppContextValues) {
  * kick off the application's portal that we're trying to serve up
  */
 export function startMashup(
-  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setServiceNotAvailable },
+  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setShutterServicePage, setServiceNotAvailable },
   _AppContextValues: AppContextValues
 ) {
   // NOTE: When loadMashup is complete, this will be called.
@@ -344,6 +359,7 @@ export function startMashup(
         // eslint-disable-next-line no-console
         console.error(err);
       }); */
+  checkShutterService({setShutterServicePage});
 
   // load the Mashup and handle the onPCoreEntry response that establishes the
   //  top level Pega root element (likely a RootContainer)
@@ -359,6 +375,7 @@ export const useStartMashup = (
 ) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
+  const [shutterServicePage, setShutterServicePage ] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [caseId, setCaseId] = useState('');
   const [operatorName, setOperatorName] = useState('');
@@ -398,7 +415,7 @@ export const useStartMashup = (
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup(
-        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setServiceNotAvailable },
+        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setOperatorName, setShutterServicePage, setServiceNotAvailable },
         _AppContextValues
       );
     });
@@ -448,6 +465,8 @@ export const useStartMashup = (
     showResolutionPage,
     setShowResolutionPage,
     caseId,
+    shutterServicePage,
+    setShutterServicePage,
     caseStatus,
     serviceNotAvailable,
     setServiceNotAvailable,
