@@ -12,7 +12,7 @@ const ConfirmationPage = ({ caseStatus }) => {
   const serviceShuttered = useServiceShuttered();
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   function getFeedBackLink() {
-    return '#';
+    return 'https://www.tax.service.gov.uk/feedback/ODXSAREG';
   }
   useEffect(() => {
     setPageTitle();
@@ -83,8 +83,10 @@ const ConfirmationPage = ({ caseStatus }) => {
         </ul>
         <p className='govuk-body govuk-!-padding-top-6'>
           <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
-            {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')} {t('OPENS_IN_NEW_TAB')}
+            {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')}
+            <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
           </a>
+          {t('TAKES_30_SECONDS')}
         </p>
       </>
     );
