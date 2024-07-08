@@ -95,7 +95,7 @@ export default function ClaimsList(props) {
         dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
         dateUpdated: item.pxUpdateDateTime,
         children: [],
-        childrenAdded: item.Claim.Child.pyFirstName !== null,
+        childrenAdded: item.Claim?.Child?.pyFirstName !== null,
         actionButton: (
           <Button
             attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}

@@ -212,6 +212,5 @@ ClaimsList.propTypes = {
   data: PropTypes.array,
   title: PropTypes.string,
   rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
-  buttonContent: PropTypes.string,
-  caseId: PropTypes.string
+  buttonContent: PropTypes.string
 };
