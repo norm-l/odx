@@ -1,5 +1,7 @@
 import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
+import { t } from 'i18next';
 
+let appServiceName = null;
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
   document.body.scrollTop = position;
@@ -30,6 +32,19 @@ export const isUnAuthJourney = () => {
   const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
   const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
   return caseType === 'Unauth' || window.location.href.includes('/ua');
+};
+
+export const isEduStartJourney = () => {
+  const caseTypeName = 'HMRC-ChB-Work-EducationStart';
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  if (!containername) {
+    return appServiceName === t('EDUCATION_START');
+  } else {
+    const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
+    return caseType === caseTypeName;
+  }
 };
 
 export const getServiceShutteredStatus = async (): Promise<boolean> => {
@@ -164,3 +179,17 @@ export const triggerLogout = () => {
       });
     });
 };
+
+export const setAppServiceName = serviceName => {
+  appServiceName = serviceName || null;
+};
+
+export const getWorkareaContainerName = () => {
+  const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const containerName = PCore.getContainerUtils().getActiveContainerItemName(
+    `${primaryContainer}/workarea`
+  );
+  return containerName;
+}
