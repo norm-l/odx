@@ -1,13 +1,10 @@
 // @ts-nocheck
 
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 
 export default function Landing({ onProceedHandler, assignmentPConn }) {
-  const { t } = useTranslation();
-
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [showStartClaim, setShowStartClaim] = useState(false);
@@ -52,7 +49,7 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
 
   useEffect(() => {
     fetchInProgressClaimsData();
-    // fetchSubmittedClaimsData();
+    fetchSubmittedClaimsData();
   }, []);
 
   return (

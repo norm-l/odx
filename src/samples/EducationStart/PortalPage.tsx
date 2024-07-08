@@ -19,6 +19,7 @@ export default function PortalPage(props) {
 
   useEffect(() => {
     setPageTitle();
+    console.log('children', children)
   }, []);
 
   return (
@@ -29,7 +30,7 @@ export default function PortalPage(props) {
         )}
         <div className='govuk-grid-row'>
           <div className='govuk-grid-column-two-thirds'>
-            <h1 className='govuk-heading-l'>{t('CHILD_BENEFIT_EXTENSION_REQUESTS')}</h1>
+            <h1 className='govuk-heading-xl'>{t('CHILD_BENEFIT_EXTENSION_REQUESTS')}</h1>
             <p className='govuk-body'>{t('VIEW_STATUS_OR_NOTIFY_CHANGES')}</p>
             <p className='govuk-body'>
               {t('YOUR_VIEW')}
@@ -51,41 +52,37 @@ export default function PortalPage(props) {
           </div>
         </div>
         {inProgressClaims.length > 0 && (
-          <>
-            <div className='govuk-grid-row'>
-              <div className='govuk-grid-column-two-thirds'>
-                {children}
-                <ClaimsList
-                  thePConn={assignmentPConn}
-                  data={inProgressClaims}
-                  title={t('REQUESTS_IN_PROGRESS')}
-                  rowClickAction='OpenAssignment'
-                  buttonContent={t('CONTINUE_MY_REQUEST')}
-                  caseId={getClaimsCaseId()}
-                  onProceedHandler={onProceedHandler}
-                />
-              </div>
+          <div className='govuk-grid-row'>
+            <div className='govuk-grid-column-two-thirds'>
+              {children}
+              <ClaimsList
+                thePConn={assignmentPConn}
+                data={inProgressClaims}
+                title={t('REQUESTS_IN_PROGRESS')}
+                rowClickAction='OpenAssignment'
+                buttonContent={t('CONTINUE_MY_REQUEST')}
+                caseId={getClaimsCaseId()}
+                onProceedHandler={onProceedHandler}
+              />
             </div>
-          </>
+          </div>
         )}
 
         {submittedClaims.length > 0 && (
-          <>
-            <div className='govuk-grid-row'>
-              <h2 className='govuk-heading-m'>{t('SUBMITTED_REQUESTS')}</h2>
+          <div className='govuk-grid-row'>
+            <div className='govuk-grid-column-two-thirds'>
               {children}
-              <p className='govuk-body'>
-                <a
-                  href='https://www.gov.uk/child-benefit-proof'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='govuk-link'
-                >
-                  {t('VIEW_DECISION_NOTICE')}
-                </a>
-              </p>
+              <ClaimsList
+                thePConn={assignmentPConn}
+                data={submittedClaims}
+                title={t('SUBMITTED_REQUESTS')}
+                rowClickAction='OpenAssignment'
+                buttonContent={t('CONTINUE_MY_REQUEST')}
+                caseId={getClaimsCaseId()}
+                onProceedHandler={onProceedHandler}
+              />
             </div>
-          </>
+          </div>
         )}
 
         <div className='govuk-grid-row'>
@@ -97,7 +94,7 @@ export default function PortalPage(props) {
                 href='#'
                 className='govuk-link govuk-link--no-visited-state'
                 rel='noopener noreferrer'
-                onClick={()=> setShowStartClaim(true)}
+                onClick={() => setShowStartClaim(true)}
               >
                 {t('STARTING_NON_ADVANCED_EDUCATION')}
               </a>
