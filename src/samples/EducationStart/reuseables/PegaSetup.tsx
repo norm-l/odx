@@ -16,14 +16,31 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
+import { getServiceShutteredStatus } from '../../../components/helpers/utils';
 
 declare const myLoadMashup: any;
+declare const PCore: any;
+
+ /*
+  * This fucntion is to invoke shuttering service
+  */
+ async function checkShutterService({setShutterServicePage}) {
+  try {
+    const status = await getServiceShutteredStatus();
+    setShutterServicePage(status);
+  } catch (error) {
+    setShutterServicePage(false);
+    // Handle error appropriately, e.g., log it or show a notification
+    console.error('Error setting shutter status:', error); // eslint-disable-line
+  }
+}
 
 export function establishPCoreSubscriptions({
   setShowPega,
   setShowResolutionPage,
   setCaseId,
-  setCaseStatus
+  setCaseStatus,
+  setServiceNotAvailable
 }) {
   /* ********************************************
    * Registers close active container on end of assignment processing
@@ -57,8 +74,14 @@ export function establishPCoreSubscriptions({
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
     if (status === 'Resolved-Discarded') {
-      // PM!! displayServiceNotAvailable();
+      setServiceNotAvailable(true);
       PCore.getContainerUtils().closeContainerItem(context);
+      //  Temporary workaround to restrict infinite update calls
+      PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
+      PCore?.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
+        'assignmentFinished'
+      );
     } else {
       showResolutionScreen();
     }
@@ -182,7 +205,7 @@ function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: Ap
   } = inRenderObj;
 
   const thePConn = props.getPConnect();
-
+  setAssignmentPConnect(thePConn);
   // PM!! setPConn(thePConn);
   setAssignmentPConnect(thePConn);
 
@@ -235,14 +258,14 @@ function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: Ap
  * kick off the application's portal that we're trying to serve up
  */
 export function startMashup(
-  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
+  { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect, setShutterServicePage, setServiceNotAvailable },
   _AppContextValues: AppContextValues
 ) {
   // NOTE: When loadMashup is complete, this will be called.
   PCore.onPCoreReady(renderObj => {
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
-    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus });
+    establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setServiceNotAvailable });
     // PM!! setShowAppName(true);
 
     // Fetches timeout length config
@@ -333,6 +356,7 @@ export function startMashup(
         // eslint-disable-next-line no-console
         console.error(err);
       }); */
+  checkShutterService({setShutterServicePage});
 
   // load the Mashup and handle the onPCoreEntry response that establishes the
   //  top level Pega root element (likely a RootContainer)
@@ -348,6 +372,8 @@ export const useStartMashup = (
 ) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
+  const [shutterServicePage, setShutterServicePage ] = useState(false);
+  const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [caseId, setCaseId] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
   const [assignmentPConn, setAssignmentPConnect] = useState(null);
@@ -386,7 +412,7 @@ export const useStartMashup = (
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup(
-        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
+        { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect, setShutterServicePage, setServiceNotAvailable },
         _AppContextValues
       );
     });
@@ -429,5 +455,17 @@ export const useStartMashup = (
     }; */
   }, []);
 
-  return { showPega, setShowPega, showResolutionPage, setShowResolutionPage, caseId, caseStatus, assignmentPConn };
+  return {
+    showPega,
+    setShowPega,
+    showResolutionPage,
+    setShowResolutionPage,
+    caseId,
+    shutterServicePage,
+    setShutterServicePage,
+    caseStatus,
+    serviceNotAvailable,
+    setServiceNotAvailable,
+    assignmentPConn
+  };
 };
