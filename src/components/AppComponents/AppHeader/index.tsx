@@ -64,9 +64,12 @@ export default function AppHeader(props) {
                 {t('NEW_SERVICE')} - {t('BANNER_FEEDBACK_1')}&nbsp;
                 <a
                   className='govuk-link'
-                  href={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${referrerURL}`}
+                  href={`${hmrcURL}contact/beta-feedback?service=427&referrerUrl=${referrerURL}`}
+                  target='_blank'
+                  rel='noreferrer'
                 >
                   {t('BANNER_FEEDBACK_LINK')}
+                  <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
                 </a>
                 &nbsp;
                 {t('BANNER_FEEDBACK_2')}.
