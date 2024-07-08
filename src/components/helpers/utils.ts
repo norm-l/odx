@@ -34,19 +34,6 @@ export const isUnAuthJourney = () => {
   return caseType === 'Unauth' || window.location.href.includes('/ua');
 };
 
-export const isEduStartJourney = () => {
-  const caseTypeName = 'HMRC-ChB-Work-EducationStart';
-  const containername = PCore.getContainerUtils().getActiveContainerItemName(
-    `${PCore.getConstants().APP.APP}/primary`
-  );
-  if (!containername) {
-    return appServiceName === t('EDUCATION_START');
-  } else {
-    const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
-    return caseType === caseTypeName;
-  }
-};
-
 export const getServiceShutteredStatus = async (): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
@@ -178,10 +165,6 @@ export const triggerLogout = () => {
         }
       });
     });
-};
-
-export const setAppServiceName = serviceName => {
-  appServiceName = serviceName || null;
 };
 
 export const getWorkareaContainerName = () => {
