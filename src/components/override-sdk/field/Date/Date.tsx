@@ -132,9 +132,10 @@ export default function Date(props) {
     return (
       <GDSCheckAnswers
         label={props.label}
-        value={new global.Date(value).toLocaleDateString()}
+        value={dayjs(value).format('D MMMM YYYY')}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
         getPConnect={getPConnect}
         required={false}
         disabled={false}
