@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { scrollToTop, GBdate, getServiceShutteredStatus } from '../../components/helpers/utils';
 import { useTranslation } from 'react-i18next';
 import Button from '../../components/BaseComponents/Button/Button';
+import dayjs from 'dayjs';
 
 declare const PCore: any;
 
@@ -172,7 +173,7 @@ export default function ClaimsList(props) {
                 {t('DATE_OF_BIRTH')}
               </dt>
               <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                {child?.dob}
+                {dayjs(child.dob).format('D MMM YYYY')}
               </dd>
             </div>
           )}
@@ -182,7 +183,7 @@ export default function ClaimsList(props) {
               {t('CREATED_DATE')}
             </dt>
             <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {claimItem.dateCreated}
+              {dayjs(claimItem.dateCreated).format('D MMM YYYY')}
             </dd>
             <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {!claimItem.childrenAdded && (
