@@ -207,7 +207,6 @@ function initialRender(inRenderObj, setAssignmentPConnect, _AppContextValues: Ap
   const thePConn = props.getPConnect();
   setAssignmentPConnect(thePConn);
   // PM!! setPConn(thePConn);
-  setAssignmentPConnect(thePConn);
 
   let target: any = null;
 
@@ -426,10 +425,11 @@ export const useStartMashup = (
     //  component is unmounted (in function returned from this effect)
 
     return function cleanupSubscriptions() {
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
-        'cancelAssignment'
-      );
+      if (typeof PCore !== 'undefined')
+        PCore?.getPubSubUtils().unsubscribe(
+          PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
+          'cancelAssignment'
+        );
     };
     // PM!!
     /*
