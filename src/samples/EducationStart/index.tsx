@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import LandingPage from './LandingPage';
+import Landing from './Landing';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from './reuseables/AppHeader';
@@ -48,7 +48,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
@@ -66,7 +65,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
     history.push('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-    setIsLoggedIn(true);
   }
 
   const { showPega, setShowPega, showResolutionPage, caseId, shutterServicePage, serviceNotAvailable, assignmentPConn } = useStartMashup(
@@ -251,7 +249,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = e => {
+  const onProceedHandler = e => {
     e.preventDefault();
     setShowLandingPage(false);
     startClaim();
@@ -273,7 +271,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
-  if (!isLoggedIn || shuttered === null) {
+  if (shuttered === null) {
     return null;
   } else if (currentDisplay === 'servicenotavailable') {
     return (
@@ -357,8 +355,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
               <div id='pega-part-of-page'>
                 <div id='pega-root' className='education-start'></div>
               </div>
-              {showLandingPage && (
-                <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
+              {showLandingPage && pCoreReady && (
+                <Landing onProceedHandler={onProceedHandler} assignmentPConn={assignmentPConn}/>
               )}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage

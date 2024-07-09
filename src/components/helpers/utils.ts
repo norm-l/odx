@@ -187,6 +187,15 @@ export const setAppServiceName = serviceName => {
   appServiceName = serviceName || null;
 };
 
+
+export const getClaimsCaseId = ()=> {
+  const context = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const caseId = PCore.getStoreValue('.ID', 'caseInfo', context) || '';
+  return caseId;
+}
+
 export const getWorkareaContainerName = () => {
   const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(
     `${PCore.getConstants().APP.APP}/primary`
@@ -205,3 +214,4 @@ export const isMultipleDateInput = () => {
   }
   return false;
 }
+
