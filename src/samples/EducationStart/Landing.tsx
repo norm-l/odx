@@ -8,6 +8,8 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [showStartClaim, setShowStartClaim] = useState(false);
+  const [loadingInProgressClaims, setLoadingInProgressClaims] = useState(true);
+  const [loadingSubmittedClaims, setLoadingSubmittedClaims] = useState(true);
 
   function fetchSubmittedClaimsData() {
     const operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
@@ -16,13 +18,11 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
       .getDataAsync('D_ClaimantSubmittedEdStartCases', 'root', { OperatorId: operatorId })
       .then(resp => {
         setSubmittedClaims(resp.data.slice(0, 10));
-        console.log(resp);
-      });
-    // .finally(() => setLoadingSubmittedClaims(false));
+      })
+      .finally(() => setLoadingSubmittedClaims(false));
   }
 
   function fetchInProgressClaimsData(isSaveComeBackClicked = false) {
-    // setLoadingInProgressClaims(true);
     let inProgressClaimsData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
@@ -31,10 +31,9 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
         resp = resp.data.slice(0, 10);
         inProgressClaimsData = resp;
         setInProgressClaims(inProgressClaimsData);
-        // setLoadingInProgressClaims(false);
-        console.log(resp);
       })
       .finally(() => {
+        setLoadingInProgressClaims(false);
         if (isSaveComeBackClicked) {
           // Here we are calling this close container because of the fact that above
           // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
@@ -53,12 +52,24 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
   }, []);
 
   return (
-    <>
-      {!showStartClaim && (inProgressClaims.length || submittedClaims.length) ? (
-        <PortalPage inProgressClaims={inProgressClaims} submittedClaims={submittedClaims} assignmentPConn={assignmentPConn} onProceedHandler={onProceedHandler} setShowStartClaim={setShowStartClaim}/>
-      ) : (
-        <StartClaim onProceedHandler={onProceedHandler} />
-       )}
-    </>
+    !(loadingInProgressClaims && loadingSubmittedClaims) && (
+      <>
+        {!showStartClaim && (inProgressClaims.length || submittedClaims.length) ? (
+          <PortalPage
+            inProgressClaims={inProgressClaims}
+            submittedClaims={submittedClaims}
+            assignmentPConn={assignmentPConn}
+            onProceedHandler={onProceedHandler}
+            setShowStartClaim={setShowStartClaim}
+          />
+        ) : (
+          <StartClaim
+            onProceedHandler={onProceedHandler}
+            setShowStartClaim={setShowStartClaim}
+            showStartClaim={showStartClaim}
+          />
+        )}
+      </>
+    )
   );
 }

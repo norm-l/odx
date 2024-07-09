@@ -19,7 +19,6 @@ export default function PortalPage(props) {
 
   useEffect(() => {
     setPageTitle();
-    console.log('children', children)
   }, []);
 
   return (
@@ -41,9 +40,8 @@ export default function PortalPage(props) {
                 rel='noopener noreferrer'
               >
                 {' '}
-                {t('PROOF_OF_ENTITLEMENT')} {t('OPENS_IN_NEW_TAB')}
+                {t('PROOF_OF_ENTITLEMENT')} {t('OPENS_IN_NEW_TAB')}.
               </a>
-              .
             </p>
             <hr
               className='govuk-section-break govuk-section-break--l govuk-section-break--visible'
@@ -76,8 +74,8 @@ export default function PortalPage(props) {
                 thePConn={assignmentPConn}
                 data={submittedClaims}
                 title={t('SUBMITTED_REQUESTS')}
-                rowClickAction='OpenAssignment'
-                buttonContent={t('CONTINUE_MY_REQUEST')}
+                rowClickAction='OpenCase'
+                buttonContent={t('VIEW_MY_REQUEST')}
                 caseId={getClaimsCaseId()}
                 onProceedHandler={onProceedHandler}
               />
@@ -98,7 +96,6 @@ export default function PortalPage(props) {
               >
                 {t('STARTING_NON_ADVANCED_EDUCATION')}
               </a>
-              .
             </p>
             <p className='govuk-body'>
               {t('MUST_TELL')}{' '}
@@ -108,9 +105,8 @@ export default function PortalPage(props) {
                 rel='noopener noreferrer'
                 target='_blank'
               >
-                {t('LEAVES_FULL_TIME_EDUCATION')} {t('OPENS_IN_NEW_TAB')}
+                {t('LEAVES_FULL_TIME_EDUCATION')} {t('OPENS_IN_NEW_TAB')}.
               </a>
-              .
             </p>
           </div>
         </div>

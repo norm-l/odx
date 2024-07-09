@@ -47,7 +47,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
@@ -65,7 +64,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
     history.push('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-    setIsLoggedIn(true);
   }
 
   const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn, shutterServicePage, serviceNotAvailable } = useStartMashup(
@@ -272,7 +270,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
-  if (!isLoggedIn || shuttered === null) {
+  if (shuttered === null) {
     return null;
   } else if (currentDisplay === 'servicenotavailable') {
     return (

@@ -90,44 +90,52 @@ export default function ClaimsList(props) {
   function getClaims() {
     const claimsData = [];
     data.forEach(item => {
-      const claimItem = {
-        claimRef: item.pyID,
-        dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
-        dateUpdated: item.pxUpdateDateTime,
-        children: [],
-        childrenAdded: item.Claim?.Child?.pyFirstName !== null,
-        actionButton: (
-          <Button
-            attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
-            variant='secondary'
-            onClick={e => {
-              _rowClick(item, e);
-            }}
-          >
-            {buttonContent}
-          </Button>
-        ),
-        status: statusMapping(item.pyStatusWork)
-      };
+      if (
+        item.ClaimExtension &&
+        item.ClaimExtension.Child &&
+        item.ClaimExtension.Child.pyFirstName
+      ) {
+        const claimItem = {
+          claimRef: item.pyID,
+          dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
+          dateUpdated: item.pxUpdateDateTime,
+          children: [],
+          childrenAdded: item.ClaimExtension?.Child?.pyFirstName !== null,
+          actionButton: (
+            <Button
+              attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
+              variant='secondary'
+              onClick={e => {
+                _rowClick(item, e);
+              }}
+            >
+              {buttonContent}
+            </Button>
+          ),
+          status: statusMapping(item.pyStatusWork)
+        };
 
-      if (item.Claim.ChildrenJSON) {
-        const additionalChildren = extractChildren(item.Claim.ChildrenJSON);
-        additionalChildren.forEach(child => {
-          const newChild = {
-            firstName: child.name,
-            lastName: ' ',
-            dob: child.dob ? GBdate(child.dob) : ''
-          };
-          claimItem.children.push(newChild);
-        });
-      } else {
-        claimItem.children.push({
-          firstName: item.Claim.Child.pyFirstName,
-          lastName: item.Claim.Child.pyLastName,
-          dob: item.Claim.Child.DateOfBirth ? GBdate(item.Claim.Child.DateOfBirth) : ''
-        });
+        if (item.ClaimExtension?.ChildrenJSON) {
+          const additionalChildren = extractChildren(item.ClaimExtension?.ChildrenJSON);
+          additionalChildren.forEach(child => {
+            const newChild = {
+              firstName: child.name,
+              lastName: ' ',
+              dob: child.dob ? GBdate(child.dob) : ''
+            };
+            claimItem.children.push(newChild);
+          });
+        } else {
+          claimItem.children.push({
+            firstName: item.ClaimExtension.Child.pyFirstName,
+            lastName: item.ClaimExtension.Child.pyLastName,
+            dob: item.ClaimExtension.Child.DateOfBirth
+              ? GBdate(item.ClaimExtension.Child.DateOfBirth)
+              : ''
+          });
+        }
+        claimsData.push(claimItem);
       }
-      claimsData.push(claimItem);
     });
     return claimsData;
   }
@@ -139,13 +147,13 @@ export default function ClaimsList(props) {
   function renderChildDetails(claimItem) {
     return claimItem.children.map((child, index) => (
       <>
-        <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child.firstName}>
+        <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child?.firstName}>
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
             <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {t('YOUNG_PERSON_NAME')}
             </dt>
             <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {child.firstName} {child.lastName}
+              {child?.firstName} {child?.lastName}
             </dd>
             <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {/* If this is the first entry add the status */}
@@ -158,13 +166,13 @@ export default function ClaimsList(props) {
               )}
             </dd>
           </div>
-          {child.dob && (
+          {child?.dob && (
             <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
               <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
                 {t('DATE_OF_BIRTH')}
               </dt>
               <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                {child.dob}
+                {child?.dob}
               </dd>
             </div>
           )}
