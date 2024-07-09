@@ -17,6 +17,11 @@ export default function PortalPage(props) {
   } = props;
   const { t } = useTranslation();
 
+  function showStartClaim(e) {
+    e.preventDefault();
+    setShowStartClaim(true);
+  }
+
   useEffect(() => {
     setPageTitle();
   }, []);
@@ -92,7 +97,7 @@ export default function PortalPage(props) {
                 href='#'
                 className='govuk-link govuk-link--no-visited-state'
                 rel='noopener noreferrer'
-                onClick={() => setShowStartClaim(true)}
+                onClick={showStartClaim}
               >
                 {t('STARTING_NON_ADVANCED_EDUCATION')}
               </a>
