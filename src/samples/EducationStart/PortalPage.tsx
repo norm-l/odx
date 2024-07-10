@@ -66,6 +66,7 @@ export default function PortalPage(props) {
                 buttonContent={t('CONTINUE_MY_REQUEST')}
                 caseId={getClaimsCaseId()}
                 onProceedHandler={onProceedHandler}
+                fieldType={t('CREATED_DATE')}
               />
             </div>
           </div>
@@ -83,6 +84,7 @@ export default function PortalPage(props) {
                 buttonContent={t('VIEW_MY_REQUEST')}
                 caseId={getClaimsCaseId()}
                 onProceedHandler={onProceedHandler}
+                fieldType={t('SUBMITTED_DATE')}
               />
             </div>
           </div>

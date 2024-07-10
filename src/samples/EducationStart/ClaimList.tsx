@@ -13,6 +13,7 @@ export default function ClaimsList(props) {
     thePConn,
     data,
     title,
+    fieldType,
     rowClickAction,
     buttonContent,
     caseId,
@@ -180,7 +181,7 @@ export default function ClaimsList(props) {
 
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
             <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {t('CREATED_DATE')}
+              {fieldType}
             </dt>
             <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {dayjs(claimItem.dateCreated).format('D MMM YYYY')}
@@ -231,6 +232,7 @@ ClaimsList.propTypes = {
   thePConn: PropTypes.object,
   data: PropTypes.array,
   title: PropTypes.string,
+  fieldType: PropTypes.string,
   rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
   buttonContent: PropTypes.string,
   caseId: PropTypes.string,
