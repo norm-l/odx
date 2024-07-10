@@ -5,13 +5,19 @@ import PropTypes from 'prop-types';
 import { scrollToTop, GBdate, getServiceShutteredStatus } from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 import WarningText from '../../BaseComponents/WarningText/WarningText';
+import { formatter } from '../../override-sdk/template/DefaultForm/DefaultFormUtils';
 
 declare const PCore: any;
 
 export default function ClaimsList(props) {
   const { thePConn, data, title, rowClickAction, buttonContent, caseId, checkShuttered } = props;
   const { t } = useTranslation();
+  const docIDForReturnSlip = 'CR0002';
+  const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
   const [claims, setClaims] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const [documentList, setDocumentList] = useState(``);
+
   const statusMapping = status => {
     switch (status) {
       case 'Open-InProgress':
@@ -77,6 +83,43 @@ export default function ClaimsList(props) {
   function extractChildren(childrenJSON: string) {
     return JSON.parse(childrenJSON.slice(childrenJSON.indexOf(':') + 1));
   }
+  function removeSpacesFromName(finalText, textToBeReplaced, textToBeFormatted) {
+    return finalText.replaceAll(
+      textToBeReplaced,
+      `<span class="govuk-hidespace">${textToBeFormatted.trim()}</span>`
+    );
+  }
+  function formatAndSetListData(listData) {
+    const finalText = formatter(
+      listData,
+      `<span class="govuk-hidespace">`,
+      `</span>`,
+      removeSpacesFromName
+    );
+    setDocumentList(finalText);
+  }
+
+  const generateReturnSlip = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    perCaseId: any
+  ) => {
+    e.preventDefault();
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_DocumentContent', 'root', {
+        DocumentID: docIDForReturnSlip,
+        Locale: locale,
+        CaseID: perCaseId
+      })
+      .then(pageData => {
+        formatAndSetListData(pageData.DocumentContentHTML);
+        const myWindow = window.open('');
+        myWindow.document.write(pageData.DocumentContentHTML);
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
+  };
 
   function getClaims() {
     const claimsData = [];
@@ -88,16 +131,31 @@ export default function ClaimsList(props) {
         children: [],
         childrenAdded: item.Claim.Child.pyFirstName !== null,
         actionButton: (
-          <Button
-            attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
-            variant='secondary'
-            onClick={() => {
-              _rowClick(item);
-            }}
-          >
-            {buttonContent}
-          </Button>
+          <>
+            <Button
+              attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
+              variant='secondary'
+              onClick={() => {
+                _rowClick(item);
+              }}
+            >
+              {buttonContent}
+            </Button>
+            {item.Claim.ShowPrintSlip && (
+              <p className='govuk-body'>
+                <a
+                  href=''
+                  onClick={e => generateReturnSlip(e, item.pzInsKey)}
+                  target='_blank'
+                  rel='noreferrer noopener'
+                >
+                  {t('PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
+                </a>
+              </p>
+            )}{' '}
+          </>
         ),
+
         status: statusMapping(item.pyStatusWork)
       };
 
