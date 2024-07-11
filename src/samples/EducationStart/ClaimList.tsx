@@ -92,52 +92,46 @@ export default function ClaimsList(props) {
   function getClaims() {
     const claimsData = [];
     data.forEach(item => {
-      if (
-        item.ClaimExtension &&
-        item.ClaimExtension.Child &&
-        item.ClaimExtension.Child.pyFirstName
-      ) {
-        const claimItem = {
-          claimRef: item.pyID,
-          dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
-          dateUpdated: item.pxUpdateDateTime,
-          children: [],
-          childrenAdded: item.ClaimExtension?.Child?.pyFirstName !== null,
-          actionButton: (
-            <Button
-              attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
-              variant='secondary'
-              onClick={() => {
-                _rowClick(item);
-              }}
-            >
-              {buttonContent}
-            </Button>
-          ),
-          status: statusMapping(item.pyStatusWork)
-        };
+      const claimItem = {
+        claimRef: item.pyID,
+        dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD/MM/YYYY' }),
+        dateUpdated: item.pxUpdateDateTime,
+        children: [],
+        childrenAdded: item.ClaimExtension?.Child?.pyFirstName !== null,
+        actionButton: (
+          <Button
+            attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
+            variant='secondary'
+            onClick={() => {
+              _rowClick(item);
+            }}
+          >
+            {buttonContent}
+          </Button>
+        ),
+        status: statusMapping(item.pyStatusWork)
+      };
 
-        if (item.ClaimExtension?.ChildrenJSON) {
-          const additionalChildren = extractChildren(item.ClaimExtension?.ChildrenJSON);
-          additionalChildren.forEach(child => {
-            const newChild = {
-              firstName: child.name,
-              lastName: ' ',
-              dob: child.dob ? GBdate(child.dob) : ''
-            };
-            claimItem.children.push(newChild);
-          });
-        } else {
-          claimItem.children.push({
-            firstName: item.ClaimExtension.Child.pyFirstName,
-            lastName: item.ClaimExtension.Child.pyLastName,
-            dob: item.ClaimExtension.Child.DateOfBirth
-              ? GBdate(item.ClaimExtension.Child.DateOfBirth)
-              : ''
-          });
-        }
-        claimsData.push(claimItem);
+      if (item.ClaimExtension?.ChildrenJSON) {
+        const additionalChildren = extractChildren(item.ClaimExtension?.ChildrenJSON);
+        additionalChildren.forEach(child => {
+          const newChild = {
+            firstName: child.name,
+            lastName: ' ',
+            dob: child.dob ? GBdate(child.dob) : ''
+          };
+          claimItem.children.push(newChild);
+        });
+      } else {
+        claimItem.children.push({
+          firstName: item.ClaimExtension.Child.pyFirstName,
+          lastName: item.ClaimExtension.Child.pyLastName,
+          dob: item.ClaimExtension.Child.DateOfBirth
+            ? GBdate(item.ClaimExtension.Child.DateOfBirth)
+            : ''
+        });
       }
+      claimsData.push(claimItem);
     });
     return claimsData;
   }
@@ -150,33 +144,37 @@ export default function ClaimsList(props) {
     return claimItem.children.map((child, index) => (
       <>
         <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child?.firstName}>
-          <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-            <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {t('YOUNG_PERSON_NAME')}
-            </dt>
-            <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {child?.firstName} {child?.lastName}
-            </dd>
-            <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {/* If this is the first entry add the status */}
-              {index === 0 ? (
-                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
-                  {claimItem.status.text}
-                </strong>
-              ) : (
-                <span className='govuk-visually-hidden'>No action</span>
+          {claimItem.childrenAdded && (
+            <>
+              <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+                <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                  {t('YOUNG_PERSON_NAME')}
+                </dt>
+                <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                  {child?.firstName} {child?.lastName}
+                </dd>
+                <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                  {/* If this is the first entry add the status */}
+                  {index === 0 ? (
+                    <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
+                      {claimItem.status.text}
+                    </strong>
+                  ) : (
+                    <span className='govuk-visually-hidden'>No action</span>
+                  )}
+                </dd>
+              </div>
+              {child?.dob && (
+                <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+                  <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                    {t('DATE_OF_BIRTH')}
+                  </dt>
+                  <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                    {dayjs(child.dob).format('DD MMM YYYY')}
+                  </dd>
+                </div>
               )}
-            </dd>
-          </div>
-          {child?.dob && (
-            <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-              <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                {t('DATE_OF_BIRTH')}
-              </dt>
-              <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                {dayjs(child.dob).format('DD MMM YYYY')}
-              </dd>
-            </div>
+            </>
           )}
 
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
@@ -221,7 +219,7 @@ export default function ClaimsList(props) {
 
       {claims.map(claimItem => (
         <React.Fragment key={claimItem.claimRef}>
-          {claimItem.childrenAdded && renderChildDetails(claimItem)}
+          {claimItem.children.length > 0 && renderChildDetails(claimItem)}
         </React.Fragment>
       ))}
     </>
