@@ -144,37 +144,33 @@ export default function ClaimsList(props) {
     return claimItem.children.map((child, index) => (
       <>
         <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child?.firstName}>
-          {claimItem.childrenAdded && (
-            <>
-              <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-                <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {t('YOUNG_PERSON_NAME')}
-                </dt>
-                <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {child?.firstName} {child?.lastName}
-                </dd>
-                <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {/* If this is the first entry add the status */}
-                  {index === 0 ? (
-                    <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
-                      {claimItem.status.text}
-                    </strong>
-                  ) : (
-                    <span className='govuk-visually-hidden'>No action</span>
-                  )}
-                </dd>
-              </div>
-              {child?.dob && (
-                <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-                  <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                    {t('DATE_OF_BIRTH')}
-                  </dt>
-                  <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                    {dayjs(child.dob).format('DD MMM YYYY')}
-                  </dd>
-                </div>
+          <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+            <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {t('YOUNG_PERSON_NAME')}
+            </dt>
+            <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {child?.firstName} {child?.lastName}
+            </dd>
+            <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
+              {/* If this is the first entry add the status */}
+              {index === 0 ? (
+                <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
+                  {claimItem.status.text}
+                </strong>
+              ) : (
+                <span className='govuk-visually-hidden'>No action</span>
               )}
-            </>
+            </dd>
+          </div>
+          {child?.dob && (
+            <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+              <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {t('DATE_OF_BIRTH')}
+              </dt>
+              <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {dayjs(child.dob).format('DD MMM YYYY')}
+              </dd>
+            </div>
           )}
 
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
@@ -219,7 +215,7 @@ export default function ClaimsList(props) {
 
       {claims.map(claimItem => (
         <React.Fragment key={claimItem.claimRef}>
-          {claimItem.children.length > 0 && renderChildDetails(claimItem)}
+          {claimItem.childrenAdded && renderChildDetails(claimItem)}
         </React.Fragment>
       ))}
     </>
