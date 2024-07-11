@@ -32,8 +32,9 @@ const _DateErrorFormatter = (message, propertyName) => {
     }
     let missingPartErrorMessage = i18n.t(`DATE_MUST_INCLUDE${missingPartMessage}`);
     if(isMultipleDateInput()) {
-      missingPartErrorMessage = `${i18n.t('THE')} ${propertyName?.toLowerCase()} ${i18n.t(`MUST_INCLUDE${missingPartMessage}`)}`;
-      invalidDateErrorMsgByField = `${i18n.t('THE')} ${propertyName?.toLowerCase()} ${i18n.t('MUST_BE_A_REAL_DATE')}`;
+      const langLabelKey = propertyName?.replace(' ', '_')?.toUpperCase();
+      missingPartErrorMessage = i18n.t(`${langLabelKey}_MUST_INCLUDE${missingPartMessage}`);
+      invalidDateErrorMsgByField = i18n.t(`${langLabelKey}_MUST_BE_A_REAL_DATE`);
     }
 
     if (missingPartMessage.length > 0) {
