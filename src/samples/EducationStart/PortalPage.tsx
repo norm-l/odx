@@ -12,7 +12,7 @@ export default function PortalPage(props) {
     inProgressClaims,
     submittedClaims,
     assignmentPConn,
-    onProceedHandler,
+    setShowLandingPage,
     setShowStartClaim
   } = props;
   const { t } = useTranslation();
@@ -65,7 +65,8 @@ export default function PortalPage(props) {
                 rowClickAction='OpenAssignment'
                 buttonContent={t('CONTINUE_MY_REQUEST')}
                 caseId={getClaimsCaseId()}
-                onProceedHandler={onProceedHandler}
+                fieldType={t('CREATED_DATE')}
+                setShowLandingPage={setShowLandingPage}
               />
             </div>
           </div>
@@ -82,7 +83,9 @@ export default function PortalPage(props) {
                 rowClickAction='OpenCase'
                 buttonContent={t('VIEW_MY_REQUEST')}
                 caseId={getClaimsCaseId()}
-                onProceedHandler={onProceedHandler}
+                fieldType={t('SUBMITTED_DATE')}
+                setShowLandingPage={setShowLandingPage}
+
               />
             </div>
           </div>
