@@ -18,7 +18,7 @@ export default function ClaimsList(props) {
     buttonContent,
     caseId,
     checkShuttered,
-    onProceedHandler
+    setShowLandingPage
   } = props;
   const { t } = useTranslation();
   const [claims, setClaims] = useState([]);
@@ -43,19 +43,19 @@ export default function ClaimsList(props) {
     }
   };
 
-  const containerManger = thePConn.getContainerManager();
+  const containerManger = thePConn?.getContainerManager();
   const resetContainer = () => {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
-    containerManger.resetContainers({
+    containerManger?.resetContainers({
       context: 'app',
       name: 'primary',
       containerItems: [context]
     });
   };
 
-  async function _rowClick(row: any, e) {
+  async function _rowClick(row: any) {
     const { pzInsKey, pyAssignmentID } = row;
 
     const container = thePConn.getContainerName();
@@ -82,7 +82,7 @@ export default function ClaimsList(props) {
           });
       }
     }
-    onProceedHandler(e);
+    setShowLandingPage(false);
   }
 
   function extractChildren(childrenJSON: string) {
@@ -107,8 +107,8 @@ export default function ClaimsList(props) {
             <Button
               attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
               variant='secondary'
-              onClick={e => {
-                _rowClick(item, e);
+              onClick={() => {
+                _rowClick(item);
               }}
             >
               {buttonContent}
@@ -143,7 +143,7 @@ export default function ClaimsList(props) {
   }
 
   function getCurrentDate(date) {
-    return DateFormatter.Date(date, { format: 'DD MMM YYYY' });
+    return DateFormatter.Date(date, { format: 'DD MMMM YYYY' });
   }
 
   function renderChildDetails(claimItem) {
@@ -174,7 +174,7 @@ export default function ClaimsList(props) {
                 {t('DATE_OF_BIRTH')}
               </dt>
               <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                {dayjs(child.dob).format('D MMM YYYY')}
+                {dayjs(child.dob).format('DD MMM YYYY')}
               </dd>
             </div>
           )}
@@ -184,7 +184,7 @@ export default function ClaimsList(props) {
               {fieldType}
             </dt>
             <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {dayjs(claimItem.dateCreated).format('D MMM YYYY')}
+              {dayjs(claimItem.dateCreated).format('DD MMM YYYY')}
             </dd>
             <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {!claimItem.childrenAdded && (
@@ -236,5 +236,5 @@ ClaimsList.propTypes = {
   rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
   buttonContent: PropTypes.string,
   caseId: PropTypes.string,
-  onProceedHandler: PropTypes.func
+  setShowLandingPage: PropTypes.func
 };

@@ -5,7 +5,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
 import WarningText from './reuseables/WarningText/WarningText';
 
-export default function StartClaim({ onProceedHandler, setShowStartClaim, showStartClaim }) {
+export default function StartClaim({ handleStartCliam, setShowStartClaim, showStartClaim }) {
   const { t } = useTranslation();
   const { serviceParam } = useContext(AppContextEducation);
 
@@ -46,7 +46,7 @@ export default function StartClaim({ onProceedHandler, setShowStartClaim, showSt
 
         <Button
           id='continueToPortal'
-          onClick={onProceedHandler}
+          onClick={handleStartCliam}
           variant='start'
           data-prevent-double-click='true'
         >

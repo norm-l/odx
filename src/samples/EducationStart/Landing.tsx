@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 
-export default function Landing({ onProceedHandler, assignmentPConn }) {
+export default function Landing({ handleStartCliam, assignmentPConn, showPortalBanner, setShowLandingPage }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [showStartClaim, setShowStartClaim] = useState(false);
@@ -59,12 +59,13 @@ export default function Landing({ onProceedHandler, assignmentPConn }) {
             inProgressClaims={inProgressClaims}
             submittedClaims={submittedClaims}
             assignmentPConn={assignmentPConn}
-            onProceedHandler={onProceedHandler}
             setShowStartClaim={setShowStartClaim}
+            showPortalBanner={showPortalBanner}
+            setShowLandingPage={setShowLandingPage}
           />
         ) : (
           <StartClaim
-            onProceedHandler={onProceedHandler}
+            handleStartCliam={handleStartCliam}
             setShowStartClaim={setShowStartClaim}
             showStartClaim={showStartClaim}
           />
