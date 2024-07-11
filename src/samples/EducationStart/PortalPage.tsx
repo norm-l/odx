@@ -37,7 +37,7 @@ export default function PortalPage(props) {
             <h1 className='govuk-heading-xl'>{t('CHILD_BENEFIT_EXTENSION_REQUESTS')}</h1>
             <p className='govuk-body'>{t('VIEW_STATUS_OR_NOTIFY_CHANGES')}</p>
             <p className='govuk-body'>
-              {t('YOUR_VIEW')}
+              {t('YOUR_VIEW')}{' '}
               <a
                 href='https://www.gov.uk/child-benefit-proof'
                 target='_blank'
