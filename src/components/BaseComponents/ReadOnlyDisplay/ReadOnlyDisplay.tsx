@@ -13,14 +13,7 @@ export default function ReadOnlyDisplay(props) {
 
   useEffect(() => {
     if (name && name.indexOf(COMMA_DELIMITED_FIELD) !== -1 && value.indexOf(',') !== -1) {
-      let formatValue = value.split(',').map((item: string) => item.trim());
-
-      if (name.toLowerCase().includes('address')) {
-        const lastAddressLine = formatValue.at(-1);
-        formatValue = formatValue.slice(0, -1).map((item: string) => `${item},`);
-        formatValue = [...formatValue, lastAddressLine];
-      }
-
+      const formatValue = value.split(',').map((item: string) => item.trim());
       setFormattedValue(formatValue);
     }
   }, []);
