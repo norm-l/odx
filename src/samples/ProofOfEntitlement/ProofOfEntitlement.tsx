@@ -13,7 +13,7 @@ declare const myLoadMashup: any;
 export default function ProofOfEntitlement(){
 
     const [entitlementData, setEntitlementData] = useState(null);
-    const [nino, setNino] = useState('GY908084B')
+    const [nino, setNino] = useState('PA003371D')
     const history = useHistory();
     const {t} = useTranslation();
 
@@ -76,13 +76,18 @@ export default function ProofOfEntitlement(){
                         <div className="govuk-grid-column-two-thirds">
                             <h1 className="govuk-heading-l">{t('PROOF_ENTITLEMENT_HEADING')}</h1>
 
-                            <p className='govuk-body'>{t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName}</p>
+                            <p className='govuk-body'>{t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName} {t('ON')} {dayjs().format('D MMMM YYYY')}</p>
                             <h2 className='govuk-heading-m'>{t('PROOF_ENTITLEMENT_DETAILS_H2')}</h2>
-                            <p className='govuk-body'>{t('PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT')}</p>
+                            <p className='govuk-body'>{t('PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT')}{' '}
+                            <a href="https://www.gov.uk/report-changes-child-benefit/if-your-familys-circumstances-change" className="govuk-link" target="_blank" rel="noreferrer noopener">{t("PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT_CHANGE_YOUR_CIRCUSMSTANCES_LINK")}{t("OPENS_IN_NEW_TAB")}</a>                          
+                            {' '}{t("PROOF_ENTITLMENT_IF_DETAILS_INCORRECT_OR_ABOUT")}{' '}
+                            <a href="https://www.gov.uk/report-changes-child-benefit" className="govuk-link" target="_blank" rel="noreferrer noopener">{t("PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT_CHANGE_CHILDS_CIRCUMSTANCES_LINK")}{t("OPENS_IN_NEW_TAB")}</a>
+                            {t("PROOF_ENTITLMENT_IF_DETAILS_INCORRECT_WILL_UPDATE")}
+                            </p>
 
                             <dl className='govuk-summary-list'>
-                                <ReadOnlyDisplay key='name' label={t('POE_LABEL_NAME')} value={entitlementData.Claimant?.pyFullName}/>                            
-                                <ReadOnlyDisplay key='address' label={t('POE_LABEL_ADDRESS')} value={entitlementData.Claimant?.pyAddress}/>                            
+                                <ReadOnlyDisplay key='name' label={t('POE_LABEL_NAME')} value={entitlementData.Claimant?.pyFullName}/>                                                            
+                                <ReadOnlyDisplay key='address' label={t('POE_LABEL_ADDRESS')} value={entitlementData.Claimant?.pyAddress} name={entitlementData.Claimant?.pyAddress.indexOf(',')?'CSV':''}/>                            
                                 <ReadOnlyDisplay key='amount' label={t('POE_LABEL_AMOUNT')} value={`£${entitlementData.AwardValue?.toString()} ${t('PER_WEEK')}`}/>                            
                                 <ReadOnlyDisplay key='startdate' label={t('POE_LABEL_START_DATE')} value={dayjs(entitlementData.AwardStart).format('D MMMM YYYY')}/>                            
                                 <ReadOnlyDisplay key='enddate' label={t('POE_LABEL_END_DATE')} value={dayjs(entitlementData.AwardEnd).format('D MMMM YYYY')}/>  

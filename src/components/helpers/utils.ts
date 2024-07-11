@@ -1,5 +1,7 @@
 import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
+import { t } from 'i18next';
 
+let appServiceName = null;
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
   document.body.scrollTop = position;
@@ -32,6 +34,19 @@ export const isUnAuthJourney = () => {
   return caseType === 'Unauth' || window.location.href.includes('/ua');
 };
 
+export const isEduStartJourney = () => {
+  const caseTypeName = 'HMRC-ChB-Work-EducationStart';
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  if (!containername) {
+    return appServiceName === t('EDUCATION_START');
+  } else {
+    const caseType = PCore.getStore().getState().data[containername]?.caseInfo.caseTypeID;
+    return caseType === caseTypeName;
+  }
+};
+
 export const getServiceShutteredStatus = async (): Promise<boolean> => {
   interface ResponseType {
     data: { Shuttered: boolean };
@@ -41,8 +56,11 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = isUnAuthJourney() ? 'UnauthChB' : 'ChB';
+
+    let featureID = 'ChB';
     const featureType = 'Service';
+    if (isUnAuthJourney()) featureID = 'UnauthChB';
+    else if (isEduStartJourney()) featureID = 'EdStart';
 
     const parameters = new URLSearchParams(
       `{FeatureID: ${featureID}, FeatureType: ${featureType}}`
@@ -103,6 +121,8 @@ export const removeRedundantString = (redundantString: string, separator: string
   const list = redundantString.split(separator);
   const newList = [];
   let uniqueString = '';
+  const emailPattern = new RegExp(/\S+@\S+\.\S+/);
+  const checkEmail = emailPattern.test(redundantString);
   if (list.length > 0) {
     list.forEach(item => {
       if (!newList.includes(item.trim())) {
@@ -111,7 +131,8 @@ export const removeRedundantString = (redundantString: string, separator: string
     });
     if (newList.length > 0) {
       newList.forEach(element => {
-        uniqueString = uniqueString + (uniqueString.length > 0 ? '. ' : '') + element.trim();
+        uniqueString =
+          uniqueString + (uniqueString.length <= 0 ? '' : checkEmail ? '.' : '. ') + element.trim();
       });
     }
   }
@@ -161,3 +182,26 @@ export const triggerLogout = () => {
       });
     });
 };
+
+export const setAppServiceName = serviceName => {
+  appServiceName = serviceName || null;
+};
+
+export const getWorkareaContainerName = () => {
+  const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const containerName = PCore.getContainerUtils().getActiveContainerItemName(
+    `${primaryContainer}/workarea`
+  );
+  return containerName;
+}
+
+export const isMultipleDateInput = () => {
+  const containerName = getWorkareaContainerName();
+  const formEditablefields = PCore.getFormUtils().getEditableFields(containerName);
+  if(formEditablefields?.length > 1) {
+    return formEditablefields.filter(field => field.type.toLowerCase() === 'date').length > 1 ? true : false;;
+  }
+  return false;
+}
