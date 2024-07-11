@@ -5,7 +5,7 @@ const _DateErrorFormatter = (message, propertyName = '') => {
   const matchedDates = message.match(dateRegExp);
   const originalDate = matchedDates?.length > 0 ? matchedDates[0] : null;
   const targets = [];
-  //TODO - We are going to expose a property to make this logic as configurable.
+  // TODO - We are going to expose a property to make this logic as configurable.
   const dateFieldsAndCustomErrorMsg = [
     { 'when did you start working for yourself?': 'THE_DATE_YOU_BECAME_SELF_EMPLOYED' },
     {
