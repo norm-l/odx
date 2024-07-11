@@ -13,7 +13,14 @@ export default function ReadOnlyDisplay(props) {
 
   useEffect(() => {
     if (name && name.indexOf(COMMA_DELIMITED_FIELD) !== -1 && value.indexOf(',') !== -1) {
-      const formatValue = value.split(',').map((item: string) => item.trim());
+      let formatValue = value.split(',').map((item: string) => item.trim());
+
+      if (name.toLowerCase().includes('address')) {
+        const lastAddressLine = formatValue.at(-1);
+        formatValue = formatValue.slice(0, -1).map((item: string) => `${item},`);
+        formatValue = [...formatValue, lastAddressLine];
+      }
+
       setFormattedValue(formatValue);
     }
   }, []);
@@ -25,11 +32,11 @@ export default function ReadOnlyDisplay(props) {
       <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
         {Array.isArray(formattedValue) ? (
           <>
-          {formattedValue?.map(item => (
-            <React.Fragment key={item}>
-              {item}
-              <br />
-            </React.Fragment>
+            {formattedValue?.map(item => (
+              <React.Fragment key={item}>
+                {item}
+                <br />
+              </React.Fragment>
             ))}
           </>
         ) : (

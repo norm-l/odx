@@ -10,15 +10,10 @@ import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
-  const {
-    getPConnect,
-    inputProps,
-    validatemessage,
-    hintText,
-    readOnly,
-    value,
-    configAlternateDesignSystem
-  } = props;
+  const { getPConnect, inputProps, validatemessage, readOnly, value, configAlternateDesignSystem } =
+    props;
+
+  const hintText = props.hintText || props.helperText;
   // let label = props.label;
 
   // These two properties should be passed to individual checkbox components via pconnet registerAdditionalProps
@@ -41,7 +36,6 @@ export default function CheckboxComponent(props) {
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const { errorMsgs } = useContext(ErrorMsgContext);
-  
 
   // build name for id, allows for error message navigation to field
   const propertyContext = getPConnect().options.pageReference
@@ -49,7 +43,10 @@ export default function CheckboxComponent(props) {
     : '';
   const propertyName = getPConnect().getStateProps().value.split('.').pop();
   /* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */
-  const name = getPConnect().viewName.toLowerCase() === 'declaration' ? `${propertyName}` : `${propertyContext}-${propertyName}`;
+  const name =
+    getPConnect().viewName.toLowerCase() === 'declaration'
+      ? `${propertyName}`
+      : `${propertyContext}-${propertyName}`;
 
   useEffect(() => {
     const found = checkErrorMsgs(errorMsgs, name);
@@ -108,8 +105,8 @@ export default function CheckboxComponent(props) {
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
-               <span className='govuk-visually-hidden'>Error:</span>{' '}
-               {removeRedundantString(errorMessage)}
+              <span className='govuk-visually-hidden'>Error:</span>{' '}
+              {removeRedundantString(errorMessage)}
             </p>
           )}
           <GDSCheckbox
