@@ -308,5 +308,17 @@
   "EDUCATION_START_UNIVERSAL_CREDIT_WARNING": "If the young person is receiving Universal Credit you cannot apply for an extension to their payments.",
 
   
-  "PROOF_ENTITLEMENT_HEADING":"Proof of entitlement to Child Benefit"
+  "PROOF_ENTITLEMENT_HEADING":"Proof of entitlement to Child Benefit",  
+  "PROOF_ENTITLEMENT_CONFIRMATION":"This is confirmation from HMRC of the Child Benefit entitlement for",
+  "PROOF_ENTITLEMENT_DETAILS_H2":"Claimants entitlement details",
+  "PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT":"If your address or any names are incorrect, you can tell us about changes to your circumstances (opens in new tab) or about your child or child's circumstances (opens in new tab), and we will update them for you.",
+  "POE_LABEL_NAME":"Name",
+  "POE_LABEL_ADDRESS":"Address",
+  "POE_LABEL_AMOUNT":"Amount",
+  "POE_LABEL_START_DATE":"Start date",
+  "POE_LABEL_END_DATE":"End date",
+  "CHILD_BENEFIT_DETAILS_FOR":"Child Benefit award details for",
+  "PER_WEEK":"per week",
+  "POE_LABEL_CHILD_DOB":"Date of birth"
+
 }
