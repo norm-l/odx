@@ -78,12 +78,12 @@ export default function SaReg() {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
-  const [caseId, setCaseId] = useState('');
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [inprogressRegistration, setInprogressRegistration] = useState([]);
   const [showAgeRestrictionInfo, setshowAgeRestrictionInfo] = useState(false);
   const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
+  const [isSoleTrader, setIsSoleTrader] = useState(false);
 
   const history = useHistory();
   const { t } = useTranslation();
@@ -172,21 +172,27 @@ export default function SaReg() {
       { skipDirtyCheck: true }
     );
   }
-  function getRegistrationCaseID() {
+
+  function getIsSoleTrader() {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
-    const caseID = PCore.getStoreValue('.ID', 'caseInfo', context);
-    setCaseId(caseID);
+
+    const soleTraderFlag = PCore.getStoreValue('.IsSoleTrader', 'caseInfo.content', context);
+
+    setIsSoleTrader(soleTraderFlag);
   }
+
   function assignmentFinished() {
-    getRegistrationCaseID();
     if (!bShowResolutionScreen) {
+      getIsSoleTrader();
+
       PCore.getContainerUtils().closeContainerItem(
         PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
         { skipDirtyCheck: true }
       );
     }
+
     displayResolutionScreen();
   }
 
@@ -217,7 +223,6 @@ export default function SaReg() {
 
   function cancelAssignment() {
     fetchInProgressRegistrationData();
-    getRegistrationCaseID();
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
@@ -245,6 +250,7 @@ export default function SaReg() {
           `${containername}/workarea`
         );
         const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
+
         if (status === 'Resolved-Discarded') {
           displayServiceNotAvailable();
 
@@ -568,7 +574,6 @@ export default function SaReg() {
                   data={inprogressRegistration}
                   rowClickAction='OpenAssignment'
                   buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
-                  caseId={caseId}
                 />
               )}
             </UserPortal>
@@ -599,7 +604,7 @@ export default function SaReg() {
       />
       <div className='govuk-width-container'>
         {renderContent()}
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} />}
+        {bShowResolutionScreen && <ConfirmationPage isSoleTrader={isSoleTrader} />}
       </div>
 
       <LogoutPopup

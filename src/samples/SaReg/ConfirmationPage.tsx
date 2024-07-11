@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-import Button from '../../components/BaseComponents/Button/Button';
+// import Button from '../../components/BaseComponents/Button/Button';
 
-const ConfirmationPage = ({ caseStatus }) => {
+const ConfirmationPage = ({ isSoleTrader }) => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
   const serviceShuttered = useServiceShuttered();
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  function getFeedBackLink() {
-    return 'https://www.tax.service.gov.uk/feedback/ODXSAREG';
-  }
   useEffect(() => {
     setPageTitle();
   }, [lang]);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
 
   const getPanelContentOfSubmittedReg = () => {
     return (
@@ -30,59 +22,55 @@ const ConfirmationPage = ({ caseStatus }) => {
     );
   };
 
-  const _clickToTaxAccount = () => {};
-
   const getBodyContentofSubmittedReg = () => {
     return (
       <>
-        <p className='govuk-body'> {t('WE_HAVE_SENT_YOUR_APPLICATION')}</p>
+        <p className='govuk-body'> {t('YOU_WILL_GET_A_MESSAGE_TO_CONFIRM')}</p>
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
-        <p className='govuk-body'> {t('YOU_WILL_SEE_DETAILS_IN_24_HOURS')}</p>
+        <p className='govuk-body'> {t('AFTER_YOUR_REGISTRATION_HAS_BEEN_PROCESSED')}</p>
+        {isSoleTrader && (
+          <p className='govuk-body'>{t('YOU_WILL_ALSO_BE_REGISTERED_FOR_CLASS_2')}</p>
+        )}
+        <p className='govuk-body'>{t('THIS_USUALLY_HAPPENS_WITHIN_24_HOURS')}</p>
+        <p className='govuk-body'>{t('YOU_WILL_ALSO_RECEIVE_A_LETTER_BY_POST')}</p>
+        <h2 className='govuk-heading-m'> {t('WHAT_YOU_NEED_TO_DO')}</h2>
+        <p className='govuk-body'> {t('REGISTERING_FOR_SELF_ASSESSMENT_MEANS')}</p>
+        <p className='govuk-body'>{t('YOU_STILL_NEED_TO_SEND_A_TAX_RETURN')}</p>
+        <h2 className='govuk-heading-m'> {t('IF_YOU_NO_LONGER_NEED_TO_BE_IN_SA')}</h2>
+        <p className='govuk-body'> {t('YOU_NEED_TO_TELL_US_YOU_NO_LONGER')}</p>
+        <p className='govuk-body'>{t('IF_YOU_DO_NOT_SEND_A_TAX_RETURN')}</p>
         <p className='govuk-body'>
-          {' '}
-          {t('WANT_TO_SEE_MORE_INFO')}{' '}
+          {t('YOU_CAN_ALSO')}
           <a
             href='https://www.gov.uk/guidance/download-the-hmrc-app'
+            className='govuk-link'
+            target='_blank'
+            rel='noreferrer'
+          >
+            {t('USE_THE_HMRC_APP')}
+            <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
+          </a>
+          {t('TO_READ_MORE_ABOUT_SELF_ASSESSMENT')}
+        </p>
+        <p className='govuk-body'>
+          <a
+            href='https://www.tax.service.gov.uk/personal-account/profile-and-settings'
+            className='govuk-link'
             target='_blank'
             rel='noreferrer noopener'
           >
-            {t('USE_THE_HMRC_APP')} {t('OPENS_IN_NEW_TAB')}
+            {t('GO_TO_YOUR_TAX_ACCOUNT')}
+            <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
           </a>
         </p>
-        <Button
-          attributes={{ className: 'govuk-!-margin-top-4' }}
-          variant='primary'
-          onClick={() => {
-            _clickToTaxAccount();
-          }}
-        >
-          {t('GO_TO_YOUR_TAX_ACCOUNT')}
-        </Button>{' '}
         <br />
-        <hr className='govuk-section-break govuk-section-break--visible govuk-!-padding-top-2'></hr>
-        <h2 className='govuk-heading-m govuk-!-padding-top-6'> {t('YOUR_HMRC_ONLINE_SERVICES')}</h2>
-        <ul className='govuk-list govuk-list--bullet'>
-          <li>
-            {t('SEE_YOUR')}{' '}
-            <a href='' target='_blank' rel='noreferrer noopener'>
-              {t('NATIONAL_INSURANCE_CONTRIBUTIONS')} {t('OPENS_IN_NEW_TAB')}
-            </a>
-          </li>
-          <li>
-            {t('VIEW_AN')}{' '}
-            <a href='' target='_blank' rel='noreferrer noopener'>
-              {t('ESTIMATION_OF_YOUR_STATE_PENSION')} {t('OPENS_IN_NEW_TAB')}
-            </a>
-          </li>
-          <li>
-            {t('UPDATE')}{' '}
-            <a href='' target='_blank' rel='noreferrer noopener'>
-              {t('YOUR_ADDRESS')} {t('OPENS_IN_NEW_TAB')}
-            </a>
-          </li>
-        </ul>
         <p className='govuk-body govuk-!-padding-top-6'>
-          <a href={getFeedBackLink()} className='govuk-link' target='_blank' rel='noreferrer'>
+          <a
+            href='https://www.tax.service.gov.uk/feedback/ODXSAREG'
+            className='govuk-link'
+            target='_blank'
+            rel='noreferrer'
+          >
             {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')}
             <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
           </a>
@@ -100,9 +88,7 @@ const ConfirmationPage = ({ caseStatus }) => {
     return getBodyContentofSubmittedReg();
   };
 
-  if (loading && caseStatus === undefined) {
-    return null;
-  } else if (serviceShuttered) {
+  if (serviceShuttered) {
     return <ShutterServicePage />;
   } else {
     return (
