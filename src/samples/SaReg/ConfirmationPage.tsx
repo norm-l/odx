@@ -4,12 +4,12 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-// import Button from '../../components/BaseComponents/Button/Button';
 
 const ConfirmationPage = ({ isSoleTrader }) => {
   const { t } = useTranslation();
   const serviceShuttered = useServiceShuttered();
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+
   useEffect(() => {
     setPageTitle();
   }, [lang]);
@@ -29,7 +29,18 @@ const ConfirmationPage = ({ isSoleTrader }) => {
         <h2 className='govuk-heading-m'> {t('WHAT_HAPPENS_NEXT')}</h2>
         <p className='govuk-body'> {t('AFTER_YOUR_REGISTRATION_HAS_BEEN_PROCESSED')}</p>
         {isSoleTrader && (
-          <p className='govuk-body'>{t('YOU_WILL_ALSO_BE_REGISTERED_FOR_CLASS_2')}</p>
+          <p className='govuk-body'>
+            {t('YOU_WILL_ALSO_BE_REGISTERED_FOR')}
+            <a
+              href='https://www.gov.uk/pay-class-2-national-insurance'
+              className='govuk-link'
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              {t('CLASS_2_NATIONAL_INSURANCE_CONTRIBUTIONS')}
+              <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
+            </a>
+          </p>
         )}
         <p className='govuk-body'>{t('THIS_USUALLY_HAPPENS_WITHIN_24_HOURS')}</p>
         <p className='govuk-body'>{t('YOU_WILL_ALSO_RECEIVE_A_LETTER_BY_POST')}</p>
@@ -45,7 +56,7 @@ const ConfirmationPage = ({ isSoleTrader }) => {
             href='https://www.gov.uk/guidance/download-the-hmrc-app'
             className='govuk-link'
             target='_blank'
-            rel='noreferrer'
+            rel='noreferrer noopener'
           >
             {t('USE_THE_HMRC_APP')}
             <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
@@ -69,7 +80,7 @@ const ConfirmationPage = ({ isSoleTrader }) => {
             href='https://www.tax.service.gov.uk/feedback/ODXSAREG'
             className='govuk-link'
             target='_blank'
-            rel='noreferrer'
+            rel='noreferrer noopener'
           >
             {t('WHAT_DID_YOU_THINK_OF_THIS_SERVICE')}
             <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>

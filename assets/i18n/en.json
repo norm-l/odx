@@ -129,7 +129,8 @@
   "WHAT_HAPPENS_NEXT": "What happens next",
   "YOU_WILL_GET_A_MESSAGE_TO_CONFIRM": "You’ll get a message to confirm that we’ve received your registration, if you provided contact details.",
   "AFTER_YOUR_REGISTRATION_HAS_BEEN_PROCESSED": "After your registration has been processed you'll be able to access your Self Assessment and Unique Taxpayer Reference (UTR) in your personal tax account.",
-  "YOU_WILL_ALSO_BE_REGISTERED_FOR_CLASS_2": "You will also be registered for Class 2 National Insurance contributions.",
+  "YOU_WILL_ALSO_BE_REGISTERED_FOR": "You will also be registered for ",
+  "CLASS_2_NATIONAL_INSURANCE_CONTRIBUTIONS": "Class 2 National Insurance contributions.",
   "THIS_USUALLY_HAPPENS_WITHIN_24_HOURS": "This usually happens within 24 hours, but may take up to 72 hours.",
   "YOU_WILL_ALSO_RECEIVE_A_LETTER_BY_POST": "You will also receive a letter by post.",
   "WHAT_YOU_NEED_TO_DO": "What you need to do",
@@ -216,5 +217,5 @@
   "YOU_WILL_NEED_YOUR": "You'll need your ",
   "YOU_WILL_NEED_YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Unique Taxpayer Reference (UTR) number.",
 
-  "I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONs": "i don't work in any of these positions"
+  "I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS": "i don't work in any of these positions"
 }

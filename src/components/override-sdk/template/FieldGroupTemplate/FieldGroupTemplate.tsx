@@ -144,7 +144,7 @@ export default function Group(props) {
           index
         });
 
-        const arrayExclusiveOptions = [t('I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONs')];
+        const arrayExclusiveOptions = [t('I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS')];
 
         if (arrayExclusiveOptions.includes(resolvedProps.caption.toLowerCase())) {
           exclusiveOptionPropName = childPConnect.getStateProps().value;
