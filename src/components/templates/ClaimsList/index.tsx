@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { scrollToTop, GBdate, getServiceShutteredStatus } from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
 import WarningText from '../../BaseComponents/WarningText/WarningText';
-import { formatter } from '../../override-sdk/template/DefaultForm/DefaultFormUtils';
 
 declare const PCore: any;
 
