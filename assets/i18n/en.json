@@ -54,6 +54,8 @@
   "WE_HAVE_SENT_YOUR_APPLICATION": "We've sent your application to the Child Benefit Office.",
   "WE_WILL_TELL_YOU_IN_28_DAYS": "We'll tell you in 28 calendar days if your application has been successful.",
   "CONTINUE_CLAIM": "Continue claim",
+  "CONTINUE_MY_REQUEST": "Continue my request",
+  "VIEW_MY_REQUEST": "View my request",
   "CLAIMS_IN_PROGRESS": "Child Benefit claims in progress",
   "SUBMITTED_CLAIMS": "Child Benefit submitted claims",
   "VIEW_CLAIM": "View claim",
@@ -74,6 +76,7 @@
   "CHILD_NAME": "Child name",
   "DATE_OF_BIRTH": "Date of birth",
   "CREATED_DATE": "Created date",
+  "SUBMITTED_DATE": "Submitted date",
   "YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS": "You still need to save your progress. If you sign out without saving, your progress will be lost.",
   "TO_SAVE_YOUR_PROGRESS": "To save your progress, select the 'Save and come back later' link.",
   "SIGN-OUT": "Sign out",
@@ -362,5 +365,4 @@
   "CHB_HOMEPAGE_CHANGE_BANK_DETAILS_LINK":"Change your bank details",
   "CHB_HOMEPAGE_VIEW_PROOF_OF_ENTITLEMENT_LINK":"View your proof of entitlement to Child Benefit",
   "CHB_HOMEPAGE_HICBC_CHARGE_LINK":"High Income Child Benefit Charge"
-
 }
