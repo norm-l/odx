@@ -142,8 +142,9 @@ export default function ClaimsList(props) {
               {buttonContent}
             </Button>
             {item.Claim.ShowPrintSlip && (
-              <p className='govuk-body'>
+              <div className='govuk-body'>
                 <a
+                  className='govuk-link'
                   href=''
                   onClick={e => generateReturnSlip(e, item.pzInsKey)}
                   target='_blank'
@@ -151,7 +152,7 @@ export default function ClaimsList(props) {
                 >
                   {t('PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
                 </a>
-              </p>
+              </div>
             )}{' '}
           </>
         ),
