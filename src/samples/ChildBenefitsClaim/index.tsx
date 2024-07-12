@@ -131,7 +131,6 @@ export default function ChildBenefitsClaim() {
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
-  // const [showPrintSlip, setShowPrintSlip] = useState([]);
 
   function doRedirectDone() {
     history.push('/');
@@ -497,10 +496,6 @@ export default function ChildBenefitsClaim() {
         .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
         .then(resp => {
           setSubmittedClaims(resp.data.slice(0, 10));
-
-          // resp.data.slice(0, 10).map(item => (
-          //   setShowPrintSlip(item.Claim.ShowPrintSlip);
-          // ));
         })
         .finally(() => setLoadingSubmittedClaims(false));
       fetchInProgressClaimsData();
