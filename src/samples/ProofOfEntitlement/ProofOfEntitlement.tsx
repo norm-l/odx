@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import NoAwardPage from './NoAward';
 import { triggerLogout } from '../../components/helpers/utils';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
+import Button from '../../components/BaseComponents/Button/Button';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -68,6 +69,7 @@ export default function ProofOfEntitlement(){
                                 <>                 
                                     <h1 className="govuk-heading-l">{t('PROOF_ENTITLEMENT_HEADING')}</h1>
 
+                                    <Button variant='link' onClick={()=>{}}>{t('PRINT_THIS_PAGE')}</Button>
                                     <p className='govuk-body'>{t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName} {t('ON')} {dayjs().format('D MMMM YYYY')}</p>
                                     <h2 className='govuk-heading-m'>{t('PROOF_ENTITLEMENT_DETAILS_H2')}</h2>
                                     <p className='govuk-body'>{t('PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT')}{' '}
