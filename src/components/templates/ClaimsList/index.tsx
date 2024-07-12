@@ -15,8 +15,6 @@ export default function ClaimsList(props) {
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
   const [claims, setClaims] = useState([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const [documentList, setDocumentList] = useState(``);
 
   const statusMapping = status => {
     switch (status) {
@@ -83,21 +81,6 @@ export default function ClaimsList(props) {
   function extractChildren(childrenJSON: string) {
     return JSON.parse(childrenJSON.slice(childrenJSON.indexOf(':') + 1));
   }
-  function removeSpacesFromName(finalText, textToBeReplaced, textToBeFormatted) {
-    return finalText.replaceAll(
-      textToBeReplaced,
-      `<span class="govuk-hidespace">${textToBeFormatted.trim()}</span>`
-    );
-  }
-  function formatAndSetListData(listData) {
-    const finalText = formatter(
-      listData,
-      `<span class="govuk-hidespace">`,
-      `</span>`,
-      removeSpacesFromName
-    );
-    setDocumentList(finalText);
-  }
 
   const generateReturnSlip = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -111,7 +94,6 @@ export default function ClaimsList(props) {
         CaseID: perCaseId
       })
       .then(pageData => {
-        formatAndSetListData(pageData.DocumentContentHTML);
         const myWindow = window.open('');
         myWindow.document.write(pageData.DocumentContentHTML);
       })
