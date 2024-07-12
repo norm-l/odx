@@ -136,6 +136,8 @@ export default function Assignment(props) {
     containerName = caseInfo.assignments[0].name;
   }
 
+  const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
+
   PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
     setSelectedLang(langreference?.language);
   });
@@ -143,12 +145,9 @@ export default function Assignment(props) {
   // To update the title when we toggle the language
   useEffect(() => {
     setTimeout(() => {
-      
-
-      const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
       let tryTranslate = localizedVal(containerName, '', 'HMRC-CHB-WORK-CLAIM!CASE!CLAIM');
       if (tryTranslate === containerName) {
-        tryTranslate = localizedVal(tryTranslate, '', "@BASECLASS!GENERIC!PYGENERICFIELDS");
+        tryTranslate = localizedVal(tryTranslate, '', headerLocaleLocation);
       }
       if (containerName?.toLowerCase() === 'claim child benefit') {
         tryTranslate = t('CLAIM_CHILD_BENEFIT');
@@ -160,14 +159,11 @@ export default function Assignment(props) {
 
   useEffect(() => {
     const headerFetch = setTimeout(() => {
-      
-
-      const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
-      setHeader(localizedVal(containerName, '', "@BASECLASS!GENERIC!PYGENERICFIELDS"));
+      setHeader(localizedVal(containerName, '', headerLocaleLocation));
     }, 50);
 
     return () => clearTimeout(headerFetch);
-  }, [containerName]);
+  }, [headerLocaleLocation, containerName]);
 
   useEffect(() => {
     if (children && children.length > 0) {

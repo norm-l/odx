@@ -13,7 +13,7 @@ declare const myLoadMashup: any;
 export default function ProofOfEntitlement(){
 
     const [entitlementData, setEntitlementData] = useState(null);
-    const [nino, setNino] = useState('PA003371D')
+    const [nino, setNino] = useState('OK551993A')
     const history = useHistory();
     const {t} = useTranslation();
 
@@ -51,7 +51,7 @@ export default function ProofOfEntitlement(){
         if (typeof PCore !== 'undefined' && nino) {
             PCore.getDataPageUtils()
             .getPageDataAsync('D_GetChBEntitlement', 'root', {
-                NINO: nino          
+                //NINO: nino          
             },{
                 invalidateCache:true
             }
@@ -106,6 +106,9 @@ export default function ProofOfEntitlement(){
                                 )
                                 })
                             }
+
+                            <h2 className='govuk-heading-m'>{t('PROOF_ENTITLEMENT_VIEW_YOUR_PAYMENTS_H2')}</h2>
+                            <a href="https://www.gov.uk" className="govuk-link">{t('PROOF_ENTITLEMENT_VIEW_PAST_PAYMENTS_LINK')}</a>
                         </div>
                     </div>
                 </main>            

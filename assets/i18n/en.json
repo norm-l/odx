@@ -337,7 +337,11 @@
   "CHILD_BENEFIT_DETAILS_FOR":"Child Benefit award details for",
   "PER_WEEK":"per week",
   "POE_LABEL_CHILD_DOB":"Date of birth",
-  
+  "PROOF_ENTITLEMENT_VIEW_YOUR_PAYMENTS_H2":"View your Child Benefit payments",
+  "PROOF_ENTITLEMENT_VIEW_PAST_PAYMENTS_LINK":"View details of up to 5 of your most recent payments.",
+  "PRINT_THIS_PAGE": "Argraffu’r dudalen hon",
+  "DOWNLOAD_THIS_PAGE": "Lawrlwytho’r dudalen hon",
+
   "CHB_HOMEPAGE_HEADING":"Child Benefit",
   "CHB_HOMEPAGE_MAKING_CLAIM_SUBHEADING":"Make a claim",
   "CHB_HOMEPAGE_CHECK_IF_CAN_CLAIM_LINK":"Check if you can claim",
