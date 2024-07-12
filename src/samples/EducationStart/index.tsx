@@ -344,7 +344,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           languageToggleCallback= {
             toggleNotificationProcess(
           { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn 
+          assignmentPConn?.getDataObject()?.caseInfo ? assignmentPConn : null
           ) 
           }
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
