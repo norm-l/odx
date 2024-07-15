@@ -349,7 +349,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   } else if (currentDisplay === 'servicenotavailable') {
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} />
+        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={showLanguageToggleState} />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         </div>
@@ -447,9 +447,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
               )}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage
-                  summaryContent={summaryPageContent.Content}
-                  summaryTitle={summaryPageContent.Title}
-                  summaryBanner={summaryPageContent.Banner}
+                  summaryContent={summaryPageContent?.Content}
+                  summaryTitle={summaryPageContent?.Title}
+                  summaryBanner={summaryPageContent?.Banner}
                   backlinkProps={{}}
                 />
               )}
