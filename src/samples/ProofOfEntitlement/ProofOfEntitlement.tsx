@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { loginIfNecessary, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
-import AppHeader from '../../components/AppComponents/AppHeader';
+import AppHeader from '../HighIncomeCase/reuseables/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ReadOnlyDisplay from '../../components/BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import NoAwardPage from './NoAward';
+import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { triggerLogout } from '../../components/helpers/utils';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import Button from '../../components/BaseComponents/Button/Button';
@@ -18,10 +19,11 @@ export default function ProofOfEntitlement(){
 
     const [entitlementData, setEntitlementData] = useState(null);
     const [showNoAward, setShowNoAward] = useState(false);    
-    const [showProblemWithService, setShowProblemWithService] = useState(false);
+    const [showProblemWithService, setShowProblemWithService] = useState(false);    
     const history = useHistory();
     const {t} = useTranslation();
 
+    registerServiceName(t('CHB_HOMEPAGE_HEADING'));
 
     const onRedirectDone = ()=>{
         history.push('/view-proof-entitlement');
@@ -40,7 +42,7 @@ export default function ProofOfEntitlement(){
             PCore.onPCoreReady(() => {
                 PCore.getDataPageUtils()
                 .getPageDataAsync('D_GetChBEntitlement', 'root', {
-                    NINO: PCore.getEnvironmentInfo().getOperatorIdentifier()          
+                    NINO: PCore.getEnvironmentInfo().getOperatorIdentifier()       
                 }, ).then((result) =>
                 {
                     // If no claimant data in response, assume no award (or api error)
@@ -61,8 +63,8 @@ export default function ProofOfEntitlement(){
         
     return (
         <>
-            <AppHeader hasLanguageToggle={true} handleSignout={sdkIsLoggedIn() ? triggerLogout : null} />
-            
+            <AppHeader appname={t('CHB_HOMEPAGE_HEADING')} hasLanguageToggle={true} handleSignout={sdkIsLoggedIn() ? triggerLogout : null} />
+            {sdkIsLoggedIn() && 
             <div className='govuk-width-container'>
             <MainWrapper>
                             {entitlementData  &&  
@@ -70,7 +72,7 @@ export default function ProofOfEntitlement(){
                                     <h1 className="govuk-heading-l">{t('PROOF_ENTITLEMENT_HEADING')}</h1>
 
                                     <Button variant='link' onClick={()=>{}}>{t('PRINT_THIS_PAGE')}</Button>
-                                    <p className='govuk-body'>{t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName} {t('ON')} {dayjs().format('D MMMM YYYY')}</p>
+                                    <p className='govuk-body'>{t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName} {t('ON')} {dayjs().format('D MMMM YYYY')}.</p>
                                     <h2 className='govuk-heading-m'>{t('PROOF_ENTITLEMENT_DETAILS_H2')}</h2>
                                     <p className='govuk-body'>{t('PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT')}{' '}
                                     <a href="https://www.gov.uk/report-changes-child-benefit/if-your-familys-circumstances-change" className="govuk-link" target="_blank" rel="noreferrer noopener">{t("PROOF_ENTITLEMENT_IF_DETAILS_INCORRECT_CHANGE_YOUR_CIRCUSMSTANCES_LINK")}{t("OPENS_IN_NEW_TAB")}</a>                          
@@ -123,7 +125,7 @@ export default function ProofOfEntitlement(){
                             <br/> 
                             <br/> 
                         </MainWrapper>
-                    </div>
+                    </div>}
         <AppFooter />
         </>
     
