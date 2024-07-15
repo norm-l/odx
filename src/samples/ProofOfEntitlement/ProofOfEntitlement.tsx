@@ -63,7 +63,7 @@ export default function ProofOfEntitlement(){
         
     return (
         <>
-            <AppHeader appname={t('CHB_HOMEPAGE_HEADING')} hasLanguageToggle={true} handleSignout={sdkIsLoggedIn() ? triggerLogout : null} />
+            <AppHeader appname={t('CHB_HOMEPAGE_HEADING')} hasLanguageToggle handleSignout={sdkIsLoggedIn() ? triggerLogout : null} />
             {sdkIsLoggedIn() && 
             <div className='govuk-width-container'>
             <MainWrapper>
