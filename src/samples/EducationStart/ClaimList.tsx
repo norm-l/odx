@@ -140,9 +140,7 @@ export default function ClaimsList(props) {
       <h2 className='govuk-heading-l'>{title}</h2>
 
       {cases.map(claimItem => (
-        <React.Fragment key={claimItem.claimRef}>
-          {renderChildDetails(claimItem)}
-        </React.Fragment>
+        <React.Fragment key={claimItem.claimRef}>{renderChildDetails(claimItem)}</React.Fragment>
       ))}
     </>
   );

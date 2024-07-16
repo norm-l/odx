@@ -8,7 +8,6 @@ import PortalPage from './PortalPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { GBdate } from '../../components/helpers/utils';
 
-
 export default function Landing({
   handleStartCliam,
   assignmentPConn,
