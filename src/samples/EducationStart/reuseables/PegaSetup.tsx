@@ -16,7 +16,7 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
-import { getServiceShutteredStatus } from '../../../components/helpers/utils';
+import { checkStatus, getServiceShutteredStatus } from '../../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 declare const PCore: any;
@@ -93,6 +93,16 @@ export function establishPCoreSubscriptions({
     handleServiceNotAvailable,
     'handleServiceNotAvailableOnAssignmentFinished'
   );
+
+  PCore.getPubSubUtils().subscribe(
+    'CustomAssignmentFinished',
+    customAssignmentFinishedEvent
+  );
+
+  function customAssignmentFinishedEvent() {
+    showResolutionScreen();
+    PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished');
+  }
 
   /* ********************************
    * On Cancel event, ?
