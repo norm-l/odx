@@ -102,8 +102,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         }
       } else if (elem.tagName === 'DIV') {
         const isCsV = (elem.children[1] as HTMLElement).dataset.isCsv;
-        const isCountryValue = (elem.children[1] as HTMLElement).dataset.country;
-
+        const emptyValue = (elem.children[1] as HTMLElement).dataset.emptyValue;
         if (isCsV === 'true') {
           const csvItems = (elem as HTMLElement).children[1].textContent.split(',');
           if (csvItems.length > 1) {
@@ -114,8 +113,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
               (elem as HTMLElement).children[1].appendChild(document.createElement('br'));
             });
           }
-        } else if (isCountryValue) {
-          (elem as HTMLElement).children[1].innerHTML = isCountryValue;
+        } else if (emptyValue) {
+          (elem as HTMLElement).children[1].innerHTML = emptyValue;
         }
 
         if (!openDL) {
