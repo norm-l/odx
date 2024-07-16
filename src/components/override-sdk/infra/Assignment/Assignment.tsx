@@ -98,44 +98,20 @@ export default function Assignment(props) {
   }, [serviceShuttered]);
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
-  async function initialLanguageCall() {
-    const lang = sessionStorage.getItem('rsdk_locale')?.slice(0, 2);
+  function initialLanguageCall() {
+    const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2);
 
-    const sdkConfig = await getSdkConfig();
+    const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
 
-    let langOption = '';
-
-    if (lang === 'cy') {
-      langOption = 'SwitchLanguageToWelsh';
-    } else {
-      langOption = 'SwitchLanguageToEnglish';
-    }
-
-    const url = new URL(
-      `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${
-        sdkConfig.serverConfig.appAlias
-      }/api/application/v2/cases/${
-        getPConnect().getDataObject().caseInfo.ID
-      }/processes/${langOption}?viewType=form`
-    ).href;
-
-    const { invokeCustomRestApi } = PCore.getRestClient();
-    invokeCustomRestApi(url, {
-      method: 'POST',
-      body: {},
-      headers: {}
-    })
-      .then(() => {
-        // handle the response
-      })
-      .catch(error => {
-        // handle the error
-        console.log(error);
-      });
+    thePConn
+      .getActionsApi()
+      .openProcessAction(config[lang], { caseID: thePConn.getCaseInfo().getKey(), type: 'Case' });
   }
 
   useEffect(() => {
-    initialLanguageCall();
+    if (thePConn.getCurrentClassID() === 'HMRC-ChB-Work-Claim') {
+      initialLanguageCall();
+    }
   }, []);
 
   useEffect(() => {
