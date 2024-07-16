@@ -69,8 +69,8 @@ export default function ClaimsList(props) {
 
   function renderChildDetails(claimItem) {
     return claimItem.children.map((child, index) => (
-      <>
-        <dl className='govuk-summary-list govuk-!-margin-bottom-0' key={child?.firstName}>
+      <React.Fragment key={child?.firstName}>
+        <dl className='govuk-summary-list govuk-!-margin-bottom-0'>
           <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
             <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
               {t('YOUNG_PERSON_NAME')}
@@ -131,7 +131,7 @@ export default function ClaimsList(props) {
           className='govuk-section-break govuk-section-break--l govuk-section-break--visible'
           aria-hidden='true'
         ></hr>
-      </>
+      </React.Fragment>
     ));
   }
 
