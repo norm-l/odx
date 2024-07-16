@@ -428,7 +428,7 @@ export default function Assignment(props) {
               .then(() => {
                 // TODO -  This is temporary workaround solution till pega provide standard solution ready
                 if(isEduStartJourney() && checkStatus() === 'Pending-ManualInvestigation') {
-                  PCore.getPubSubUtils().publish('CustomAssignmentFinished');
+                  PCore.getPubSubUtils().publish('CustomAssignmentFinishedForEducation');
                 }
                 scrollToTop();
                 setErrorSummary(false);
