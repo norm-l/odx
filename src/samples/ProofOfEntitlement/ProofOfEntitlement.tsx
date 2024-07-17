@@ -77,7 +77,7 @@ export default function ProofOfEntitlement(){
                     {
                         setShowTimeoutModal(false);                        
                         initTimeout(setShowTimeoutModal, false, true, false);
-                        //Using operator details call as 'app agnostic' session keep-alive
+                        // Using operator details call as 'app agnostic' session keep-alive
                         PCore.getUserApi().getOperatorDetails(PCore.getEnvironmentInfo().getOperatorIdentifier());
                     }                 
                 }
