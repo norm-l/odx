@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import LandingPage from './LandingPage';
+import Landing from './Landing';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
-import { triggerLogout } from '../../components/helpers/utils';
+import { setAppServiceName, triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
@@ -21,13 +21,16 @@ import {
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import { useStartMashup } from './reuseables/PegaSetup';
 import { useHistory } from 'react-router-dom';
+import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 const EducationStartCase: FunctionComponent<any> = () => {
+  const educationStartParam = 'claim-child-benefit';
+  const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
+
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
+  const [startClaimClicked, setStartClaimClicked] = useState(false);
   const [shuttered, setShuttered] = useState(null);
 
-  const [shutterServicePage /* setShutterServicePage */] = useState(false);
-  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -35,7 +38,12 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const setAuthType = useState('gg')[1];
 
   const [currentDisplay, setCurrentDisplay] = useState<
-    'pegapage' | 'resolutionpage' | 'servicenotavailable' | 'shutterpage' | 'loading'
+    | 'pegapage'
+    | 'resolutionpage'
+    | 'servicenotavailable'
+    | 'shutterpage'
+    | 'loading'
+    | 'landingpage'
   >('pegapage');
 
   const [summaryPageContent, setSummaryPageContent] = useState<any>({
@@ -46,16 +54,15 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showPortalBanner, setShowPortalBanner] = useState(false);
+  const [pConnect, setPconnect] = useState(null);
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
 
   registerServiceName(t('EDUCATION_START'));
-
-  // Construct the final URL for the education flow page not working
-  const educationStartParam = 'claim-child-benefit';
+  setAppServiceName(t('EDUCATION_START'));
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -65,20 +72,139 @@ const EducationStartCase: FunctionComponent<any> = () => {
     history.push('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-    setIsLoggedIn(true);
   }
 
-  const { showPega, setShowPega, showResolutionPage, caseId } = useStartMashup(
-    setAuthType,
-    doRedirectDone,
-    {
-      appBacklinkProps: {},
-      serviceParam: educationStartParam
+  const {
+    showPega,
+    setShowPega,
+    showResolutionPage,
+    caseId,
+    shutterServicePage,
+    serviceNotAvailable,
+    assignmentPConnect,
+    assignmentCancelled,
+    setAssignmentCancelled
+  } = useStartMashup(setAuthType, doRedirectDone, {
+    appBacklinkProps: {},
+    serviceParam: educationStartParam
+  });
+
+  useEffect(()=>{
+    if(assignmentPConnect) {
+      setPconnect(assignmentPConnect);
+    } 
+  },[assignmentPConnect])
+
+  function handleSignout() {
+    if (currentDisplay === 'pegapage') {
+      setShowSignoutModal(true);
+    } else {
+      triggerLogout();
     }
-  );
+  }
+
+  const handleStaySignIn = e => {
+    e.preventDefault();
+    setShowSignoutModal(false);
+    // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
+    staySignedIn(
+      setShowTimeoutModal,
+      claimsListApi,
+      null,
+      false,
+      true,
+      currentDisplay === 'resolutionpage'
+    );
+  };
+
+  function returnToPortalPage() {
+    setShowSignoutModal(false);
+    staySignedIn(
+      setShowTimeoutModal,
+      claimsListApi,
+      null,
+      false,
+      true,
+      currentDisplay === 'resolutionpage'
+    );
+    setCurrentDisplay('loading');
+    setShowLandingPage(true);
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  }
+
+  const handleStartCliam = e => {
+    e.preventDefault();
+    setShowPega(true);
+    setShowLandingPage(false);
+    setStartClaimClicked(true);
+  };
+
+  /* ***
+   * Application specific PCore subscriptions
+   *
+   * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
+   */
+
+  // TODO - This function will be removed with US-13518 implementation.
+  function removeHmrcLink() {
+    const hmrcLink = document.querySelector(
+      '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
+    );
+    const breakTag = document.querySelectorAll('br');
+
+    if (hmrcLink || breakTag.length) {
+      hmrcLink?.remove();
+      breakTag[0]?.remove();
+      breakTag[1]?.remove();
+    } else {
+      requestAnimationFrame(removeHmrcLink);
+    }
+  }
+  function closeContainer() {
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+    setShowPega(false);
+  }
+
+  function returnedToPortal(showBanner = false) {
+    closeContainer();
+    setCurrentDisplay('landingpage');
+    setShowPortalBanner(showBanner);
+    setAssignmentCancelled(false);
+  }
 
   useEffect(() => {
-    if (showPega) {
+    if (assignmentCancelled) {
+      // user clicked save and come back later link
+      const showBanner = true;
+      returnedToPortal(showBanner);
+    }
+  }, [assignmentCancelled]);
+
+  useEffect(() => {
+    if (currentDisplay === 'resolutionpage') {
+      const homepage = document.getElementById('#homepage');
+      if (homepage) {
+        homepage.addEventListener('click', () => returnedToPortal(false));
+      }
+
+      return () => {
+        if (homepage) {
+          homepage.removeEventListener('click', () => returnedToPortal(false));
+        }
+      };
+    }
+  }, [currentDisplay]);
+
+  useEffect(() => {
+    if (showLandingPage && pCoreReady) {
+      setCurrentDisplay('landingpage');
+    } else if (showPega) {
       setCurrentDisplay('pegapage');
     } else if (showResolutionPage) {
       setCurrentDisplay('resolutionpage');
@@ -130,56 +256,21 @@ const EducationStartCase: FunctionComponent<any> = () => {
     if (!showPega) {
       setPageTitle();
     }
-  }, [showResolutionPage, showPega, shutterServicePage, serviceNotAvailable, pCoreReady]);
+  }, [
+    showResolutionPage,
+    showPega,
+    shutterServicePage,
+    serviceNotAvailable,
+    pCoreReady,
+    showLandingPage
+  ]);
 
-  function handleSignout() {
-    if (currentDisplay === 'pegapage') {
-      setShowSignoutModal(true);
-    } else {
-      triggerLogout();
-    }
-  }
-
-  const handleStaySignIn = e => {
-    e.preventDefault();
-    setShowSignoutModal(false);
-    // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
-  };
-
-  const startClaim = () => {
-    setShowPega(true);
-  };
-
-  /* ***
-   * Application specific PCore subscriptions
-   *
-   * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
-   */
-
-  // TODO - This function will be removed with US-13518 implementation.
-  function removeHmrcLink() {
-    const hmrcLink = document.querySelector(
-      '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
-    );
-    const breakTag = document.querySelectorAll('br');
-
-    if (hmrcLink || breakTag.length) {
-      hmrcLink?.remove();
-      breakTag[0]?.remove();
-      breakTag[1]?.remove();
-    } else {
-      requestAnimationFrame(removeHmrcLink);
-    }
-  }
-
-  // And clean up
   useEffect(() => {
-    if (showPega && pCoreReady) {
+    if (showPega && pCoreReady && startClaimClicked) {
       PCore.getMashupApi().createCase('HMRC-ChB-Work-EducationStart', PCore.getConstants().APP.APP);
       requestAnimationFrame(removeHmrcLink); // TODO - To be removed with US-13518 implementation.
     }
-  }, [pCoreReady, showPega]);
+  }, [pCoreReady, showPega, startClaimClicked]);
 
   useEffect(() => {
     document.addEventListener('SdkConstellationReady', () => {
@@ -194,7 +285,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
             },
             'showStartPageOnCloseContainerItem'
           );
-          // startClaim();
         }
       });
       settingTimer();
@@ -238,12 +328,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
     };
   }, []);
 
-  const landingPageProceedHandler = e => {
-    e.preventDefault();
-    setShowLandingPage(false);
-    startClaim();
-  };
-
   useEffect(() => {
     getSdkConfig().then(config => {
       setShowLanguageToggleState(config?.educationStartConfig?.showLanguageToggle);
@@ -260,13 +344,23 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
-  if (!isLoggedIn || shuttered === null) {
+  if (shuttered === null) {
     return null;
+  } else if (currentDisplay === 'servicenotavailable') {
+    return (
+      <>
+        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={showLanguageToggleState} />
+        <div className='govuk-width-container'>
+          <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
+        </div>
+        <AppFooter />
+      </>
+    );
   } else if (shuttered) {
     setPageTitle();
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={false} />
+        <AppHeader appname={t('EDUCATION_START')} />
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
@@ -295,7 +389,14 @@ const EducationStartCase: FunctionComponent<any> = () => {
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() =>
-            staySignedIn(setShowTimeoutModal, 'D_ClaimantWorkAssignmentChBCases')
+            staySignedIn(
+              setShowTimeoutModal,
+              claimsListApi,
+              null,
+              false,
+              true,
+              currentDisplay === 'resolutionpage'
+            )
           }
           signoutHandler={triggerLogout}
           isAuthorised={false}
@@ -305,7 +406,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <h1 id='hmrc-timeout-heading' className='govuk-heading-m push--top'>
             You’re about to be signed out
           </h1>
-          <p className='govuk-body hmrc-timeout-dialog__message' aria-hidden='true'>
+          <p className='govuk-body hmrc-timeout-dialog__message'>
+            {' '}
+            {/* Todo Aria-hidden will be added back with US-13474 implementation */}
             For your security, we will sign you out in{' '}
             <span id='hmrc-timeout-countdown' className='hmrc-timeout-dialog__countdown'>
               2 minutes
@@ -318,31 +421,35 @@ const EducationStartCase: FunctionComponent<any> = () => {
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
           isPegaApp={showPega}
-          languageToggleCallback={
-            () => {} /* toggleNotificationProcess(
+          languageToggleCallback= {
+            toggleNotificationProcess(
           { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn 
-          ) */
+          assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
+          ) 
           }
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>
-          {shutterServicePage ? (
+          {currentDisplay === 'shutterpage' ? (
             <ShutterServicePage />
           ) : (
             <>
               <div id='pega-part-of-page'>
                 <div id='pega-root' className='education-start'></div>
               </div>
-              {showLandingPage && (
-                <LandingPage onProceedHandler={e => landingPageProceedHandler(e)} />
+              {currentDisplay === 'landingpage' && (
+                <Landing
+                  handleStartCliam={handleStartCliam}
+                  assignmentPConn={pConnect}
+                  showPortalBanner={showPortalBanner}
+                  setShowLandingPage={setShowLandingPage}
+                />
               )}
-              {serviceNotAvailable && <ServiceNotAvailable />}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage
-                  summaryContent={summaryPageContent.Content}
-                  summaryTitle={summaryPageContent.Title}
-                  summaryBanner={summaryPageContent.Banner}
+                  summaryContent={summaryPageContent?.Content}
+                  summaryTitle={summaryPageContent?.Title}
+                  summaryBanner={summaryPageContent?.Banner}
                   backlinkProps={{}}
                 />
               )}
@@ -360,7 +467,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
           <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
             {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
           </h1>
-          <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
+          <p className='govuk-body'>{t('YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS')}</p>
+          <p className='govuk-body'>{t('TO_SAVE_YOUR_PROGRESS')}</p>
         </LogoutPopup>
         <AppFooter />
       </AppContextEducation.Provider>
