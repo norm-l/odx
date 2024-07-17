@@ -104,7 +104,7 @@ export default function Assignment(props) {
 
     thePConn
       .getActionsApi()
-      .openProcessAction(config[lang], { caseID: thePConn.getCaseInfo().getKey(), type: 'Case' });
+      .openProcessAction(config[lang], { caseID: thePConn.getCaseInfo()?.getKey(), type: 'Case' });
   }
 
   useEffect(() => {
@@ -442,7 +442,7 @@ export default function Assignment(props) {
             finishPromise
               .then(() => {
                 // TODO -  This is temporary workaround solution till pega provide standard solution ready
-                if(isEduStartJourney() && checkStatus() === 'Pending-ManualInvestigation') {
+                if (isEduStartJourney() && checkStatus() === 'Pending-ManualInvestigation') {
                   PCore.getPubSubUtils().publish('CustomAssignmentFinishedForEducation');
                 }
                 scrollToTop();
