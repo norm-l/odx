@@ -114,7 +114,7 @@ export default function ClaimsList(props) {
           attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
           variant='secondary'
           onClick={() => {
-            _rowClick(claimItem);
+            _rowClick(claimItem.rowDetails);
           }}
         >
           {claimItem.actionButton}

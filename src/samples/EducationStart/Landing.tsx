@@ -61,6 +61,7 @@ export default function Landing({
           dateUpdated: item.pxUpdateDateTime,
           children: [],
           actionButton: buttonContent,
+          rowDetails: {pzInsKey: item.pzInsKey, pyAssignmentID: item.pyAssignmentID},
           status: statusMapping(item.pyStatusWork)
         };
 
