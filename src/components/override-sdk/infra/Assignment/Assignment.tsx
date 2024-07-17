@@ -24,7 +24,6 @@ import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreCon
 import AppContextEducation from '../../../../samples/EducationStart/reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
 import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
-import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -99,8 +98,6 @@ export default function Assignment(props) {
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
   function initialLanguageCall() {
-    const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2);
-
     const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
 
     thePConn
