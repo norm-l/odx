@@ -113,7 +113,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
               (elem as HTMLElement).children[1].appendChild(document.createElement('br'));
             });
           }
-        } else if (emptyValue) {
+        } else if (emptyValue && (elem as HTMLElement).children[1].innerHTML === '') {
           (elem as HTMLElement).children[1].innerHTML = emptyValue;
         }
 

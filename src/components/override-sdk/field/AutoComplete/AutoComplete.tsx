@@ -203,11 +203,12 @@ export default function AutoComplete(props: AutoCompleteProps) {
       });
     }
   }, [currentLang]);
-  const [countryName, setCountryName] = useState('');
+
   function handleChange(event) {
     const optionValue = event.target.value;
-    setCountryName(optionValue);
-    //   sessionStorage.setItem('countryName', optionValue);
+    if (!sessionStorage.getItem('countryName')) {
+      sessionStorage.setItem('countryName', optionValue);
+    }
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
     });
@@ -260,8 +261,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   if (
     hasBeenWrapped &&
     configAlternateDesignSystem?.ShowChangeLink &&
-    inprogressStatus === 'Open-InProgress' &&
-    countryName
+    inprogressStatus === 'Open-InProgress'
   ) {
     return (
       <GDSCheckAnswers
@@ -279,7 +279,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId=''
         helperText=''
         hideLabel={false}
-        countryName={countryName}
+        countryName={sessionStorage.getItem('countryName')}
       />
     );
   }
