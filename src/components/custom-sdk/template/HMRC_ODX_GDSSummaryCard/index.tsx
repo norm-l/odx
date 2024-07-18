@@ -84,9 +84,17 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const [hiddenText, setHiddenText] = useState('');
 
   useEffect(() => {
-    const updatedHiddenText =
-      useType === 2 ? `${formattedValues[0]} ${childName}` : `${childName} ${formattedValues[0]}`;
-    setHiddenText(updatedHiddenText);
+    if (useType === '2') {
+      setHiddenText(`${formattedValues[0]} ${childName}`);
+    } else if (useType === '4') {
+      setHiddenText(`${t('POE_LABEL_NAME')} ${formattedValues[0]}`);
+    } else {
+      setHiddenText(`${childName} ${formattedValues[0]}`);
+    }
+
+    // const updatedHiddenText =
+    //   useType === 2 ? `${formattedValues[0]} ${childName}` : `${childName} ${formattedValues[0]}`;
+    // setHiddenText(updatedHiddenText);
   }, [childName, formattedValues]);
 
   const handleOnClick = (action: string) => {
