@@ -11,6 +11,7 @@ import { registerServiceName } from '../../components/helpers/setPageTitleHelper
 import { triggerLogout } from '../../components/helpers/utils';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import Button from '../../components/BaseComponents/Button/Button';
+import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -19,11 +20,12 @@ export default function ProofOfEntitlement(){
 
     const [entitlementData, setEntitlementData] = useState(null);
     const [showNoAward, setShowNoAward] = useState(false);    
-    const [showProblemWithService, setShowProblemWithService] = useState(false);    
+    const [showProblemWithService, setShowProblemWithService] = useState(false); 
+    const { hmrcURL } = useHMRCExternalLinks(); 
     const history = useHistory();
     const {t} = useTranslation();
 
-    registerServiceName(t('CHB_HOMEPAGE_HEADING'));
+    registerServiceName(t('CHB_HOMEPAGE_HEADING'));    
 
     const onRedirectDone = ()=>{
         history.push('/view-proof-entitlement');
@@ -63,7 +65,7 @@ export default function ProofOfEntitlement(){
         
     return (
         <>
-            <AppHeader appname={t('CHB_HOMEPAGE_HEADING')} hasLanguageToggle handleSignout={sdkIsLoggedIn() ? triggerLogout : null} />
+            <AppHeader appname={t('CHB_HOMEPAGE_HEADING')} hasLanguageToggle handleSignout={sdkIsLoggedIn() ? triggerLogout : null} betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`} />
             {sdkIsLoggedIn() && 
             <div className='govuk-width-container'>
             <MainWrapper>
