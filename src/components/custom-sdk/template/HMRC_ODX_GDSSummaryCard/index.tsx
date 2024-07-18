@@ -91,10 +91,6 @@ export default function HmrcOdxGdsSummaryCard(props) {
     } else {
       setHiddenText(`${childName} ${formattedValues[0]}`);
     }
-
-    // const updatedHiddenText =
-    //   useType === 2 ? `${formattedValues[0]} ${childName}` : `${childName} ${formattedValues[0]}`;
-    // setHiddenText(updatedHiddenText);
   }, [childName, formattedValues]);
 
   const handleOnClick = (action: string) => {
