@@ -143,27 +143,20 @@ export default function Assignment(props) {
   });
 
   // To update the title when we toggle the language
-  useEffect(() => {
+  /*useEffect(() => {
     setTimeout(() => {
-      let tryTranslate = localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS');
-      if (tryTranslate === containerName) {
-        tryTranslate = localizedVal(tryTranslate, '', headerLocaleLocation);
-      }
-      if (containerName?.toLowerCase() === 'claim child benefit') {
-        tryTranslate = t('CLAIM_CHILD_BENEFIT');
-      }
-      // Set our translated header!*/
+      let tryTranslate = localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS');      
+      // Set our translated header!
      setHeader(tryTranslate);
-    }, 300);
-  }, [selectedLang]);
+    }, 60);
+  }, [selectedLang]);*/
 
   useEffect(() => {
     const headerFetch = setTimeout(() => {
       setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
-    }, 300);
+    }, 60);
 
-    return () => clearTimeout(headerFetch);
-  }, [headerLocaleLocation, containerName]);
+  }, [headerLocaleLocation, containerName, selectedLang]);
 
   useEffect(() => {
     if (children && children.length > 0) {
