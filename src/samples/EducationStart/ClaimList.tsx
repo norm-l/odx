@@ -33,7 +33,8 @@ export default function ClaimsList(props) {
     });
   };
 
-  async function _rowClick(row: any) {
+  async function _rowClick(e, row: any) {
+    e.preventDefault();
     const { pzInsKey, pyAssignmentID } = row;
 
     const container = thePConn.getContainerName();
@@ -113,8 +114,8 @@ export default function ClaimsList(props) {
         <Button
           attributes={{ className: 'govuk-!-margin-top-4 govuk-!-margin-bottom-4' }}
           variant='secondary'
-          onClick={() => {
-            _rowClick(claimItem);
+          onClick={(e) => {
+            _rowClick(e, claimItem.rowDetails);
           }}
         >
           {claimItem.actionButton}

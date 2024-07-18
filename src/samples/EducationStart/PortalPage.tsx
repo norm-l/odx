@@ -13,13 +13,15 @@ export default function PortalPage(props) {
     submittedClaims,
     assignmentPConn,
     setShowLandingPage,
-    setShowStartClaim
+    setShowStartClaim,
+    setShowPortalPageDefault
   } = props;
   const { t } = useTranslation();
 
   function showStartClaim(e) {
     e.preventDefault();
     setShowStartClaim(true);
+    setShowPortalPageDefault(false);
   }
 
   useEffect(() => {

@@ -12,7 +12,9 @@ export default function Landing({
   handleStartCliam,
   assignmentPConn,
   showPortalBanner,
-  setShowLandingPage
+  setShowLandingPage,
+  showPortalPageDefault,
+  setShowPortalPageDefault
 }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
@@ -30,7 +32,7 @@ export default function Landing({
     return JSON.parse(childrenJSON.slice(childrenJSON.indexOf(':') + 1));
   }
 
-    const statusMapping = status => {
+  const statusMapping = status => {
     switch (status) {
       case 'Open-InProgress':
         return { text: t('IN_PROGRESS'), tagColour: 'blue' };
@@ -61,6 +63,7 @@ export default function Landing({
           dateUpdated: item.pxUpdateDateTime,
           children: [],
           actionButton: buttonContent,
+          rowDetails: { pzInsKey: item.pzInsKey, pyAssignmentID: item.pyAssignmentID },
           status: statusMapping(item.pyStatusWork)
         };
 
@@ -101,7 +104,7 @@ export default function Landing({
       .finally(() => setLoadingSubmittedClaims(false));
   }
 
-  function fetchInProgressClaimsData(isSaveComeBackClicked = false) {
+  function fetchInProgressClaimsData() {
     let inProgressClaimsData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
@@ -113,15 +116,6 @@ export default function Landing({
       })
       .finally(() => {
         setLoadingInProgressClaims(false);
-        if (isSaveComeBackClicked) {
-          // Here we are calling this close container because of the fact that above
-          // D_ClaimantWorkAssignmentChBCases API is getting excuted as last call but we want to make
-          // close container call as the very last one.
-          PCore.getContainerUtils().closeContainerItem(
-            PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-            { skipDirtyCheck: true }
-          );
-        }
       });
   }
 
@@ -131,9 +125,10 @@ export default function Landing({
   }, []);
 
   return (
-    !(loadingInProgressClaims && loadingSubmittedClaims) && (
+    (!loadingInProgressClaims && !loadingSubmittedClaims) && (
       <>
-        {!showStartClaim && (inProgressClaims.length || submittedClaims.length) ? (
+        {showPortalPageDefault ||
+        (!showStartClaim && (inProgressClaims.length || submittedClaims.length)) ? (
           <PortalPage
             inProgressClaims={inProgressClaims}
             submittedClaims={submittedClaims}
@@ -141,6 +136,7 @@ export default function Landing({
             setShowStartClaim={setShowStartClaim}
             showPortalBanner={showPortalBanner}
             setShowLandingPage={setShowLandingPage}
+            setShowPortalPageDefault={setShowPortalPageDefault}
           />
         ) : (
           <StartClaim

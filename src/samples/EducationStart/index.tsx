@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Landing from './Landing';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
@@ -27,16 +27,16 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const educationStartParam = 'claim-child-benefit';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
 
+  const summaryPageRef = useRef<HTMLDivElement>(null);
+
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
+  const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
   const [startClaimClicked, setStartClaimClicked] = useState(false);
   const [shuttered, setShuttered] = useState(null);
-
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContextEducation);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
-
   const setAuthType = useState('gg')[1];
-
   const [currentDisplay, setCurrentDisplay] = useState<
     | 'pegapage'
     | 'resolutionpage'
@@ -45,13 +45,11 @@ const EducationStartCase: FunctionComponent<any> = () => {
     | 'loading'
     | 'landingpage'
   >('pegapage');
-
   const [summaryPageContent, setSummaryPageContent] = useState<any>({
     content: null,
     title: null,
     banner: null
   });
-
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showPortalBanner, setShowPortalBanner] = useState(false);
@@ -89,11 +87,11 @@ const EducationStartCase: FunctionComponent<any> = () => {
     serviceParam: educationStartParam
   });
 
-  useEffect(()=>{
-    if(assignmentPConnect) {
+  useEffect(() => {
+    if (assignmentPConnect) {
       setPconnect(assignmentPConnect);
-    } 
-  },[assignmentPConnect])
+    }
+  }, [assignmentPConnect]);
 
   function handleSignout() {
     if (currentDisplay === 'pegapage') {
@@ -163,16 +161,19 @@ const EducationStartCase: FunctionComponent<any> = () => {
       requestAnimationFrame(removeHmrcLink);
     }
   }
+
   function closeContainer() {
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
-    setShowPega(false);
+    if (PCore.getContainerUtils().getActiveContainerItemName('app/primary')) {
+      PCore.getContainerUtils().closeContainerItem(
+        PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+        { skipDirtyCheck: true }
+      );
+    }
   }
 
   function returnedToPortal(showBanner = false) {
     closeContainer();
+    setShowPega(false);
     setCurrentDisplay('landingpage');
     setShowPortalBanner(showBanner);
     setAssignmentCancelled(false);
@@ -187,22 +188,30 @@ const EducationStartCase: FunctionComponent<any> = () => {
   }, [assignmentCancelled]);
 
   useEffect(() => {
-    if (currentDisplay === 'resolutionpage') {
-      const homepage = document.getElementById('#homepage');
-      if (homepage) {
-        homepage.addEventListener('click', () => returnedToPortal(false));
+    function handleClick(e) {
+      e.preventDefault();
+      const targetId = e.target.id;
+      if (targetId === 'homepage') {
+        returnedToPortal(false);
+        setShowPortalPageDefault(true);
       }
-
-      return () => {
-        if (homepage) {
-          homepage.removeEventListener('click', () => returnedToPortal(false));
-        }
-      };
     }
-  }, [currentDisplay]);
+
+    const currentSummaryPageRef = summaryPageRef.current;
+    if (currentSummaryPageRef) {
+      currentSummaryPageRef.addEventListener('click', handleClick);
+    }
+    return () => {
+      if (currentSummaryPageRef) {
+        currentSummaryPageRef.removeEventListener('click', handleClick);
+      }
+    };
+  }, [summaryPageContent]);
 
   useEffect(() => {
-    if (showLandingPage && pCoreReady) {
+    if (shutterServicePage) {
+      setCurrentDisplay('shutterpage');
+    } else if (showLandingPage && pCoreReady) {
       setCurrentDisplay('landingpage');
     } else if (showPega) {
       setCurrentDisplay('pegapage');
@@ -246,8 +255,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
             return false;
           });
       });
-    } else if (shutterServicePage) {
-      setCurrentDisplay('shutterpage');
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
     } else {
@@ -349,7 +356,11 @@ const EducationStartCase: FunctionComponent<any> = () => {
   } else if (currentDisplay === 'servicenotavailable') {
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={showLanguageToggleState} />
+        <AppHeader
+          appname={t('EDUCATION_START')}
+          hasLanguageToggle={showLanguageToggleState}
+          handleSignout={handleSignout}
+        />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         </div>
@@ -421,12 +432,10 @@ const EducationStartCase: FunctionComponent<any> = () => {
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
           isPegaApp={showPega}
-          languageToggleCallback= {
-            toggleNotificationProcess(
-          { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
-          ) 
-          }
+          languageToggleCallback={toggleNotificationProcess(
+            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
+            assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
+          )}
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>
@@ -443,6 +452,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
                   assignmentPConn={pConnect}
                   showPortalBanner={showPortalBanner}
                   setShowLandingPage={setShowLandingPage}
+                  showPortalPageDefault={showPortalPageDefault}
+                  setShowPortalPageDefault={setShowPortalPageDefault}
                 />
               )}
               {currentDisplay === 'resolutionpage' && (
@@ -451,6 +462,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
                   summaryTitle={summaryPageContent?.Title}
                   summaryBanner={summaryPageContent?.Banner}
                   backlinkProps={{}}
+                  ref={summaryPageRef}
                 />
               )}
             </>
