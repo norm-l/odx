@@ -349,7 +349,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   } else if (currentDisplay === 'servicenotavailable') {
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} hasLanguageToggle={showLanguageToggleState} />
+        <AppHeader handleSignout={handleSignout} appname={t('EDUCATION_START')} hasLanguageToggle={showLanguageToggleState} />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
         </div>
