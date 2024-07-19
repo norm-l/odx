@@ -85,7 +85,6 @@ export default function PortalPage(props) {
                 caseId={getClaimsCaseId()}
                 fieldType={t('SUBMITTED_DATE')}
                 setShowLandingPage={setShowLandingPage}
-
               />
             </div>
           </div>

@@ -56,7 +56,6 @@ export default function Landing({
   function getClaims(data, buttonContent) {
     const claimsData = [];
     data.forEach(item => {
-      if (item.ClaimExtension?.Child?.pyFirstName !== null) {
         const claimItem = {
           claimRef: item.pyID,
           dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD MMM YYYY' }),
@@ -87,7 +86,6 @@ export default function Landing({
           });
         }
         claimsData.push(claimItem);
-      }
     });
     return claimsData;
   }
