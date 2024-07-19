@@ -84,14 +84,25 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const [hiddenText, setHiddenText] = useState('');
 
   useEffect(() => {
-    if (useType === '2') {
-      setHiddenText(`${formattedValues[0]} ${childName}`);
-    } else if (useType === '4') {
-      setHiddenText(`${t('POE_LABEL_NAME')} ${formattedValues[0]}`);
-    } else {
-      setHiddenText(`${childName} ${formattedValues[0]}`);
+    if (!formattedValues || formattedValues.length === 0 || !childName) return;
+
+    let combinedText;
+    switch (useType) {
+      case '2':
+        combinedText = `${formattedValues[0]} ${childName}`;
+        break;
+      case '4':
+        combinedText = `${t('POE_LABEL_NAME')} ${formattedValues[0]}`;
+        break;
+      default:
+        combinedText = `${childName} ${formattedValues[0]}`;
+        break;
     }
-  }, [childName, formattedValues]);
+
+    if (combinedText !== hiddenText) {
+      setHiddenText(combinedText);
+    }
+  }, [useType, formattedValues, childName]);
 
   const handleOnClick = (action: string) => {
     switch (action) {
