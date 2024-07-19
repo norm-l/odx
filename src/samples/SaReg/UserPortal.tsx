@@ -4,7 +4,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import NotificationBanner from '../../components/BaseComponents/NotificationBanner/NotificationBanner';
 
 export default function UserPortal(props) {
-  const { children, showPortalBanner } = props;
+  const { children, showPortalBanner, isLogout } = props;
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -13,7 +13,11 @@ export default function UserPortal(props) {
 
   return (
     <>
-      <main className='govuk-main-wrapper' id='main-content' role='main'>
+      <main
+        className={isLogout ? 'govuk-main-wrapper visibility-hidden' : 'govuk-main-wrapper'}
+        id='main-content'
+        role='main'
+      >
         {showPortalBanner && (
           <NotificationBanner content={t('PORTAL_NOTIFICATION_BANNER_CONTENT')} />
         )}

@@ -109,7 +109,7 @@ export const checkStatus = () => {
   return status;
 };
 
-export const triggerLogout = () => {
+export const triggerLogout = setIsLogout => {
   let authType = 'gg';
   getSdkConfig().then(sdkConfig => {
     const sdkConfigAuth = sdkConfig.authConfig;
@@ -121,6 +121,8 @@ export const triggerLogout = () => {
     'gg-sa-dev': 'GovGateway-SA-dev'
   };
   const authService = authServiceList[authType];
+
+  setIsLogout(true);
 
   // If the container / case is opened then close the container on signout to prevent locking.
   const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');

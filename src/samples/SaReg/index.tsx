@@ -36,7 +36,6 @@ import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
 import AlreadyRegisteredUserMessage from './AlreadyRegisteredUserMessage';
 
 declare const myLoadMashup: any;
-
 /* Time out modal functionality */
 let applicationTimeout = null;
 let signoutTimeout = null;
@@ -45,25 +44,25 @@ let milisecondsTilSignout = 115 * 1000;
 let milisecondsTilWarning = 780 * 1000;
 
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
-function initTimeout(setShowTimeoutModal) {
+function initTimeout(setShowTimeoutModal, setIsLogout) {
   clearTimeout(applicationTimeout);
   clearTimeout(signoutTimeout);
 
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
-      triggerLogout();
+      triggerLogout(setIsLogout);
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
+function staySignedIn(setShowTimeoutModal, setIsLogout, refreshSignin = true) {
   if (refreshSignin) {
     PCore.getDataPageUtils().getDataAsync('D_RegistrantWorkAssignmentSACases', 'root');
   }
   setShowTimeoutModal(false);
-  initTimeout(setShowTimeoutModal);
+  initTimeout(setShowTimeoutModal, setIsLogout);
 }
 /* ******************************* */
 
@@ -84,6 +83,7 @@ export default function SaReg() {
   const [showAgeRestrictionInfo, setshowAgeRestrictionInfo] = useState(false);
   const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
   const [isSoleTrader, setIsSoleTrader] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const history = useHistory();
   const { t } = useTranslation();
@@ -164,7 +164,7 @@ export default function SaReg() {
   }
 
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, setIsLogout);
     setServiceNotAvailable(false);
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
@@ -404,8 +404,8 @@ export default function SaReg() {
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
-          initTimeout(setShowTimeoutModal);
+          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, setIsLogout, false));
+          initTimeout(setShowTimeoutModal, setIsLogout);
         });
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -540,7 +540,7 @@ export default function SaReg() {
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
-      triggerLogout();
+      triggerLogout(setIsLogout);
     }
   }
 
@@ -548,7 +548,7 @@ export default function SaReg() {
     e.preventDefault();
     setShowSignoutModal(false);
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal);
+    staySignedIn(setShowTimeoutModal, setIsLogout);
   };
 
   const renderContent = () => {
@@ -563,11 +563,11 @@ export default function SaReg() {
     } else {
       return (
         <>
-          <div id='pega-part-of-page'>
+          <div id='pega-part-of-page' className={isLogout ? 'visibility-hidden' : ''}>
             <div id='pega-root'></div>
           </div>
           {showUserPortal && (
-            <UserPortal showPortalBanner={showPortalBanner}>
+            <UserPortal showPortalBanner={showPortalBanner} isLogout={isLogout}>
               {inprogressRegistration.length > 0 && (
                 <RegistrationDetails
                   thePConn={pConn}
@@ -587,8 +587,10 @@ export default function SaReg() {
     <>
       <TimeoutPopup
         show={showTimeoutModal}
-        staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
-        signoutHandler={() => triggerLogout()}
+        staySignedinHandler={() => staySignedIn(setShowTimeoutModal, setIsLogout)}
+        signoutHandler={() => {
+          triggerLogout(setIsLogout);
+        }}
         isAuthorised
       />
 
@@ -610,7 +612,9 @@ export default function SaReg() {
       <LogoutPopup
         show={showSignoutModal && !showTimeoutModal}
         hideModal={() => setShowSignoutModal(false)}
-        handleSignoutModal={triggerLogout}
+        handleSignoutModal={() => {
+          triggerLogout(setIsLogout);
+        }}
         handleStaySignIn={handleStaySignIn}
       />
       <AppFooter />
