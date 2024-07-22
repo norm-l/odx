@@ -371,7 +371,18 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setPageTitle();
     return (
       <>
-        <AppHeader appname={t('EDUCATION_START')} />
+        <AppHeader
+          handleSignout={handleSignout}
+          appname={t('EDUCATION_START')}
+          hasLanguageToggle={showLanguageToggleState}
+          isPegaApp={showPega}
+          languageToggleCallback={toggleNotificationProcess(
+            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
+            assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
+          )}
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
+        />
+
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
