@@ -26,6 +26,9 @@ export default function TextInput(props) {
   } = props;
 
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
+
+  const isComplexQuestionPage = PCore.getStoreValue('isComplexQuestionPage', '', 'app');
+
   registerNonEditableField(!!disabled);
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
@@ -107,6 +110,7 @@ export default function TextInput(props) {
           ...extraInputProps
         }}
         hintText={helperText}
+        extraLabelClasses={isComplexQuestionPage ? 'govuk-label--m' : ''}
         errorText={errorMessage}
         label={label}
         labelIsHeading={isOnlyField}
