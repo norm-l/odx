@@ -177,6 +177,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setCurrentDisplay('landingpage');
     setShowPortalBanner(showBanner);
     setAssignmentCancelled(false);
+    setStartClaimClicked(false);
   }
 
   useEffect(() => {
