@@ -275,7 +275,20 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   useEffect(() => {
     if (showPega && pCoreReady && startClaimClicked) {
-      PCore.getMashupApi().createCase('HMRC-ChB-Work-EducationStart', PCore.getConstants().APP.APP);
+      let startingFields = {};
+      startingFields = {
+        NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
+      };
+
+      PCore.getMashupApi().createCase(
+        'HMRC-ChB-Work-EducationStart',
+        PCore.getConstants().APP.APP,
+        {
+          startingFields,
+          pageName: '',
+          channelName: ''
+        }
+      );
       requestAnimationFrame(removeHmrcLink); // TODO - To be removed with US-13518 implementation.
     }
   }, [pCoreReady, showPega, startClaimClicked]);
