@@ -1,6 +1,9 @@
 import React from 'react';
 import ParsedHTML from '../../../helpers/formatters/ParsedHtml';
-import { registerNonEditableField } from '../../../helpers/hooks/QuestionDisplayHooks';
+import {
+  registerNonEditableField,
+  registerComplexQuestion
+} from '../../../helpers/hooks/QuestionDisplayHooks';
 import type { PConnFieldProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 import getFormattedInstructionText from '../../../override-sdk/template/DefaultForm/DefaultFormUtils';
 
@@ -18,6 +21,7 @@ export default function HmrcOdxComplexQuestionExplanation(
   const { value = '', readOnly } = props;
 
   registerNonEditableField();
+  registerComplexQuestion();
 
   if (readOnly) {
     return null;

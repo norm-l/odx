@@ -54,3 +54,7 @@ div.MuiGrid-root.MuiGrid-item .govuk-summary-list:last-of-type ~ br {
 .hide-pg-conf > .govuk-summary-list__row {
   display: none;
 }
+
+.visibility-hidden {
+  visibility: hidden;
+}
