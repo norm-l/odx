@@ -134,7 +134,10 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     const doc = parser.parseFromString(htmlContent, 'text/html');
     const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
 
+    const notification = doc.querySelector('div.govuk-notification-banner');
+
     const fragment = document.createDocumentFragment();
+    fragment.appendChild(notification.cloneNode(true));
     let openDL = false;
     let currentDL;
 
