@@ -335,7 +335,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
       );
     });
     settingTimer();
-    PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));
+    PCore.getStore().subscribe(() =>
+      staySignedIn(setShowTimeoutModal, '', null, false, true, currentDisplay === 'resolutionpage')
+    );
   });
 
   // And clean up
