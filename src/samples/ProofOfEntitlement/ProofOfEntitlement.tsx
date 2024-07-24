@@ -11,6 +11,7 @@ import { registerServiceName } from '../../components/helpers/setPageTitleHelper
 import { triggerLogout } from '../../components/helpers/utils';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import Button from '../../components/BaseComponents/Button/Button';
+import { formatCurrency } from '../../components/helpers/utils';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -21,7 +22,6 @@ export default function ProofOfEntitlement() {
   const [showProblemWithService, setShowProblemWithService] = useState(false);
   const history = useHistory();
   const { t } = useTranslation();
-  const currency = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
 
   registerServiceName(t('CHB_HOMEPAGE_HEADING'));
 
@@ -120,7 +120,7 @@ export default function ProofOfEntitlement() {
                   <ReadOnlyDisplay
                     key='amount'
                     label={t('POE_LABEL_AMOUNT')}
-                    value={`${currency.format(entitlementData.AwardValue)} ${t('PER_WEEK')}`}
+                    value={`${formatCurrency(entitlementData.AwardValue)} ${t('PER_WEEK')}`}
                   />
                   <ReadOnlyDisplay
                     key='startdate'
