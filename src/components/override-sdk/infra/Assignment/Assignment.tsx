@@ -108,7 +108,7 @@ export default function Assignment(props) {
   }
 
   useEffect(() => {
-    if (thePConn.getCurrentClassID() === 'HMRC-ChB-Work-Claim') {
+    if (!isEduStartJourney()) {
       initialLanguageCall();
     }
   }, []);
