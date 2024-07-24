@@ -182,7 +182,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         <p className='govuk-body'> {t('THE_INFO_YOU_HAVE_PROVIDED')}. </p>
         <ParsedHTML htmlString={documentList} />
         <p className='govuk-body'>
-          {t('AFTER_YOU_HAVE')}{' '}
+          {t('AFTER_YOU_HAVE')}
           <a href='' onClick={e => generateReturnSlip(e)} target='_blank' rel='noreferrer noopener'>
             {t('PRINTED_AND_SIGNED_THE_FORM')} {t('OPENS_IN_NEW_TAB')}
           </a>
@@ -241,7 +241,12 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       </>
     );
   };
-
+  useEffect(() => {
+    const element: HTMLElement = document.querySelector('div.rdlWrapperDiv');
+    if (element) {
+      element.style.display = 'none';
+    }
+  });
   const setCasetype = () => {
     if (caseStatus === undefined) {
       if (!loading && isBornAbroadOrAdopted) {
