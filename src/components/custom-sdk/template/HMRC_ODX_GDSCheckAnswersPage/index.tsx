@@ -134,10 +134,14 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     const doc = parser.parseFromString(htmlContent, 'text/html');
     const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
 
-    const notification = doc.querySelector('div.govuk-notification-banner');
-
     const fragment = document.createDocumentFragment();
-    fragment.appendChild(notification.cloneNode(true));
+
+    const notification = doc.querySelector('div.govuk-notification-banner');
+    if (notification) {
+      const h1 = document.querySelector('h1.govuk-heading-l');
+      h1.prepend(notification);
+    }
+
     let openDL = false;
     let currentDL;
 
@@ -197,6 +201,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       dfChildrenContainerRef.current.appendChild(fragment);
     }
   }
+
   let hasAutocompleteLoaded = window.sessionStorage.getItem('hasAutocompleteLoaded');
 
   const checkChildren = () => {
@@ -214,7 +219,6 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           }
         }
       });
-
       updateHTML(htmlContent);
     } else {
       // Retry until a child with the class "govuk-summary-list" is rendered

@@ -73,9 +73,9 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       <dt className='govuk-summary-list__key'>{label}</dt>
       <dd
         className={
-          placeholderOrHelperText
-            ? 'govuk-summary-list__value govuk-error-message'
-            : 'govuk-summary-list__value '
+          isValueNotBlank
+            ? 'govuk-summary-list__value'
+            : 'govuk-summary-list__value govuk-error-message'
         }
         data-is-csv={isCSV}
       >
