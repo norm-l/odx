@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import { triggerLogout } from '../../components/helpers/utils';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 
