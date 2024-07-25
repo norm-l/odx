@@ -178,9 +178,13 @@ export default function SaReg() {
       `${PCore.getConstants().APP.APP}/primary`
     );
 
-    const soleTraderFlag = PCore.getStoreValue('.IsSoleTrader', 'caseInfo.content', context);
+    const caseId = PCore.getStoreValue('.ID', 'caseInfo', context);
 
-    setIsSoleTrader(soleTraderFlag);
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_RegistrantCaseInfoDetails', 'root', { caseId })
+      .then(resp => {
+        setIsSoleTrader(resp?.IsSoleTrader);
+      });
   }
 
   function assignmentFinished() {
