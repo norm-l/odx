@@ -76,6 +76,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     showPega,
     setShowPega,
     showResolutionPage,
+    setShutterServicePage,
     caseId,
     shutterServicePage,
     serviceNotAvailable,
@@ -367,6 +368,10 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
   }, []);
 
+  const checkShuttered = (status: boolean) => {
+      setShutterServicePage(status);
+  };
+
   if (shuttered === null) {
     return null;
   } else if (currentDisplay === 'servicenotavailable') {
@@ -481,6 +486,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
                   setShowLandingPage={setShowLandingPage}
                   showPortalPageDefault={showPortalPageDefault}
                   setShowPortalPageDefault={setShowPortalPageDefault}
+                  checkShuttered={checkShuttered}
                 />
               )}
               {currentDisplay === 'resolutionpage' && (
