@@ -136,7 +136,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
     const fragment = document.createDocumentFragment();
 
-    const notification = doc.querySelector('div.govuk-notification-banner');
+    const notification = doc.querySelector('div.govuk-error-summary');
     if (notification) {
       const h1 = document.querySelector('h1.govuk-heading-l');
       h1.prepend(notification);
@@ -213,7 +213,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       Array.from(container.children).forEach(child => {
         if (child instanceof HTMLElement) {
           if (child.tagName === 'H2' || child.tagName === 'H3') {
-            htmlContent += child.outerHTML;
+            // This is tempory solution for tactical CYA validation
+            if (child.className !== 'govuk-error-summary__title') htmlContent += child.outerHTML;
           } else {
             htmlContent += child.innerHTML;
           }
