@@ -168,5 +168,6 @@ ClaimsList.propTypes = {
   fieldType: PropTypes.string,
   rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
   caseId: PropTypes.string,
-  setShowLandingPage: PropTypes.func
+  setShowLandingPage: PropTypes.func,
+  checkShuttered: PropTypes.func
 };

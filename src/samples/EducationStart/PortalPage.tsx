@@ -14,7 +14,8 @@ export default function PortalPage(props) {
     assignmentPConn,
     setShowLandingPage,
     setShowStartClaim,
-    setShowPortalPageDefault
+    setShowPortalPageDefault,
+    checkShuttered
   } = props;
   const { t } = useTranslation();
 
@@ -85,6 +86,7 @@ export default function PortalPage(props) {
                 caseId={getClaimsCaseId()}
                 fieldType={t('SUBMITTED_DATE')}
                 setShowLandingPage={setShowLandingPage}
+                checkShuttered={checkShuttered}
               />
             </div>
           </div>
