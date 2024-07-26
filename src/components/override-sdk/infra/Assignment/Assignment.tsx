@@ -102,15 +102,22 @@ export default function Assignment(props) {
   function initialLanguageCall() {
     const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
 
-    thePConn
-      .getActionsApi()
-      .openProcessAction(config[lang], { caseID: thePConn.getCaseInfo()?.getKey(), type: 'Case' });
+    const processActionPromise = thePConn.getActionsApi().openProcessAction(config[lang], {
+      caseID: thePConn.getCaseInfo()?.getKey(),
+      type: 'Case'
+    });
+
+    processActionPromise
+      .then(() => {
+        console.log(`Initial language set to ${lang}`);
+      })
+      .catch(err => {
+        console.log(`Initial language not set ${err}`);
+      });
   }
 
   useEffect(() => {
-    if (!isEduStartJourney()) {
-      initialLanguageCall();
-    }
+    initialLanguageCall();
   }, []);
 
   useEffect(() => {
