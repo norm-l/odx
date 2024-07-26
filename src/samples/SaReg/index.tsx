@@ -178,9 +178,13 @@ export default function SaReg() {
       `${PCore.getConstants().APP.APP}/primary`
     );
 
-    const soleTraderFlag = PCore.getStoreValue('.IsSoleTrader', 'caseInfo.content', context);
+    const caseId = PCore.getStoreValue('.ID', 'caseInfo', context);
 
-    setIsSoleTrader(soleTraderFlag);
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_RegistrantCaseInfoDetails', 'root', { caseId })
+      .then(resp => {
+        setIsSoleTrader(resp?.IsSoleTrader);
+      });
   }
 
   function assignmentFinished() {
@@ -504,10 +508,6 @@ export default function SaReg() {
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup();
-    });
-
-    document.addEventListener('SdkLoggedOut', () => {
-      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
     });
 
     // Subscriptions can't be done until onPCoreReady.
