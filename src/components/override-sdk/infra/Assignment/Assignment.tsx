@@ -145,16 +145,16 @@ export default function Assignment(props) {
   });
 
   // To update the title when we toggle the language
-  /*useEffect(() => {
+  /* useEffect(() => {
     setTimeout(() => {
       let tryTranslate = localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS');      
       // Set our translated header!
      setHeader(tryTranslate);
     }, 60);
-  }, [selectedLang]);*/
+  }, [selectedLang]); */
 
   useEffect(() => {
-    const headerFetch = setTimeout(() => {
+    /* const headerFetch = */ setTimeout(() => {
       setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
     }, 60);
 
