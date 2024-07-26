@@ -1,11 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import { getInstructions } from './utils';
 import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
-import { scrollToTop } from '../../../helpers/utils';
 
 import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
+import setPageTitle from '../../../helpers/setPageTitleHelpers';
+import { scrollToTop } from '../../../helpers/utils';
 
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
@@ -21,6 +22,24 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   const instructions = getInstructions(getPConnect(), props.instructions);
 
   let divClass: string;
+
+  useEffect(() => {
+    return () => {
+      const notification: HTMLElement = document.querySelector('div.govuk-error-summary');
+      const h1: HTMLElement = document.querySelector('h1.govuk-heading-l');
+      if (notification && h1) h1.parentElement.removeChild(notification);
+    };
+  }, []);
+
+  PCore.getPubSubUtils().subscribe(
+    'CustomAssignmentFinishedError',
+    () => {
+      setTimeout(() => {
+        setPageTitle(true);
+      }, 1000);
+    },
+    'CustomAssignmentFinishedError'
+  );
 
   const numCols = NumCols || '1';
   switch (numCols) {
@@ -136,10 +155,12 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
     const fragment = document.createDocumentFragment();
 
-    const notification = doc.querySelector('div.govuk-error-summary');
-    if (notification) {
+    // Temporary solution for tactical solution of CYA validation
+    const notifications = doc.querySelectorAll('div.govuk-error-summary');
+    if (notifications.length === 1) {
       const h1 = document.querySelector('h1.govuk-heading-l');
-      h1.prepend(notification);
+      h1.parentElement.prepend(notifications[0]);
+      setPageTitle(true);
     }
 
     let openDL = false;

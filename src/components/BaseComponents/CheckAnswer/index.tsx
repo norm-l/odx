@@ -79,6 +79,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
         }
         data-is-csv={isCSV}
       >
+        {!isValueNotBlank && <span className='govuk-visually-hidden'>Error:</span>}
         {Array.isArray(formattedValue) ? (
           <>
             {formattedValue.map(item => (
