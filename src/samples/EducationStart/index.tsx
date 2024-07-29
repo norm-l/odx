@@ -67,7 +67,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   }, []);
 
   function doRedirectDone() {
-    history.push('/education/start');
+    history.replace('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
@@ -190,9 +190,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   useEffect(() => {
     function handleClick(e) {
-      e.preventDefault();
       const targetId = e.target.id;
       if (targetId === 'homepage') {
+        e.preventDefault();
         returnedToPortal(false);
         setShowPortalPageDefault(true);
       }
