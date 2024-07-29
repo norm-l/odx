@@ -56,6 +56,12 @@ const AlreadyRegisteredUserMessage = () => {
             <br />
             {t('HM_REVENUE_AND_CUSTOMS')}
             <br />
+            {lang === 'cy' && (
+              <>
+                HMRC
+                <br />
+              </>
+            )}
             {t('BX9_1AN')}
             <br />
             {t('UNITED_KINGDOM')}

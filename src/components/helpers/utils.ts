@@ -171,3 +171,13 @@ export const isSaveAndContinueButton = () => {
     return false;
   }
 };
+
+export const getWorkareaContainerName = () => {
+  const primaryContainer = PCore.getContainerUtils().getActiveContainerItemContext(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const containerName = PCore.getContainerUtils().getActiveContainerItemName(
+    `${primaryContainer}/workarea`
+  );
+  return containerName;
+};
