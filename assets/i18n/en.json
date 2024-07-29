@@ -61,6 +61,7 @@
   "SUBMITTED_CLAIMS": "Child Benefit submitted claims",
   "VIEW_CLAIM": "View claim",
   "IN_PROGRESS": "In Progress",
+  "IN_PROGRESS_1": "In progress",
   "CLAIM_RECEIVED": "Claim received",
   "SUBMITTED": "Submitted",
   "CHILDREN_ADDED": "Children added",
@@ -363,6 +364,9 @@
   "DOWNLOAD_THIS_PAGE": "Download this page",
   "YOU_WILL_NEED_TO_START_AGAIN": "You will have to start again when the service is available.",
   "ON_OR_BEFORE": "On or before",
+  "POE_CHB_PAID_AT": "Child Benefit is paid at:",
+  "POE_FOR_ELDEST_CHILD": "£25.60 for the eldest or only child",
+  "POE_FOR_ADDITIONAL_CHILD": "£16.95 for each additional child",
 
   "CHB_HOMEPAGE_HEADING": "Child Benefit",
   "CHB_HOMEPAGE_MAKING_CLAIM_SUBHEADING": "Make a claim",
@@ -389,6 +393,7 @@
   "NO_AWARD_YOU_CAN": "You can",
   "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "find out more about Child Benefit",
   "TRY_AGAIN_LATER": "Try again later.",
+
   "YOUNG_PERSON_NAME": "Young person name",
   "EDUCATION_PORTAL_WARNING_TEXT2": "and will store your information for 28 days.",
   "VIEW_STATUS_OR_NOTIFY_CHANGES": "You can view the status of your Child Benefit extension requests here or notify us of any changes.",
