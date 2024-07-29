@@ -107,13 +107,9 @@ export default function Assignment(props) {
       type: 'Case'
     });
 
-    processActionPromise
-      .then(() => {
-        console.log(`Initial language set to ${lang}`);
-      })
-      .catch(err => {
-        console.log(`Initial language not set ${err}`);
-      });
+    processActionPromise.catch(err => {
+      console.log(`Initial language not set: ${err}`);
+    });
   }
 
   useEffect(() => {
