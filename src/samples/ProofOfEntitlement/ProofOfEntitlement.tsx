@@ -120,14 +120,6 @@ export default function ProofOfEntitlement() {
                     {t('DOWNLOAD_THIS_PAGE')}
                   </a>
                 </p>
-                {/*
-                <a
-                  className='styled-like-a-button'
-                  download={'ProofOfEntitlement.pdf'}
-                  href={`data:application/pdf;base64,${b64PDFstring}`}
-                >
-                  Download
-            </a> */}
                 <p className='govuk-body'>
                   {t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName}{' '}
                   {t('ON')} {dayjs().format('D MMMM YYYY')}.
