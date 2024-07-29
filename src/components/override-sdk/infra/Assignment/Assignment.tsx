@@ -108,6 +108,7 @@ export default function Assignment(props) {
     });
 
     processActionPromise.catch(err => {
+      // eslint-disable-next-line no-console
       console.log(`Initial language not set: ${err}`);
     });
   }
