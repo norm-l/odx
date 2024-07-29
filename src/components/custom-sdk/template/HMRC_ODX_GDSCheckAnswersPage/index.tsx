@@ -34,6 +34,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   PCore.getPubSubUtils().subscribe(
     'CustomAssignmentFinishedError',
     () => {
+      document.getElementById('errorBanner').focus();
       setTimeout(() => {
         setPageTitle(true);
       }, 1000);
@@ -161,6 +162,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const h1 = document.querySelector('h1.govuk-heading-l');
       h1.parentElement.prepend(notifications[0]);
       setPageTitle(true);
+      document.getElementById('errorBanner').focus();
     }
 
     let openDL = false;

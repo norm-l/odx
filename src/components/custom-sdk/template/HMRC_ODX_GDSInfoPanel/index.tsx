@@ -47,7 +47,12 @@ export default function HmrcOdxGdsInfoPanel(props) {
 
   if (panelType === '4') {
     return (
-      <div className='govuk-error-summary' data-module='govuk-error-summary' tabIndex={-1}>
+      <div
+        className='govuk-error-summary'
+        data-module='govuk-error-summary'
+        id='errorBanner'
+        tabIndex={-1}
+      >
         <div role='alert'>
           <h2 className='govuk-error-summary__title'>{panelTitle}</h2>
           <div className='govuk-error-summary__body'>{panelText}</div>
