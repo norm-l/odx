@@ -68,11 +68,12 @@ export default function ProofOfEntitlement() {
 
       PCore.getDataPageUtils()
         .getPageDataAsync('D_GetChBEntitlementContent', 'root', {
-          NINO: PCore.getEnvironmentInfo().getOperatorIdentifier()
+          NINO: PCore.getEnvironmentInfo().getOperatorIdentifier(),
+          DocumentID: 'POE0001',
+          Locale: PCore.getEnvironmentInfo().locale.replaceAll('-', '_')
         })
         .then(result => {
-          console.log('result====', result);
-          setB64PDFstring(result.content);
+          setB64PDFstring(result.pyNote);
         });
     });
   }, []);
