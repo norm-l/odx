@@ -10,7 +10,6 @@ import NoAwardPage from './NoAward';
 import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { triggerLogout } from '../../components/helpers/utils';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
-import Button from '../../components/BaseComponents/Button/Button';
 import { formatCurrency } from '../../components/helpers/utils';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
