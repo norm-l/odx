@@ -33,6 +33,7 @@ export default function HmrcOdxGdsTextPresentation(props: HmrcOdxGdsTextPresenta
     name,
     fieldMetadata,
     helperText,
+    placeholder,
     getPConnect,
     configAlternateDesignSystem
   } = props;
@@ -83,7 +84,8 @@ export default function HmrcOdxGdsTextPresentation(props: HmrcOdxGdsTextPresenta
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );

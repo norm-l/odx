@@ -6,7 +6,7 @@ interface HmrcOdxTestProps extends PConnFieldProps {
   // If any, enter additional props that only exist on this componentName
   name?: string;
   stepId?: any;
-  hiddenText? : string;
+  hiddenText?: string;
 }
 
 // Duplicated runtime code from React SDK
@@ -15,7 +15,7 @@ interface HmrcOdxTestProps extends PConnFieldProps {
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const COMMA_DELIMITED_FIELD = 'CSV';
-  const { label, value, name, stepId, hiddenText, getPConnect } = props;
+  const { label, value, name, stepId, hiddenText, getPConnect, placeholder, helperText } = props;
   const [formattedValue, setFormattedValue] = useState<string | Array<string>>(value);
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
@@ -48,10 +48,38 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       });
   };
 
+  // This is teporary solution from react for back link issue and it will be handled by pega in coming sprint
+  // const isValueNotBlank =
+  //   (!!formattedValue &&
+  //     formattedValue !== ' ' &&
+  //     formattedValue !== 'Invalid Date' &&
+  //     formattedValue?.length > 0) ||
+  //   (!!value && value !== ' ' && formattedValue !== 'Invalid Date' && value?.length > 0);
+
+  const isValueNotBlank =
+    !!value &&
+    value !== ' ' &&
+    formattedValue !== 'Invalid Date' &&
+    value?.length > 0 &&
+    !value?.includes(',,');
+
+  const formattedValueOrValue = formattedValue || value;
+  const placeholderOrHelperText = placeholder || helperText;
+
+  const cyaValue = isValueNotBlank ? formattedValueOrValue : placeholderOrHelperText;
+
   return (
     <div className='govuk-summary-list__row'>
       <dt className='govuk-summary-list__key'>{label}</dt>
-      <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
+      <dd
+        className={
+          isValueNotBlank
+            ? 'govuk-summary-list__value'
+            : 'govuk-summary-list__value govuk-error-message'
+        }
+        data-is-csv={isCSV}
+      >
+        {!isValueNotBlank && <span className='govuk-visually-hidden'>Error:</span>}
         {Array.isArray(formattedValue) ? (
           <>
             {formattedValue.map(item => (
@@ -62,13 +90,13 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
             ))}
           </>
         ) : (
-          formattedValue || value
+          cyaValue
         )}
       </dd>
       <dd className='govuk-summary-list__actions'>
         <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
           {t('GDS_ACTION_CHANGE')}
-          <span className='govuk-visually-hidden'> {hiddenText || label }</span>
+          <span className='govuk-visually-hidden'> {hiddenText || label}</span>
         </a>
       </dd>
     </div>

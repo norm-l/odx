@@ -1,11 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import { getInstructions } from './utils';
 import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
-import { scrollToTop } from '../../../helpers/utils';
 
 import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
+import setPageTitle from '../../../helpers/setPageTitleHelpers';
+import { scrollToTop } from '../../../helpers/utils';
 
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
@@ -21,6 +22,25 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   const instructions = getInstructions(getPConnect(), props.instructions);
 
   let divClass: string;
+
+  useEffect(() => {
+    return () => {
+      const notification: HTMLElement = document.querySelector('div.govuk-error-summary');
+      const h1: HTMLElement = document.querySelector('h1.govuk-heading-l');
+      if (notification && h1) h1.parentElement.removeChild(notification);
+    };
+  }, []);
+
+  PCore.getPubSubUtils().subscribe(
+    'CustomAssignmentFinishedError',
+    () => {
+      document.getElementById('errorBanner').focus();
+      setTimeout(() => {
+        setPageTitle(true);
+      }, 1000);
+    },
+    'CustomAssignmentFinishedError'
+  );
 
   const numCols = NumCols || '1';
   switch (numCols) {
@@ -82,12 +102,69 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  const getCYAStepId = (event, originalLink) => {
+    interface ResponseType {
+      CYAStepID: string;
+    }
+    let stepIDCYA;
+    const stepId = originalLink.getAttribute('data-step-id');
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const currentFlowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+    const options = {
+      invalidateCache: true
+    };
+
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_GetCurrentCYAStepID',
+        'root',
+        {
+          FlowActionName: currentFlowActionId,
+          CaseID: pConn.getCaseSummary().content.pyID
+        },
+        options
+      ) // @ts-ignore
+      .then((pageData: ResponseType) => {
+        stepIDCYA = pageData?.CYAStepID;
+        if (stepIDCYA) {
+          sessionStorage.setItem('stepIDCYA', stepIDCYA);
+          sessionStorage.setItem('isEditMode', 'true');
+
+          sessionStorage.removeItem('isComingFromPortal');
+          sessionStorage.removeItem('isComingFromTasklist');
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      })
+      .finally(() => {
+        navigateToStep(event, stepId, originalLink);
+      });
+  };
+
   function updateHTML(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
     const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
 
     const fragment = document.createDocumentFragment();
+
+    // Temporary solution for tactical solution of CYA validation
+    const notifications = doc.querySelectorAll('div.govuk-error-summary');
+    if (notifications.length === 1) {
+      const h1 = document.querySelector('h1.govuk-heading-l');
+      h1.parentElement.prepend(notifications[0]);
+      setPageTitle(true);
+      document.getElementById('errorBanner').focus();
+    }
+
     let openDL = false;
     let currentDL;
 
@@ -134,8 +211,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
     fragment.querySelectorAll('a').forEach(cloneLink => {
       const originalLink = cloneLink;
       if (originalLink) {
-        const stepId = originalLink.getAttribute('data-step-id');
-        cloneLink.addEventListener('click', event => navigateToStep(event, stepId, originalLink));
+        cloneLink.addEventListener('click', event => {
+          getCYAStepId(event, originalLink);
+        });
       }
     });
 
@@ -146,6 +224,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       dfChildrenContainerRef.current.appendChild(fragment);
     }
   }
+
   let hasAutocompleteLoaded = window.sessionStorage.getItem('hasAutocompleteLoaded');
 
   const checkChildren = () => {
@@ -157,13 +236,13 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       Array.from(container.children).forEach(child => {
         if (child instanceof HTMLElement) {
           if (child.tagName === 'H2' || child.tagName === 'H3') {
-            htmlContent += child.outerHTML;
+            // This is tempory solution for tactical CYA validation
+            if (child.className !== 'govuk-error-summary__title') htmlContent += child.outerHTML;
           } else {
             htmlContent += child.innerHTML;
           }
         }
       });
-
       updateHTML(htmlContent);
     } else {
       // Retry until a child with the class "govuk-summary-list" is rendered
