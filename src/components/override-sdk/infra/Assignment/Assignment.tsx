@@ -144,17 +144,8 @@ export default function Assignment(props) {
     setSelectedLang(langreference?.language);
   });
 
-  // To update the title when we toggle the language
-  /* useEffect(() => {
-    setTimeout(() => {
-      let tryTranslate = localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS');      
-      // Set our translated header!
-     setHeader(tryTranslate);
-    }, 60);
-  }, [selectedLang]); */
-
   useEffect(() => {
-    /* const headerFetch = */ setTimeout(() => {
+    setTimeout(() => {
       setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
     }, 60);
 
