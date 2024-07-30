@@ -296,8 +296,11 @@
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE": "rydych yn dal i fod yn gymwys i gael",
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE_LINK_TEXT": "Budd-dal Plant",
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "rydych am optio i mewn neu optio allan cyn pen y 3 mis nesaf",
-
   "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "Gall y gwasanaeth hwn dim ond cael ei ddefnyddio gan y person sy’n hawlio Budd-dal Plant",
+  "HICBC_LANDINGPAGE_BEFORE_6_APRIL_OPTION_LABEL": "Cyn 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "Ar neu ar ôl 6 Ebrill 2024",
+  "HICBC_LANDINGPAGE_QUESTION_LABEL": "Pryd ydych chi am optio i mewn i daliadau Budd-dal Plant?",
+  "HICBC_LANDINGPAGE_NO_OPTION_SELECTED_ERROR_MESSAGE": "Dewiswch ddyddiad i optio i mewn",
 
   "BACK_TO_START_PAGE": "Yn ôl i’r dudalen cychwyn",
 
@@ -399,5 +402,6 @@
   "NO_AWARD_SOMEONE_ELSE_MADE_CLAIM_LISTITEM": "cafodd yr hawliad ei wneud gan rywun arall - er enghraifft, mae’n bosibl ei fod yn enw eich partner",
   "NO_AWARD_NO_LONGER_RECEIVING_BENEFIT": "nid ydych yn cael Budd-dal Plant mwyach",
   "NO_AWARD_YOU_CAN": "Gallwch",
-  "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "ddysgu rhagor am Fudd-dal Plant"
+  "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "ddysgu rhagor am Fudd-dal Plant",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim"
 }

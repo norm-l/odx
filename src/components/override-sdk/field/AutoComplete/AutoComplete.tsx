@@ -73,7 +73,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
     hideLabel,
     displayOrder,
     configAlternateDesignSystem,
-    name
+    name,
+    placeholder
   } = props;
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
@@ -280,7 +281,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );

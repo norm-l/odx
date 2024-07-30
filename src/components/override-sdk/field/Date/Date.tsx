@@ -18,6 +18,7 @@ export default function Date(props) {
     value = '',
     validatemessage,
     helperText,
+    placeholder,
     readOnly,
     name,
     testId,
@@ -141,7 +142,8 @@ export default function Date(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );

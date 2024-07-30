@@ -392,7 +392,6 @@
   "NO_AWARD_NO_LONGER_RECEIVING_BENEFIT": "you no longer receive Child Benefit",
   "NO_AWARD_YOU_CAN": "You can",
   "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "find out more about Child Benefit",
-
   "TRY_AGAIN_LATER": "Try again later.",
 
   "YOUNG_PERSON_NAME": "Young person name",
@@ -408,5 +407,6 @@
   "STARTING_NON_ADVANCED_EDUCATION": "if your child is starting non-advanced education or approved training.",
   "MUST_TELL": "You must tell the",
   "LEAVES_FULL_TIME_EDUCATION": "Child Benefit Office immediately if your child leaves full time non-advanced education or approved training",
-  "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests"
+  "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim"
 }
