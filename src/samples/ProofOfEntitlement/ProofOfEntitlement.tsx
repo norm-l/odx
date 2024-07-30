@@ -54,7 +54,7 @@ export default function ProofOfEntitlement() {
             // If no claimant data in response, assume no award (or api error)
             if (result.IsAPIError) {
               setShowProblemWithService(true);
-            } else if (result.HasAward === false || !result.Claimant) {
+            } else if (!result.HasAward) {
               setShowNoAward(true);
             } else {
               setEntitlementData(result);
