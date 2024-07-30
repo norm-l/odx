@@ -39,8 +39,7 @@
       "source": [
         { "key": "1", "value": "Important" },
         { "key": "2", "value": "Warning" },
-        { "key": "3", "value": "Success" },
-        { "key": "4", "value": "Error" }
+        { "key": "3", "value": "Success" }
       ]
     },
     {
