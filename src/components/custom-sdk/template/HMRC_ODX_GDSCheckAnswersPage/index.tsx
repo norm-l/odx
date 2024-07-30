@@ -5,7 +5,6 @@ import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps
 import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
-import setPageTitle from '../../../helpers/setPageTitleHelpers';
 import { scrollToTop } from '../../../helpers/utils';
 
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
@@ -22,25 +21,6 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   const instructions = getInstructions(getPConnect(), props.instructions);
 
   let divClass: string;
-
-  useEffect(() => {
-    return () => {
-      const notification: HTMLElement = document.querySelector('div.govuk-error-summary');
-      const h1: HTMLElement = document.querySelector('h1.govuk-heading-l');
-      if (notification && h1) h1.parentElement.removeChild(notification);
-    };
-  }, []);
-
-  PCore.getPubSubUtils().subscribe(
-    'CustomAssignmentFinishedError',
-    () => {
-      document.getElementById('errorBanner').focus();
-      setTimeout(() => {
-        setPageTitle(true);
-      }, 1000);
-    },
-    'CustomAssignmentFinishedError'
-  );
 
   const numCols = NumCols || '1';
   switch (numCols) {
@@ -156,15 +136,6 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
     const fragment = document.createDocumentFragment();
 
-    // Temporary solution for tactical solution of CYA validation
-    const notifications = doc.querySelectorAll('div.govuk-error-summary');
-    if (notifications.length === 1) {
-      const h1 = document.querySelector('h1.govuk-heading-l');
-      h1.parentElement.prepend(notifications[0]);
-      setPageTitle(true);
-      document.getElementById('errorBanner').focus();
-    }
-
     let openDL = false;
     let currentDL;
 
@@ -236,8 +207,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       Array.from(container.children).forEach(child => {
         if (child instanceof HTMLElement) {
           if (child.tagName === 'H2' || child.tagName === 'H3') {
-            // This is tempory solution for tactical CYA validation
-            if (child.className !== 'govuk-error-summary__title') htmlContent += child.outerHTML;
+            htmlContent += child.outerHTML;
           } else {
             htmlContent += child.innerHTML;
           }

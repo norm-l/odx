@@ -473,7 +473,6 @@ export default function Assignment(props) {
               .catch(() => {
                 scrollToTop();
                 showErrorSummary();
-                PCore.getPubSubUtils().publish('CustomAssignmentFinishedError');
               });
           }
           break;

@@ -40,25 +40,6 @@ export default function HmrcOdxGdsInfoPanel(props) {
     case '3':
       panelTitle = t('GDS_INFO_SUCCESS');
       break;
-    case '4':
-      panelTitle = t('THERE_IS_A_PROBLEM');
-      break;
-  }
-
-  if (panelType === '4') {
-    return (
-      <div
-        className='govuk-error-summary'
-        data-module='govuk-error-summary'
-        id='errorBanner'
-        tabIndex={-1}
-      >
-        <div role='alert'>
-          <h2 className='govuk-error-summary__title'>{panelTitle}</h2>
-          <div className='govuk-error-summary__body'>{panelText}</div>
-        </div>
-      </div>
-    );
   }
 
   return (

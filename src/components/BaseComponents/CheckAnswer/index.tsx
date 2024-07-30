@@ -48,14 +48,6 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       });
   };
 
-  // This is teporary solution from react for back link issue and it will be handled by pega in coming sprint
-  // const isValueNotBlank =
-  //   (!!formattedValue &&
-  //     formattedValue !== ' ' &&
-  //     formattedValue !== 'Invalid Date' &&
-  //     formattedValue?.length > 0) ||
-  //   (!!value && value !== ' ' && formattedValue !== 'Invalid Date' && value?.length > 0);
-
   const isValueNotBlank =
     !!value &&
     value !== ' ' &&
@@ -71,16 +63,8 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   return (
     <div className='govuk-summary-list__row'>
       <dt className='govuk-summary-list__key'>{label}</dt>
-      <dd
-        className={
-          isValueNotBlank
-            ? 'govuk-summary-list__value'
-            : 'govuk-summary-list__value govuk-error-message'
-        }
-        data-is-csv={isCSV}
-      >
-        {!isValueNotBlank && <span className='govuk-visually-hidden'>Error:</span>}
-        {Array.isArray(formattedValue) ? (
+      <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
+        {isValueNotBlank && Array.isArray(formattedValue) ? (
           <>
             {formattedValue.map(item => (
               <React.Fragment key={item}>
