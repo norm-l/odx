@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
-import { useTranslation } from 'react-i18next';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
@@ -14,15 +13,14 @@ export default function Landing({
   showPortalBanner,
   setShowLandingPage,
   showPortalPageDefault,
-  setShowPortalPageDefault
+  setShowPortalPageDefault,
+  setShutterServicePage
 }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [showStartClaim, setShowStartClaim] = useState(false);
   const [loadingInProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [loadingSubmittedClaims, setLoadingSubmittedClaims] = useState(true);
-
-  const { t } = useTranslation();
 
   useEffect(() => {
     setPageTitle();
@@ -35,7 +33,7 @@ export default function Landing({
   const statusMapping = status => {
     switch (status) {
       case 'Open-InProgress':
-        return { text: t('IN_PROGRESS_1'), tagColour: 'blue' };
+        return { text: 'IN_PROGRESS_1', tagColour: 'blue' };
       case 'Pending-CBS':
       case 'Resolved-Completed':
       case 'Resolved-Rejected':
@@ -47,7 +45,7 @@ export default function Landing({
       case 'Pending-AwaitingDocumentation':
       case 'Pending-Disallowance':
       case 'Resolved-Disallowance':
-        return { text: t('SUBMITTED'), tagColour: 'purple' };
+        return { text: 'SUBMITTED', tagColour: 'purple' };
       default:
         return { text: status, tagColour: 'grey' };
     }
@@ -96,7 +94,7 @@ export default function Landing({
       // @ts-ignore
       .getDataAsync('D_ClaimantSubmittedEdStartCases', 'root', { OperatorId: operatorId })
       .then(resp => {
-        const filteredCases = getClaims(resp.data.slice(0, 10), t('VIEW_MY_REQUEST'));
+        const filteredCases = getClaims(resp.data.slice(0, 10), 'VIEW_MY_REQUEST');
         setSubmittedClaims(filteredCases);
       })
       .finally(() => setLoadingSubmittedClaims(false));
@@ -109,7 +107,7 @@ export default function Landing({
       .getDataAsync('D_ClaimantWorkAssignmentEdStartCases', 'root')
       .then(resp => {
         resp = resp.data.slice(0, 10);
-        inProgressClaimsData = getClaims(resp, t('CONTINUE_MY_REQUEST'));
+        inProgressClaimsData = getClaims(resp, 'CONTINUE_MY_REQUEST');
         setInProgressClaims(inProgressClaimsData);
       })
       .finally(() => {
@@ -135,6 +133,7 @@ export default function Landing({
             showPortalBanner={showPortalBanner}
             setShowLandingPage={setShowLandingPage}
             setShowPortalPageDefault={setShowPortalPageDefault}
+            setShutterServicePage={setShutterServicePage}
           />
         ) : (
           <StartClaim
