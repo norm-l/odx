@@ -58,7 +58,14 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const formattedValueOrValue = formattedValue || value;
   const placeholderOrHelperText = placeholder || helperText;
 
-  const cyaValue = isValueNotBlank ? formattedValueOrValue : placeholderOrHelperText;
+  const renderCYAValue = () =>
+    !isValueNotBlank ? (
+      <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+        {placeholderOrHelperText}
+      </a>
+    ) : (
+      formattedValueOrValue
+    );
 
   return (
     <div className='govuk-summary-list__row'>
@@ -74,15 +81,17 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
             ))}
           </>
         ) : (
-          cyaValue
+          renderCYAValue()
         )}
       </dd>
-      <dd className='govuk-summary-list__actions'>
-        <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
-          {t('GDS_ACTION_CHANGE')}
-          <span className='govuk-visually-hidden'> {hiddenText || label}</span>
-        </a>
-      </dd>
+      {isValueNotBlank && (
+        <dd className='govuk-summary-list__actions'>
+          <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+            {t('GDS_ACTION_CHANGE')}
+            <span className='govuk-visually-hidden'> {hiddenText || label}</span>
+          </a>
+        </dd>
+      )}
     </div>
   );
 }
