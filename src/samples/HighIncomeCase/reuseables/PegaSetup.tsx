@@ -398,6 +398,8 @@ export const useStartMashup = (
         PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
         'cancelAssignment'
       );
+      PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished', 'CustomAssignmentFinished');
+
     };
     // PM!!
     /*

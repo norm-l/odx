@@ -581,6 +581,8 @@ export default function ChildBenefitsClaim() {
         'assignmentFinished'
       );
       PCore?.getPubSubUtils().unsubscribe('languageToggleTriggered');
+      PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished');
+
     };
   }, []);
 

@@ -451,6 +451,8 @@ export default function EmbeddedTopLevel() {
       );
 
       PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
+      PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished');
+
     };
   }, []);
 
