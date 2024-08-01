@@ -1,7 +1,6 @@
 // @ts-nocheck
 
 import React, { useEffect, useState } from 'react';
-import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
