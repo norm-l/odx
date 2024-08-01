@@ -21,6 +21,7 @@ import ShutterServicePage from '../../../../components/AppComponents/ShutterServ
 import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
+import AppContextEducation from '../../../../samples/EducationStart/reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will remove this import from EducationStart
 import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
 
@@ -46,6 +47,8 @@ export default function Assignment(props) {
   const serviceShuttered = useServiceShuttered();
   const { setAssignmentPConnect }: any = useContext(StoreContext);
   const { appBacklinkProps } = useContext(AppContext);
+  const { appBacklinkProps: appBacklinkPropsEducation, serviceParam } =
+    useContext(AppContextEducation); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
@@ -93,6 +96,25 @@ export default function Assignment(props) {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
 
+  // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
+  function initialLanguageCall() {
+    const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
+
+    const processActionPromise = thePConn.getActionsApi().openProcessAction(config[lang], {
+      caseID: thePConn.getCaseInfo()?.getKey(),
+      type: 'Case'
+    });
+
+    processActionPromise.catch(err => {
+      // eslint-disable-next-line no-console
+      console.log(`Initial language not set: ${err}`);
+    });
+  }
+
+  useEffect(() => {
+    initialLanguageCall();
+  }, []);
+
   useEffect(() => {
     const updateErrorTimeOut = setTimeout(() => {
       setPageTitle(errorMessages.length > 0);
@@ -139,28 +161,12 @@ export default function Assignment(props) {
     setSelectedLang(langreference?.language);
   });
 
-  // To update the title when we toggle the language
   useEffect(() => {
     setTimeout(() => {
-      let tryTranslate = localizedVal(containerName, '', 'HMRC-CHB-WORK-CLAIM!CASE!CLAIM');
-      if (tryTranslate === containerName) {
-        tryTranslate = localizedVal(tryTranslate, '', headerLocaleLocation);
-      }
-      if (containerName?.toLowerCase() === 'claim child benefit') {
-        tryTranslate = t('CLAIM_CHILD_BENEFIT');
-      }
-      // Set our translated header!
-      setHeader(tryTranslate);
-    }, 300);
-  }, [selectedLang]);
+      setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
+    }, 60);
 
-  useEffect(() => {
-    const headerFetch = setTimeout(() => {
-      setHeader(localizedVal(containerName, '', headerLocaleLocation));
-    }, 50);
-
-    return () => clearTimeout(headerFetch);
-  }, [headerLocaleLocation, containerName]);
+  }, [headerLocaleLocation, containerName, selectedLang]);
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -210,7 +216,9 @@ export default function Assignment(props) {
         if (errorVal.length > 0) {
           errorVal.forEach(element => {
             validatemessage =
-              validatemessage + (validatemessage.length > 0 ? '. ' : '') + element.message;
+              validatemessage +
+              (validatemessage.length > 0 ? '. ' : '') +
+              localizedVal(removeRedundantString(element.message), 'Messages');
           });
         }
 
@@ -464,7 +472,17 @@ export default function Assignment(props) {
     );
   }
 
+  function triggerBack() {
+    if (typeof appBacklinkProps.appBacklinkAction === 'function') {
+      appBacklinkProps.appBacklinkAction();
+    }
+    if (typeof appBacklinkPropsEducation.appBacklinkAction === 'function') {
+      appBacklinkPropsEducation.appBacklinkAction();
+    }
+  }
+
   const shouldRemoveFormTag = shouldRemoveFormTagForReadOnly(containerName);
+
   return (
     <>
       {serviceShutteredStatus ? (
@@ -487,21 +505,22 @@ export default function Assignment(props) {
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-              appBacklinkProps.appBacklinkAction && (
+              (appBacklinkProps.appBacklinkAction ||
+                appBacklinkPropsEducation.appBacklinkAction) && (
                 <Button
                   variant='backlink'
-                  onClick={e => {
-                    e.target.blur();
-                    appBacklinkProps.appBacklinkAction();
-                  }}
+                  onClick={triggerBack}
                   key='createstagebacklink'
                   attributes={{ type: 'link' }}
                 >
-                  {t(appBacklinkProps.appBacklinkText as string)}
+                  {t(
+                    (appBacklinkProps.appBacklinkText as string) ||
+                      (appBacklinkPropsEducation.appBacklinkText as string)
+                  )}
                 </Button>
               )
           }
-          <MainWrapper>
+          <MainWrapper serviceParam={serviceParam}>
             {errorSummary && errorMessages.length > 0 && (
               <ErrorSummary
                 errors={errorMessages.map(item =>

@@ -8,6 +8,7 @@ import RadioButtons from '../../../components/BaseComponents/RadioButtons/RadioB
 import '../../../../assets/css/appStyles.scss';
 import StaticPageErrorSummary from '../ErrorSummary';
 import setPageTitle from '../../../components/helpers/setPageTitleHelpers';
+import useTranslatedStaticPageError from '../../../components/helpers/hooks/useTranslatedStaticPageError';
 
 export default function RecentlyClaimedChildBenefit() {
   const { t } = useTranslation();
@@ -15,6 +16,12 @@ export default function RecentlyClaimedChildBenefit() {
   const [errorMsg, setErrorMsg] = useState('');
   const errorHref = `#serviceType`;
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+
+  const translatedError = useTranslatedStaticPageError(
+    'SELECT_CHILD_BENEFIT_SERVICE',
+    lang,
+    errorMsg
+  );
 
   useEffect(() => {
     const setPageTitleTimeout = setTimeout(() => {
@@ -38,15 +45,19 @@ export default function RecentlyClaimedChildBenefit() {
     },
     {
       value: 'checkonprogressofclaim',
-      label: t('CHECK_PROGRESS_OF_CLAIM')
+      label: t('CHECK_PROGRESS_OF_SUBMITTED_CLAIM')
+    },
+    {
+      value: 'viewmyproofofentitlement',
+      label: t('VIEW_MY_PROOF_OF_ENTITLEMENT')
     },
     {
       value: 'restartyourpayments',
-      label: t('RESTART_YOUR_PAYMENTS')
+      label: t('RESTART_MY_PAYMENTS')
     },
     {
       value: 'stopyourpayments',
-      label: t('STOP_YOUR_PAYMENTS')
+      label: t('STOP_MY_PAYMENTS')
     }
   ];
 
@@ -63,6 +74,11 @@ export default function RecentlyClaimedChildBenefit() {
           break;
         case 'checkonprogressofclaim':
           history.push('/check-on-claim');
+          break;
+        case 'viewmyproofofentitlement':
+          window.location.assign(
+            'https://www.tax.service.gov.uk/child-benefit/view-proof-entitlement'
+          );
           break;
         case 'restartyourpayments':
           window.location.assign(
@@ -84,7 +100,7 @@ export default function RecentlyClaimedChildBenefit() {
       <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle isPegaApp={false} />
       <div className='govuk-width-container'>
         <MainWrapper>
-          <StaticPageErrorSummary errorSummary={errorMsg} linkHref={errorHref} />
+          <StaticPageErrorSummary errorSummary={translatedError} linkHref={errorHref} />
           <form>
             <RadioButtons
               name='serviceType'
@@ -92,10 +108,9 @@ export default function RecentlyClaimedChildBenefit() {
               value=''
               useSmallRadios={false}
               options={radioOptions}
-              label={t('MAKE_SURE_YOU_USE_RIGHT_CHBS')}
+              label={t('WHICH_CHBS_DO_YOU_WANT_TO_USE')}
               legendIsHeading
-              hintText={`${t('CONFIRM_YOUR_SERVICE')}`}
-              errorText={errorMsg}
+              errorText={translatedError}
             ></RadioButtons>
             <button
               className='govuk-button'

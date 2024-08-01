@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import 'dayjs/locale/cy';
+import setPageTitle from '../../helpers/setPageTitleHelpers';
 
 declare const PCore: any;
 
@@ -14,7 +17,10 @@ const LanguageToggle = props => {
     lang = e.currentTarget.getAttribute('lang');
     setSelectedLang(lang);
     sessionStorage.setItem('rsdk_locale', `${lang}_GB`);
-    i18n.changeLanguage(lang);
+    dayjs.locale(lang);
+    i18n.changeLanguage(lang).then(() => {
+      setPageTitle();
+    });
     if (typeof PCore !== 'undefined') {
       PCore.getEnvironmentInfo().setLocale(`${lang}_GB`);
       PCore.getLocaleUtils().resetLocaleStore();
@@ -24,13 +30,24 @@ const LanguageToggle = props => {
         '@BASECLASS!DATAPAGE!D_SCOPEDREFERENCEDATALISTBYTYPE',
         'HMRC-CHB-WORK-CLAIM!CASE!CLAIM'
       ]);
-
-      PCore.getPubSubUtils().publish('languageToggleTriggered', {language: lang, localeRef: []});
+      
+      PCore.getPubSubUtils().publish('languageToggleTriggered', { language: lang, localeRef: [] });
     }
     if (languageToggleCallback) {
       languageToggleCallback(lang);
     }
   };
+
+  // Initialises language value in session storage, and for dayjs
+  useEffect(() => {
+    if (!sessionStorage.getItem('rsdk_locale')) {
+      sessionStorage.setItem('rsdk_locale', `en_GB`);
+      dayjs.locale('en');
+    } else {
+      const currentLang = sessionStorage.getItem('rsdk_locale').slice(0, 2).toLowerCase();
+      dayjs.locale(currentLang);
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = selectedLang;

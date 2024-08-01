@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GDSAutocomplete from '../../../BaseComponents/Autocomplete/Autocomplete';
 import Utils from '@pega/react-sdk-components/lib/components/helpers/utils';
 import isDeepEqual from 'fast-deep-equal/react';
@@ -8,6 +8,9 @@ import FieldValueList from '@pega/react-sdk-components/lib/components/designSyst
 import type { PConnFieldProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 import useIsOnlyField from '../../../helpers/hooks/QuestionDisplayHooks';
 import ReadOnlyDisplay from '../../../BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
+import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
+import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
+import { checkStatus } from '../../../helpers/utils';
 
 interface IOption {
   key: string;
@@ -52,6 +55,7 @@ interface AutoCompleteProps extends PConnFieldProps {
   displayOrder: string;
   hideLabel: boolean;
   name: string;
+  configAlternateDesignSystem: any;
 }
 
 export default function AutoComplete(props: AutoCompleteProps) {
@@ -68,9 +72,10 @@ export default function AutoComplete(props: AutoCompleteProps) {
     helperText,
     hideLabel,
     displayOrder,
+    configAlternateDesignSystem,
     name
   } = props;
-
+  const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   const [isAutocompleteLoaded, setAutocompleteLoaded] = useState(false);
@@ -154,23 +159,50 @@ export default function AutoComplete(props: AutoCompleteProps) {
     }
   }, [theDatasource]);
 
+  const [currentLang, setCurrentLang] = useState(
+    sessionStorage.getItem('rsdk_locale')?.substring(0, 2).toUpperCase() || 'EN'
+  );
+
+  PCore.getPubSubUtils().subscribe(
+    'languageToggleTriggered',
+    ({ language }) => {
+      setCurrentLang(language.toUpperCase());
+    },
+    ''
+  );
+
   useEffect(() => {
+    if (currentLang === 'CY') {
+      PCore.getLocaleUtils().loadLocaleResources([
+        `@BASECLASS!DATAPAGE!${datasource.toUpperCase()}`
+      ]);
+    }
+
     if (!displayMode && listType !== 'associated') {
       getDataPage(datasource, parameters, context).then((results: any) => {
         const optionsData: Array<any> = [];
         const displayColumn = getDisplayFieldsMetaData(columns);
+        const translationDataPage = `@BASECLASS!DATAPAGE!${datasource.toUpperCase()}`;
+        const localePath = datasource === 'D_NationalityList' ? 'Value' : 'CountryName';
+
         results?.forEach(element => {
           const val = element[displayColumn.primary]?.toString();
+          const valTranslated = PCore.getLocaleUtils().getLocaleValue(
+            val,
+            localePath,
+            translationDataPage
+          );
           const obj = {
             key: element[displayColumn.key] || element.pyGUID,
-            value: val
+            value: valTranslated
           };
           optionsData.push(obj);
         });
+
         setOptions(optionsData);
       });
     }
-  }, []);
+  }, [currentLang]);
 
   function handleChange(event) {
     const optionValue = event.target.value;
@@ -191,7 +223,16 @@ export default function AutoComplete(props: AutoCompleteProps) {
       e.preventDefault();
     }
   };
+  const selectedOption = options?.filter(item => {
+    return item?.key === value;
+  });
 
+  useEffect(() => {
+    if (selectedOption[0]?.value) {
+      window.sessionStorage.setItem('hasAutocompleteLoaded', 'true');
+      PCore.getPubSubUtils().publish('rerenderCYA', {});
+    }
+  }, [selectedOption[0]?.value]);
   useEffect(() => {
     const element = document.getElementById(formattedPropertyName) as HTMLInputElement;
     const elementUl = document.getElementById(
@@ -218,10 +259,34 @@ export default function AutoComplete(props: AutoCompleteProps) {
     return <FieldValueList name={hideLabel ? '' : label} value={value} variant='stacked' />;
   }
 
+  const inprogressStatus = checkStatus();
+
+  if (
+    hasBeenWrapped &&
+    configAlternateDesignSystem?.ShowChangeLink &&
+    inprogressStatus === 'Open-InProgress'
+  ) {
+    return (
+      <GDSCheckAnswers
+        label={props.label}
+        value={selectedOption[0]?.value}
+        name={name}
+        stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
+        getPConnect={getPConnect}
+        required={false}
+        disabled={false}
+        validatemessage=''
+        onChange={undefined}
+        readOnly={false}
+        testId=''
+        helperText=''
+        hideLabel={false}
+      />
+    );
+  }
+
   if (readOnly) {
-    const selectedOption = options?.filter(item => {
-      return item?.key === value;
-    });
     return (
       selectedOption?.length > 0 && (
         <ReadOnlyDisplay label={label} value={selectedOption[0]?.value} name={name} />

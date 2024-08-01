@@ -24,7 +24,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   const chbOfficeLink = 'https://www.gov.uk/child-benefit-tax-charge/your-circumstances-change';
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const sessionCaseId =
-    (sessionStorage.getItem('isNinoPresent') && sessionStorage.getItem('caseRefId')) || '';
+    (!sessionStorage.getItem('isNinoPresent') && sessionStorage.getItem('caseRefId')) || '';
   const referenceNumber = refId || sessionCaseId?.replace('HMRC-CHB-WORK ', '');
 
   function getFeedBackLink() {
@@ -91,13 +91,20 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         // eslint-disable-next-line no-console
         console.error(err);
       });
-
+    const options = {
+      invalidateCache: true
+    };
     PCore.getDataPageUtils()
-      .getPageDataAsync('D_DocumentContent', 'root', {
-        DocumentID: docIDForReturnSlip,
-        Locale: locale,
-        CaseID: caseId || sessionStorage.getItem('caseRefId')
-      })
+      .getPageDataAsync(
+        'D_DocumentContent',
+        'root',
+        {
+          DocumentID: docIDForReturnSlip,
+          Locale: locale,
+          CaseID: caseId || sessionStorage.getItem('caseRefId')
+        },
+        options
+      )
       .then(pageData => {
         setReturnSlipContent(pageData.DocumentContentHTML);
       })
@@ -241,7 +248,12 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       </>
     );
   };
-
+  useEffect(() => {
+    const element: HTMLElement = document.querySelector('div.rdlWrapperDiv');
+    if (element) {
+      element.style.display = 'none';
+    }
+  });
   const setCasetype = () => {
     if (caseStatus === undefined) {
       if (!loading && isBornAbroadOrAdopted) {

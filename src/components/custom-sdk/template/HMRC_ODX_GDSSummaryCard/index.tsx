@@ -31,6 +31,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
       break;
   }
   const [childName, setChildName] = useState(itemName);
+
   useEffect(() => {
     const elms: Array<string> = [];
     let finalELms: Array<string> = [];
@@ -72,7 +73,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
   useEffect(() => {
     formElms.forEach(field => {
       if (
-        (field as any)?.props?.label === 'First Name' ||
+        (field as any)?.props?.label === 'Name' ||
         (field as any)?.props?.label === 'Enw cyntaf'
       ) {
         setChildName((field as any)?.props?.value);
@@ -83,10 +84,25 @@ export default function HmrcOdxGdsSummaryCard(props) {
   const [hiddenText, setHiddenText] = useState('');
 
   useEffect(() => {
-    const updatedHiddenText =
-      useType === 2 ? `${formattedValues[0]} ${childName}` : `${childName} ${formattedValues[0]}`;
-    setHiddenText(updatedHiddenText);
-  }, [childName, formattedValues]);
+    if (!formattedValues || formattedValues.length === 0 || !childName) return;
+
+    let combinedText;
+    switch (useType) {
+      case '2':
+        combinedText = `${formattedValues[0]} ${childName}`;
+        break;
+      case '4':
+        combinedText = `${t('POE_LABEL_NAME')} ${formattedValues[0]}`;
+        break;
+      default:
+        combinedText = `${childName} ${formattedValues[0]}`;
+        break;
+    }
+
+    if (combinedText !== hiddenText) {
+      setHiddenText(combinedText);
+    }
+  }, [useType, formattedValues, childName]);
 
   const handleOnClick = (action: string) => {
     switch (action) {
@@ -105,7 +121,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
 
   return (
     <StyledHmrcOdxGdsSummaryCardWrapper>
-      <h2>{sectionHeader}</h2>
+      {sectionHeader && <h2>{sectionHeader}</h2>}
       <Grid
         container={{
           cols: `repeat(${nCols}, minmax(0, 1fr))`,
@@ -114,7 +130,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
       >
         <div className='govuk-summary-card'>
           <div className='govuk-summary-card__title-wrapper'>
-            <h2 className='govuk-summary-card__title'>{itemName}</h2>
+            {itemName && <h2 className='govuk-summary-card__title'>{itemName}</h2>}
             <ul className='govuk-summary-card__actions'>
               {!isSingleEntity(pageReference, getPConnect) && (
                 <li className='govuk-summary-card__action remove-link'>

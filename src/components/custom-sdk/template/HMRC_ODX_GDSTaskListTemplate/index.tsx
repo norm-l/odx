@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps';
 import StyledHmrcOdxGdsTaskListTemplateWrapper from './styles';
 import './TaskListTemplate.css';
+import Button from '../../../BaseComponents/Button/Button';
 
 interface HmrcOdxGdsTaskListTemplateProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
@@ -59,7 +60,9 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
     }
   });
 
-  const handleOnClick = (section: string) => {
+  const handleOnClick = (section: string, event) => {
+    event.preventDefault();
+    window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
     getPConnect().setValue('.SelectedTask', section, '', false);
     getPConnect().getActionsApi().finishAssignment(context);
     PCore.getPubSubUtils().publish('assignmentFinishedOnTaskListClicked', {});
@@ -101,11 +104,11 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
         {children[0]}
       </Grid>
       <div className='govuk-!-padding-bottom-4'>
-        <p className='govuk-body govuk-!-font-weight-bold'>
+        <h2 className='govuk-heading-s'>
           {completedSections < totalSections
             ? `${t('CLAIM')} ${t('INCOMPLETE')}`
             : `${t('CLAIM')} ${t('COMPLETE')}`}
-        </p>
+        </h2>
         <p className='govuk-body govuk-!-padding-bottom-4'>
           {`${t('YOU_HAVE_COMPLETED')} ${completedSections} ${t('OF')} ${totalSections} ${t(
             'SECTIONS'
@@ -125,7 +128,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
                           className='govuk-link govuk-task-list__link'
                           href='#'
                           aria-describedby={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
-                          onClick={() => handleOnClick(`${task.TaskLabel}`)}
+                          onClick={event => handleOnClick(`${task.TaskLabel}`, event)}
                         >
                           {labelStatusMapping(task.TaskLabel)}
                         </a>
@@ -150,7 +153,9 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
                           className='govuk-task-list__status'
                           id={`${task.TaskLabel.replaceAll(' ', '')}-${key}-status`}
                         >
-                          <strong className='govuk-tag govuk-tag--blue'>{labelStatusMapping(task.TaskStatus)}</strong>
+                          <strong className='govuk-tag govuk-tag--blue'>
+                            {labelStatusMapping(task.TaskStatus)}
+                          </strong>
                         </div>
                       )}
 
@@ -184,14 +189,15 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
         </ul>
       </div>
       {completedSections === totalSections ? (
-        <button
-          className='govuk-button'
-          data-module='govuk-button'
-          onClick={() => handleOnClick(cssHooks === 'unauth' ? 'Continue' : 'Save And Continue')}
-          type='button'
+        <Button
+          name={cssHooks === 'unauth' ? t('CONTINUE') : t('SAVE_AND_CONTINUE')}
+          variant='primary'
+          onClick={event =>
+            handleOnClick(cssHooks === 'unauth' ? 'Continue' : 'Save And Continue', event)
+          }
         >
           {cssHooks === 'unauth' ? t('CONTINUE') : t('SAVE_AND_CONTINUE')}
-        </button>
+        </Button>
       ) : (
         <></>
       )}

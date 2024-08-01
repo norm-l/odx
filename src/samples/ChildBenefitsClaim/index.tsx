@@ -37,7 +37,6 @@ declare const myLoadMashup: any;
 
 /* Time out modal functionality */
 let applicationTimeout = null;
-let signoutTimeout = null;
 // Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
 let milisecondsTilSignout = 115 * 1000;
 let milisecondsTilWarning = 780 * 1000;
@@ -45,13 +44,9 @@ let milisecondsTilWarning = 780 * 1000;
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
 function initTimeout(setShowTimeoutModal) {
   clearTimeout(applicationTimeout);
-  clearTimeout(signoutTimeout);
 
   applicationTimeout = setTimeout(() => {
     setShowTimeoutModal(true);
-    signoutTimeout = setTimeout(() => {
-      triggerLogout();
-    }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 }
 
@@ -93,6 +88,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function displayPega() {
+    const pegaElem = document.getElementById('pega-part-of-page');
+    pegaElem.style.display = 'block';
     resetAppDisplay();
     setShowPega(true);
   }
@@ -120,7 +117,7 @@ export default function ChildBenefitsClaim() {
   let operatorId = '';
   const serviceName = t('CLAIM_CHILD_BENEFIT');
   registerServiceName(serviceName);
-  let assignmentFinishedFlag = false;
+
   useEffect(() => {
     setPageTitle();
   }, [
@@ -136,7 +133,7 @@ export default function ChildBenefitsClaim() {
   const [submittedClaims, setSubmittedClaims] = useState([]);
 
   function doRedirectDone() {
-    history.push('/');
+    history.replace('/');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
@@ -158,6 +155,7 @@ export default function ChildBenefitsClaim() {
     if (pConn) {
       setIsCreateCaseBlocked(true);
       createCase();
+      sessionStorage.setItem('assignmentFinishedFlag', 'false');
     }
   }
 
@@ -165,10 +163,12 @@ export default function ChildBenefitsClaim() {
     // Added to ensure that clicking begin claim restarts timeout
     staySignedIn(setShowTimeoutModal);
     displayStartPage();
+    setIsCreateCaseBlocked(false);
   }
   function returnToPortalPage() {
     staySignedIn(setShowTimeoutModal);
     setServiceNotAvailable(false);
+
     displayUserPortal();
     PCore.getContainerUtils().closeContainerItem(
       PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
@@ -194,6 +194,8 @@ export default function ChildBenefitsClaim() {
   }
 
   function closeContainer() {
+    const pegaElem = document.getElementById('pega-part-of-page');
+    pegaElem.style.display = 'none';
     displayUserPortal();
   }
 
@@ -269,7 +271,9 @@ export default function ChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        if (!assignmentFinishedFlag) { // Temporary workaround to restrict infinite update calls
+        const assignmentFinishedFlag = sessionStorage.getItem('assignmentFinishedFlag');
+        if (assignmentFinishedFlag !== 'true') {
+          // Temporary workaround to restrict infinite update calls
           setShowStartPage(false);
           setShowUserPortal(false);
           setShowPega(false);
@@ -284,8 +288,8 @@ export default function ChildBenefitsClaim() {
             displayServiceNotAvailable();
 
             PCore.getContainerUtils().closeContainerItem(context);
-            //Temporary workaround to restrict infinite update calls
-            assignmentFinishedFlag = true;
+            //  Temporary workaround to restrict infinite update calls
+            sessionStorage.setItem('assignmentFinishedFlag', 'true');
             PCore?.getPubSubUtils().unsubscribe(
               PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
               'assignmentFinished'
@@ -512,7 +516,11 @@ export default function ChildBenefitsClaim() {
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
   }
 
+  useEffect(() => {
+    window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
+  });
   // One time (initialization) subscriptions and related unsubscribe
+
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
       const sdkConfigAuth = sdkConfig.authConfig;
@@ -645,6 +653,7 @@ export default function ChildBenefitsClaim() {
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
         signoutHandler={() => triggerLogout()}
+        milisecondsTilSignout={milisecondsTilSignout}
         isAuthorised
       />
 
