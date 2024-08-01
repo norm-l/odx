@@ -56,7 +56,7 @@ export default function Landing({
     data.forEach(item => {
         const claimItem = {
           claimRef: item.pyID,
-          dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD MMM YYYY' }),
+          dateCreated: item.pxCreateDateTime,
           dateUpdated: item.pxUpdateDateTime,
           children: [],
           actionButton: buttonContent,
