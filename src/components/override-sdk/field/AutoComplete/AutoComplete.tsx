@@ -206,9 +206,9 @@ export default function AutoComplete(props: AutoCompleteProps) {
 
   function handleChange(event) {
     const optionValue = event.target.value;
-    if (!sessionStorage.getItem('countryName')) {
-      sessionStorage.setItem('countryName', optionValue);
-    }
+    //  if (sessionStorage.getItem('countryName')) {
+    sessionStorage.setItem(`countryName${name}`, optionValue);
+    //   }
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
     });
@@ -279,7 +279,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId=''
         helperText=''
         hideLabel={false}
-        countryName={sessionStorage.getItem('countryName')}
+        countryName={sessionStorage.getItem(`countryName${name}`)}
       />
     );
   }
