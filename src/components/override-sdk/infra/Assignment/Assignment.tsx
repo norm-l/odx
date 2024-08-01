@@ -137,21 +137,9 @@ export default function Assignment(props) {
   // To update the title when we toggle the language
   useEffect(() => {
     setTimeout(() => {
-      const tryTranslate = localizedVal(containerName, '', PCore.getLocaleUtils().GENERIC_BUNDLE_KEY);
-      // Set our translated header!
-      setHeader(tryTranslate);
-    }, 300);
-  }, [selectedLang]);
-
-  useEffect(() => {
-    const headerFetch = setTimeout(() => {
-      setHeader(localizedVal(containerName, '', headerLocaleLocation));
-      if (!header || header === '') setHeader(localizedVal(containerName, '', PCore.getLocaleUtils().GENERIC_BUNDLE_KEY));
-      if (!header || header === '') setHeader(containerName);
-    }, 200);
-
-    return () => clearTimeout(headerFetch);
-  }, [headerLocaleLocation, containerName]);
+      setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
+    }, 60);
+  }, [headerLocaleLocation, containerName, selectedLang]);
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -201,7 +189,9 @@ export default function Assignment(props) {
         if (errorVal.length > 0) {
           errorVal.forEach(element => {
             validatemessage =
-              validatemessage + (validatemessage.length > 0 ? '. ' : '') + element.message;
+              validatemessage +
+              (validatemessage.length > 0 ? '. ' : '') +
+              localizedVal(removeRedundantString(element.message), 'Messages');
           });
         }
 
@@ -296,19 +286,22 @@ export default function Assignment(props) {
     });
   }
 
-  function handleBackLinkforInvalidDate(){
+  function handleBackLinkforInvalidDate() {
     const childPconnect = children[0]?.props?.getPConnect();
-    const dateField = PCore.getFormUtils().getEditableFields(childPconnect.getContextName()).filter(field => field.type.toLowerCase() === 'date');
-    if(dateField){
+    const dateField = PCore.getFormUtils()
+      .getEditableFields(childPconnect.getContextName())
+      .filter(field => field.type.toLowerCase() === 'date');
+    if (dateField) {
       dateField?.forEach(field => {
         const childPagRef = childPconnect.getPageReference();
-        const pageRef = thePConn.getPageReference() === childPagRef ? thePConn.getPageReference() : childPagRef;
+        const pageRef =
+          thePConn.getPageReference() === childPagRef ? thePConn.getPageReference() : childPagRef;
         const storedRefName = field.name?.replace(pageRef, '');
         const storedDateValue = childPconnect.getValue(`.${storedRefName}`);
-        if(!dayjs(storedDateValue, 'YYYY-MM-DD', true).isValid()) {
-          childPconnect.setValue(`.${storedRefName}`,'');
+        if (!dayjs(storedDateValue, 'YYYY-MM-DD', true).isValid()) {
+          childPconnect.setValue(`.${storedRefName}`, '');
         }
-      })
+      });
     }
   }
 
@@ -318,7 +311,7 @@ export default function Assignment(props) {
     if (sButtonType === 'secondary') {
       switch (sAction) {
         case 'navigateToStep': {
-          handleBackLinkforInvalidDate(); // clears the date value if there is invalid date, allowing back btn click(ref bug-7756) 
+          handleBackLinkforInvalidDate(); // clears the date value if there is invalid date, allowing back btn click(ref bug-7756)
           const navigatePromise = navigateToStep('previous', itemKey);
 
           clearErrors();
