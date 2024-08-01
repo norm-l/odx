@@ -90,7 +90,7 @@ export function establishPCoreSubscriptions({
 
   async function customAssignmentFinished() {
     const sdkConfig = await getSdkConfig();
-    if (sdkConfig.showResolutionStatuses.includes(checkStatus())) {
+    if (sdkConfig.showResolutionStatuses?.includes(checkStatus())) {
       showResolutionScreen();
     }
   }
