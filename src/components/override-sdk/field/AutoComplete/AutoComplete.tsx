@@ -278,7 +278,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId=''
         helperText=''
         hideLabel={false}
-        countryName={sessionStorage.getItem(`countryName${name}`)}
+        emptyValue={sessionStorage.getItem(`countryName${name}`)}
       />
     );
   }

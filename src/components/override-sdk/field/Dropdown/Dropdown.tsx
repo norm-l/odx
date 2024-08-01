@@ -109,7 +109,7 @@ export default function Dropdown(props) {
         testId=''
         helperText=''
         hideLabel={false}
-        countryName={sessionStorage.getItem('buildingSoceityName')}
+        emptyValue={sessionStorage.getItem('buildingSoceityName')}
       />
     );
   }
@@ -117,9 +117,9 @@ export default function Dropdown(props) {
   if (readOnly) {
     const optionsList = [...Utils.getOptionList(props, getPConnect().getDataObject())];
     const selectedOption = optionsList.find(option => option.key === value);
-    let countryName = '';
+    let buildingSoceityName = '';
     if (selectedOption && selectedOption.value) {
-      countryName = selectedOption.value;
+      buildingSoceityName = selectedOption.value;
     }
     return (
       <ReadOnlyDisplay
@@ -129,7 +129,7 @@ export default function Dropdown(props) {
           localePath,
           thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
         )}
-        countryName={countryName}
+        emptyValue={buildingSoceityName}
       />
     );
   }
