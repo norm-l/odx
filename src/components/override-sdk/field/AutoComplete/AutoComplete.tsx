@@ -206,9 +206,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
 
   function handleChange(event) {
     const optionValue = event.target.value;
-    //  if (sessionStorage.getItem('countryName')) {
     sessionStorage.setItem(`countryName${name}`, optionValue);
-    //   }
+
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
     });
