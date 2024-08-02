@@ -9,7 +9,6 @@
   "REGISTRATION_RECEIVED": "Registration received",
   "DATE_CREATED": "Date created",
 
-  "YOU_ARE_ABOUT_TO_SIGN_OUT": "You're about to sign out",
   "YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS": "You still need to save your progress. If you sign out without saving, your progress will be lost.",
   "TO_SAVE_YOUR_PROGRESS": "To save your progress, select the 'Save and come back later' link.",
   "SIGN-OUT": "Sign out",
@@ -84,6 +83,7 @@
   "BANNER_FEEDBACK_2": "will help us to improve it",
   "CLEAR_DATA": "Clear data",
 
+  "YOU_ARE_ABOUT_TO_SIGN_OUT": "You're about to sign out",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "For your security, we will sign you out in",
   "2_MINUTES": "2 minutes",
   "FOR_YOUR_SECURITY": "For your security",
