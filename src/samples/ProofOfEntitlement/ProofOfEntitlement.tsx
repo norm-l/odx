@@ -13,6 +13,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import { formatCurrency } from '../../components/helpers/utils';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
+import LoadingSpinner from '../../components/helpers/LoadingSpinner/LoadingSpinner';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -22,7 +23,8 @@ export default function ProofOfEntitlement() {
   const [showNoAward, setShowNoAward] = useState(false);
   const [showProblemWithService, setShowProblemWithService] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
-  const [b64PDFstring, setB64PDFstring] = useState(false);
+  // const [b64PDFstring, setB64PDFstring] = useState(false);
+  const [pageContentReady, setPageContentReady] = useState(false);
 
   const history = useHistory();
   const { t } = useTranslation();
@@ -34,7 +36,20 @@ export default function ProofOfEntitlement() {
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   };
-
+  /* 
+  const getPDFContent = () => {
+    PCore.getDataPageUtils()
+      .getPageDataAsync('D_GetChBEntitlementContent', 'root', {
+        NINO: PCore.getEnvironmentInfo().getOperatorIdentifier(),
+        DocumentID: 'POE0001',
+        Locale: PCore.getEnvironmentInfo().Locale
+      })
+      .then(result => {
+        setB64PDFstring(result.pyNote);
+        return result.pyNote;
+      });
+  };
+*/
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
   }, []);
@@ -54,10 +69,13 @@ export default function ProofOfEntitlement() {
             // If no claimant data in response, assume no award (or api error)
             if (result.IsAPIError) {
               setShowProblemWithService(true);
+              setPageContentReady(true);
             } else if (result.HasAward === false || !result.Claimant) {
               setShowNoAward(true);
+              setPageContentReady(true);
             } else {
               setEntitlementData(result);
+              setPageContentReady(true);
             }
           })
           .catch(() => {
@@ -65,15 +83,7 @@ export default function ProofOfEntitlement() {
           });
       });
 
-      PCore.getDataPageUtils()
-        .getPageDataAsync('D_GetChBEntitlementContent', 'root', {
-          NINO: PCore.getEnvironmentInfo().getOperatorIdentifier(),
-          DocumentID: 'POE0001',
-          Locale: PCore.getEnvironmentInfo().locale.replaceAll('-', '_')
-        })
-        .then(result => {
-          setB64PDFstring(result.pyNote);
-        });
+      // getPDFContent();
     });
   }, []);
 
@@ -97,7 +107,7 @@ export default function ProofOfEntitlement() {
         signoutButtonText='Sign out'
         staySignedInButtonText='Stay signed in'
       />
-      {sdkIsLoggedIn() && (
+      {(pageContentReady && (
         <div className='govuk-width-container' id='poe-page'>
           <MainWrapper>
             {entitlementData && (
@@ -110,6 +120,7 @@ export default function ProofOfEntitlement() {
                   <a href='#' className='govuk-link' onClick={window.print}>
                     {t('PRINT_THIS_PAGE')}
                   </a>
+                  {/* US-14781: Waiting for Buisness confirmation for download functionality 
                   <br />
                   <a
                     className='govuk-link'
@@ -118,6 +129,7 @@ export default function ProofOfEntitlement() {
                   >
                     {t('DOWNLOAD_THIS_PAGE')}
                   </a>
+            */}
                 </p>
                 <p className='govuk-body'>
                   {t('PROOF_ENTITLEMENT_CONFIRMATION')} {entitlementData.Claimant?.pyFullName}{' '}
@@ -243,7 +255,7 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )}
+      )) || <LoadingSpinner bottomText='Loading' size='30px' />}
       <AppFooter />
     </>
   );
