@@ -42,7 +42,7 @@ export default function ProofOfEntitlement() {
       .getPageDataAsync('D_GetChBEntitlementContent', 'root', {
         NINO: PCore.getEnvironmentInfo().getOperatorIdentifier(),
         DocumentID: 'POE0001',
-        Locale: PCore.getEnvironmentInfo().Locale
+        Locale: PCore.getEnvironmentInfo().locale.replaceAll('-', '_')
       })
       .then(result => {
         setB64PDFstring(result.pyNote);
@@ -255,7 +255,7 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )) || <LoadingSpinner bottomText='Loading' size='30px' />}
+      )) || <LoadingSpinner bottomText={t('Loading')} size='30px' />}
       <AppFooter />
     </>
   );
