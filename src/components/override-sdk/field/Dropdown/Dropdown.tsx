@@ -55,7 +55,7 @@ export default function Dropdown(props) {
         const selectedOption = optionsList.find(option => option.key === value);
         if (selectedOption && selectedOption.value) {
           setDisplayValue(selectedOption.value);
-          sessionStorage.setItem('buildingSoceityName', selectedOption.value);
+          sessionStorage.setItem('dropdownEmptyValue', selectedOption.value);
         }
         setOptions(optionsList);
       } catch (err) {
@@ -109,7 +109,7 @@ export default function Dropdown(props) {
         testId=''
         helperText=''
         hideLabel={false}
-        emptyValue={sessionStorage.getItem('buildingSoceityName')}
+        emptyValue={sessionStorage.getItem('dropdownEmptyValue')}
       />
     );
   }

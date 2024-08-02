@@ -206,7 +206,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
 
   function handleChange(event) {
     const optionValue = event.target.value;
-    sessionStorage.setItem(`countryName${name}`, optionValue);
+    sessionStorage.setItem(`autocompleteEmptyValue${name}`, optionValue);
 
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
@@ -278,7 +278,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         testId=''
         helperText=''
         hideLabel={false}
-        emptyValue={sessionStorage.getItem(`countryName${name}`)}
+        emptyValue={sessionStorage.getItem(`autocompleteEmptyValue${name}`)}
       />
     );
   }
