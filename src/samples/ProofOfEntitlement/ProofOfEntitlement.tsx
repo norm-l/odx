@@ -27,9 +27,9 @@ export default function ProofOfEntitlement() {
   // const [b64PDFstring, setB64PDFstring] = useState(false);
   const [pageContentReady, setPageContentReady] = useState(false);
 
-  const { hmrcURL } = useHMRCExternalLinks(); 
+  const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   registerServiceName(t('CHB_HOMEPAGE_HEADING'));
 
@@ -91,7 +91,7 @@ export default function ProofOfEntitlement() {
     <>
       <AppHeader
         appname={t('CHB_HOMEPAGE_HEADING')}
-        hasLanguageToggle        
+        hasLanguageToggle
         betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
         handleSignout={sdkIsLoggedIn() ? triggerLogout : null}
       />
@@ -183,8 +183,7 @@ export default function ProofOfEntitlement() {
                     value={entitlementData.Claimant?.CurrentAddress?.AddressCSV}
                     name={
                       entitlementData.Claimant?.CurrentAddress?.AddressCSV.indexOf(',') ? 'CSV' : ''
-                    }                           
-   
+                    }
                   />
                   <ReadOnlyDisplay
                     key='amount'
@@ -257,7 +256,7 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )) || <LoadingSpinner bottomText={t('Loading')} size='30px' />}
+      )) || <LoadingSpinner bottomText={t('LOADING')} size='30px' />}
       <AppFooter />
     </>
   );
