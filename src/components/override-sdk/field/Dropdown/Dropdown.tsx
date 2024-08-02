@@ -117,9 +117,9 @@ export default function Dropdown(props) {
   if (readOnly) {
     const optionsList = [...Utils.getOptionList(props, getPConnect().getDataObject())];
     const selectedOption = optionsList.find(option => option.key === value);
-    let buildingSoceityName = '';
+    let dropdownValue = '';
     if (selectedOption && selectedOption.value) {
-      buildingSoceityName = selectedOption.value;
+      dropdownValue = selectedOption.value;
     }
     return (
       <ReadOnlyDisplay
@@ -129,7 +129,7 @@ export default function Dropdown(props) {
           localePath,
           thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
         )}
-        emptyValue={buildingSoceityName}
+        emptyValue={dropdownValue}
       />
     );
   }
