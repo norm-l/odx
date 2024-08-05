@@ -105,7 +105,7 @@ const ConfirmationPage = ({ isSoleTrader }) => {
     return (
       <>
         <MainWrapper showPageNotWorkingLink={false}>
-          <div className='govuk-panel govuk-panel--confirmation govuk-!-padding-bottom-9 govuk-!-margin-bottom-7'>
+          <div className='govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-8'>
             {getPanelContent()}
           </div>
           {getBodyContent()}

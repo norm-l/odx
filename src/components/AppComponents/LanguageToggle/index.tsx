@@ -26,7 +26,8 @@ const LanguageToggle = props => {
       PCore.getLocaleUtils().resetLocaleStore();
       PCore.getLocaleUtils().loadLocaleResources([
         PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
-        '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
+        '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE',
+        '@BASECLASS!DATAPAGE!D_SALISTREFERENCEDATABYTYPE'
       ]);
 
       PCore.getPubSubUtils().publish('languageToggleTriggered', { language: lang, localeRef: [] });
