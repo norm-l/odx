@@ -7,6 +7,7 @@ interface HmrcOdxTestProps extends PConnFieldProps {
   name?: string;
   stepId?: any;
   hiddenText?: string;
+  emptyValue?: string;
 }
 
 // Duplicated runtime code from React SDK
@@ -15,7 +16,17 @@ interface HmrcOdxTestProps extends PConnFieldProps {
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const COMMA_DELIMITED_FIELD = 'CSV';
-  const { label, value, name, stepId, hiddenText, getPConnect, placeholder, helperText } = props;
+  const {
+    label,
+    value,
+    name,
+    stepId,
+    hiddenText,
+    getPConnect,
+    placeholder,
+    helperText,
+    emptyValue
+  } = props;
   const [formattedValue, setFormattedValue] = useState<string | Array<string>>(value);
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
@@ -70,7 +81,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   return (
     <div className='govuk-summary-list__row'>
       <dt className='govuk-summary-list__key'>{label}</dt>
-      <dd className='govuk-summary-list__value' data-is-csv={isCSV}>
+      <dd className='govuk-summary-list__value' data-empty-value={emptyValue} data-is-csv={isCSV}>
         {isValueNotBlank && Array.isArray(formattedValue) ? (
           <>
             {formattedValue.map(item => (

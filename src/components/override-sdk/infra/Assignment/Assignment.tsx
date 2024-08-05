@@ -465,6 +465,7 @@ export default function Assignment(props) {
               .then(() => {
                 scrollToTop();
                 setErrorSummary(false);
+                PCore.getPubSubUtils().publish('CustomAssignmentFinished');
               })
               .catch(() => {
                 scrollToTop();

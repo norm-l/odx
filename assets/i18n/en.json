@@ -408,5 +408,6 @@
   "MUST_TELL": "You must tell the",
   "LEAVES_FULL_TIME_EDUCATION": "Child Benefit Office immediately if your child leaves full time non-advanced education or approved training",
   "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
-  "RETURN_TO_CHANGE_CLAIM": "Return to change claim"
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim",
+  "LOADING": "Loading"
 }
