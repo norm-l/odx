@@ -17,7 +17,7 @@ export default function Landing({
 }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
-  const [showStartClaim, setShowStartClaim] = useState({visibility: false, fromDefaultPortal: false});
+  const [showStartClaim, setShowStartClaim] = useState({status: false, fromDefaultPortal: false});
   const [loadingInProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [loadingSubmittedClaims, setLoadingSubmittedClaims] = useState(true);
 
