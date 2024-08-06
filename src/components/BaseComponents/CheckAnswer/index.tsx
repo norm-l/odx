@@ -70,7 +70,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const placeholderOrHelperText = placeholder || helperText;
 
   const renderCYAValue = () =>
-    !isValueNotBlank ? (
+    !isValueNotBlank && !emptyValue ? (
       <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
         {placeholderOrHelperText}
       </a>
