@@ -55,7 +55,7 @@ export default function Assignment(props) {
     : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
   const actionsAPI = thePConn.getActionsApi();
-  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const localizedVal = thePConn.getLocalizedValue;//PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
     .getCaseInfo()
@@ -161,12 +161,7 @@ export default function Assignment(props) {
     setSelectedLang(langreference?.language);
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
-    }, 60);
-
-  }, [headerLocaleLocation, containerName, selectedLang]);
+  
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -531,7 +526,7 @@ export default function Assignment(props) {
             {(!isOnlyFieldDetails.isOnlyField ||
               containerName?.toLowerCase().includes('check your answer') ||
               containerName?.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>{header}</h1>
+              <h1 className='govuk-heading-l'>{localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS')}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <a

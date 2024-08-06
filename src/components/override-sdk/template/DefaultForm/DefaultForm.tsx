@@ -34,7 +34,7 @@ export default function DefaultForm(props) {
   // defaultForm kids
   const arChildren = getPConnect().getChildren()[0].getPConnect().getChildren();
   let instructionText =
-    props.instructions === 'none' || props.instructions === null ? '' : props.instructions;
+    props.instructions === 'none' || props.instructions === null ? '' : getPConnect().getLocalizedValue(props.instructions);
   // If the parent Default Form has instruction text passed through, append it here so that it is not
   // lost in nested default forms
   if (passedThroughInstructionText) {
