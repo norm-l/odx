@@ -1,11 +1,9 @@
 // @ts-nocheck
 
 import React, { useEffect, useState } from 'react';
-import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
-import { GBdate } from '../../components/helpers/utils';
 
 export default function Landing({
   handleStartCliam,
@@ -56,7 +54,7 @@ export default function Landing({
     data.forEach(item => {
         const claimItem = {
           claimRef: item.pyID,
-          dateCreated: DateFormatter.Date(item.pxCreateDateTime, { format: 'DD MMM YYYY' }),
+          dateCreated: item.pxCreateDateTime,
           dateUpdated: item.pxUpdateDateTime,
           children: [],
           actionButton: buttonContent,
@@ -70,7 +68,7 @@ export default function Landing({
             const newChild = {
               firstName: child.name,
               lastName: ' ',
-              dob: child.dob ? GBdate(child.dob) : ''
+              dob: child.dob
             };
             claimItem.children.push(newChild);
           });
@@ -79,7 +77,7 @@ export default function Landing({
             firstName: item.ClaimExtension.Child.pyFirstName,
             lastName: item.ClaimExtension.Child.pyLastName,
             dob: item.ClaimExtension.Child.DateOfBirth
-              ? GBdate(item.ClaimExtension.Child.DateOfBirth)
+              ? (item.ClaimExtension.Child.DateOfBirth)
               : ''
           });
         }

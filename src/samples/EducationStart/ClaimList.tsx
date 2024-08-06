@@ -33,6 +33,11 @@ export default function ClaimsList(props) {
     });
   };
 
+  function openPegaPortalPage() {
+    scrollToTop();
+    setShowLandingPage(false);
+  }
+
   async function _rowClick(e, row: any) {
     e.preventDefault();
     const { pzInsKey, pyAssignmentID } = row;
@@ -48,7 +53,7 @@ export default function ClaimsList(props) {
       PCore.getMashupApi()
         .openAssignment(pyAssignmentID, target, openAssignmentOptions)
         .then(() => {
-          scrollToTop();
+          openPegaPortalPage();
         })
         .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
     } else if (rowClickAction === 'OpenCase') {
@@ -59,11 +64,10 @@ export default function ClaimsList(props) {
         PCore.getMashupApi()
           .openCase(pzInsKey, target, { pageName: 'SummaryClaim' })
           .then(() => {
-            scrollToTop();
+            openPegaPortalPage();
           });
       }
     }
-    setShowLandingPage(false);
   }
 
   function getCurrentDate(date) {
@@ -111,7 +115,7 @@ export default function ClaimsList(props) {
               {fieldType}
             </dt>
             <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-              {claimItem.dateCreated}
+              {dayjs(claimItem.dateCreated).format('DD MMM YYYY')}
             </dd>
             {!child?.firstName && !child?.lastName && (
               <dd className='govuk-summary-list__actions govuk-!-width-one-third'>

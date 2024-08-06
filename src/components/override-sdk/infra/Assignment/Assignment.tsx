@@ -55,7 +55,7 @@ export default function Assignment(props) {
     : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
   const actionsAPI = thePConn.getActionsApi();
-  const localizedVal = thePConn.getLocalizedValue;//PCore.getLocaleUtils().getLocaleValue;
+  const localizedVal = thePConn.getLocalizedValue; //PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
     .getCaseInfo()
@@ -160,8 +160,6 @@ export default function Assignment(props) {
   PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
     setSelectedLang(langreference?.language);
   });
-
-  
 
   useEffect(() => {
     if (children && children.length > 0) {
@@ -424,6 +422,7 @@ export default function Assignment(props) {
               .then(() => {
                 scrollToTop();
                 setErrorSummary(false);
+                PCore.getPubSubUtils().publish('CustomAssignmentFinished');
               })
               .catch(() => {
                 scrollToTop();
