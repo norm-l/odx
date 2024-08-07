@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 // @ts-nocheck
 import { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';

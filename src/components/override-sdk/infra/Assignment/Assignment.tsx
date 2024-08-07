@@ -55,7 +55,7 @@ export default function Assignment(props) {
     : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
   const actionsAPI = thePConn.getActionsApi();
-  const localizedVal = thePConn.getLocalizedValue; //PCore.getLocaleUtils().getLocaleValue;
+  const localizedVal = thePConn.getLocalizedValue;
   const localeCategory = 'Assignment';
   const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
     .getCaseInfo()
@@ -73,10 +73,8 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
-  const [header, setHeader] = useState('');
 
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  const [selectedLang, setSelectedLang] = useState(lang);
 
   const [hasAutoCompleteError, setHasAutoCompleteError] = useState('');
 
@@ -154,13 +152,7 @@ export default function Assignment(props) {
   if (caseInfo?.assignments?.length > 0) {
     containerName = caseInfo.assignments[0].name;
   }
-
-  const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
-
-  PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
-    setSelectedLang(langreference?.language);
-  });
-
+ 
   useEffect(() => {
     if (children && children.length > 0) {
       const oWorkItem = children[0].props.getPConnect();
