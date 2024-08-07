@@ -95,7 +95,7 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
           renderCYAValue()
         )}
       </dd>
-      {isValueNotBlank && (
+      {(isValueNotBlank || emptyValue) && (
         <dd className='govuk-summary-list__actions'>
           <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
             {t('GDS_ACTION_CHANGE')}
