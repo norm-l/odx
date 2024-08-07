@@ -380,7 +380,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   if (shuttered === null) {
     return null;
-  } else if (currentDisplay !== 'servicenotavailable') {
+  } else if (currentDisplay === 'servicenotavailable') {
     return (
       <>
         <AppHeader
