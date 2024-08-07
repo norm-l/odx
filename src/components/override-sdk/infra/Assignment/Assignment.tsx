@@ -211,7 +211,7 @@ export default function Assignment(props) {
             validatemessage =
               validatemessage +
               (validatemessage.length > 0 ? '. ' : '') +
-              localizedVal(removeRedundantString(element.message), 'Messages');
+              localizedVal(removeRedundantString(element.message), 'Messages', localeReference);
           });
         }
 
@@ -240,7 +240,7 @@ export default function Assignment(props) {
 
           acc.push({
             message: {
-              message: localizedVal(removeRedundantString(validatemessage)),
+              message: removeRedundantString(validatemessage),
               pageRef,
               fieldId,
               clearMessageProperty
