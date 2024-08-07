@@ -380,13 +380,14 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   if (shuttered === null) {
     return null;
-  } else if (currentDisplay === 'servicenotavailable') {
+  } else if (currentDisplay !== 'servicenotavailable') {
     return (
       <>
         <AppHeader
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
           handleSignout={handleSignout}
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />
