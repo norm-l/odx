@@ -92,6 +92,13 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const propName = thePConn.getStateProps()['value'];
   const formattedPropertyName = name || propName?.split('.')?.pop();
 
+  function customAssignmentFinished() {
+    sessionStorage.setItem(
+      `autocompleteEmptyValue${name}`,
+      sessionStorage.getItem(`autocompleteValue${name}`)
+    );
+  }
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'assets/lib/location-autocomplete.min.js';
@@ -100,6 +107,12 @@ export default function AutoComplete(props: AutoCompleteProps) {
     script.onload = () => {
       setAutocompleteLoaded(true);
     };
+
+    PCore.getPubSubUtils().subscribe(
+      'CustomAssignmentFinished',
+      customAssignmentFinished,
+      'customAssignmentFinished'
+    );
 
     return () => {
       document.body.removeChild(script);
@@ -206,8 +219,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }, [currentLang]);
 
   function handleChange(event) {
+    sessionStorage.setItem(`autocompleteValue${name}`, event.target.value);
     const optionValue = event.target.value;
-    sessionStorage.setItem(`autocompleteEmptyValue${name}`, optionValue);
 
     const selectedOptionKey = options.filter(item => {
       return item.value === optionValue;
