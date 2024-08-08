@@ -4,6 +4,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import AskHMRC from './AskHMRC';
 
 const ConfirmationPage = ({ isSoleTrader }) => {
   const { t } = useTranslation();
@@ -109,20 +110,7 @@ const ConfirmationPage = ({ isSoleTrader }) => {
             {getPanelContent()}
           </div>
           {getBodyContent()}
-          <hr className='govuk-section-break govuk-section-break--l govuk-section-break--visible'></hr>
-          <h2 className='govuk-heading-m'>{t('GET_HELP')}</h2>
-          <p>
-            {t('USE')}{' '}
-            <a
-              href='https://www.tax.service.gov.uk/ask-hmrc/chat/self-assessment'
-              rel='noreferrer noopener'
-              target='_blank'
-              className='govuk-link'
-            >
-              {t('HRMC_ONLINE_ASSISTANT')}
-            </a>{' '}
-            {t('TO_GET_HELP_WITH_REGISTRATION')}
-          </p>
+          <AskHMRC />
         </MainWrapper>
       </>
     );
