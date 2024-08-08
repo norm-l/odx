@@ -95,7 +95,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   function customAssignmentFinished() {
     sessionStorage.setItem(
       `autocompleteEmptyValue${name}`,
-      sessionStorage.getItem(`autocompleteValue${name}`)
+      sessionStorage.getItem(`autocompleteValue${name}` || '')
     );
   }
 
@@ -219,7 +219,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }, [currentLang]);
 
   function handleChange(event) {
-    sessionStorage.setItem(`autocompleteValue${name}`, event.target.value);
+    sessionStorage.setItem(`autocompleteValue${name}`, event.target.value || '');
     const optionValue = event.target.value;
 
     const selectedOptionKey = options.filter(item => {
