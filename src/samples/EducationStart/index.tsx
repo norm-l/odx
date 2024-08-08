@@ -117,6 +117,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   };
 
   function returnToPortalPage() {
+    sessionStorage.setItem('assignmentFinishedFlag', 'false');
     setShowSignoutModal(false);
     staySignedIn(
       setShowTimeoutModal,
@@ -286,6 +287,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   useEffect(() => {
     if (showPega && pCoreReady && startClaimClicked) {
+      sessionStorage.setItem('assignmentFinishedFlag', 'false');
       let startingFields = {};
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
