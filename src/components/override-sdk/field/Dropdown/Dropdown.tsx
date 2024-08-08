@@ -55,7 +55,6 @@ export default function Dropdown(props) {
         const selectedOption = optionsList.find(option => option.key === value);
         if (selectedOption && selectedOption.value) {
           setDisplayValue(selectedOption.value);
-          // sessionStorage.setItem('dropdownEmptyValue', selectedOption.value);
         }
         sessionStorage.setItem('dropdownEmptyValue', selectedOption?.value ?? '');
         setOptions(optionsList);
