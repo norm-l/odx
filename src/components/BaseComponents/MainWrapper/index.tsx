@@ -10,9 +10,7 @@ export default function MainWrapper({
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
 
-
- const pageNotWorkingUrl =
-    `${hmrcURL}contact/report-technical-problem?newTab=true&service=${serviceParam}&referrerUrl=${window.location}`;
+  const pageNotWorkingUrl = `${hmrcURL}contact/report-technical-problem?newTab=true&service=${serviceParam}&referrerUrl=${window.location}`;
 
   return (
     <main className='govuk-main-wrapper govuk-main-wrapper--l' id='main-content' role='main'>
@@ -20,15 +18,17 @@ export default function MainWrapper({
         <div className='govuk-grid-column-two-thirds'>
           {children}
           {showPageNotWorkingLink && (
-            <a
-              lang='en'
-              className='govuk-link hmrc-report-technical-issue '
-              rel='noreferrer noopener'
-              target='_blank'
-              href={pageNotWorkingUrl}
-            >
-              {t('PAGE_NOT_WORKING_PROPERLY')} {t('OPENS_IN_NEW_TAB')}
-            </a>
+            <p className='govuk-body'>
+              <a
+                lang='en'
+                className='govuk-link hmrc-report-technical-issue '
+                rel='noreferrer noopener'
+                target='_blank'
+                href={pageNotWorkingUrl}
+              >
+                {t('PAGE_NOT_WORKING_PROPERLY')} {t('OPENS_IN_NEW_TAB')}
+              </a>
+            </p>
           )}
         </div>
       </div>
