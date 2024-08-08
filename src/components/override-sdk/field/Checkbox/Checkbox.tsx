@@ -19,7 +19,9 @@ export default function CheckboxComponent(props) {
     hintText,
     readOnly,
     value,
-    configAlternateDesignSystem
+    configAlternateDesignSystem,
+    helperText,
+    placeholder
   } = props;
 
   // let label = props.label;
@@ -85,7 +87,8 @@ export default function CheckboxComponent(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );
@@ -118,7 +121,7 @@ export default function CheckboxComponent(props) {
             item={{ checked: value, label: caption, readOnly: false, hintText }}
             index={index}
             name={name}
-            inputProps={...inputProps}
+            inputProps={{ ...inputProps }}
             onChange={evt => {
               handleChange(evt);
               exclusiveOptionChangeHandler();
@@ -131,7 +134,7 @@ export default function CheckboxComponent(props) {
           item={{ checked: value, label: caption, readOnly: false, hintText }}
           index={index}
           name={name}
-          inputProps={...inputProps}
+          inputProps={{ ...inputProps }}
           onChange={evt => {
             handleChange(evt);
             exclusiveOptionChangeHandler();

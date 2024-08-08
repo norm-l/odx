@@ -55,8 +55,8 @@ export default function Dropdown(props) {
         const selectedOption = optionsList.find(option => option.key === value);
         if (selectedOption && selectedOption.value) {
           setDisplayValue(selectedOption.value);
-          sessionStorage.setItem('dropdownEmptyValue', selectedOption.value);
         }
+        sessionStorage.setItem('dropdownEmptyValue', selectedOption?.value ?? '');
         setOptions(optionsList);
       } catch (err) {
         // eslint-disable-next-line no-console
@@ -107,9 +107,10 @@ export default function Dropdown(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
-        emptyValue={sessionStorage.getItem('dropdownEmptyValue')}
+        emptyValue={sessionStorage.getItem('dropdownEmptyValue') || ''}
       />
     );
   }

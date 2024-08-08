@@ -12,6 +12,7 @@ export default function UserPortal(props) {
 
   useEffect(() => {
     setPageTitle();
+    sessionStorage.setItem('isTasklistScreen', 'false');
   }, []);
 
   return (

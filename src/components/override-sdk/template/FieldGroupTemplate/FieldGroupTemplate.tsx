@@ -10,7 +10,7 @@ import { checkStatus } from '../../../helpers/utils';
 declare const PCore: any;
 
 export default function Group(props) {
-  const { children, heading, instructions, readOnly, getPConnect } = props;
+  const { children, heading, instructions, readOnly, getPConnect, helperText, placeholder } = props;
 
   const thePConn = getPConnect();
   const actionsApi = thePConn.getActionsApi();
@@ -79,7 +79,8 @@ export default function Group(props) {
               onChange={undefined}
               readOnly={false}
               testId=''
-              helperText=''
+              helperText={helperText}
+              placeholder={placeholder}
               hideLabel={false}
             />
           );
