@@ -11,6 +11,7 @@ const LanguageToggle = props => {
   const { i18n } = useTranslation();
   let lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const [selectedLang, setSelectedLang] = useState(lang);
+  const [resourcebundles, setResourceBundles] = useState([]);
 
   const changeLanguage = e => {
     e.preventDefault();
@@ -28,7 +29,8 @@ const LanguageToggle = props => {
         PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
         '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE',
         '@BASECLASS!DATAPAGE!D_SCOPEDREFERENCEDATALISTBYTYPE',
-        'HMRC-CHB-WORK-CLAIM!CASE!CLAIM'
+        'HMRC-CHB-WORK-CLAIM!CASE!CLAIM',
+        ...resourcebundles
       ]);
       
       PCore.getPubSubUtils().publish('languageToggleTriggered', { language: lang, localeRef: [] });
@@ -39,7 +41,14 @@ const LanguageToggle = props => {
   };
 
   // Initialises language value in session storage, and for dayjs
-  useEffect(() => {
+  useEffect(() => {  
+    document.addEventListener('SdkConstellationReady', () => {
+      PCore.onPCoreReady(() => {
+        PCore.getPubSubUtils().subscribe(PCore.getConstants().PUB_SUB_EVENTS.EVENT_EXPRESS_LOCALACTION, (data) =>  {
+          setResourceBundles(data.submitResponse.uiResources.localeReferences);
+        })
+      })});
+
     if (!sessionStorage.getItem('rsdk_locale')) {
       sessionStorage.setItem('rsdk_locale', `en_GB`);
       dayjs.locale('en');
