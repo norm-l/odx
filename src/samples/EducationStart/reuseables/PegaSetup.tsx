@@ -87,9 +87,7 @@ export function establishPCoreSubscriptions({
       } else {
         showResolutionScreen();
       }
-    } else {
-
-    }
+    } 
   }
 
   async function customAssignmentFinished() {
