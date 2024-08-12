@@ -41,7 +41,8 @@ export function establishPCoreSubscriptions({
   setCaseId,
   setCaseStatus,
   setServiceNotAvailable,
-  setAssignmentCancelled
+  setAssignmentCancelled,
+  backToLandingPage
 }) {
   /* ********************************************
    * Registers close active container on end of assignment processing
@@ -121,7 +122,11 @@ export function establishPCoreSubscriptions({
    ******************************** */
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
-    () => {},
+    () => {
+      console.log('CLOSE_CONTAINER_ITEM');
+      // setShowLandingPage(true);
+      backToLandingPage(true);
+    },
     'closeContainer'
   );
 
@@ -131,6 +136,7 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
     () => {
+      console.log('ASSIGNMENT_OPENED');
       // console.log("SUBEVENT!! showPegaWhenAssignmentOpened")
       setShowPega(true);
     },
@@ -143,6 +149,7 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
     () => {
+      console.log('CASE_CREATED');
       // console.log("SUBEVENT!! showPegaWhenCaseCreated")
       setShowPega(true);
     },
@@ -152,6 +159,7 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
     () => {
+      console.log('CREATE_STAGE_SAVED');
       setAssignmentCancelled(true);
       // PM!! setShowPortalBanner(true);
       // PM!! setIsCreateCaseBlocked(false);
@@ -163,6 +171,8 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
     () => {
+      console.log('CASE_OPENED');
+      setShowPega(true);
       // PM!! displayPega();
     },
     'continueCase'
@@ -275,7 +285,8 @@ export function startMashup(
     setAssignmentPConnect,
     setShutterServicePage,
     setServiceNotAvailable,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    backToLandingPage
   },
   _AppContextValues: AppContextValues
 ) {
@@ -289,7 +300,8 @@ export function startMashup(
       setCaseId,
       setCaseStatus,
       setServiceNotAvailable,
-      setAssignmentCancelled
+      setAssignmentCancelled,
+      backToLandingPage
     });
     // PM!! setShowAppName(true);
 
@@ -402,6 +414,7 @@ export const useStartMashup = (
   const [caseId, setCaseId] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
   const [assignmentPConnect, setAssignmentPConnect] = useState(null);
+  const [toLandingPage, backToLandingPage] = useState(false);
 
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
@@ -446,7 +459,8 @@ export const useStartMashup = (
             setAssignmentPConnect,
             setShutterServicePage,
             setServiceNotAvailable,
-            setAssignmentCancelled
+            setAssignmentCancelled,
+            backToLandingPage
           },
           _AppContextValues
         );
@@ -468,6 +482,7 @@ export const useStartMashup = (
           'cancelAssignment'
         );
       PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished');
+      PCore?.getPubSubUtils().unsubscribe('closeContainer');
     };
     // PM!!
     /*
@@ -506,6 +521,8 @@ export const useStartMashup = (
     setServiceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    toLandingPage,
+    backToLandingPage
   };
 };

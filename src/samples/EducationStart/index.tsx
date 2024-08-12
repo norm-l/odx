@@ -82,7 +82,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     serviceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    toLandingPage
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
     serviceParam: educationStartParam
@@ -218,7 +219,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   useEffect(() => {
     if (shutterServicePage) {
       setCurrentDisplay('shutterpage');
-    } else if (showLandingPage && pCoreReady) {
+    } else if (showLandingPage && pCoreReady ) {
       setCurrentDisplay('landingpage');
     } else if (showPega) {
       setCurrentDisplay('pegapage');
@@ -269,6 +270,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
+    } else if (toLandingPage) {
+      setCurrentDisplay('landingpage');
     } else {
       setCurrentDisplay('loading');
     }
@@ -281,7 +284,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     shutterServicePage,
     serviceNotAvailable,
     pCoreReady,
-    showLandingPage
+    showLandingPage,
+    toLandingPage
   ]);
 
   useEffect(() => {
