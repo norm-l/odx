@@ -217,5 +217,9 @@
   "YOU_WILL_NEED_YOUR": "Bydd angen eich ",
   "YOU_WILL_NEED_YOUR_UNIQUE_TAXPAYER_REFERENCE_NUMBER": "Cyfeirnod Unigryw y Trethdalwr (UTR) arnoch.",
 
-  "I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS": "nid wyf yn gweithio mewn unrhyw un o’r swyddi hyn"
+  "I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS": "nid wyf yn gweithio mewn unrhyw un o’r swyddi hyn",
+  "GET_HELP": "Get help",
+  "USE": "Use ",
+  "HRMC_ONLINE_ASSISTANT": "HMRC's online assistant (opens in a new tab)",
+  "TO_GET_HELP_WITH_REGISTRATION": " to get help with your registration."
 }

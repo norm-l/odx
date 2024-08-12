@@ -4,6 +4,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
+import AskHMRC from './AskHMRC';
 
 const ConfirmationPage = ({ isSoleTrader }) => {
   const { t } = useTranslation();
@@ -109,6 +110,7 @@ const ConfirmationPage = ({ isSoleTrader }) => {
             {getPanelContent()}
           </div>
           {getBodyContent()}
+          <AskHMRC />
         </MainWrapper>
       </>
     );

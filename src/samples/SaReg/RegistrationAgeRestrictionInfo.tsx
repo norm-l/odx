@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import AskHMRC from './AskHMRC';
 
 const RegistrationAgeRestrictionInfo = () => {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ const RegistrationAgeRestrictionInfo = () => {
           <p className='govuk-body'>{t('YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS')}</p>
           <p className='govuk-body'>{t('IF_YOU_NEED_TO_REGISTER_CALL_HMRC')}</p>
         </div>
+        <AskHMRC />
       </MainWrapper>
     </>
   );

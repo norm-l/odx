@@ -21,6 +21,7 @@ import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import dayjs from 'dayjs';
+import AskHMRC from '../../../../samples/SaReg/AskHMRC';
 
 export interface ErrorMessageDetails {
   message: string;
@@ -479,6 +480,7 @@ export default function Assignment(props) {
               <h1 className='govuk-heading-l'>{header}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
+            <AskHMRC />
           </MainWrapper>
         </div>
       )}

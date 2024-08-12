@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import AskHMRC from './AskHMRC';
 
 const AlreadyRegisteredUserMessage = () => {
   const { t } = useTranslation();
@@ -79,6 +80,7 @@ const AlreadyRegisteredUserMessage = () => {
             </a>
           </p>
         </div>
+        <AskHMRC />
       </MainWrapper>
     </>
   );
