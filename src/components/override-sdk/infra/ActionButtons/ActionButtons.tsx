@@ -8,6 +8,7 @@ export default function ActionButtons(props) {
     props;
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
+  // This is for chb tactical solution only
   const taskListStepId = 'SubProcessSF7_AssignmentSF1';
   const thePConn = getPConnect();
   const _containerName = thePConn.getContainerName();

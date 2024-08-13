@@ -349,21 +349,26 @@ export default function Assignment(props) {
       });
   }
 
+  function getUniqueValueForEveryScreen() {
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const flowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+    const screenContext =
+      PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
+    const uniqueValueForEveryScreen = flowActionId + screenContext;
+    return uniqueValueForEveryScreen;
+  }
+
   useEffect(() => {
     const isEditMode = sessionStorage.getItem('isEditMode');
     if (isEditMode === 'true') {
       sessionStorage.setItem('isEditMode', 'false');
-      const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-        `${PCore.getConstants().APP.APP}/primary`
-      );
-      const flowActionId = PCore.getStoreValue(
-        '.ID',
-        'caseInfo.assignments[0].actions[0]',
-        contextWorkarea
-      );
-      const screenContext =
-        PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
-      const uniqueValueForEveryScreen = flowActionId + screenContext;
+      const uniqueValueForEveryScreen = getUniqueValueForEveryScreen();
       sessionStorage.setItem('uniqueValueForEveryScreen', uniqueValueForEveryScreen);
     }
   });
@@ -511,21 +516,12 @@ export default function Assignment(props) {
 
   function navigate(e, sButton) {
     const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
-    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
-      `${PCore.getConstants().APP.APP}/primary`
-    );
-    const currentFlowActionId = PCore.getStoreValue(
-      '.ID',
-      'caseInfo.assignments[0].actions[0]',
-      contextWorkarea
-    );
-    const currentScreenContext =
-      PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
-    const currentUniqueValueForEveryScreen = currentFlowActionId + currentScreenContext;
+    const currentUniqueValueForEveryScreen = getUniqueValueForEveryScreen();
 
     const storedUniqueValueForEveryScreen = sessionStorage.getItem('uniqueValueForEveryScreen');
     const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
     const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
+    // This is for chb tactical solution only
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
     if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
@@ -569,7 +565,8 @@ export default function Assignment(props) {
         <div id='Assignment'>
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' &&
-            sessionStorage.getItem('isTasklistScreen') !== 'true' ? (
+            sessionStorage.getItem('isTasklistScreen') !== 'true' &&
+            sessionStorage.getItem('isChildSummaryScreen') !== 'true' ? (
               <Button
                 variant='backlink'
                 onClick={e => {
@@ -583,7 +580,8 @@ export default function Assignment(props) {
           )}
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-          sessionStorage.getItem('isTasklistScreen') !== 'true' ? (
+          sessionStorage.getItem('isTasklistScreen') !== 'true' &&
+          sessionStorage.getItem('isChildSummaryScreen') !== 'true' ? (
             <Button
               variant='backlink'
               onClick={event => {
