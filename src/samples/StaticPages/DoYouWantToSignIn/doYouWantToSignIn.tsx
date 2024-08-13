@@ -49,7 +49,7 @@ export default function DoYouWantToSignIn() {
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
       if (selectedOptionValue === 'yes') {
-        history.push('/');
+        window.location.href = '/';
       } else {
         history.push('/are-you-sure-to-continue-without-sign-in');
       }
