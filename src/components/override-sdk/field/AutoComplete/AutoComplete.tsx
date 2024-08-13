@@ -293,7 +293,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         helperText={helperText}
         placeholder={placeholder}
         hideLabel={false}
-        emptyValue={sessionStorage.getItem(`autocompleteEmptyValue${name}`)}
+        emptyValue={sessionStorage.getItem(`autocompleteEmptyValue${name}`) || ''}
       />
     );
   }
