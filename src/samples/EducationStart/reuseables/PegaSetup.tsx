@@ -127,13 +127,8 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
     () => {
-      // const assignmentFinishedFlag = sessionStorage.getItem('assignmentFinishedFlag');
-      // if(assignmentFinishedFlag !== 'false') {
-      //   setServiceNotAvailable(false);
-      // }
-      console.log('CLOSE_CONTAINER_ITEM');
-      // setShowResolutionPage(false);
-      // setContainerClosed(true);
+      setShowResolutionPage(false);
+      setContainerClosed(true);
     },
     'closeContainer'
   );
@@ -144,7 +139,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
     () => {
-      console.log('ASSIGNMENT_OPENED');
       // console.log("SUBEVENT!! showPegaWhenAssignmentOpened")
       setShowPega(true);
     },
@@ -158,7 +152,6 @@ export function establishPCoreSubscriptions({
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
     () => {
       // console.log("SUBEVENT!! showPegaWhenCaseCreated")
-      console.log('CASE_CREATED');
       setShowPega(true);
     },
     'showPegaWhenCaseCreated'
@@ -167,7 +160,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
     () => {
-      console.log('CREATE_STAGE_SAVED');
       setAssignmentCancelled(true);
       // PM!! setShowPortalBanner(true);
       // PM!! setIsCreateCaseBlocked(false);
@@ -179,9 +171,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
     () => {
-      console.log('CASE_OPENED');
-      setServiceNotAvailable(false);
-      setContainerClosed(false);
       setShowPega(true);
       // PM!! displayPega();
     },
