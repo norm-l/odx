@@ -80,6 +80,8 @@ export default function Assignment(props) {
 
   const [hasAutoCompleteError, setHasAutoCompleteError] = useState('');
 
+  const [isChildSummaryScreen, setIsChildSummaryScreen] = useState(false);
+
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
   const containerID = PCore.getContainerUtils()
@@ -95,6 +97,16 @@ export default function Assignment(props) {
   useEffect(() => {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('isChildSummaryScreen') === 'true') {
+      setTimeout(() => {
+        setIsChildSummaryScreen(true);
+      });
+    } else {
+      setIsChildSummaryScreen(false);
+    }
+  });
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
   function initialLanguageCall() {
@@ -566,7 +578,7 @@ export default function Assignment(props) {
           {arSecondaryButtons?.map(sButton =>
             sButton['name'] === 'Previous' &&
             sessionStorage.getItem('isTasklistScreen') !== 'true' &&
-            sessionStorage.getItem('isChildSummaryScreen') !== 'true' ? (
+            !isChildSummaryScreen ? (
               <Button
                 variant='backlink'
                 onClick={e => {
@@ -581,7 +593,7 @@ export default function Assignment(props) {
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
           sessionStorage.getItem('isTasklistScreen') !== 'true' &&
-          sessionStorage.getItem('isChildSummaryScreen') !== 'true' ? (
+          !isChildSummaryScreen ? (
             <Button
               variant='backlink'
               onClick={event => {
