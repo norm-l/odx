@@ -93,10 +93,12 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const formattedPropertyName = name || propName?.split('.')?.pop();
 
   function customAssignmentFinished() {
-    sessionStorage.setItem(
-      `autocompleteEmptyValue${name}`,
-      sessionStorage.getItem(`autocompleteValue${name}` || '')
-    );
+    if (localStorage.getItem(`autocompleteValue${name}`) !== null) {
+      sessionStorage.setItem(
+        `autocompleteEmptyValue${name}`,
+        sessionStorage.getItem(`autocompleteValue${name}` || '')
+      );
+    }
   }
 
   useEffect(() => {
