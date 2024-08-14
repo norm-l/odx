@@ -521,7 +521,6 @@ export const useStartMashup = (
     assignmentPConnect,
     assignmentCancelled,
     setAssignmentCancelled,
-    containerClosed,
-    setContainerClosed
+    containerClosed
   };
 };

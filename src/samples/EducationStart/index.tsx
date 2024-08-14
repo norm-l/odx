@@ -220,7 +220,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   useEffect(() => {
     if (shutterServicePage) {
       setCurrentDisplay('shutterpage');
-    } else if (showLandingPage && pCoreReady ) {
+    } else if (showLandingPage && pCoreReady) {
       setCurrentDisplay('landingpage');
     } else if (showPega) {
       setCurrentDisplay('pegapage');
