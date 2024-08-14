@@ -42,7 +42,7 @@ export function establishPCoreSubscriptions({
   setCaseStatus,
   setServiceNotAvailable,
   setAssignmentCancelled,
-  backToLandingPage
+  setContainerClosed
 }) {
   /* ********************************************
    * Registers close active container on end of assignment processing
@@ -75,6 +75,7 @@ export function establishPCoreSubscriptions({
       `${containername}/workarea`
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
+    setContainerClosed(false);
     if (status === 'Resolved-Discarded') {
       setServiceNotAvailable(true);
       PCore.getContainerUtils().closeContainerItem(context);
@@ -91,6 +92,7 @@ export function establishPCoreSubscriptions({
 
   async function customAssignmentFinished() {
     const sdkConfig = await getSdkConfig();
+    setContainerClosed(false);
     if (sdkConfig.showResolutionStatuses?.includes(checkStatus())) {
       showResolutionScreen();
     }
@@ -123,9 +125,8 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
     () => {
-      console.log('CLOSE_CONTAINER_ITEM');
-      // setShowLandingPage(true);
-      backToLandingPage(true);
+      setShowResolutionPage(false);
+      setContainerClosed(true);
     },
     'closeContainer'
   );
@@ -136,7 +137,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
     () => {
-      console.log('ASSIGNMENT_OPENED');
       // console.log("SUBEVENT!! showPegaWhenAssignmentOpened")
       setShowPega(true);
     },
@@ -149,7 +149,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
     () => {
-      console.log('CASE_CREATED');
       // console.log("SUBEVENT!! showPegaWhenCaseCreated")
       setShowPega(true);
     },
@@ -159,7 +158,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CREATE_STAGE_SAVED,
     () => {
-      console.log('CREATE_STAGE_SAVED');
       setAssignmentCancelled(true);
       // PM!! setShowPortalBanner(true);
       // PM!! setIsCreateCaseBlocked(false);
@@ -171,7 +169,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
     () => {
-      console.log('CASE_OPENED');
       setShowPega(true);
       // PM!! displayPega();
     },
@@ -286,7 +283,7 @@ export function startMashup(
     setShutterServicePage,
     setServiceNotAvailable,
     setAssignmentCancelled,
-    backToLandingPage
+    setContainerClosed
   },
   _AppContextValues: AppContextValues
 ) {
@@ -301,7 +298,7 @@ export function startMashup(
       setCaseStatus,
       setServiceNotAvailable,
       setAssignmentCancelled,
-      backToLandingPage
+      setContainerClosed
     });
     // PM!! setShowAppName(true);
 
@@ -414,7 +411,7 @@ export const useStartMashup = (
   const [caseId, setCaseId] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
   const [assignmentPConnect, setAssignmentPConnect] = useState(null);
-  const [toLandingPage, backToLandingPage] = useState(false);
+  const [containerClosed, setContainerClosed] = useState(false);
 
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
@@ -460,7 +457,7 @@ export const useStartMashup = (
             setShutterServicePage,
             setServiceNotAvailable,
             setAssignmentCancelled,
-            backToLandingPage
+            setContainerClosed
           },
           _AppContextValues
         );
@@ -522,7 +519,7 @@ export const useStartMashup = (
     assignmentPConnect,
     assignmentCancelled,
     setAssignmentCancelled,
-    toLandingPage,
-    backToLandingPage
+    containerClosed,
+    setContainerClosed
   };
 };
