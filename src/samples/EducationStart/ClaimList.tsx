@@ -129,7 +129,7 @@ export default function ClaimsList(props) {
                     {t(claimItem.status.text)}
                   </strong>
                 ) : (
-                  <span className='govuk-visually-hidden'>No action</span>
+                  <span className='govuk-visually-hidden'>{t('NO_ACTION')}</span>
                 )}
               </dd>
             </div>
