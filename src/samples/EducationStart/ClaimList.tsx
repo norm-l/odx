@@ -27,7 +27,7 @@ export default function ClaimsList(props) {
 
   const containerManger = thePConn?.getContainerManager();
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
-  const docIDForDecisionNotice = 'ESDN0001';
+  const docIDForDecisionNotice = locale.toLowerCase() !== 'en_gb' ? 'ESDN0002' : 'ESDN0001';
 
   function viewDecisionWindow(e: React.MouseEvent<HTMLAnchorElement>, currentCaseId: string) {
     e.preventDefault();
