@@ -7,19 +7,23 @@ import { useTranslation } from 'react-i18next';
 import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import { triggerLogout } from '../../components/helpers/utils';
-
-import MainWrapper from '../../components/BaseComponents/MainWrapper';
-// import { Link } from 'react-router-dom';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
-import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
-import WarningText from '../../components/BaseComponents/GDSWarningText/WarningText';
-import Button from '../../components/BaseComponents/Button/Button';
+import LogoutPopup from '../../components/AppComponents/LogoutPopup';
+import {
+  initTimeout,
+  staySignedIn
+} from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
+import { useStartMashup } from '../HighIncomeCase/reuseables/PegaSetup';
+import StartPage from './StartPage';
 
 export default function ChangeOfBank() {
   const history = useHistory();
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [showSignoutModal, setShowSignoutModal] = useState(false);
+
   const { t } = useTranslation();
-  const { referrerURL, hmrcURL } = useHMRCExternalLinks();
+  const { hmrcURL } = useHMRCExternalLinks();
+  const setAuthType = useState('gg')[1];
 
   registerServiceName(t('CHB_HOMEPAGE_HEADING'));
   const onRedirectDone = () => {
@@ -27,6 +31,10 @@ export default function ChangeOfBank() {
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   };
+
+  const { showPega, setShowPega } = useStartMashup(setAuthType, onRedirectDone, {
+    appBacklinkProps: {}
+  });
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -38,60 +46,71 @@ export default function ChangeOfBank() {
     }
   }, []);
 
-  const handleSignout = () => {
-    triggerLogout();
+  const handleStartCOB = () => {
+    setShowPega(true);
+    PCore.getMashupApi().createCase('HMRC-ChB-Work-ChBChangeOfBank', PCore.getConstants().APP.APP);
   };
-  const handleStartCOB = () => {};
 
-  return sdkIsLoggedIn() ? (
-    <>
-      <AppHeader
-        hasLanguageToggle
-        betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
-        appname={t('CHB_HOMEPAGE_HEADING')}
-        handleSignout={handleSignout}
-      />
-      <TimeoutPopup
-        show={showTimeoutModal}
-        staySignedinHandler={() => {
-          setShowTimeoutModal(false);
-          initTimeout(setShowTimeoutModal, false, true, false);
-          // Using operator details call as 'app agnostic' session keep-alive
-          PCore.getUserApi().getOperatorDetails(PCore.getEnvironmentInfo().getOperatorIdentifier());
-        }}
-        signoutHandler={triggerLogout}
-        isAuthorised
-        signoutButtonText='Sign out'
-        staySignedInButtonText='Stay signed in'
-      />
-      <div className='govuk-width-container'>
-        <MainWrapper>
-          <h1 className='govuk-heading-xl'>{t('COB_PAGE_HEADING')}</h1>
-          <WarningText className='govuk-body'>{t('COB_PAGE_WARRNING')}</WarningText>
-          <p className='govuk-body'>{t('COB_PAGE_P1')}</p>
-          <p className='govuk-body'>
-            {t('COB_PAGE_P2')}
-            <a href={`${referrerURL}recently-claimed-child-benefit`} className='govuk-link'>
-              {t('COB_PAGE_MAKE_A_CLAIM')}
-            </a>
-            .
-          </p>
-          <p className='govuk-body'>{t('COB_PAGE_P3')}</p>
+  function handleSignout() {
+    if (showPega) {
+      setShowSignoutModal(true);
+    } else {
+      triggerLogout();
+    }
+  }
 
-          <Button
-            id='continueToPortal'
-            onClick={handleStartCOB}
-            variant='start'
-            data-prevent-double-click='true'
-          >
-            {t('START_NOW')}
-          </Button>
-        </MainWrapper>
-      </div>
+  const handleStaySignIn = e => {
+    e.preventDefault();
+    setShowSignoutModal(false);
+    // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
+    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
+  };
 
-      <AppFooter />
-    </>
-  ) : (
-    <></>
+  return (
+    sdkIsLoggedIn() && (
+      <>
+        <AppHeader
+          hasLanguageToggle
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
+          appname={t('CHB_HOMEPAGE_HEADING')}
+          handleSignout={handleSignout}
+        />
+        <TimeoutPopup
+          show={showTimeoutModal}
+          staySignedinHandler={() => {
+            setShowTimeoutModal(false);
+            initTimeout(setShowTimeoutModal, false, true, false);
+            // Using operator details call as 'app agnostic' session keep-alive
+            PCore.getUserApi().getOperatorDetails(
+              PCore.getEnvironmentInfo().getOperatorIdentifier()
+            );
+          }}
+          signoutHandler={triggerLogout}
+          isAuthorised
+          signoutButtonText={t('SIGN-OUT')}
+          staySignedInButtonText={t('STAY_SIGNED_IN')}
+        />
+        <div className='govuk-width-container'>
+          {!showPega && <StartPage handleStartCOB={handleStartCOB} />}
+          <div id='pega-part-of-page'>
+            <div id='pega-root'></div>
+          </div>
+        </div>
+        <LogoutPopup
+          show={showSignoutModal && !showTimeoutModal}
+          hideModal={() => setShowSignoutModal(false)}
+          handleSignoutModal={triggerLogout}
+          handleStaySignIn={handleStaySignIn}
+          staySignedInButtonText={t('STAY_SIGNED_IN')}
+          signoutButtonText={t('SIGN-OUT')}
+        >
+          <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
+            {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
+          </h1>
+          <p className='govuk-body'>{t('SIGN_OUT_MSG')}</p>
+        </LogoutPopup>
+        <AppFooter />
+      </>
+    )
   );
 }

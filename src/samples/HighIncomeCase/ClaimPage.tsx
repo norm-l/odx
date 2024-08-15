@@ -23,99 +23,121 @@ import AppContext from './reuseables/AppContext';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 // declare const myLoadMashup;
-declare const PCore:any;
+declare const PCore: any;
 
 const ClaimPage: FunctionComponent<any> = () => {
-    // const [bShowPega, setShowPega] = useState(false);
-    const [shutterServicePage, /* setShutterServicePage */] = useState(false);
-    const [serviceNotAvailable, /* setServiceNotAvailable */] = useState(false);
-    const [pCoreReady, setPCoreReady] = useState(false);
-    const {showLanguageToggle} = useContext(AppContext);
+  // const [bShowPega, setShowPega] = useState(false);
+  const [shutterServicePage /* setShutterServicePage */] = useState(false);
+  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
+  const [pCoreReady, setPCoreReady] = useState(false);
+  const { showLanguageToggle } = useContext(AppContext);
 
-    const setAuthType = useState('gg')[1];
+  const setAuthType = useState('gg')[1];
 
-    const [currentDisplay, setCurrentDisplay] = useState<|'pegapage'|'resolutionpage'|'servicenotavailable'|'shutterpage'|'loading'>('pegapage');
-    // Holds relevant summary page content (specific language)
-    const [summaryPageContent, setSummaryPageContent] = useState<any>({content:null, title:null, banner:null})    
-    const { t } = useTranslation();
-    
-    const history = useHistory();
+  const [currentDisplay, setCurrentDisplay] = useState<
+    'pegapage' | 'resolutionpage' | 'servicenotavailable' | 'shutterpage' | 'loading'
+  >('pegapage');
+  // Holds relevant summary page content (specific language)
+  const [summaryPageContent, setSummaryPageContent] = useState<any>({
+    content: null,
+    title: null,
+    banner: null
+  });
+  const { t } = useTranslation();
 
-    const [showTimeoutModal, setShowTimeoutModal] = useState(false);  
-    const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const history = useHistory();
 
-    const { hmrcURL } = useHMRCExternalLinks();
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [showSignoutModal, setShowSignoutModal] = useState(false);
 
-    useEffect(() => 
-        {
-          initTimeout(setShowTimeoutModal, false, true, false)         
-        }        
-    , []);    
-    
-    function doRedirectDone() {
-        history.replace('/hicbc/opt-in');
-        // appName and mainRedirect params have to be same as earlier invocation
-        loginIfNecessary({ appName: 'embedded', mainRedirect: true });        
-    } 
+  const { hmrcURL } = useHMRCExternalLinks();
 
-    const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn} = useStartMashup(setAuthType, doRedirectDone, {appBacklinkProps:{}});
-    
-    
-    useEffect(() => {
-      if(showPega){setCurrentDisplay('pegapage')}
-      else if(showResolutionPage){
-        setCurrentDisplay('resolutionpage')
-        getSdkConfig().then((config)=>{
-          PCore.getRestClient().invokeCustomRestApi(
+  useEffect(() => {
+    initTimeout(setShowTimeoutModal, false, true, false);
+  }, []);
+
+  function doRedirectDone() {
+    history.replace('/hicbc/opt-in');
+    // appName and mainRedirect params have to be same as earlier invocation
+    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+  }
+
+  const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn } = useStartMashup(
+    setAuthType,
+    doRedirectDone,
+    { appBacklinkProps: {} }
+  );
+
+  useEffect(() => {
+    if (showPega) {
+      setCurrentDisplay('pegapage');
+    } else if (showResolutionPage) {
+      setCurrentDisplay('resolutionpage');
+      getSdkConfig().then(config => {
+        PCore.getRestClient()
+          .invokeCustomRestApi(
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
             {
               method: 'GET',
               body: '',
               headers: '',
-              withoutDefaultHeaders: false,
+              withoutDefaultHeaders: false
             },
-            '')
-            .then((response) => {     
-              PCore.getPubSubUtils().unsubscribe('languageToggleTriggered', 'summarypageLanguageChange');
-              const summaryData:Array<any> = response.data.data.caseInfo.content.ScreenContent.LocalisedContent;
-              /* const summaryData={
+            ''
+          )
+          .then(response => {
+            PCore.getPubSubUtils().unsubscribe(
+              'languageToggleTriggered',
+              'summarypageLanguageChange'
+            );
+            const summaryData: Array<any> =
+              response.data.data.caseInfo.content.ScreenContent.LocalisedContent;
+            /* const summaryData={
                 en:{content:'English content', title: 'English Title', banner:null},
                 cy:{content:'Welsh content', banner: 'Welsh Banner', title:null},
               } */
-              // setSummaryPageData(summaryData); 
-              const currentLang = sessionStorage.getItem('rsdk_locale')?.slice(0,2).toUpperCase() || 'EN';
+            // setSummaryPageData(summaryData);
+            const currentLang =
+              sessionStorage.getItem('rsdk_locale')?.slice(0, 2).toUpperCase() || 'EN';
 
-              setSummaryPageContent(summaryData.find(data => data.Language === currentLang));                              
+            setSummaryPageContent(summaryData.find(data => data.Language === currentLang));
 
-              PCore.getPubSubUtils().subscribe('languageToggleTriggered', ({language}) => {
-                setSummaryPageContent(summaryData.find(data => data.Language === language.toUpperCase()));             
-              }, 'summarypageLanguageChange');
-            })
-      })}
-      else if(shutterServicePage){setCurrentDisplay('shutterpage')}      
-      else if(serviceNotAvailable){setCurrentDisplay('servicenotavailable')}
-      else {
-        setCurrentDisplay('loading');
-      }
-      if(!showPega){ setPageTitle(); }
-
-    }, [showResolutionPage, showPega, shutterServicePage, serviceNotAvailable, pCoreReady])
-
-  
+            PCore.getPubSubUtils().subscribe(
+              'languageToggleTriggered',
+              ({ language }) => {
+                setSummaryPageContent(
+                  summaryData.find(data => data.Language === language.toUpperCase())
+                );
+              },
+              'summarypageLanguageChange'
+            );
+          });
+      });
+    } else if (shutterServicePage) {
+      setCurrentDisplay('shutterpage');
+    } else if (serviceNotAvailable) {
+      setCurrentDisplay('servicenotavailable');
+    } else {
+      setCurrentDisplay('loading');
+    }
+    if (!showPega) {
+      setPageTitle();
+    }
+  }, [showResolutionPage, showPega, shutterServicePage, serviceNotAvailable, pCoreReady]);
 
   function handleSignout() {
-        if (currentDisplay==='pegapage') {
-          setShowSignoutModal(true);
-        } else {
-          triggerLogout();
-        }
-  }  
+    if (currentDisplay === 'pegapage') {
+      setShowSignoutModal(true);
+    } else {
+      triggerLogout();
+    }
+  }
 
   const handleStaySignIn = e => {
     e.preventDefault();
     setShowSignoutModal(false);
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
-    staySignedIn(setShowTimeoutModal, "D_ClaimantSubmittedChBCases", null, null);
+    staySignedIn(setShowTimeoutModal, 'D_ClaimantSubmittedChBCases', null, null);
   };
 
   const startClaim = () => {
@@ -127,14 +149,14 @@ const ClaimPage: FunctionComponent<any> = () => {
    * Application specific PCore subscriptions
    *
    * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
-   */  
+   */
 
   // And clean up
 
   useEffect(() => {
     document.addEventListener('SdkConstellationReady', () => {
       PCore.onPCoreReady(() => {
-        if(!pCoreReady){
+        if (!pCoreReady) {
           setPCoreReady(true);
           PCore.getPubSubUtils().subscribe(
             PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
@@ -149,7 +171,7 @@ const ClaimPage: FunctionComponent<any> = () => {
       });
       settingTimer();
     });
-    
+
     return () => {
       PCore.getPubSubUtils().unsubscribe(
         PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
@@ -158,62 +180,63 @@ const ClaimPage: FunctionComponent<any> = () => {
     };
   }, []);
 
-    /* ***
-     * Application specific PCore subscriptions
-     * 
-     * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps 
-     */
-    document.addEventListener('SdkConstellationReady', () => {
-        PCore.onPCoreReady(() => {        
-        PCore.getPubSubUtils().subscribe(
-            PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
-            () => {
-                // console.log("SUBEVENT!!! showStartPageOnCloseContainerItem")
-                setShowPega(false);
-            },
-            'showStartPageOnCloseContainerItem'
-        );
-        })
-        settingTimer();
-        PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));
-    }); 
-    
-    // And clean up
+  /* ***
+   * Application specific PCore subscriptions
+   *
+   * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
+   */
+  document.addEventListener('SdkConstellationReady', () => {
+    PCore.onPCoreReady(() => {
+      PCore.getPubSubUtils().subscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
+        () => {
+          // console.log("SUBEVENT!!! showStartPageOnCloseContainerItem")
+          setShowPega(false);
+        },
+        'showStartPageOnCloseContainerItem'
+      );
+    });
+    settingTimer();
+    PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));
+  });
 
-    useEffect(() => {
-        return () => {
-            PCore.getPubSubUtils().unsubscribe(PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,'showStartPageOnCloseContainerItem')
-        }
-    }, [])
+  // And clean up
 
+  useEffect(() => {
+    return () => {
+      PCore.getPubSubUtils().unsubscribe(
+        PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
+        'showStartPageOnCloseContainerItem'
+      );
+    };
+  }, []);
 
-    return ( <>
+  return (
+    <>
       <TimeoutPopup
         show={showTimeoutModal}
-        staySignedinHandler={() =>
-          staySignedIn(setShowTimeoutModal, 'D_ClaimantWorkAssignmentChBCases')
-        }
+        staySignedinHandler={() => {
+          setShowTimeoutModal(false);
+          initTimeout(setShowTimeoutModal, false, true, false);
+          // Using operator details call as 'app agnostic' session keep-alive
+          PCore.getUserApi().getOperatorDetails(PCore.getEnvironmentInfo().getOperatorIdentifier());
+        }}
         signoutHandler={triggerLogout}
-        isAuthorised={false}  
-        signoutButtonText="Sign out"
-        staySignedInButtonText="Stay signed in"
-      >
-        <h1 id="hmrc-timeout-heading" className="govuk-heading-m push--top">You’re about to be signed out</h1>
-        <p className="govuk-body hmrc-timeout-dialog__message" aria-hidden="true">For your security, we will sign you out in <span id="hmrc-timeout-countdown" className="hmrc-timeout-dialog__countdown">2 minutes</span>.</p>
-
-      </TimeoutPopup>
+        isAuthorised
+        signoutButtonText={t('SIGN-OUT')}
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
+      />
 
       <AppHeader
         handleSignout={handleSignout}
         appname={t('HICBC_APP_NAME')}
         hasLanguageToggle={showLanguageToggle}
         isPegaApp={showPega}
-        languageToggleCallback={
-          toggleNotificationProcess(
+        languageToggleCallback={toggleNotificationProcess(
           { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn 
-          )}
-        betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}    
+          assignmentPConn
+        )}
+        betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
       />
       <div className='govuk-width-container'>
         {shutterServicePage ? (
@@ -223,13 +246,15 @@ const ClaimPage: FunctionComponent<any> = () => {
             <div id='pega-part-of-page'>
               <div id='pega-root'></div>
             </div>
-            { serviceNotAvailable && <ServiceNotAvailable /> }            
-            { currentDisplay === 'resolutionpage' && <SummaryPage summaryContent={
-              summaryPageContent.Content}
-              summaryTitle={summaryPageContent.Title}
-              summaryBanner={summaryPageContent.Banner}
-              backlinkProps={{}}  
-            />}        
+            {serviceNotAvailable && <ServiceNotAvailable />}
+            {currentDisplay === 'resolutionpage' && (
+              <SummaryPage
+                summaryContent={summaryPageContent.Content}
+                summaryTitle={summaryPageContent.Title}
+                summaryBanner={summaryPageContent.Banner}
+                backlinkProps={{}}
+              />
+            )}
           </>
         )}
       </div>
@@ -238,13 +263,13 @@ const ClaimPage: FunctionComponent<any> = () => {
         hideModal={() => setShowSignoutModal(false)}
         handleSignoutModal={triggerLogout}
         handleStaySignIn={handleStaySignIn}
-        staySignedInButtonText='Stay signed in'
-        signoutButtonText='Sign out'
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
+        signoutButtonText={t('SIGN-OUT')}
       >
         <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
           {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
         </h1>
-        <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
+        <p className='govuk-body'>{t('SIGN_OUT_MSG')}</p>
       </LogoutPopup>
       <AppFooter />
     </>
