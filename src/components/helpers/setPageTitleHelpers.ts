@@ -28,8 +28,6 @@ export default function setPageTitle(errorProperty = false) {
 
   const pageHeading = i18n.t(document.getElementsByTagName('h1')[0]?.innerText);
 
-  // Scope to fetch serviceName dynamically from here
-  // TODO fetch serviceName dynamically
   if (!serviceName || serviceName === '') {
     serviceName = i18n.t('CLAIM_CHILD_BENEFIT');
   }
