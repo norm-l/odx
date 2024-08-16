@@ -411,10 +411,10 @@
   "LEAVES_FULL_TIME_EDUCATION": "Child Benefit Office immediately if your child leaves full time non-advanced education or approved training",
   "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
   "LOADING": "Loading",
-  "COB_PAGE_HEADING": "Change the  account you use for Child Benefit payments",
-  "COB_PAGE_WARRNING": "Child Benefit due within 3 working days will go into your existing account",
+  "COB_PAGE_HEADING": "Change the account you use for Child Benefit payments",
+  "COB_PAGE_WARRNING": "Child Benefit due  within 3 working days will go into your existing account",
   "COB_PAGE_P1": "You can use this service to change to a new bank account, credit union or building society without needing a roll number.",
-  "COB_PAGE_P2": "if you are not currently claiming Child Benefit, you can ",
+  "COB_PAGE_P2": "If you are not currently claiming Child Benefit, you can ",
   "COB_PAGE_MAKE_A_CLAIM": "make a claim",
   "COB_PAGE_P3": "Completing this service takes around 5 minutes."
 }
