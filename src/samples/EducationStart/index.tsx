@@ -82,7 +82,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     serviceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    containerClosed
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
     serviceParam: educationStartParam
@@ -270,6 +271,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
+    } else if (containerClosed) { // = Back link action for submittetd cases
+      setShowPortalBanner(false);
+      setCurrentDisplay('landingpage');
     } else {
       setCurrentDisplay('loading');
     }
@@ -282,7 +286,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     shutterServicePage,
     serviceNotAvailable,
     pCoreReady,
-    showLandingPage
+    showLandingPage,
+    containerClosed
   ]);
 
   useEffect(() => {
