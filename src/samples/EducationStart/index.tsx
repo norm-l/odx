@@ -7,7 +7,7 @@ import AppHeader from './reuseables/AppHeader';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import AppContextEducation from './reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
-import { setAppServiceName, triggerLogout } from '../../components/helpers/utils';
+import { checkStatus, setAppServiceName, triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
@@ -82,7 +82,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
     serviceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    containerClosed
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
     serviceParam: educationStartParam
@@ -117,6 +118,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   };
 
   function returnToPortalPage() {
+    sessionStorage.setItem('assignmentFinishedFlag', 'false');
     setShowSignoutModal(false);
     staySignedIn(
       setShowTimeoutModal,
@@ -149,17 +151,17 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   // TODO - This function will be removed with US-13518 implementation.
   function removeHmrcLink() {
-    const hmrcLink = document.querySelector(
-      '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
-    );
-    const breakTag = document.querySelectorAll('br');
+    if (checkStatus() === 'Open-InProgress') {
+      const hmrcLink = document.querySelector(
+        '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
+      );
+      const breakTag = document.querySelectorAll('br');
 
-    if (hmrcLink || breakTag.length) {
-      hmrcLink?.remove();
-      breakTag[0]?.remove();
-      breakTag[1]?.remove();
-    } else {
-      requestAnimationFrame(removeHmrcLink);
+      if (hmrcLink || breakTag.length) {
+        hmrcLink?.remove();
+        breakTag[0]?.remove();
+        breakTag[1]?.remove();
+      }
     }
   }
 
@@ -269,6 +271,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
+    } else if (containerClosed) { // = Back link action for submittetd cases
+      setShowPortalBanner(false);
+      setCurrentDisplay('landingpage');
     } else {
       setCurrentDisplay('loading');
     }
@@ -281,11 +286,13 @@ const EducationStartCase: FunctionComponent<any> = () => {
     shutterServicePage,
     serviceNotAvailable,
     pCoreReady,
-    showLandingPage
+    showLandingPage,
+    containerClosed
   ]);
 
   useEffect(() => {
     if (showPega && pCoreReady && startClaimClicked) {
+      sessionStorage.setItem('assignmentFinishedFlag', 'false');
       let startingFields = {};
       startingFields = {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
@@ -300,7 +307,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
           channelName: ''
         }
       );
-      requestAnimationFrame(removeHmrcLink); // TODO - To be removed with US-13518 implementation.
     }
   }, [pCoreReady, showPega, startClaimClicked]);
 
@@ -309,6 +315,11 @@ const EducationStartCase: FunctionComponent<any> = () => {
       PCore.onPCoreReady(() => {
         if (!pCoreReady) {
           setPCoreReady(true);
+          PCore?.getPubSubUtils().subscribe(
+            'CustomAssignmentFinished',
+            removeHmrcLink,
+            'CustomAssignmentFinished'
+          );
           PCore.getPubSubUtils().subscribe(
             PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
             () => {
@@ -323,6 +334,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
     });
 
     return () => {
+      PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished', 'CustomAssignmentFinished');
       PCore.getPubSubUtils().unsubscribe(
         PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
         'showStartPageOnCloseContainerItem'
@@ -387,6 +399,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
           handleSignout={handleSignout}
+          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />

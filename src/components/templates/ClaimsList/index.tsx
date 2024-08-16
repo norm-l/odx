@@ -54,6 +54,11 @@ export default function ClaimsList(props) {
     const container = thePConn.getContainerName();
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
+    sessionStorage.setItem('isComingFromPortal', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('isComingFromTasklist');
+    sessionStorage.removeItem('stepIDCYA');
+
     if (rowClickAction === 'OpenAssignment') {
       resetContainer();
       const openAssignmentOptions = { containerName: container };
@@ -140,7 +145,7 @@ export default function ClaimsList(props) {
                   target='_blank'
                   rel='noreferrer noopener'
                 >
-                  {t('PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
+                  {t('VIEW_AND_PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
                 </a>
               </div>
             )}{' '}

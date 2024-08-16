@@ -80,6 +80,8 @@ export default function Assignment(props) {
 
   const [hasAutoCompleteError, setHasAutoCompleteError] = useState('');
 
+  const [isChildSummaryScreen, setIsChildSummaryScreen] = useState(false);
+
   const _containerName = getPConnect().getContainerName();
   const context = getPConnect().getContextName();
   const containerID = PCore.getContainerUtils()
@@ -95,6 +97,16 @@ export default function Assignment(props) {
   useEffect(() => {
     setServiceShutteredStatus(serviceShuttered);
   }, [serviceShuttered]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('isChildSummaryScreen') === 'true') {
+      setTimeout(() => {
+        setIsChildSummaryScreen(true);
+      });
+    } else {
+      setIsChildSummaryScreen(false);
+    }
+  });
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
   function initialLanguageCall() {
@@ -331,6 +343,48 @@ export default function Assignment(props) {
     }
   }
 
+  function navigateToStepId(event, stepId) {
+    event.preventDefault();
+    const pConn = getPConnect();
+    const actions = pConn.getActionsApi();
+    const navigateToStepPromise = actions.navigateToStep(stepId, containerID);
+    navigateToStepPromise
+      .then(() => {
+        //  navigate to step success handling
+        // eslint-disable-next-line no-console
+        console.log('navigation to CYA successful');
+      })
+      .catch(error => {
+        // navigate to step failure handling
+        // eslint-disable-next-line no-console
+        console.log('CYA Navigation failed', error);
+      });
+  }
+
+  function getUniqueValueForEveryScreen() {
+    const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+      `${PCore.getConstants().APP.APP}/primary`
+    );
+    const flowActionId = PCore.getStoreValue(
+      '.ID',
+      'caseInfo.assignments[0].actions[0]',
+      contextWorkarea
+    );
+    const screenContext =
+      PCore.getStoreValue('.context', 'caseInfo.assignments[0]', contextWorkarea) || '';
+    const uniqueValueForEveryScreen = flowActionId + screenContext;
+    return uniqueValueForEveryScreen;
+  }
+
+  useEffect(() => {
+    const isEditMode = sessionStorage.getItem('isEditMode');
+    if (isEditMode === 'true') {
+      sessionStorage.setItem('isEditMode', 'false');
+      const uniqueValueForEveryScreen = getUniqueValueForEveryScreen();
+      sessionStorage.setItem('uniqueValueForEveryScreen', uniqueValueForEveryScreen);
+    }
+  });
+
   async function buttonPress(sAction: string, sButtonType: string) {
     setErrorSummary(false);
 
@@ -472,6 +526,38 @@ export default function Assignment(props) {
     );
   }
 
+  function navigate(e, sButton) {
+    const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
+    const currentUniqueValueForEveryScreen = getUniqueValueForEveryScreen();
+
+    const storedUniqueValueForEveryScreen = sessionStorage.getItem('uniqueValueForEveryScreen');
+    const isComingFromPortal = sessionStorage.getItem('isComingFromPortal');
+    const isComingFromTasklist = sessionStorage.getItem('isComingFromTasklist');
+    // This is for chb tactical solution only
+    const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
+
+    if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+      handleBackLinkforInvalidDate();
+      if (isComingFromTasklist === 'true') {
+        // coming from tasklist
+        navigateToStepId(e, stepIdTasklist);
+      } else if (isComingFromPortal === 'true') {
+        // coming from portal
+        PCore.getPubSubUtils().publish('showPortalScreenOnBackPress', {});
+      } else if (storedStepIDCYA) {
+        // coming from cya
+        navigateToStepId(e, storedStepIDCYA);
+      } else {
+        // For inflight cases, None of above then move to tasklist as of now, will change this code in furure enhancement
+        navigateToStepId(e, stepIdTasklist);
+      }
+    } else if (sButton) {
+      _onButtonPress(sButton['jsAction'], 'secondary');
+    } else {
+      navigateToStep('previous', itemKey);
+    }
+  }
+
   function triggerBack() {
     if (typeof appBacklinkProps.appBacklinkAction === 'function') {
       appBacklinkProps.appBacklinkAction();
@@ -490,18 +576,34 @@ export default function Assignment(props) {
       ) : (
         <div id='Assignment'>
           {arSecondaryButtons?.map(sButton =>
-            sButton['name'] === 'Previous' ? (
+            sButton['name'] === 'Previous' &&
+            sessionStorage.getItem('isTasklistScreen') !== 'true' &&
+            !isChildSummaryScreen ? (
               <Button
                 variant='backlink'
                 onClick={e => {
                   e.target.blur();
-                  _onButtonPress(sButton['jsAction'], 'secondary');
+                  navigate(e, sButton);
                 }}
                 key={sButton['actionID']}
                 attributes={{ type: 'link' }}
               ></Button>
             ) : null
           )}
+
+          {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
+          sessionStorage.getItem('isTasklistScreen') !== 'true' &&
+          !isChildSummaryScreen ? (
+            <Button
+              variant='backlink'
+              onClick={event => {
+                navigate(event, null);
+              }}
+              key='createMissingBacklink'
+            >
+              {t('BACK')}
+            </Button>
+          ) : null}
           {
             // If there is no previous action button, and a 'appcontext' backlink action is set, show a backlink that performs the appcontext backlink action
             arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&

@@ -41,7 +41,8 @@ export function establishPCoreSubscriptions({
   setCaseId,
   setCaseStatus,
   setServiceNotAvailable,
-  setAssignmentCancelled
+  setAssignmentCancelled,
+  setContainerClosed
 }) {
   /* ********************************************
    * Registers close active container on end of assignment processing
@@ -66,7 +67,7 @@ export function establishPCoreSubscriptions({
    * closes container item if case is resolved-discarded, on assignmentFinished
    ******************************************** */
   function handleServiceNotAvailable() {
-    // console.log('SUBEVENT! handleServiceNotAvailableOnAssignmentFinished');
+    const assignmentFinishedFlag = sessionStorage.getItem('assignmentFinishedFlag');
     const containername = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
     );
@@ -74,22 +75,26 @@ export function establishPCoreSubscriptions({
       `${containername}/workarea`
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
-    if (status === 'Resolved-Discarded') {
-      setServiceNotAvailable(true);
-      PCore.getContainerUtils().closeContainerItem(context);
-      //  Temporary workaround to restrict infinite update calls
-      PCore?.getPubSubUtils().unsubscribe('assignmentFinished', 'assignmentFinished');
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
-        'assignmentFinished'
-      );
-    } else {
-      showResolutionScreen();
-    }
+    setContainerClosed(false);
+    if(assignmentFinishedFlag !== 'true') {
+      if (status === 'Resolved-Discarded') {
+        setServiceNotAvailable(true);
+        PCore.getContainerUtils().closeContainerItem(context);
+        //  Temporary workaround to restrict infinite update calls
+        sessionStorage.setItem('assignmentFinishedFlag', 'true');
+        PCore?.getPubSubUtils().unsubscribe(
+          PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
+          'assignmentFinished'
+        );
+      } else {
+        showResolutionScreen();
+      }
+    } 
   }
 
   async function customAssignmentFinished() {
     const sdkConfig = await getSdkConfig();
+    setContainerClosed(false);
     if (sdkConfig.showResolutionStatuses?.includes(checkStatus())) {
       showResolutionScreen();
     }
@@ -121,7 +126,10 @@ export function establishPCoreSubscriptions({
    ******************************** */
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
-    () => {},
+    () => {
+      setShowResolutionPage(false);
+      setContainerClosed(true);
+    },
     'closeContainer'
   );
 
@@ -163,6 +171,7 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
     () => {
+      setShowPega(true);
       // PM!! displayPega();
     },
     'continueCase'
@@ -275,7 +284,8 @@ export function startMashup(
     setAssignmentPConnect,
     setShutterServicePage,
     setServiceNotAvailable,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    setContainerClosed
   },
   _AppContextValues: AppContextValues
 ) {
@@ -289,7 +299,8 @@ export function startMashup(
       setCaseId,
       setCaseStatus,
       setServiceNotAvailable,
-      setAssignmentCancelled
+      setAssignmentCancelled,
+      setContainerClosed
     });
     // PM!! setShowAppName(true);
 
@@ -402,6 +413,7 @@ export const useStartMashup = (
   const [caseId, setCaseId] = useState('');
   const [caseStatus, setCaseStatus] = useState('');
   const [assignmentPConnect, setAssignmentPConnect] = useState(null);
+  const [containerClosed, setContainerClosed] = useState(false);
 
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
@@ -446,7 +458,8 @@ export const useStartMashup = (
             setAssignmentPConnect,
             setShutterServicePage,
             setServiceNotAvailable,
-            setAssignmentCancelled
+            setAssignmentCancelled,
+            setContainerClosed
           },
           _AppContextValues
         );
@@ -468,6 +481,7 @@ export const useStartMashup = (
           'cancelAssignment'
         );
       PCore?.getPubSubUtils().unsubscribe('CustomAssignmentFinished');
+      PCore?.getPubSubUtils().unsubscribe('closeContainer');
     };
     // PM!!
     /*
@@ -506,6 +520,7 @@ export const useStartMashup = (
     setServiceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
-    setAssignmentCancelled
+    setAssignmentCancelled,
+    containerClosed
   };
 };
