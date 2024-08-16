@@ -60,7 +60,7 @@ export default function UserPortal(props) {
                 <h2 className='govuk-heading-m' id='subsection-title'>
                   {t('ONLINE')}
                 </h2>
-                <p>
+                <p className='govuk-body'>
                   <a
                     href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
                     className='govuk-link'
