@@ -297,7 +297,6 @@
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE": "rydych yn dal i fod yn gymwys i gael",
   "HICBC_LANDINGPAGE_LISTITEM_STILL_ELIGIBLE_LINK_TEXT": "Budd-dal Plant",
   "HICBC_LANDINGPAGE_LISTITEM_OPT_IN_WITHIN_3_MONTHS": "rydych am optio i mewn neu optio allan cyn pen y 3 mis nesaf",
-
   "HICBC_LANDINGPAGE_WARNING_CAN_ONLY_BE_COMPLETED_BY_CLAIMANT": "Gall y gwasanaeth hwn dim ond cael ei ddefnyddio gan y person sy’n hawlio Budd-dal Plant",
 
   "BACK_TO_START_PAGE": "Yn ôl i’r dudalen cychwyn",
@@ -403,6 +402,7 @@
   "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "ddysgu rhagor am Fudd-dal Plant",
   "LOADING": "Llwytho",
   "TITLE_HEADER": "Gwall",
+  "RETURN_TO_CHANGE_CLAIM": "Dychwelyd i newid yr hawliad",
   "COB_PAGE_HEADING": "Newid y cyfrif rydych yn ei ddefnyddio i gael taliadau Budd-dal Plant",
   "COB_PAGE_WARRNING": "Bydd taliadau Budd-dal Plant sy’n ddyledus cyn pen 3 diwrnod gwaith yn cael eu talu i’ch cyfrif presennol",
   "COB_PAGE_P1": "Gallwch ddefnyddio’r gwasanaeth hwn i newid i gyfrif banc, undeb credyd neu gymdeithas adeiladu newydd heb fod angen rif rôl.",

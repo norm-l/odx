@@ -36,6 +36,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
   }, []);
 
   useEffect(() => {
+    sessionStorage.setItem('isTasklistScreen', 'true');
     sessionStorage.removeItem('isTasklistClicked');
   }, []);
 
@@ -62,10 +63,18 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
 
   const handleOnClick = (section: string, event) => {
     event.preventDefault();
+
+    sessionStorage.setItem('isComingFromTasklist', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('isComingFromPortal');
+    sessionStorage.removeItem('stepIDCYA');
+
+    window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
     getPConnect().setValue('.SelectedTask', section, '', false);
     getPConnect().getActionsApi().finishAssignment(context);
     PCore.getPubSubUtils().publish('assignmentFinishedOnTaskListClicked', {});
     sessionStorage.setItem('isTasklistClicked', 'true');
+    sessionStorage.setItem('isTasklistScreen', 'false');
   };
 
   const labelStatusMapping = status => {
