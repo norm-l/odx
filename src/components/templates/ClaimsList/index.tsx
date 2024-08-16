@@ -140,7 +140,7 @@ export default function ClaimsList(props) {
                   target='_blank'
                   rel='noreferrer noopener'
                 >
-                  {t('PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
+                  {t('VIEW_AND_PRINT_REPLY_SLIP')} {t('OPENS_IN_NEW_TAB')}
                 </a>
               </div>
             )}{' '}
