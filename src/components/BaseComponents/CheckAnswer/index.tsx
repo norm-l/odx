@@ -16,7 +16,17 @@ interface HmrcOdxTestProps extends PConnFieldProps {
 // any default values in config.pros should be set in defaultProps at bottom of this file
 export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
   const COMMA_DELIMITED_FIELD = 'CSV';
-  const { label, value, name, stepId, hiddenText, getPConnect, emptyValue } = props;
+  const {
+    label,
+    value,
+    name,
+    stepId,
+    hiddenText,
+    getPConnect,
+    placeholder,
+    helperText,
+    emptyValue
+  } = props;
   const [formattedValue, setFormattedValue] = useState<string | Array<string>>(value);
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
@@ -49,11 +59,30 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
       });
   };
 
+  const isValueNotBlank =
+    !!value &&
+    value !== ' ' &&
+    formattedValue !== 'Invalid Date' &&
+    value?.length > 0 &&
+    !value?.includes(',,');
+
+  const formattedValueOrValue = formattedValue || value;
+  const placeholderOrHelperText = placeholder || helperText;
+
+  const renderCYAValue = () =>
+    !isValueNotBlank && !emptyValue ? (
+      <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+        {placeholderOrHelperText}
+      </a>
+    ) : (
+      formattedValueOrValue
+    );
+
   return (
     <div className='govuk-summary-list__row'>
       <dt className='govuk-summary-list__key'>{label}</dt>
       <dd className='govuk-summary-list__value' data-empty-value={emptyValue} data-is-csv={isCSV}>
-        {Array.isArray(formattedValue) ? (
+        {isValueNotBlank && Array.isArray(formattedValue) ? (
           <>
             {formattedValue.map(item => (
               <React.Fragment key={item}>
@@ -63,15 +92,17 @@ export default function GDSCheckAnswers(props: HmrcOdxTestProps) {
             ))}
           </>
         ) : (
-          formattedValue || value
+          renderCYAValue()
         )}
       </dd>
-      <dd className='govuk-summary-list__actions'>
-        <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
-          {t('GDS_ACTION_CHANGE')}
-          <span className='govuk-visually-hidden'> {hiddenText || label}</span>
-        </a>
-      </dd>
+      {(isValueNotBlank || emptyValue) && (
+        <dd className='govuk-summary-list__actions'>
+          <a href='#' className='govuk-link' onClick={handleOnClick} data-step-id={stepId}>
+            {t('GDS_ACTION_CHANGE')}
+            <span className='govuk-visually-hidden'> {hiddenText || label}</span>
+          </a>
+        </dd>
+      )}
     </div>
   );
 }
