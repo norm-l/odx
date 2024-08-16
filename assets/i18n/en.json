@@ -393,7 +393,6 @@
   "NO_AWARD_NO_LONGER_RECEIVING_BENEFIT": "you no longer receive Child Benefit",
   "NO_AWARD_YOU_CAN": "You can",
   "NO_AWARD_FIND_OUT_MORE_LINKTEXT": "find out more about Child Benefit",
-
   "TRY_AGAIN_LATER": "Try again later.",
 
   "YOUNG_PERSON_NAME": "Young person name",
@@ -411,6 +410,7 @@
   "LEAVES_FULL_TIME_EDUCATION": "Child Benefit Office immediately if your child leaves full time non-advanced education or approved training",
   "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
   "LOADING": "Loading",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change claim",
   "NO_ACTION": "No action",
   "COB_PAGE_HEADING": "Change the account you use for Child Benefit payments",
   "COB_PAGE_WARRNING": "Child Benefit due  within 3 working days will go into your existing account",
