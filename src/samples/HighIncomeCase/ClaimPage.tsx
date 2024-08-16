@@ -24,6 +24,7 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 
 // declare const myLoadMashup;
 declare const PCore:any;
+let milisecondsTilSignout = 115*1000;
 
 const ClaimPage: FunctionComponent<any> = () => {
     // const [bShowPega, setShowPega] = useState(false);
@@ -65,7 +66,7 @@ const ClaimPage: FunctionComponent<any> = () => {
       if(showPega){setCurrentDisplay('pegapage')}
       else if(showResolutionPage){
         setCurrentDisplay('resolutionpage')
-        getSdkConfig().then((config)=>{
+        getSdkConfig().then((config)=>{          
           PCore.getRestClient().invokeCustomRestApi(
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
             {
@@ -132,6 +133,12 @@ const ClaimPage: FunctionComponent<any> = () => {
   // And clean up
 
   useEffect(() => {
+    getSdkConfig()
+        .then(sdkConfig => {
+          if (sdkConfig.timeoutConfig.secondsTilLogout)
+            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+        })
+      
     document.addEventListener('SdkConstellationReady', () => {
       PCore.onPCoreReady(() => {
         if(!pCoreReady){
@@ -175,7 +182,7 @@ const ClaimPage: FunctionComponent<any> = () => {
         );
         })
         settingTimer();
-        PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));
+        PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, '', null, true, false));        
     }); 
     
     // And clean up
@@ -195,12 +202,10 @@ const ClaimPage: FunctionComponent<any> = () => {
         }
         signoutHandler={triggerLogout}
         isAuthorised={false}  
-        signoutButtonText="Sign out"
-        staySignedInButtonText="Stay signed in"
+        signoutButtonText={t("SIGN-OUT")}
+        staySignedInButtonText={t("STAY_SIGNED_IN")}
+        milisecondsTilSignout={milisecondsTilSignout}
       >
-        <h1 id="hmrc-timeout-heading" className="govuk-heading-m push--top">You’re about to be signed out</h1>
-        <p className="govuk-body hmrc-timeout-dialog__message" aria-hidden="true">For your security, we will sign you out in <span id="hmrc-timeout-countdown" className="hmrc-timeout-dialog__countdown">2 minutes</span>.</p>
-
       </TimeoutPopup>
 
       <AppHeader
@@ -238,13 +243,13 @@ const ClaimPage: FunctionComponent<any> = () => {
         hideModal={() => setShowSignoutModal(false)}
         handleSignoutModal={triggerLogout}
         handleStaySignIn={handleStaySignIn}
-        staySignedInButtonText='Stay signed in'
-        signoutButtonText='Sign out'
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
+        signoutButtonText={t('SIGN-OUT')}
       >
         <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
           {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
         </h1>
-        <p className='govuk-body'>If you sign out now, your progress will be lost.</p>
+        <p className='govuk-body'>{t('IF_YOU_SIGN_OUT_NOW_PROGRESS_WILL_BE_LOST')}</p>
       </LogoutPopup>
       <AppFooter />
     </>

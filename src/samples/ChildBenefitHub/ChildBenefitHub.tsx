@@ -7,12 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import { triggerLogout } from '../../components/helpers/utils';
+import {getSdkConfig} from '@pega/auth/lib/sdk-auth-manager';
 
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 // import { Link } from 'react-router-dom';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 
+let milisecondsTilSignout = 115 * 600;
 
 export default function ChildBenefitHub() {
   const history = useHistory();
@@ -28,6 +30,11 @@ export default function ChildBenefitHub() {
   };
 
   useEffect(() => {
+    getSdkConfig()
+        .then(sdkConfig => {
+          if (sdkConfig.timeoutConfig.secondsTilLogout)
+            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+        })
     initTimeout(setShowTimeoutModal, false, true, false);
   }, []);
 
@@ -59,8 +66,9 @@ export default function ChildBenefitHub() {
         }}
         signoutHandler={triggerLogout}
         isAuthorised
-        signoutButtonText='Sign out'
-        staySignedInButtonText='Stay signed in'
+        signoutButtonText={t('SIGN-OUT')}
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
+        milisecondsTilSignout={milisecondsTilSignout}
       />
       <div className='govuk-width-container'>
         <MainWrapper>

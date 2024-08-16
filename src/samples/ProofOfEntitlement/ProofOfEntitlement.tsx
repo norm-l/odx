@@ -16,9 +16,12 @@ import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import LoadingSpinner from '../../components/helpers/LoadingSpinner/LoadingSpinner';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import {getSdkConfig} from '@pega/auth/lib/sdk-auth-manager';
 
 declare const PCore;
 declare const myLoadMashup: any;
+
+let milisecondsTilSignout = 115 * 600;
 
 export default function ProofOfEntitlement() {
   const [entitlementData, setEntitlementData] = useState(null);
@@ -54,6 +57,11 @@ export default function ProofOfEntitlement() {
   };
 */
   useEffect(() => {
+    getSdkConfig()
+        .then(sdkConfig => {
+          if (sdkConfig.timeoutConfig.secondsTilLogout)
+            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+        })
     initTimeout(setShowTimeoutModal, false, true, false);
   }, []);
 
@@ -108,8 +116,9 @@ export default function ProofOfEntitlement() {
         }}
         signoutHandler={triggerLogout}
         isAuthorised
-        signoutButtonText='Sign out'
-        staySignedInButtonText='Stay signed in'
+        signoutButtonText={t('SIGN-OUT')}
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
+        milisecondsTilSignout={milisecondsTilSignout}
       />
       {(pageContentReady && (
         <div className='govuk-width-container' id='poe-page'>
