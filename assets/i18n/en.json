@@ -83,6 +83,7 @@
   "TO_SAVE_YOUR_PROGRESS": "To save your progress, select the 'Save and come back later' link.",
   "SIGN-OUT": "Sign out",
   "STAY_SIGNED_IN": "Stay signed in",
+  "SIGN_OUT_MSG": "If you sign out now, your progress will be lost.",
   "BACK": "Back",
   "A_DAY": "a day",
   "AND_A_MONTH": " and a month",
@@ -409,5 +410,11 @@
   "MUST_TELL": "You must tell the",
   "LEAVES_FULL_TIME_EDUCATION": "Child Benefit Office immediately if your child leaves full time non-advanced education or approved training",
   "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
-  "LOADING": "Loading"
+  "LOADING": "Loading",
+  "COB_PAGE_HEADING": "Change the account you use for Child Benefit payments",
+  "COB_PAGE_WARRNING": "Child Benefit due  within 3 working days will go into your existing account",
+  "COB_PAGE_P1": "You can use this service to change to a new bank account, credit union or building society without needing a roll number.",
+  "COB_PAGE_P2": "If you are not currently claiming Child Benefit, you can ",
+  "COB_PAGE_MAKE_A_CLAIM": "make a claim",
+  "COB_PAGE_P3": "Completing this service takes around 5 minutes."
 }
