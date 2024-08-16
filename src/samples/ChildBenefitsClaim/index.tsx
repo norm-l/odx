@@ -464,11 +464,11 @@ export default function ChildBenefitsClaim() {
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      PCore.getLocaleUtils().resetLocaleStore();
-      PCore.getLocaleUtils().loadLocaleResources([
+      // PCore.getLocaleUtils().resetLocaleStore();
+      /* PCore.getLocaleUtils().loadLocaleResources([
         PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
         '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
-      ]);
+      ]); */
       initialRender(renderObj);
 
       operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();

@@ -173,9 +173,9 @@ export default function AutoComplete(props: AutoCompleteProps) {
 
   useEffect(() => {
     if (currentLang === 'CY') {
-      PCore.getLocaleUtils().loadLocaleResources([
+      /* PCore.getLocaleUtils().loadLocaleResources([
         `@BASECLASS!DATAPAGE!${datasource.toUpperCase()}`
-      ]);
+      ]); */
     }
 
     if (!displayMode && listType !== 'associated') {

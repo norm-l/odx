@@ -35,8 +35,8 @@ export default function View(props) {
   useEffect(() => {
     PCore.getPubSubUtils().subscribe('languageToggleTriggered', locale => {
       if (!locale.localeRef.includes(props.localeReference)) {
-        locale.localeRef.push(props.localeReference);
-        PCore.getLocaleUtils().loadLocaleResources([props.localeReference]);
+        // locale.localeRef.push(props.localeReference);
+        // PCore.getLocaleUtils().loadLocaleResources([props.localeReference]);
       }
     });
   }, []);
