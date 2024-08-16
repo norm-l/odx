@@ -534,16 +534,16 @@ export default function Assignment(props) {
               <h1 className='govuk-heading-l'>{header}</h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
-            <a
-              href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
-              className='govuk-link'
-              rel='noreferrer noopener'
-              target='_blank'
-            >
-              {t('ASK_HMRC_ONLINE')} {t('OPENS_IN_NEW_TAB')}
-            </a>
-            <br />
-            <br />
+            <p className='govuk-body'>
+              <a
+                href='https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit'
+                className='govuk-link'
+                rel='noreferrer noopener'
+                target='_blank'
+              >
+                {t('ASK_HMRC_ONLINE')} {t('OPENS_IN_NEW_TAB')}
+              </a>
+            </p>
           </MainWrapper>
         </div>
       )}
