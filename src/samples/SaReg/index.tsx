@@ -90,8 +90,8 @@ export default function SaReg() {
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'SA';
   const featureType = 'Service';
-  const caseStatusForRestrictedUser = 'resolved-rejecteddob';
-  const caseStatusForAlreadyRegisteredUser = 'resolved-rejectedutractive';
+  const caseStatusForRestrictedUser = 'resolved-rejectedvulnerable';
+  const caseStatusForAlreadyRegisteredUser = 'resolved-rejectedutrexists';
 
   function resetAppDisplay() {
     setShowUserPortal(false);
