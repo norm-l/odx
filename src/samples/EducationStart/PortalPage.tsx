@@ -101,7 +101,6 @@ export default function PortalPage(props) {
               <a
                 href='#'
                 className='govuk-link govuk-link--no-visited-state'
-                rel='noopener noreferrer'
                 onClick={showStartClaim}
               >
                 {t('STARTING_NON_ADVANCED_EDUCATION')}
