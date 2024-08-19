@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n, { t } from 'i18next';
 
 /* 
   setPageTitle()
@@ -28,21 +28,19 @@ export default function setPageTitle(errorProperty = false) {
 
   const pageHeading = i18n.t(document.getElementsByTagName('h1')[0]?.innerText);
 
-  // Scope to fetch serviceName dynamically from here
-  // TODO fetch serviceName dynamically
-  if(!serviceName || serviceName === ''){
+  if (!serviceName || serviceName === '') {
     serviceName = i18n.t('CLAIM_CHILD_BENEFIT');
-  }   
+  }
 
   if (pageHeading) {
-    const errorPrefix = errorProperty ? 'Error: ' : '';
+    const errorPrefix = errorProperty ? `${t('ERROR')}: ` : '';
     document.title = `${errorPrefix}${pageHeading} - ${serviceName} - GOV.UK`;
   } else {
     document.title = `${serviceName} - GOV.UK`;
   }
 }
 
-function registerServiceName(name){
+function registerServiceName(name) {
   serviceName = name;
 }
-export { registerServiceName }
+export { registerServiceName };
