@@ -1,9 +1,9 @@
-// @ts-nocheck
-
 import React, { useEffect, useState } from 'react';
 import StartClaim from './StartClaim';
 import PortalPage from './PortalPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+
+declare const PCore: any;
 
 export default function Landing({
   handleStartCliam,
@@ -17,7 +17,7 @@ export default function Landing({
 }) {
   const [inProgressClaims, setInProgressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
-  const [showStartClaim, setShowStartClaim] = useState({status: false, fromDefaultPortal: false});
+  const [showStartClaim, setShowStartClaim] = useState({ status: false, fromDefaultPortal: false });
   const [loadingInProgressClaims, setLoadingInProgressClaims] = useState(true);
   const [loadingSubmittedClaims, setLoadingSubmittedClaims] = useState(true);
 
@@ -53,36 +53,35 @@ export default function Landing({
   function getClaims(data, buttonContent) {
     const claimsData = [];
     data.forEach(item => {
-        const claimItem = {
-          claimRef: item.pyID,
-          dateCreated: item.pxCreateDateTime,
-          dateUpdated: item.pxUpdateDateTime,
-          children: [],
-          actionButton: buttonContent,
-          rowDetails: { pzInsKey: item.pzInsKey, pyAssignmentID: item.pyAssignmentID },
-          status: statusMapping(item.pyStatusWork)
-        };
+      const claimItem = {
+        claimRef: item.pyID,
+        dateCreated: item.pxCreateDateTime,
+        dateUpdated: item.pxUpdateDateTime,
+        children: [],
+        actionButton: buttonContent,
+        rowDetails: { pzInsKey: item.pzInsKey, pyAssignmentID: item.pyAssignmentID },
+        status: statusMapping(item.pyStatusWork),
+        viewDecisionNotice: item.ClaimExtension.ShowDecisionNotice
+      };
 
-        if (item.ClaimExtension?.ChildrenJSON) {
-          const additionalChildren = extractChildren(item.ClaimExtension?.ChildrenJSON);
-          additionalChildren.forEach(child => {
-            const newChild = {
-              firstName: child.name,
-              lastName: ' ',
-              dob: child.dob
-            };
-            claimItem.children.push(newChild);
-          });
-        } else {
-          claimItem.children.push({
-            firstName: item.ClaimExtension.Child.pyFirstName,
-            lastName: item.ClaimExtension.Child.pyLastName,
-            dob: item.ClaimExtension.Child.DateOfBirth
-              ? (item.ClaimExtension.Child.DateOfBirth)
-              : ''
-          });
-        }
-        claimsData.push(claimItem);
+      if (item.ClaimExtension?.ChildrenJSON) {
+        const additionalChildren = extractChildren(item.ClaimExtension?.ChildrenJSON);
+        additionalChildren.forEach(child => {
+          const newChild = {
+            firstName: child.name,
+            lastName: ' ',
+            dob: child.dob
+          };
+          claimItem.children.push(newChild);
+        });
+      } else {
+        claimItem.children.push({
+          firstName: item.ClaimExtension.Child.pyFirstName,
+          lastName: item.ClaimExtension.Child.pyLastName,
+          dob: item.ClaimExtension.Child.DateOfBirth ? item.ClaimExtension.Child.DateOfBirth : ''
+        });
+      }
+      claimsData.push(claimItem);
     });
     return claimsData;
   }
@@ -120,7 +119,8 @@ export default function Landing({
   }, []);
 
   return (
-    (!loadingInProgressClaims && !loadingSubmittedClaims) && (
+    !loadingInProgressClaims &&
+    !loadingSubmittedClaims && (
       <>
         {showPortalPageDefault ||
         (!showStartClaim.status && (inProgressClaims.length || submittedClaims.length)) ? (
@@ -140,7 +140,6 @@ export default function Landing({
             handleStartCliam={handleStartCliam}
             setShowStartClaim={setShowStartClaim}
             showStartClaim={showStartClaim}
-            showPortalPageDefault={showPortalPageDefault}
             setShowPortalPageDefault={setShowPortalPageDefault}
             setShowPortalBanner={setShowPortalBanner}
           />

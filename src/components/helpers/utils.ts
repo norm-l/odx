@@ -38,6 +38,21 @@ export const isUnAuthJourney = () => {
   return caseType === 'Unauth' || window.location.href.includes('/ua');
 };
 
+export const isAuthJourney = () => {
+  const containername = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const context = PCore.getContainerUtils().getActiveContainerItemName(`${containername}/workarea`);
+  const caseType = PCore.getStoreValue('.CaseType', 'caseInfo.content', context);
+  return caseType === 'Auth';
+};
+
+export const isCHBJourney = () => {
+  const isAuth = isAuthJourney();
+  const isUnAuth = isUnAuthJourney();
+  return isAuth || isUnAuth;
+};
+
 export const isEduStartJourney = () => {
   const caseTypeName = 'HMRC-ChB-Work-EducationStart';
   const containername = PCore.getContainerUtils().getActiveContainerItemName(

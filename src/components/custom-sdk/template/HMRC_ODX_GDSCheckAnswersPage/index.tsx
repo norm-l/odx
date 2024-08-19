@@ -5,7 +5,7 @@ import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps
 import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
-import { scrollToTop } from '../../../helpers/utils';
+import { isCHBJourney, scrollToTop } from '../../../helpers/utils';
 
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
@@ -187,7 +187,12 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const originalLink = cloneLink;
       if (originalLink) {
         cloneLink.addEventListener('click', event => {
-          getCYAStepId(event, originalLink);
+          if (isCHBJourney()) {
+            getCYAStepId(event, originalLink);
+          } else {
+            const stepId = originalLink.getAttribute('data-step-id');
+            navigateToStep(event, stepId, originalLink);
+          }
         });
       }
     });
