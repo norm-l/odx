@@ -33,7 +33,7 @@ export default function setPageTitle(errorProperty = false) {
   }
 
   if (pageHeading) {
-    const errorPrefix = errorProperty ? `${t('TITLE_HEADER')}: ` : '';
+    const errorPrefix = errorProperty ? `${t('ERROR')}: ` : '';
     document.title = `${errorPrefix}${pageHeading} - ${serviceName} - GOV.UK`;
   } else {
     document.title = `${serviceName} - GOV.UK`;
