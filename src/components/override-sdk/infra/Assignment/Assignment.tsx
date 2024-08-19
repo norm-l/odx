@@ -5,7 +5,8 @@ import {
   getServiceShutteredStatus,
   scrollToTop,
   shouldRemoveFormTagForReadOnly,
-  removeRedundantString
+  removeRedundantString,
+  isCHBJourney
 } from '../../../helpers/utils';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import {
@@ -536,7 +537,7 @@ export default function Assignment(props) {
     // This is for chb tactical solution only
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
-    if (currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+    if (isCHBJourney() && currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
       handleBackLinkforInvalidDate();
       if (isComingFromTasklist === 'true') {
         // coming from tasklist
@@ -592,6 +593,7 @@ export default function Assignment(props) {
           )}
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
+          isCHBJourney() &&
           sessionStorage.getItem('isTasklistScreen') !== 'true' &&
           !isChildSummaryScreen ? (
             <Button
