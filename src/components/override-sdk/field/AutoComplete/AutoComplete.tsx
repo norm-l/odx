@@ -93,7 +93,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const formattedPropertyName = name || propName?.split('.')?.pop();
 
   function customAssignmentFinished() {
-    if (localStorage.getItem(`autocompleteValue${name}`) !== null) {
+    if (sessionStorage.getItem(`autocompleteValue${name}`) !== null) {
       sessionStorage.setItem(
         `autocompleteEmptyValue${name}`,
         sessionStorage.getItem(`autocompleteValue${name}` || '')

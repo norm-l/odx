@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
+import { isCHBJourney } from '../../../helpers/utils';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
@@ -49,7 +50,7 @@ export default function ActionButtons(props) {
             </Button>
           ) : null
         )}
-        {isDeclarationPage && (
+        {isDeclarationPage && isCHBJourney() && (
           <Button
             variant='secondary'
             attributes={{ type: 'button' }}
