@@ -195,7 +195,9 @@ export default function ChildBenefitsClaim() {
 
   function closeContainer() {
     const pegaElem = document.getElementById('pega-part-of-page');
-    pegaElem.style.display = 'none';
+    if (pegaElem) {
+      pegaElem.style.display = 'none';
+    }
     displayUserPortal();
   }
 
