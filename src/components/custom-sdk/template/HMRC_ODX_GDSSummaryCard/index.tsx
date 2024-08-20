@@ -16,6 +16,7 @@ export default function HmrcOdxGdsSummaryCard(props) {
   let itemName = '';
   switch (useType) {
     case '1':
+      sessionStorage.setItem('isChildSummaryScreen', 'true');
       itemName = t('GDS_INFO_ITEM_CHILD');
       break;
     case '2':
@@ -31,6 +32,12 @@ export default function HmrcOdxGdsSummaryCard(props) {
       break;
   }
   const [childName, setChildName] = useState(itemName);
+
+  useEffect(() => {
+    return () => {
+      sessionStorage.setItem('isChildSummaryScreen', 'false');
+    };
+  }, []);
 
   useEffect(() => {
     const elms: Array<string> = [];

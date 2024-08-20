@@ -8,6 +8,10 @@ import dayjs from 'dayjs';
 
 declare const PCore: any;
 
+type NoticeDetailsType = {
+  DocumentContentHTML: string;
+};
+
 export default function ClaimsList(props) {
   const {
     thePConn,
@@ -22,6 +26,37 @@ export default function ClaimsList(props) {
   const { t } = useTranslation();
 
   const containerManger = thePConn?.getContainerManager();
+  const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
+  const docIDForDecisionNotice = locale.toLowerCase() !== 'en_gb' ? 'ESDN0002' : 'ESDN0001';
+
+  function viewDecisionWindow(e: React.MouseEvent<HTMLAnchorElement>, currentCaseId: string) {
+    e.preventDefault();
+
+    const options = {
+      invalidateCache: true
+    };
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_DocumentContent',
+        'root',
+        {
+          DocumentID: docIDForDecisionNotice,
+          Locale: locale,
+          CaseID: currentCaseId
+        },
+        options
+      )
+      .then((noticeDetails: NoticeDetailsType) => {
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(noticeDetails.DocumentContentHTML);
+        newWindow.document.close();
+      })
+      .catch((err: Error) => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
+  }
+
   const resetContainer = () => {
     const context = PCore.getContainerUtils().getActiveContainerItemName(
       `${PCore.getConstants().APP.APP}/primary`
@@ -40,10 +75,11 @@ export default function ClaimsList(props) {
 
   async function _rowClick(e, row: any) {
     e.preventDefault();
+    sessionStorage.setItem('assignmentFinishedFlag', 'false');
     const { pzInsKey, pyAssignmentID } = row;
 
     // const container = thePConn.getContainerName();
-    const container = 'primary'; 
+    const container = 'primary';
 
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
@@ -78,27 +114,26 @@ export default function ClaimsList(props) {
     return claimItem.children.map((child, index) => (
       <React.Fragment key={child?.firstName}>
         <dl className='govuk-summary-list govuk-!-margin-bottom-0'>
-          {(child?.firstName ||
-            child?.lastName) && (
-              <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
-                <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {t('YOUNG_PERSON_NAME')}
-                </dt>
-                <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {child?.firstName} {child?.lastName}
-                </dd>
-                <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
-                  {/* If this is the first entry add the status */}
-                  {index === 0 ? (
-                    <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
-                      {t(claimItem.status.text)}
-                    </strong>
-                  ) : (
-                    <span className='govuk-visually-hidden'>No action</span>
-                  )}
-                </dd>
-              </div>
-            )}
+          {(child?.firstName || child?.lastName) && (
+            <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
+              <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {t('YOUNG_PERSON_NAME')}
+              </dt>
+              <dd className='govuk-summary-list__value govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {child?.firstName} {child?.lastName}
+              </dd>
+              <dd className='govuk-summary-list__actions govuk-!-width-one-third govuk-!-padding-bottom-2'>
+                {/* If this is the first entry add the status */}
+                {index === 0 ? (
+                  <strong className={`govuk-tag govuk-tag--${claimItem.status.tagColour}`}>
+                    {t(claimItem.status.text)}
+                  </strong>
+                ) : (
+                  <span className='govuk-visually-hidden'>{t('NO_ACTION')}</span>
+                )}
+              </dd>
+            </div>
+          )}
           {child?.dob && (
             <div className='govuk-summary-list__row govuk-summary-list__row--no-border'>
               <dt className='govuk-summary-list__key govuk-!-width-one-third govuk-!-padding-bottom-2'>
@@ -139,13 +174,26 @@ export default function ClaimsList(props) {
           {t(claimItem.actionButton)}
         </Button>
 
-        {!caseId?.includes(claimItem.claimRef) &&
-          (claimItem?.status?.text === 'IN_PROGRESS_1') && (
-            <p className='govuk-body'>
-              {t('PORTAL_WARNING_TEXT')} {getCurrentDate(claimItem?.dateUpdated)}{' '}
-              {t('EDUCATION_PORTAL_WARNING_TEXT2')}
-            </p>
-          )}
+        {claimItem.viewDecisionNotice && (
+          <div className='govuk-body'>
+            <a
+              className='govuk-link'
+              href='#'
+              onClick={e => viewDecisionWindow(e, claimItem.rowDetails.pzInsKey)}
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              {t('VIEW_DECISION_NOTICE')} {t('OPENS_IN_NEW_TAB')}
+            </a>
+          </div>
+        )}
+
+        {!caseId?.includes(claimItem.claimRef) && claimItem?.status?.text === 'IN_PROGRESS_1' && (
+          <p className='govuk-body'>
+            {t('PORTAL_WARNING_TEXT')} {getCurrentDate(claimItem?.dateUpdated)}{' '}
+            {t('EDUCATION_PORTAL_WARNING_TEXT2')}
+          </p>
+        )}
         <hr
           className='govuk-section-break govuk-section-break--l govuk-section-break--visible'
           aria-hidden='true'
