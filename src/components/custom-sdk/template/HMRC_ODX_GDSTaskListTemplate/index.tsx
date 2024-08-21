@@ -196,7 +196,7 @@ export default function HmrcOdxGdsTaskListTemplate(props: HmrcOdxGdsTaskListTemp
             })}
         </ul>
       </div>
-      {completedSections !== totalSections ? (
+      {completedSections === totalSections ? (
         <Button
           name={cssHooks === 'unauth' ? t('CONTINUE') : t('SAVE_AND_CONTINUE')}
           variant='primary'
