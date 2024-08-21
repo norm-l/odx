@@ -82,11 +82,13 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
     }
 
+    triggerLogout();
     setShowTimeoutModal(false);
     setShowStartPage(false);
     setShowPega(false);
     setShowResolutionScreen(false);
     setShowDeletePage(true);
+    sessionStorage.clear();
   }
 
   function startNow() {
