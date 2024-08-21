@@ -351,6 +351,16 @@ export default function ChildBenefitsClaim() {
       },
       'continueCase'
     );
+
+    PCore.getPubSubUtils().subscribe(
+      'showPortalScreenOnBackPress',
+      () => {
+        cancelAssignment();
+        setShowPortalBanner(true);
+        setIsCreateCaseBlocked(false);
+      },
+      'showPortalScreenOnBackPress'
+    );
   }
 
   useEffect(() => {
@@ -578,6 +588,7 @@ export default function ChildBenefitsClaim() {
         'assignmentFinished'
       );
       PCore?.getPubSubUtils().unsubscribe('languageToggleTriggered');
+      PCore?.getPubSubUtils().unsubscribe('showPortalScreenOnBackPress');
     };
   }, []);
 

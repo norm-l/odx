@@ -108,8 +108,8 @@ export default function ProofOfEntitlement() {
         }}
         signoutHandler={triggerLogout}
         isAuthorised
-        signoutButtonText='Sign out'
-        staySignedInButtonText='Stay signed in'
+        signoutButtonText={t('SIGN-OUT')}
+        staySignedInButtonText={t('STAY_SIGNED_IN')}
       />
       {(pageContentReady && (
         <div className='govuk-width-container' id='poe-page'>
