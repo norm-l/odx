@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { isCHBJourney } from '../../../helpers/utils';
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
     props;
+  const [isDisabled, setIsDisabled] = useState(false);
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const localeCategory = 'Assignment';
   // This is for chb tactical solution only
@@ -29,6 +30,10 @@ export default function ActionButtons(props) {
     event.preventDefault();
     thePConn.getActionsApi().navigateToStep(taskListStepId, containerID);
   }
+
+  useEffect(() => {
+    setIsDisabled(false);
+  }, [isDeclarationPage]);
 
   return (
     <>
@@ -53,8 +58,12 @@ export default function ActionButtons(props) {
         {isDeclarationPage && isCHBJourney() && (
           <Button
             variant='secondary'
+            disabled={isDisabled}
             attributes={{ type: 'button' }}
-            onClick={e => navigateToTaskList(e)}
+            onClick={e => {
+              setIsDisabled(true);
+              navigateToTaskList(e);
+            }}
           >
             {t('RETURN_TO_CHANGE_CLAIM')}
           </Button>
