@@ -171,13 +171,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
     ''
   );
 
-  useEffect(() => {
-    if (currentLang === 'CY') {
-      /* PCore.getLocaleUtils().loadLocaleResources([
-        `@BASECLASS!DATAPAGE!${datasource.toUpperCase()}`
-      ]); */
-    }
-
+  useEffect(() => {   
     if (!displayMode && listType !== 'associated') {
       getDataPage(datasource, parameters, context).then((results: any) => {
         const optionsData: Array<any> = [];

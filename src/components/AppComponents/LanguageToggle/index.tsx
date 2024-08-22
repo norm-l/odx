@@ -23,15 +23,24 @@ const LanguageToggle = props => {
       setPageTitle();
     });
     if (typeof PCore !== 'undefined') {
-      PCore.getEnvironmentInfo().setLocale(`${lang}_GB`);
-      PCore.getLocaleUtils().resetLocaleStore();
-      PCore.getLocaleUtils().loadLocaleResources([
+      // Fetch Locale Reference names for data pages
+      const datapageKeys = Object.keys(PCore.getDataPageUtils().datastore);
+      const dataPageBundleNames = datapageKeys.map((dpageName)=> {
+        return `@BASECLASS!DATAPAGE!${dpageName.toUpperCase()}`
+      })
+      
+      const bundles = [
         PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
         '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE',
         '@BASECLASS!DATAPAGE!D_SCOPEDREFERENCEDATALISTBYTYPE',
         'HMRC-CHB-WORK-CLAIM!CASE!CLAIM',
-        ...resourcebundles
-      ]);
+      ]
+
+      bundles.push(...resourcebundles, ...dataPageBundleNames)
+
+      PCore.getEnvironmentInfo().setLocale(`${lang}_GB`);
+      PCore.getLocaleUtils().resetLocaleStore();
+      PCore.getLocaleUtils().loadLocaleResources(bundles);
       
       PCore.getPubSubUtils().publish('languageToggleTriggered', { language: lang, localeRef: [] });
     }
