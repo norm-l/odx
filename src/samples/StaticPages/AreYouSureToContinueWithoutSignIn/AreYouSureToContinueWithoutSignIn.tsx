@@ -63,7 +63,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
           }
         });
       } else {
-        history.push('/');
+        window.location.href = '/';
       }
     } else {
       setErrorMsg(t('SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN'));
