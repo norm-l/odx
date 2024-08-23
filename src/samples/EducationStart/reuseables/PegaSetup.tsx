@@ -317,8 +317,6 @@ export function startMashup(
     
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
 
-    // PM!! operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
-
     /* Functionality to set the device id in the header for use in CIP.
       Device id is unique and will be stored on the user device / browser cookie */
     const COOKIE_PEGAODXDI = 'pegaodxdi';
@@ -337,17 +335,7 @@ export function startMashup(
         setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
         PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
       });
-    }
-
-    // PM!! setLoadingSubmittedClaims(true);
-    // @ts-ignore
-    /* PCore.getDataPageUtils()
-        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
-        .then(resp => {
-          setSubmittedClaims(resp.data.slice(0, 10));
-        })
-        .finally(() => setLoadingSubmittedClaims(false));
-      fetchInProgressClaimsData(); */
+    }    
   });
 
   // Initialize the SdkComponentMap (local and pega-provided)
