@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { loginIfNecessary, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
+import { loginIfNecessary, sdkIsLoggedIn, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from '../HighIncomeCase/reuseables/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import { useTranslation } from 'react-i18next';
@@ -13,13 +13,20 @@ import {
   initTimeout,
   staySignedIn
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
+import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { useStartMashup } from '../HighIncomeCase/reuseables/PegaSetup';
 import StartPage from './StartPage';
+import SummaryPage from '../../components/AppComponents/SummaryPage';
 
 export default function ChangeOfBank() {
   const history = useHistory();
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
+  const [summaryPageContent, setSummaryPageContent] = useState<any>({
+    content: null,
+    title: null,
+    banner: null
+  });
 
   const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
@@ -32,9 +39,13 @@ export default function ChangeOfBank() {
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   };
 
-  const { showPega, setShowPega } = useStartMashup(setAuthType, onRedirectDone, {
-    appBacklinkProps: {}
-  });
+  const { showPega, setShowPega, caseId, showResolutionPage } = useStartMashup(
+    setAuthType,
+    onRedirectDone,
+    {
+      appBacklinkProps: {}
+    }
+  );
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -45,6 +56,49 @@ export default function ChangeOfBank() {
       loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
     }
   }, []);
+
+  useEffect(() => {
+    if (showResolutionPage) {
+      getSdkConfig().then(config => {
+        PCore.getRestClient()
+          .invokeCustomRestApi(
+            `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
+            {
+              method: 'GET',
+              body: '',
+              headers: '',
+              withoutDefaultHeaders: false
+            },
+            ''
+          )
+          .then(response => {
+            PCore.getPubSubUtils().unsubscribe(
+              'languageToggleTriggered',
+              'summarypageLanguageChange'
+            );
+            const summaryData: Array<any> =
+              response.data.data.caseInfo.content.ScreenContent.LocalisedContent;
+            const currentLang =
+              sessionStorage.getItem('rsdk_locale')?.slice(0, 2).toUpperCase() || 'EN';
+
+            setSummaryPageContent(summaryData.find(data => data.Language === currentLang));
+
+            PCore.getPubSubUtils().subscribe(
+              'languageToggleTriggered',
+              ({ language }) => {
+                setSummaryPageContent(
+                  summaryData.find(data => data.Language === language.toUpperCase())
+                );
+              },
+              'summarypageLanguageChange'
+            );
+          });
+      });
+    }
+    if (!showPega) {
+      setPageTitle();
+    }
+  }, [showResolutionPage, showPega]);
 
   const handleStartCOB = () => {
     setShowPega(true);
@@ -95,6 +149,14 @@ export default function ChangeOfBank() {
           <div id='pega-part-of-page'>
             <div id='pega-root'></div>
           </div>
+          {showResolutionPage && (
+            <SummaryPage
+              summaryContent={summaryPageContent.Content}
+              summaryTitle={summaryPageContent.Title}
+              summaryBanner={summaryPageContent.Banner}
+              backlinkProps={{}}
+            />
+          )}
         </div>
         <LogoutPopup
           show={showSignoutModal && !showTimeoutModal}

@@ -135,6 +135,8 @@ export default function ViewContainer(props) {
           hasForm: viewName === CREATE_DETAILS_VIEW_NAME
         };
         const configObject = PCore.createPConnect(config);
+        const caseStatus =
+          PCore.getStore().getState().data[routingInfo.accessedOrder[0]].caseInfo.status;
         // Add in displayOnlyFA if prop is on ViewContainer
         if (displayOnlyFA) {
           configObject.displayOnlyFA = true;
@@ -144,24 +146,21 @@ export default function ViewContainer(props) {
           Fragment,
           { key: theBuildName },
           <>
-            {!PCore.getStore()
-              .getState()
-              .data[routingInfo.accessedOrder[0]].caseInfo.status.startsWith('Open') &&
-              !isHICBC && (
-                <Button
-                  variant='backlink'
-                  onClick={e => {
-                    e.preventDefault();
-                    PCore.getContainerUtils().closeContainerItem(
-                      PCore.getContainerUtils().getActiveContainerItemName(
-                        `${pConn.getContextName()}/${pConn.getContainerName()}`
-                      )
-                    );
-                  }}
-                  key='closePreview'
-                  attributes={{ type: 'link' }}
-                />
-              )}
+            {!caseStatus.startsWith('Open') && !caseStatus.startsWith('New') && !isHICBC && (
+              <Button
+                variant='backlink'
+                onClick={e => {
+                  e.preventDefault();
+                  PCore.getContainerUtils().closeContainerItem(
+                    PCore.getContainerUtils().getActiveContainerItemName(
+                      `${pConn.getContextName()}/${pConn.getContainerName()}`
+                    )
+                  );
+                }}
+                key='closePreview'
+                attributes={{ type: 'link' }}
+              />
+            )}
             {componentVisible && root}
           </>,
           loadingInfo &&

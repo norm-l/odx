@@ -91,12 +91,13 @@ export default function AutoComplete(props: AutoCompleteProps) {
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps()['value'];
   const formattedPropertyName = name || propName?.split('.')?.pop();
+  const caseId = thePConn.getCaseSummary().content.pyID;
 
   function customAssignmentFinished() {
-    if (sessionStorage.getItem(`autocompleteValue${name}`) !== null) {
+    if (sessionStorage.getItem(`autocompleteValue${name}${caseId}`) !== null) {
       sessionStorage.setItem(
-        `autocompleteEmptyValue${name}`,
-        sessionStorage.getItem(`autocompleteValue${name}` || '')
+        `autocompleteEmptyValue${name}${caseId}`,
+        sessionStorage.getItem(`autocompleteValue${name}${caseId}` || '')
       );
     }
   }
@@ -121,6 +122,12 @@ export default function AutoComplete(props: AutoCompleteProps) {
       sessionStorage.setItem('isAutocompleteRendered', 'false');
     };
   }, []);
+
+  useEffect(() => {
+    if (!value) {
+      sessionStorage.removeItem(`autocompleteEmptyValue${name}${caseId}`);
+    }
+  }, [value]);
 
   useEffect(() => {
     setErrorMessage(localizedVal(validatemessage));
@@ -187,13 +194,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
     ''
   );
 
-  useEffect(() => {
-    if (currentLang === 'CY') {
-      PCore.getLocaleUtils().loadLocaleResources([
-        `@BASECLASS!DATAPAGE!${datasource.toUpperCase()}`
-      ]);
-    }
-
+  useEffect(() => {   
     if (!displayMode && listType !== 'associated') {
       getDataPage(datasource, parameters, context).then((results: any) => {
         const optionsData: Array<any> = [];
@@ -221,7 +222,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
   }, [currentLang]);
 
   function handleChange(event) {
-    sessionStorage.setItem(`autocompleteValue${name}`, event.target.value || '');
+    sessionStorage.setItem(`autocompleteValue${name}${caseId}`, event.target.value || '');
     const optionValue = event.target.value;
 
     const selectedOptionKey = options.filter(item => {
@@ -295,7 +296,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
         helperText={helperText}
         placeholder={placeholder}
         hideLabel={false}
-        emptyValue={sessionStorage.getItem(`autocompleteEmptyValue${name}`) || ''}
+        emptyValue={sessionStorage.getItem(`autocompleteEmptyValue${name}${caseId}`)}
       />
     );
   }
