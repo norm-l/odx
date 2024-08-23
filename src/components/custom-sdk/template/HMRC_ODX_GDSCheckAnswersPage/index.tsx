@@ -229,8 +229,9 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           requestAnimationFrame(checkChildren);
         }
       };
-
-      checkChildren();
+      setTimeout(() => {
+        checkChildren();
+      }, 500);
     }
   }, [dfChildren]);
 
