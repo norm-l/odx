@@ -229,8 +229,10 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           requestAnimationFrame(checkChildren);
         }
       };
-
-      checkChildren();
+      // Added timeout to fix rendering issue, will remove this once enhancement story related to autocomplete value implemented
+      setTimeout(() => {
+        checkChildren();
+      }, 500);
     }
   }, [dfChildren]);
 
