@@ -101,7 +101,7 @@ export default function Assignment(props) {
     if (sessionStorage.getItem('isChildSummaryScreen') === 'true') {
       setTimeout(() => {
         setIsChildSummaryScreen(true);
-      });
+      }, 100);
     } else {
       setIsChildSummaryScreen(false);
     }
@@ -165,7 +165,7 @@ export default function Assignment(props) {
   if (caseInfo?.assignments?.length > 0) {
     containerName = caseInfo.assignments[0].name;
   }
- 
+
   useEffect(() => {
     if (children && children.length > 0) {
       const oWorkItem = children[0].props.getPConnect();
@@ -621,7 +621,9 @@ export default function Assignment(props) {
             {(!isOnlyFieldDetails.isOnlyField ||
               containerName?.toLowerCase().includes('check your answer') ||
               containerName?.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>{localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS')}</h1>
+              <h1 className='govuk-heading-l'>
+                {localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS')}
+              </h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <p className='govuk-body'>
