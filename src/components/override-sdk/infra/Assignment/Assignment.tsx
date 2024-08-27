@@ -524,6 +524,7 @@ export default function Assignment(props) {
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
     if (isCHBJourney() && currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+      clearErrors();
       handleBackLinkforInvalidDate();
       if (isComingFromTasklist === 'true') {
         // coming from tasklist
