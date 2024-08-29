@@ -66,12 +66,20 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
   }, [lang]);
 
   useEffect(() => {
+    const options = {
+      invalidateCache: true
+    };
     PCore.getDataPageUtils()
-      .getPageDataAsync('D_DocumentContent', 'root', {
-        DocumentID: docIDForDocList,
-        Locale: locale,
-        CaseID: caseId || sessionStorage.getItem('caseRefId')
-      })
+      .getPageDataAsync(
+        'D_DocumentContent',
+        'root',
+        {
+          DocumentID: docIDForDocList,
+          Locale: locale,
+          CaseID: caseId || sessionStorage.getItem('caseRefId')
+        },
+        options
+      )
       .then(listData => {
         if (
           listData.DocumentContentHTML.includes("data-bornabroad='true'") ||
@@ -91,9 +99,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
         // eslint-disable-next-line no-console
         console.error(err);
       });
-    const options = {
-      invalidateCache: true
-    };
+
     PCore.getDataPageUtils()
       .getPageDataAsync(
         'D_DocumentContent',
@@ -248,12 +254,7 @@ const ConfirmationPage = ({ caseId, caseStatus, isUnAuth }) => {
       </>
     );
   };
-  useEffect(() => {
-    const element: HTMLElement = document.querySelector('div.rdlWrapperDiv');
-    if (element) {
-      element.style.display = 'none';
-    }
-  });
+
   const setCasetype = () => {
     if (caseStatus === undefined) {
       if (!loading && isBornAbroadOrAdopted) {
