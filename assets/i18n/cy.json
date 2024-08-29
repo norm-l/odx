@@ -404,8 +404,10 @@
   "ERROR": "Gwall",
   "RETURN_TO_CHANGE_CLAIM": "Dychwelyd i newid yr hawliad",
   "NO_ACTION": "No action",
+
+  "COB_SERVICE_HEADING": "Newid eich manylion taliadau Budd-dal Plant",
   "COB_PAGE_HEADING": "Newid y cyfrif rydych yn ei ddefnyddio i gael taliadau Budd-dal Plant",
-  "COB_PAGE_WARRNING": "Bydd taliadau Budd-dal Plant sy’n ddyledus cyn pen 3 diwrnod gwaith yn cael eu talu i’ch cyfrif presennol.",
+  "COB_PAGE_WARNING": "Bydd taliadau Budd-dal Plant sy’n ddyledus cyn pen 3 diwrnod gwaith yn cael eu talu i’ch cyfrif presennol.",
   "COB_PAGE_P1": "Gallwch ddefnyddio’r gwasanaeth hwn i newid i gyfrif banc, undeb credyd neu gymdeithas adeiladu newydd heb fod angen rif rôl.",
   "COB_PAGE_P2": "Os nad ydych yn hawlio Budd-dal Plant ar hyd o bryd, gallwch ",
   "COB_PAGE_MAKE_A_CLAIM": "wneud hawliad",

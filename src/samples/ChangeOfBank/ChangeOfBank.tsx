@@ -32,7 +32,7 @@ export default function ChangeOfBank() {
   const { hmrcURL } = useHMRCExternalLinks();
   const setAuthType = useState('gg')[1];
 
-  registerServiceName(t('CHB_HOMEPAGE_HEADING'));
+  registerServiceName(t('CHILD_BENEFIT'));
   const onRedirectDone = () => {
     history.replace('/change-of-bank');
     // appName and mainRedirect params have to be same as earlier invocation
@@ -126,7 +126,7 @@ export default function ChangeOfBank() {
         <AppHeader
           hasLanguageToggle
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
-          appname={t('CHB_HOMEPAGE_HEADING')}
+          appname={t('COB_SERVICE_HEADING')}
           handleSignout={handleSignout}
         />
         <TimeoutPopup
