@@ -32,7 +32,7 @@ export default function ChangeOfBank() {
   const { hmrcURL } = useHMRCExternalLinks();
   const setAuthType = useState('gg')[1];
 
-  registerServiceName(t('CHILD_BENEFIT'));
+  registerServiceName(t('COB_SERVICE_HEADING'));
   const onRedirectDone = () => {
     history.replace('/change-of-bank');
     // appName and mainRedirect params have to be same as earlier invocation
