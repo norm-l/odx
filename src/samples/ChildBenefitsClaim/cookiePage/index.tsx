@@ -5,18 +5,31 @@ import AppFooter from '../../../components/AppComponents/AppFooter';
 import CookiePageTable from './CookiePageTable';
 import { scrollToTop } from '../../../components/helpers/utils';
 import MainWrapper from '../../../components/BaseComponents/MainWrapper';
+import { useLocation } from 'react-router-dom';
 
 const FIND_OUT_MORE_URL = 'https://www.tax.service.gov.uk/help/cookie-details';
 
 export default function CookiePage() {
-  const { t } = useTranslation();
   scrollToTop();
+  const { t } = useTranslation();
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const fromUrl = searchParams.get('from');
+
+  let mainWrapperProps;
+  let appname = t('CLAIM_CHILD_BENEFIT');
+
+  if (fromUrl.includes('/education/start')) {
+    appname = t('EDUCATION_START');
+    mainWrapperProps = { serviceParam: 'claim-child-benefit' };
+  }
 
   return (
     <>
-      <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle isPegaApp={false} />
+      <AppHeader appname={appname} hasLanguageToggle isPegaApp={false} />
       <div className='govuk-width-container'>
-        <MainWrapper>
+        <MainWrapper  {...mainWrapperProps}>
           <h1 className='govuk-heading-l'>{t('COOKIES')}</h1>
           <p className='govuk-body'>{t('COOKIES_PAGE_P1')}</p>
           <p className='govuk-body'>{t('COOKIES_PAGE_P2')}</p>
