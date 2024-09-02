@@ -271,7 +271,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
-    } else if (containerClosed) { // = Back link action for submittetd cases
+    } else if (containerClosed) {
+      // = Back link action for submittetd cases
       setShowPortalBanner(false);
       setCurrentDisplay('landingpage');
     } else {
@@ -360,6 +361,14 @@ const EducationStartCase: FunctionComponent<any> = () => {
     settingTimer();
     PCore.getStore().subscribe(() =>
       staySignedIn(setShowTimeoutModal, '', null, false, true, currentDisplay === 'resolutionpage')
+    );
+
+    PCore?.getPubSubUtils().subscribe(
+      'showPortalScreenOnBackPress',
+      () => {
+        returnedToPortal(true);
+      },
+      'showPortalScreenOnBackPress'
     );
   });
 
