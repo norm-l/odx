@@ -6,6 +6,7 @@ import CookiePageTable from './CookiePageTable';
 import { scrollToTop } from '../../../components/helpers/utils';
 import MainWrapper from '../../../components/BaseComponents/MainWrapper';
 import { useLocation } from 'react-router-dom';
+import { registerServiceName } from '../../../components/helpers/setPageTitleHelpers';
 
 const FIND_OUT_MORE_URL = 'https://www.tax.service.gov.uk/help/cookie-details';
 
@@ -23,6 +24,7 @@ export default function CookiePage() {
   if (fromUrl.includes('/education/start')) {
     appname = t('EDUCATION_START');
     mainWrapperProps = { serviceParam: 'claim-child-benefit' };
+    registerServiceName(t('EDUCATION_START'));
   }
 
   return (
