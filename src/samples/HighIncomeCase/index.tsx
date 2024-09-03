@@ -13,7 +13,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(
     !window.location.search.includes('code')
   );
-  const [shuttered, setShuttered] = useState(null);  
+  const [shuttered, setShuttered] = useState(null);
   const [showLanguageToggle, setShowLanguageToggle] = useState(false);
 
   const { t } = useTranslation();
@@ -23,11 +23,11 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     setShowLandingPage(false);
   };
   useEffect(() => {
-    getSdkConfig().then((config)=>{
+    getSdkConfig().then(config => {
       setShowLanguageToggle(config?.hicbcOptinConfig?.showLanguageToggle);
-    })
-  }, [])
-  
+    });
+  }, []);
+
   useEffect(() => {
     getSdkConfig().then(config => {
       if (config.hicbcOptinConfig?.shutterService) {
@@ -47,12 +47,12 @@ const HighIncomeCase: FunctionComponent<any> = () => {
         <AppHeader appname={t('HICBC_APP_NAME')} hasLanguageToggle={false} />
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
-            <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
-            <p className='govuk-body'>Try again later.</p>
+            <h1 className='govuk-heading-l'>{t('SHUTTER_SERVICE_UNAVAILABLE')}</h1>
+            <p className='govuk-body'>{t('TRY_AGAIN_LATER')}</p>
             <p className='govuk-body'>
-              You can return to{' '}
+              {t('HICBC_ERROR_RETURN_TO')}{' '}
               <a className='govuk-link' href='https://www.gov.uk/child-benefit'>
-                Child Benefit guidance
+                {t('HICBC_ERROR_RETURN_LINK')}
               </a>
               .
             </p>
@@ -63,9 +63,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContext.Provider
-        value={{ appBacklinkProps: {}, showLanguageToggle}}
-      >
+      <AppContext.Provider value={{ appBacklinkProps: {}, showLanguageToggle }}>
         {showLandingPage ? (
           <LandingPage onProceedHandler={() => landingPageProceedHandler()} />
         ) : (
