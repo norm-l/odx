@@ -141,6 +141,10 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setShowPega(true);
     setShowLandingPage(false);
     setStartClaimClicked(true);
+
+    sessionStorage.setItem('isComingFromPortal', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('stepIDCYA');
   };
 
   /* ***
