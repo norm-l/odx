@@ -214,6 +214,7 @@ const ClaimPage: FunctionComponent<any> = () => {
   return (
     <>
       <TimeoutPopup
+        millisecondsTilSignout={120}
         show={showTimeoutModal}
         staySignedinHandler={() => {
           setShowTimeoutModal(false);

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export default function TimeoutPopup(props) {
   const {
     show,
-    milisecondsTilSignout,
+    millisecondsTilSignout,
     staySignedinHandler,
     signoutHandler,
     isAuthorised,
@@ -26,7 +26,7 @@ export default function TimeoutPopup(props) {
 
   const initialTimeoutState = {
     countdownStart: false,
-    timeRemaining: 60,
+    timeRemaining: 120,
     screenReaderCountdown: ''
   };
 
@@ -48,12 +48,12 @@ export default function TimeoutPopup(props) {
   useEffect(() => {
     if (!show) {
       // Reset countdown and related states if show is false
-      dispatch({ type: 'UPDATE_TIME_REMAINING', payload: 60 });
+      dispatch({ type: 'UPDATE_TIME_REMAINING', payload: 120 });
       dispatch({ type: 'UPDATE_SCREEN_READER_COUNTDOWN', payload: '' });
       dispatch({ type: 'START_COUNTDOWN', payload: false });
     } else {
       // Start the countdown only if show is true
-      const milisecondsTilCountdown = milisecondsTilSignout - 60000;
+      const milisecondsTilCountdown = millisecondsTilSignout - 60000;
       const countdownTimeout = setTimeout(() => {
         dispatch({ type: 'START_COUNTDOWN', payload: true });
       }, milisecondsTilCountdown);
@@ -66,10 +66,10 @@ export default function TimeoutPopup(props) {
 
   useEffect(() => {
     if (timeoutState.countdownStart) {
-      if (timeoutState.timeRemaining === 60) {
+      if (timeoutState.timeRemaining === 120) {
         dispatch({
           type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
+          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('2_MINUTES')}`
         });
       }
 
@@ -84,7 +84,7 @@ export default function TimeoutPopup(props) {
   }, [timeoutState.countdownStart, timeoutState.timeRemaining]);
 
   useEffect(() => {
-    if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
+    if (timeoutState.timeRemaining < 120 && timeoutState.timeRemaining % 20 === 0) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
         payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
@@ -242,7 +242,7 @@ export default function TimeoutPopup(props) {
 
 TimeoutPopup.propTypes = {
   show: PropTypes.bool,
-  milisecondsTilSignout: PropTypes.number,
+  millisecondsTilSignout: PropTypes.number,
   staySignedinHandler: PropTypes.func,
   signoutHandler: PropTypes.func,
   isAuthorised: PropTypes.bool,
