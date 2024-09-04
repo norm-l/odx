@@ -24,7 +24,12 @@ import { useHistory } from 'react-router-dom';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 const EducationStartCase: FunctionComponent<any> = () => {
+  const { t } = useTranslation();
+
   const educationStartParam = 'claim-child-benefit';
+  // Adding hardcoded value as key to sort translation issue.
+  const serviceName = 'Update your Child Benefit for education or training';
+  const appNameHeader = 'Update your Child Benefit for education or training';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
 
   const summaryPageRef = useRef<HTMLDivElement>(null);
@@ -55,7 +60,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
 
-  const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
 
@@ -86,7 +90,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
     containerClosed
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
-    serviceParam: educationStartParam
+    serviceParam: educationStartParam,
+    serviceName,
+    appNameHeader
   });
 
   useEffect(() => {
@@ -458,7 +464,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
         value={{
           appBacklinkProps: {},
           showLanguageToggle,
-          serviceParam: educationStartParam
+          serviceParam: educationStartParam,
+          serviceName,
+          appNameHeader
         }}
       >
         <TimeoutPopup
