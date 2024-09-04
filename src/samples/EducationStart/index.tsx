@@ -27,6 +27,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const { t } = useTranslation();
 
   const educationStartParam = 'claim-child-benefit';
+  // Adding hardcoded value as key to sort translation issue.
   const serviceName = 'Update your Child Benefit for education or training';
   const appNameHeader = 'Update your Child Benefit for education or training';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
