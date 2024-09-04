@@ -5,7 +5,7 @@ import type { PConnProps } from '@pega/react-sdk-components/lib/types/PConnProps
 import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
-import { isCHBJourney, scrollToTop } from '../../../helpers/utils';
+import { isCHBJourney, isEduStartJourney, scrollToTop } from '../../../helpers/utils';
 
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
@@ -100,13 +100,18 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       invalidateCache: true
     };
 
+    const dataPageName = isEduStartJourney()
+      ? 'D_GetCYAStepIDByApplication'
+      : 'D_GetCurrentCYAStepID';
+
     PCore.getDataPageUtils()
       .getPageDataAsync(
-        'D_GetCurrentCYAStepID',
+        dataPageName,
         'root',
         {
           FlowActionName: currentFlowActionId,
-          CaseID: pConn.getCaseSummary().content.pyID
+          CaseID: pConn.getCaseSummary().content.pyID,
+          ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
         },
         options
       ) // @ts-ignore
@@ -187,7 +192,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const originalLink = cloneLink;
       if (originalLink) {
         cloneLink.addEventListener('click', event => {
-          if (isCHBJourney()) {
+          if (isCHBJourney() || isEduStartJourney()) {
             getCYAStepId(event, originalLink);
           } else {
             const stepId = originalLink.getAttribute('data-step-id');
