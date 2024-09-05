@@ -137,7 +137,7 @@ export default function SaReg() {
   }, [showUserPortal, bShowPega, bShowResolutionScreen, serviceName]);
 
   function doRedirectDone() {
-    history.push('/');
+    history.replace('/');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
