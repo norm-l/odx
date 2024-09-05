@@ -82,6 +82,17 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  const getDataPageNameForCYAId = () => {
+    switch (true) {
+      case isCHBJourney():
+        return 'D_GetCurrentCYAStepID';
+      case isEduStartJourney():
+        return 'D_GetCYAStepIDByApplication';
+      default:
+        return 'D_GetCYAStepIDByApplication';
+    }
+  };
+
   const getCYAStepId = (event, originalLink) => {
     interface ResponseType {
       CYAStepID: string;
@@ -100,9 +111,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       invalidateCache: true
     };
 
-    const dataPageName = isEduStartJourney()
-      ? 'D_GetCYAStepIDByApplication'
-      : 'D_GetCurrentCYAStepID';
+    const dataPageName = getDataPageNameForCYAId();
 
     PCore.getDataPageUtils()
       .getPageDataAsync(
@@ -192,6 +201,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       const originalLink = cloneLink;
       if (originalLink) {
         cloneLink.addEventListener('click', event => {
+          event.preventDefault();
           if (isCHBJourney() || isEduStartJourney()) {
             getCYAStepId(event, originalLink);
           } else {

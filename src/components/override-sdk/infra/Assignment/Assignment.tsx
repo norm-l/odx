@@ -515,6 +515,7 @@ export default function Assignment(props) {
   }
 
   function navigate(e, sButton) {
+    e.preventDefault();
     const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
     const currentUniqueValueForEveryScreen = getUniqueValueForEveryScreen();
 
