@@ -418,5 +418,7 @@
   "COB_PAGE_P1": "You can use this service to change to a new bank account, credit union or building society without needing a roll number.",
   "COB_PAGE_P2": "If you are not currently claiming Child Benefit, you can ",
   "COB_PAGE_MAKE_A_CLAIM": "make a claim",
-  "COB_PAGE_P3": "Completing this service takes around 5 minutes."
+  "COB_PAGE_P3": "Completing this service takes around 5 minutes.",
+  "FOR": "for",
+  "BORN_ON": "born on"
 }
