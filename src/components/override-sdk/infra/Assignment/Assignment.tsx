@@ -6,7 +6,8 @@ import {
   scrollToTop,
   shouldRemoveFormTagForReadOnly,
   removeRedundantString,
-  isCHBJourney
+  isCHBJourney,
+  isEduStartJourney
 } from '../../../helpers/utils';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import {
@@ -514,6 +515,7 @@ export default function Assignment(props) {
   }
 
   function navigate(e, sButton) {
+    e.preventDefault();
     const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
     const currentUniqueValueForEveryScreen = getUniqueValueForEveryScreen();
 
@@ -523,7 +525,10 @@ export default function Assignment(props) {
     // This is for chb tactical solution only
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
-    if (isCHBJourney() && currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+    if (
+      (isCHBJourney() || isEduStartJourney()) &&
+      currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen
+    ) {
       clearErrors();
       handleBackLinkforInvalidDate();
       if (isComingFromTasklist === 'true') {
@@ -580,7 +585,7 @@ export default function Assignment(props) {
           )}
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-          isCHBJourney() &&
+          (isCHBJourney() || isEduStartJourney()) &&
           sessionStorage.getItem('isTasklistScreen') !== 'true' &&
           !isChildSummaryScreen ? (
             <Button
