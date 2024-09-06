@@ -83,6 +83,10 @@ export default function ClaimsList(props) {
 
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
+    sessionStorage.setItem('isComingFromPortal', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('stepIDCYA');
+
     if (rowClickAction === 'OpenAssignment') {
       resetContainer();
       const openAssignmentOptions = { containerName: container };
