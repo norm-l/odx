@@ -8,7 +8,6 @@ export interface AppContextValues {
   showLanguageToggle?: boolean;
   serviceParam?: string;
   serviceName?: string;
-  appNameHeader?: string;
 }
 // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 const AppContextEducation = createContext<AppContextValues>({
@@ -18,8 +17,7 @@ const AppContextEducation = createContext<AppContextValues>({
   },
   showLanguageToggle: false,
   serviceParam: '',
-  serviceName: '',
-  appNameHeader: ''
+  serviceName: ''
 });
 
 export { AppContextEducation as default };

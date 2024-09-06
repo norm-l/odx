@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import AppHeader from '../../../components/AppComponents/AppHeader';
 import AppFooter from '../../../components/AppComponents/AppFooter';
 import CookiePageTable from './CookiePageTable';
@@ -14,19 +15,25 @@ export default function CookiePage() {
   const { t } = useTranslation();
   const location = useLocation();
   scrollToTop();
-
-  const searchParams = new URLSearchParams(location.search);
-  const appNameHeader = searchParams.get('appname');
-  const serviceNamePageTitle = searchParams.get('serviceNamePageTitle');
-  const serviceParam = searchParams.get('serviceParam');
   
-  registerServiceName(t(serviceNamePageTitle));
+  const searchParams = new URLSearchParams(location.search);
+
+  // Checking if the param values are valid
+  function getUrlParamsValue(paramKey: string) {
+    console.log(i18n.exists(searchParams.get(paramKey)), '111')
+    return i18n.exists(searchParams.get(paramKey)) ? searchParams.get(paramKey) : '';
+  }
+
+  const serviceNameUpdate = getUrlParamsValue('serviceName') || 'CLAIM_CHILD_BENEFIT';
+  const serviceParamsUpdate = searchParams.get('serviceParam');
+  
+  registerServiceName(t(serviceNameUpdate));
 
   return (
     <>
-      <AppHeader appname={t(appNameHeader)} hasLanguageToggle isPegaApp={false} />
+      <AppHeader appname={t(serviceNameUpdate)} hasLanguageToggle isPegaApp={false} />
       <div className='govuk-width-container'>
-        <MainWrapper serviceParam={serviceParam}>
+        <MainWrapper serviceParam={serviceParamsUpdate}>
           <h1 className='govuk-heading-l'>{t('COOKIES')}</h1>
           <p className='govuk-body'>{t('COOKIES_PAGE_P1')}</p>
           <p className='govuk-body'>{t('COOKIES_PAGE_P2')}</p>

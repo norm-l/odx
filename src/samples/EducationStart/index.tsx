@@ -28,7 +28,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
 
   const educationStartParam = 'claim-child-benefit';
   // Adding hardcoded value as key to sort translation issue.
-  const serviceNameAndHeader = 'EDUCATION_START';
+  const serviceName = 'EDUCATION_START';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
 
   const summaryPageRef = useRef<HTMLDivElement>(null);
@@ -90,8 +90,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
     serviceParam: educationStartParam,
-    serviceName: serviceNameAndHeader,
-    appNameHeader: serviceNameAndHeader
+    serviceName
   });
 
   useEffect(() => {
@@ -464,8 +463,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
           appBacklinkProps: {},
           showLanguageToggle,
           serviceParam: educationStartParam,
-          serviceName: serviceNameAndHeader,
-          appNameHeader: serviceNameAndHeader
+          serviceName,
         }}
       >
         <TimeoutPopup
