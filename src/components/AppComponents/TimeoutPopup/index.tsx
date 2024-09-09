@@ -95,7 +95,7 @@ export default function TimeoutPopup(props) {
   }, [timeoutState.timeRemaining]);
 
   useEffect(() => {
-    if (isAuthorised && timeoutState.timeRemaining === 0) {
+    if (timeoutState.timeRemaining === 0) {
       const signoutHandlerTimeout = setTimeout(() => {
         signoutHandler();
       }, 1000);
@@ -104,7 +104,7 @@ export default function TimeoutPopup(props) {
         clearTimeout(signoutHandlerTimeout);
       };
     }
-  }, [isAuthorised, timeoutState.timeRemaining]);
+  }, [timeoutState.timeRemaining]);
 
   useEffect(() => {
     if (show) {
@@ -141,8 +141,13 @@ export default function TimeoutPopup(props) {
         </h1>
 
         <p className='govuk-body'>
-          {t('WE_WILL_DELETE_YOUR_CLAIM')}
-          <span className='govuk-!-font-weight-bold'> {t('2_MINUTES')}.</span>
+          {`${t('WE_WILL_DELETE_YOUR_CLAIM')} `}
+          <span className='govuk-!-font-weight-bold'> {timeoutText()}</span>
+          {timeoutState.countdownStart && (
+            <span className='govuk-visually-hidden' aria-live='polite'>
+              {timeoutState.screenReaderCountdown}
+            </span>
+          )}
         </p>
 
         <div className='govuk-button-group govuk-!-padding-top-4'>
@@ -165,8 +170,13 @@ export default function TimeoutPopup(props) {
         </h1>
 
         <p className='govuk-body'>
-          {t('AUTOMATICALLY_CLOSE_IN')}
-          <span className='govuk-!-font-weight-bold'> {t('2_MINUTES')}.</span>
+          {`${t('AUTOMATICALLY_CLOSE_IN')} `}
+          <span className='govuk-!-font-weight-bold'>{timeoutText()}</span>
+          {timeoutState.countdownStart && (
+            <span className='govuk-visually-hidden' aria-live='polite'>
+              {timeoutState.screenReaderCountdown}
+            </span>
+          )}
         </p>
 
         <div className='govuk-button-group govuk-!-padding-top-4'>
