@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 
-
 export interface AppContextValues {
   appBacklinkProps: {
     appBacklinkAction?: Function | null;
@@ -8,15 +7,19 @@ export interface AppContextValues {
   };
   showLanguageToggle?: boolean;
   serviceParam?: string;
+  serviceName?: string;
+  appNameHeader?: string;
 }
 // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
-const AppContextEducation = createContext<AppContextValues>({  
+const AppContextEducation = createContext<AppContextValues>({
   appBacklinkProps: {
     appBacklinkAction: null,
     appBacklinkText: null
   },
   showLanguageToggle: false,
-  serviceParam: ''
+  serviceParam: '',
+  serviceName: '',
+  appNameHeader: ''
 });
 
 export { AppContextEducation as default };
