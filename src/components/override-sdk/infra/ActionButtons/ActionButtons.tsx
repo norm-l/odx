@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { isCHBJourney } from '../../../helpers/utils';
+import { isCHBJourney, isEduStartJourney } from '../../../helpers/utils';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
@@ -21,6 +21,7 @@ export default function ActionButtons(props) {
     .getContainerAccessOrder(`${_context}/${_containerName}`)
     .at(-1);
   const isDeclarationPage = screenName?.toLowerCase().includes('declaration');
+  const isIntruptionPage = screenName?.toLowerCase().includes('add some information');
 
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -29,6 +30,37 @@ export default function ActionButtons(props) {
   function navigateToTaskList(event) {
     event.preventDefault();
     thePConn.getActionsApi().navigateToStep(taskListStepId, containerID);
+  }
+
+  function navigateToCYA(event) {
+    event.preventDefault();
+    interface ResponseType {
+      CYAStepID: string;
+    }
+
+    const options = {
+      invalidateCache: true
+    };
+
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_GetCYAStepIDByApplication',
+        'root',
+        {
+          ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
+        },
+        options
+      ) // @ts-ignore
+      .then((pageData: ResponseType) => {
+        const stepIDCYA = pageData?.CYAStepID;
+        if (stepIDCYA) {
+          thePConn.getActionsApi().navigateToStep(stepIDCYA, containerID);
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
   }
 
   useEffect(() => {
@@ -49,7 +81,7 @@ export default function ActionButtons(props) {
               key={mButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {!isUnAuth && !isHICBC && mButton.name === 'Continue'
+              {!isUnAuth && !isHICBC && !isIntruptionPage && mButton.name === 'Continue'
                 ? t('SAVE_AND_CONTINUE')
                 : localizedVal(mButton.name, localeCategory)}
             </Button>
@@ -66,6 +98,16 @@ export default function ActionButtons(props) {
             }}
           >
             {t('RETURN_TO_CHANGE_CLAIM')}
+          </Button>
+        )}
+        {isDeclarationPage && isEduStartJourney() && (
+          <Button
+            variant='link'
+            onClick={e => {
+              navigateToCYA(e);
+            }}
+          >
+            {t('RETURN_TO_CHANGE_ANSWERS')}
           </Button>
         )}
       </div>
