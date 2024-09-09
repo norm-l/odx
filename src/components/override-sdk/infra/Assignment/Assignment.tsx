@@ -6,7 +6,8 @@ import {
   scrollToTop,
   shouldRemoveFormTagForReadOnly,
   removeRedundantString,
-  isCHBJourney
+  isCHBJourney,
+  isEduStartJourney
 } from '../../../helpers/utils';
 import ErrorSummary from '../../../BaseComponents/ErrorSummary/ErrorSummary';
 import {
@@ -56,7 +57,7 @@ export default function Assignment(props) {
     : SdkComponentMap.getPegaProvidedComponentMap()['AssignmentCard'];
 
   const actionsAPI = thePConn.getActionsApi();
-  const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const localizedVal = thePConn.getLocalizedValue;
   const localeCategory = 'Assignment';
   const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
     .getCaseInfo()
@@ -74,10 +75,8 @@ export default function Assignment(props) {
   const [errorSummary, setErrorSummary] = useState(false);
   const [errorMessages, setErrorMessages] = useState<Array<OrderedErrorMessage>>([]);
   const [serviceShutteredStatus, setServiceShutteredStatus] = useState(serviceShuttered);
-  const [header, setHeader] = useState('');
 
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  const [selectedLang, setSelectedLang] = useState(lang);
 
   const [hasAutoCompleteError, setHasAutoCompleteError] = useState('');
 
@@ -103,7 +102,7 @@ export default function Assignment(props) {
     if (sessionStorage.getItem('isChildSummaryScreen') === 'true') {
       setTimeout(() => {
         setIsChildSummaryScreen(true);
-      });
+      }, 100);
     } else {
       setIsChildSummaryScreen(false);
     }
@@ -168,18 +167,6 @@ export default function Assignment(props) {
     containerName = caseInfo.assignments[0].name;
   }
 
-  const headerLocaleLocation = PCore.getStoreValue('localeReference', '', 'app');
-
-  PCore.getPubSubUtils().subscribe('languageToggleTriggered', langreference => {
-    setSelectedLang(langreference?.language);
-  });
-
-  useEffect(() => {
-    setTimeout(() => {
-      setHeader(localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS'));
-    }, 60);
-  }, [headerLocaleLocation, containerName, selectedLang]);
-
   useEffect(() => {
     if (children && children.length > 0) {
       const oWorkItem = children[0].props.getPConnect();
@@ -230,7 +217,7 @@ export default function Assignment(props) {
             validatemessage =
               validatemessage +
               (validatemessage.length > 0 ? '. ' : '') +
-              localizedVal(removeRedundantString(element.message), 'Messages');
+              localizedVal(removeRedundantString(element.message), 'Messages', localeReference);
           });
         }
 
@@ -259,7 +246,7 @@ export default function Assignment(props) {
 
           acc.push({
             message: {
-              message: localizedVal(removeRedundantString(validatemessage)),
+              message: removeRedundantString(validatemessage),
               pageRef,
               fieldId,
               clearMessageProperty
@@ -528,6 +515,7 @@ export default function Assignment(props) {
   }
 
   function navigate(e, sButton) {
+    e.preventDefault();
     const storedStepIDCYA = sessionStorage.getItem('stepIDCYA');
     const currentUniqueValueForEveryScreen = getUniqueValueForEveryScreen();
 
@@ -537,7 +525,11 @@ export default function Assignment(props) {
     // This is for chb tactical solution only
     const stepIdTasklist = 'SubProcessSF7_AssignmentSF1';
 
-    if (isCHBJourney() && currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen) {
+    if (
+      (isCHBJourney() || isEduStartJourney()) &&
+      currentUniqueValueForEveryScreen === storedUniqueValueForEveryScreen
+    ) {
+      clearErrors();
       handleBackLinkforInvalidDate();
       if (isComingFromTasklist === 'true') {
         // coming from tasklist
@@ -593,7 +585,7 @@ export default function Assignment(props) {
           )}
 
           {arSecondaryButtons?.findIndex(button => button.name === 'Previous') === -1 &&
-          isCHBJourney() &&
+          (isCHBJourney() || isEduStartJourney()) &&
           sessionStorage.getItem('isTasklistScreen') !== 'true' &&
           !isChildSummaryScreen ? (
             <Button
@@ -635,7 +627,9 @@ export default function Assignment(props) {
             {(!isOnlyFieldDetails.isOnlyField ||
               containerName?.toLowerCase().includes('check your answer') ||
               containerName?.toLowerCase().includes('declaration')) && (
-              <h1 className='govuk-heading-l'>{header}</h1>
+              <h1 className='govuk-heading-l'>
+                {localizedVal(containerName, 'Assignment', '@BASECLASS!GENERIC!PYGENERICFIELDS')}
+              </h1>
             )}
             {shouldRemoveFormTag ? renderAssignmentCard() : <form>{renderAssignmentCard()}</form>}
             <p className='govuk-body'>

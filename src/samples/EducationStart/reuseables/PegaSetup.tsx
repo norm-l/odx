@@ -325,14 +325,8 @@ export function startMashup(
 
     // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
     PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-    PCore.getLocaleUtils().resetLocaleStore();
-    PCore.getLocaleUtils().loadLocaleResources([
-      PCore.getLocaleUtils().GENERIC_BUNDLE_KEY,
-      '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE'
-    ]);
+    
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
-
-    // PM!! operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
 
     /* Functionality to set the device id in the header for use in CIP.
       Device id is unique and will be stored on the user device / browser cookie */
@@ -352,17 +346,7 @@ export function startMashup(
         setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
         PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
       });
-    }
-
-    // PM!! setLoadingSubmittedClaims(true);
-    // @ts-ignore
-    /* PCore.getDataPageUtils()
-        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
-        .then(resp => {
-          setSubmittedClaims(resp.data.slice(0, 10));
-        })
-        .finally(() => setLoadingSubmittedClaims(false));
-      fetchInProgressClaimsData(); */
+    }    
   });
 
   // Initialize the SdkComponentMap (local and pega-provided)

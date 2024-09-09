@@ -147,6 +147,7 @@
   "FOOTER_LISCENSE_P1": "All content is available under the ",
   "FOOTER_LISCENSE_LINK": "Open Government Licence v3.0",
   "FOOTER_LISCENSE_P2": ", except where otherwise stated",
+  "SUPPORT_LINKS": "Support links",
   "COPYRIGHT": "© Crown copyright",
   "SEVEN_DAYS": "7 days",
   "TEN_YEARS": "10 years",
@@ -306,7 +307,8 @@
   "HICBC_LANDINGPAGE_ONORAFTER_6_APRIL_OPTION_LABEL": "On or after 6 April 2024",
   "HICBC_LANDINGPAGE_QUESTION_LABEL": "When do you want to opt-in to Child Benefit payments?",
   "HICBC_LANDINGPAGE_NO_OPTION_SELECTED_ERROR_MESSAGE": "Select a date to opt-in",
-
+  "HICBC_ERROR_RETURN_TO": "You can return to",
+  "HICBC_ERROR_RETURN_LINK": "Child Benefit guidance",
   "BACK_TO_START_PAGE": "Back to start page",
   "CLICK_TO_LOGOUT": "Click to log out",
 
@@ -411,10 +413,12 @@
   "CHILD_BENEFIT_EXTENSION_REQUESTS": "Child Benefit extension requests",
   "LOADING": "Loading",
   "ERROR": "Error",
-  "RETURN_TO_CHANGE_CLAIM": "Return to change claim",
+  "RETURN_TO_CHANGE_CLAIM": "Return to change your claim",
   "NO_ACTION": "No action",
+
+  "COB_SERVICE_HEADING": "Change your Child Benefit payment details",
   "COB_PAGE_HEADING": "Change the account you use for Child Benefit payments",
-  "COB_PAGE_WARRNING": "Child Benefit due  within 3 working days will go into your existing account",
+  "COB_PAGE_WARNING": "Child Benefit due within 3 working days will go into your existing account.",
   "COB_PAGE_P1": "You can use this service to change to a new bank account, credit union or building society without needing a roll number.",
   "COB_PAGE_P2": "If you are not currently claiming Child Benefit, you can ",
   "COB_PAGE_MAKE_A_CLAIM": "make a claim",

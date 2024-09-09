@@ -12,7 +12,7 @@ export default function StartPage(props) {
   return (
     <MainWrapper>
       <h1 className='govuk-heading-xl'>{t('COB_PAGE_HEADING')}</h1>
-      <WarningText className='govuk-body'>{t('COB_PAGE_WARRNING')}</WarningText>
+      <WarningText className='govuk-body'>{t('COB_PAGE_WARNING')}</WarningText>
       <p className='govuk-body'>{t('COB_PAGE_P1')}</p>
       <p className='govuk-body'>
         {t('COB_PAGE_P2')}

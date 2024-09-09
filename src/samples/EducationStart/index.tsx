@@ -24,7 +24,11 @@ import { useHistory } from 'react-router-dom';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 const EducationStartCase: FunctionComponent<any> = () => {
+  const { t } = useTranslation();
+
   const educationStartParam = 'claim-child-benefit';
+  // Adding hardcoded value as key to sort translation issue.
+  const serviceNameAndHeader = 'EDUCATION_START';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
 
   const summaryPageRef = useRef<HTMLDivElement>(null);
@@ -55,7 +59,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
 
-  const { t } = useTranslation();
   const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
 
@@ -86,7 +89,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
     containerClosed
   } = useStartMashup(setAuthType, doRedirectDone, {
     appBacklinkProps: {},
-    serviceParam: educationStartParam
+    serviceParam: educationStartParam,
+    serviceName: serviceNameAndHeader,
+    appNameHeader: serviceNameAndHeader
   });
 
   useEffect(() => {
@@ -141,6 +146,10 @@ const EducationStartCase: FunctionComponent<any> = () => {
     setShowPega(true);
     setShowLandingPage(false);
     setStartClaimClicked(true);
+
+    sessionStorage.setItem('isComingFromPortal', 'true');
+    sessionStorage.setItem('isEditMode', 'true');
+    sessionStorage.removeItem('stepIDCYA');
   };
 
   /* ***
@@ -271,7 +280,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
-    } else if (containerClosed) { // = Back link action for submittetd cases
+    } else if (containerClosed) {
+      // = Back link action for submittetd cases
       setShowPortalBanner(false);
       setCurrentDisplay('landingpage');
     } else {
@@ -361,6 +371,14 @@ const EducationStartCase: FunctionComponent<any> = () => {
     PCore.getStore().subscribe(() =>
       staySignedIn(setShowTimeoutModal, '', null, false, true, currentDisplay === 'resolutionpage')
     );
+
+    PCore?.getPubSubUtils().subscribe(
+      'showPortalScreenOnBackPress',
+      () => {
+        returnedToPortal(true);
+      },
+      'showPortalScreenOnBackPress'
+    );
   });
 
   // And clean up
@@ -445,7 +463,9 @@ const EducationStartCase: FunctionComponent<any> = () => {
         value={{
           appBacklinkProps: {},
           showLanguageToggle,
-          serviceParam: educationStartParam
+          serviceParam: educationStartParam,
+          serviceName: serviceNameAndHeader,
+          appNameHeader: serviceNameAndHeader
         }}
       >
         <TimeoutPopup
