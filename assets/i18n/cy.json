@@ -221,5 +221,10 @@
   "GET_HELP": "Help",
   "USE": "Defnyddiwch ",
   "HRMC_ONLINE_ASSISTANT": "gynorthwyydd ar-lein CThEF (yn agor tab newydd)",
-  "TO_GET_HELP_WITH_REGISTRATION": " i gael help wrth gofrestru."
+  "TO_GET_HELP_WITH_REGISTRATION": " i gael help wrth gofrestru.",
+  "SORRY_SERVICE_NOT_AVAILABLE": "Mae’n ddrwg gennym, ond nid yw’r gwasanaeth hwn ar gael",
+  "YOU_WILL_USE_SERVICE_LATER": "Byddwch yn gallu defnyddio’r gwasanaeth hwn yn nes ymlaen.",
+  "FIND_OUT_HOW_TO": "Os hoffech siarad â rhywun o hyd, dysgwch sut i ",
+  "CONTACT_HRMC_ABOUT_SA": "gysylltu â CThEF ynghylch Hunanasesiad.",
+  "IF_STILL_NEED_TO_SPEAK": ""
 }

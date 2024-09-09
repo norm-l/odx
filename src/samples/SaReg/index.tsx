@@ -24,7 +24,6 @@ import UserPortal from './UserPortal';
 import RegistrationDetails from '../../components/templates/RegistrationDetails';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
-import ServiceNotAvailable from '../../components/AppComponents/ServiceNotAvailable';
 
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../sdk-local-component-map';
@@ -34,6 +33,7 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 import { triggerLogout, checkStatus } from '../../components/helpers/utils';
 import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
 import AlreadyRegisteredUserMessage from './AlreadyRegisteredUserMessage';
+import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 
 declare const myLoadMashup: any;
 /* Time out modal functionality */
@@ -84,7 +84,6 @@ export default function SaReg() {
   const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
   const [isSoleTrader, setIsSoleTrader] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-
   const history = useHistory();
   const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
@@ -161,16 +160,6 @@ export default function SaReg() {
           displayShowAlreadyRegisteredUserMessage();
         }
       });
-  }
-
-  function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal, setIsLogout);
-    setServiceNotAvailable(false);
-    displayUserPortal();
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
   }
 
   function getIsSoleTrader() {
@@ -553,7 +542,7 @@ export default function SaReg() {
 
   const renderContent = () => {
     if (serviceNotAvailable) {
-      return <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />;
+      return <ApiServiceNotAvailable />;
     } else if (shutterServicePage) {
       return <ShutterServicePage />;
     } else if (showAgeRestrictionInfo) {
