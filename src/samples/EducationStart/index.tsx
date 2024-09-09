@@ -280,8 +280,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
-    } else if (containerClosed) {
-      // = Back link action for submittetd cases
+    } else if (containerClosed) { // Back link action for submitted cases
       setShowPortalBanner(false);
       setCurrentDisplay('landingpage');
     } else {
