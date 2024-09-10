@@ -88,7 +88,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       sessionStorage.setItem('isComingFromPortal', 'false');
       sessionStorage.setItem('isCommingFromEduStartPages', 'false');
     }
-  }, []);
+  });
 
   const getDataPageNameForCYAId = () => {
     switch (true) {
