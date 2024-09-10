@@ -114,6 +114,6 @@ The EC2 instances built will use the ECS provided RHEL8.8 image and will have al
 
 ### Dynatrace SaaS links:
 
-NonProduction: <https://ihb49563.apps.dynatrace.com>
-PreProduction: <https://kdv79045.apps.dynatrace.com>
-Production: <https://tey47616.apps.dynatrace.com>
+* NonProduction: <https://ihb49563.apps.dynatrace.com>
+* PreProduction: <https://kdv79045.apps.dynatrace.com>
+* Production: <https://tey47616.apps.dynatrace.com>
