@@ -494,6 +494,56 @@ export default function Assignment(props) {
     }
   }, [actionButtons]);
 
+  // This is for declaration and interruption page of education start as pega have limitation
+  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const currentFlowActionId = PCore.getStoreValue(
+    '.ID',
+    'caseInfo.assignments[0].actions[0]',
+    contextWorkarea
+  );
+
+  const arrEduStartPagesForStepIds = ['declaration', 'checkdata'];
+  const isEduStartPagesForStepIdsExist = arrEduStartPagesForStepIds.includes(
+    currentFlowActionId.toLowerCase()
+  );
+
+  useEffect(() => {
+    if (isEduStartPagesForStepIdsExist && isEduStartJourney()) {
+      interface ResponseType {
+        CurrentStepId: string;
+      }
+
+      const options = {
+        invalidateCache: true
+      };
+
+      PCore.getDataPageUtils()
+        .getPageDataAsync(
+          'D_GetStepIdByApplicationAndAction',
+          'root',
+          {
+            FlowActionName: currentFlowActionId,
+            CaseID: thePConn.getCaseSummary().content.pyID,
+            ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
+          },
+          options
+        ) // @ts-ignore
+        .then((pageData: ResponseType) => {
+          const stepIDCYA = pageData?.CurrentStepId;
+          if (stepIDCYA) {
+            sessionStorage.setItem('stepIDCYA', stepIDCYA);
+            sessionStorage.setItem('isCommingFromEduStartPages', 'true');
+          }
+        })
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        });
+    }
+  }, [isEduStartPagesForStepIdsExist]);
+
   function renderAssignmentCard() {
     return (
       <ErrorMsgContext.Provider

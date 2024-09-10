@@ -15,13 +15,21 @@ export default function ActionButtons(props) {
   const thePConn = getPConnect();
   const _containerName = thePConn.getContainerName();
   const _context = thePConn.getContextName();
-  const caseInfo = thePConn.getDataObject().caseInfo;
-  const screenName = caseInfo?.assignments?.length > 0 ? caseInfo.assignments[0].name : '';
+
   const containerID = PCore.getContainerUtils()
     .getContainerAccessOrder(`${_context}/${_containerName}`)
     .at(-1);
-  const isDeclarationPage = screenName?.toLowerCase().includes('declaration');
-  const isIntruptionPage = screenName?.toLowerCase().includes('add some information');
+
+  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const flowActionId = PCore.getStoreValue(
+    '.ID',
+    'caseInfo.assignments[0].actions[0]',
+    contextWorkarea
+  );
+  const isDeclarationPage = flowActionId?.toLowerCase().includes('declaration');
+  const isIntruptionPage = flowActionId?.toLowerCase().includes('checkdata');
 
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -35,7 +43,7 @@ export default function ActionButtons(props) {
   function navigateToCYA(event) {
     event.preventDefault();
     interface ResponseType {
-      CYAStepID: string;
+      CurrentStepId: string;
     }
 
     const options = {
@@ -44,15 +52,17 @@ export default function ActionButtons(props) {
 
     PCore.getDataPageUtils()
       .getPageDataAsync(
-        'D_GetCYAStepIDByApplication',
+        'D_GetStepIdByApplicationAndAction',
         'root',
         {
+          FlowActionName: 'CheckYourAnswers',
+          CaseID: thePConn.getCaseSummary().content.pyID,
           ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
         },
         options
       ) // @ts-ignore
       .then((pageData: ResponseType) => {
-        const stepIDCYA = pageData?.CYAStepID;
+        const stepIDCYA = pageData?.CurrentStepId;
         if (stepIDCYA) {
           thePConn.getActionsApi().navigateToStep(stepIDCYA, containerID);
         }
@@ -71,7 +81,7 @@ export default function ActionButtons(props) {
     <>
       <div className='govuk-button-group govuk-!-padding-top-4'>
         {arMainButtons.map(mButton =>
-          mButton.name !== 'Hidden' ? (
+          mButton.name !== 'Hidden' && !isIntruptionPage ? (
             <Button
               variant='primary'
               onClick={e => {
@@ -81,11 +91,21 @@ export default function ActionButtons(props) {
               key={mButton.actionID}
               attributes={{ type: 'button' }}
             >
-              {!isUnAuth && !isHICBC && !isIntruptionPage && mButton.name === 'Continue'
+              {!isUnAuth && !isHICBC && mButton.name === 'Continue'
                 ? t('SAVE_AND_CONTINUE')
                 : localizedVal(mButton.name, localeCategory)}
             </Button>
-          ) : null
+          ) : (
+            <Button
+              variant='primary'
+              attributes={{ type: 'button' }}
+              onClick={e => {
+                navigateToCYA(e);
+              }}
+            >
+              {t('CONTINUE')}
+            </Button>
+          )
         )}
         {isDeclarationPage && isCHBJourney() && (
           <Button
