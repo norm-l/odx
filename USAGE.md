@@ -1,3 +1,15 @@
+## Table of Contents
+- [ODX-API Platform - Application Build Template](#odx-api-platform---application-build-template)
+  - [Environments](#environments)
+    - [Production Environments](#production-environments)
+    - [NonProduction Environments](#nonproduction-environments)
+  - [Usage](#usage)
+    - [Automatic jobs](#automatic-jobs)
+    - [Manual jobs](#manual-jobs)
+  - [Deployment Configuration](#deployment-configuration)
+  - [Infrastructure Configuration](#infrastructure-configuration)
+    - [Dynatrace SaaS links](#dynatrace-saas-links)
+
 # ODX-API Platform - Application Build Template
 
 This is the template to use when creating a new application for build and hosting on the ODX-API platform.
