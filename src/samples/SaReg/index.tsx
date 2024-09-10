@@ -212,6 +212,7 @@ export default function SaReg() {
         }
         // setLoadingInProgressRegistration(false);
       });
+    sessionStorage.setItem('assignmentFinishedFlag', 'false');
   }
 
   function cancelAssignment() {
@@ -234,20 +235,29 @@ export default function SaReg() {
     PCore.getPubSubUtils().subscribe(
       'assignmentFinished',
       () => {
-        setShowUserPortal(false);
-        setShowPega(false);
-        const containername = PCore.getContainerUtils().getActiveContainerItemName(
-          `${PCore.getConstants().APP.APP}/primary`
-        );
-        const context = PCore.getContainerUtils().getActiveContainerItemName(
-          `${containername}/workarea`
-        );
-        const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
+        const assignmentFinishedFlag = sessionStorage.getItem('assignmentFinishedFlag');
+        if (assignmentFinishedFlag !== 'true') {
+          setShowUserPortal(false);
+          setShowPega(false);
+          const containername = PCore.getContainerUtils().getActiveContainerItemName(
+            `${PCore.getConstants().APP.APP}/primary`
+          );
+          const context = PCore.getContainerUtils().getActiveContainerItemName(
+            `${containername}/workarea`
+          );
+          const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
 
-        if (status === 'Resolved-Discarded') {
-          displayServiceNotAvailable();
+          if (status === 'Resolved-Discarded') {
+            displayServiceNotAvailable();
 
-          PCore.getContainerUtils().closeContainerItem(context);
+            PCore.getContainerUtils().closeContainerItem(context);
+
+            sessionStorage.setItem('assignmentFinishedFlag', 'true');
+            PCore?.getPubSubUtils().unsubscribe(
+              PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
+              'assignmentFinished'
+            );
+          }
         }
       },
       'assignmentFinished'
