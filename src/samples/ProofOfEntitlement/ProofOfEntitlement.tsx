@@ -17,7 +17,7 @@ import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOut
 import LoadingSpinner from '../../components/helpers/LoadingSpinner/LoadingSpinner';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 
-declare const PCore;
+declare const PCore: any;
 declare const myLoadMashup: any;
 
 export default function ProofOfEntitlement() {

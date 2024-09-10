@@ -234,3 +234,23 @@ export const getClaimsCaseId = () => {
   const caseId = PCore.getStoreValue('.ID', 'caseInfo', context) || '';
   return caseId;
 };
+
+export const updateBundles = async (pegaInstance, language: string, currentBundles = []) => {
+  // Fetch Locale Reference names for data pages
+  const datapageKeys = Object.keys(pegaInstance.getDataPageUtils().datastore);
+  const dataPageBundleNames = datapageKeys.map(dpageName => {
+    return `@BASECLASS!DATAPAGE!${dpageName.toUpperCase()}`;
+  });
+
+  const bundles = [
+    pegaInstance.getLocaleUtils().GENERIC_BUNDLE_KEY,
+    '@BASECLASS!DATAPAGE!D_LISTREFERENCEDATABYTYPE',
+    '@BASECLASS!DATAPAGE!D_SCOPEDREFERENCEDATALISTBYTYPE',
+    'HMRC-CHB-WORK-CLAIM!CASE!CLAIM'
+  ];
+
+  bundles.push(...currentBundles, ...dataPageBundleNames);
+  pegaInstance.getEnvironmentInfo().setLocale(`${language}_GB`);
+  pegaInstance.getLocaleUtils().resetLocaleStore();
+  await pegaInstance.getLocaleUtils().loadLocaleResources(bundles);
+};

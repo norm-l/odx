@@ -1,5 +1,4 @@
 //  This file is adapted from React components/Templates/utils.js
-// declare const PCore: any;
 
 export function getAllFields(pConnect: any) {
   const metadata = pConnect.getRawMetadata();

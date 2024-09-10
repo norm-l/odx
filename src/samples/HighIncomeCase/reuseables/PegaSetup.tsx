@@ -16,6 +16,7 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
+import { updateBundles } from '../../../components/helpers/utils';
 
 declare const myLoadMashup: any;
 
@@ -98,7 +99,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
     () => {
-      // console.log("SUBEVENT!! showPegaWhenAssignmentOpened")
       setShowPega(true);
     },
     'showPegaWhenAssignmentOpened'
@@ -110,7 +110,6 @@ export function establishPCoreSubscriptions({
   PCore.getPubSubUtils().subscribe(
     PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_CREATED,
     () => {
-      // console.log("SUBEVENT!! showPegaWhenCaseCreated")
       setShowPega(true);
     },
     'showPegaWhenCaseCreated'
@@ -122,7 +121,6 @@ export function establishPCoreSubscriptions({
       // PM!! cancelAssignment();
       // PM!! setShowPortalBanner(true);
       // PM!! setIsCreateCaseBlocked(false);
-      // console.log('SUBEVENT!!! savedCase');
     },
     'savedCase'
   );
@@ -259,7 +257,7 @@ export function startMashup(
         */
 
     PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-    
+
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
 
     // PM!! operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
@@ -372,12 +370,15 @@ export const useStartMashup = (
       loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
     });
 
-    document.addEventListener('SdkConstellationReady', () => {
+    document.addEventListener('SdkConstellationReady', async () => {
       // start the portal
       startMashup(
         { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
         _AppContextValues
       );
+
+      const lang: string = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
+      await updateBundles(PCore, lang);
     });
 
     /* document.addEventListener('SdkLoggedOut', () => {
@@ -389,6 +390,13 @@ export const useStartMashup = (
     //  component is unmounted (in function returned from this effect)
 
     return function cleanupSubscriptions() {
+      document.removeEventListener('SdkConstellationReady', () => {
+        // start the portal
+        startMashup(
+          { setShowPega, setShowResolutionPage, setCaseId, setCaseStatus, setAssignmentPConnect },
+          _AppContextValues
+        );
+      });
       PCore?.getPubSubUtils().unsubscribe(
         PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
         'cancelAssignment'
@@ -418,5 +426,13 @@ export const useStartMashup = (
     }; */
   }, []);
 
-  return { showPega, setShowPega, showResolutionPage, setShowResolutionPage, caseId, caseStatus, assignmentPConn };
+  return {
+    showPega,
+    setShowPega,
+    showResolutionPage,
+    setShowResolutionPage,
+    caseId,
+    caseStatus,
+    assignmentPConn
+  };
 };

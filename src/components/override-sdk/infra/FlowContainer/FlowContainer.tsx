@@ -10,14 +10,16 @@ import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreCon
 import DayjsUtils from '@date-io/dayjs';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-import { addContainerItem, showBanner } from '@pega/react-sdk-components/lib/components/infra/Containers/FlowContainer/helpers';
+import {
+  addContainerItem,
+  showBanner
+} from '@pega/react-sdk-components/lib/components/infra/Containers/FlowContainer/helpers';
 
 import { getComponentFromMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 // import { isEmptyObject } from '@pega/react-sdk-components/lib/components/helpers/common-utils'
 
 // Remove this and use "real" PCore type once .d.ts is fixed (currently shows 3 errors)
 declare const PCore: any;
-
 
 //
 // WARNING:  It is not expected that this file should be modified.  It is part of infrastructure code that works with
@@ -29,7 +31,7 @@ export default function FlowContainer(props) {
   const pCoreConstants = PCore.getConstants();
   const PCoreVersion = PCore.getPCoreVersion();
 
-  const Assignment =  getComponentFromMap("Assignment");
+  const Assignment = getComponentFromMap('Assignment');
 
   const { getPConnect, routingInfo } = props;
 
@@ -46,7 +48,7 @@ export default function FlowContainer(props) {
   const [todo_context, setTodoContext] = useState('');
 
   // const [caseMessages, setCaseMessages] = useState('');
- // const [bHasCaseMessages,setHasCaseMessages] = useState(false);
+  // const [bHasCaseMessages,setHasCaseMessages] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [checkSvg, setCheckSvg] = useState('');
 
@@ -54,8 +56,8 @@ export default function FlowContainer(props) {
   const [containerName, setContainerName] = useState('');
   const [buildName, setBuildName] = useState('');
   const [bShowConfirm, setShowConfirm] = useState(false);
- // const localizedVal = PCore.getLocaleUtils().getLocaleValue;
- // const localeCategory = 'Messages';
+  // const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  // const localeCategory = 'Messages';
 
   function initContainer() {
     const ourPConn = getPConnect();
@@ -91,7 +93,7 @@ export default function FlowContainer(props) {
     return `${context.toUpperCase()}/${viewContainerName.toUpperCase()}`;
   }
 
-    function initComponent(bLoadChildren: boolean) {
+  function initComponent(bLoadChildren: boolean) {
     const ourPConn = getPConnect();
 
     // when true, update arChildren from pConn, otherwise, arChilren will be updated in updateSelf()
@@ -250,23 +252,28 @@ export default function FlowContainer(props) {
     }
 
     const caseViewMode = thePConn.getValue('context_data.caseViewMode');
-    if (caseViewMode && caseViewMode === 'review' || (caseViewMode && caseViewMode === 'perform' && window.sessionStorage.getItem('okToInitFlowContainer') === 'true')) {
+    if (
+      (caseViewMode && caseViewMode === 'review') ||
+      (caseViewMode &&
+        caseViewMode === 'perform' &&
+        window.sessionStorage.getItem('okToInitFlowContainer') === 'true')
+    ) {
       // in React, when cancel is called, somehow the constructor for flowContainer is called which
       // does init/add of containers.  This mimics that
       initContainer();
     }
 
     // if have caseMessage show message and end
-   // const theCaseMessages = localizedVal(thePConn.getValue('caseMessages'), localeCategory);
+    // const theCaseMessages = localizedVal(thePConn.getValue('caseMessages'), localeCategory);
 
-   // if (theCaseMessages || !hasAssignments()) {
-      if ( !hasAssignments()) {
+    // if (theCaseMessages || !hasAssignments()) {
+    if (!hasAssignments()) {
       // Temp fix for 8.7 change: confirmationNote no longer coming through in caseMessages$.
       // So, if we get here and caseMessages$ is empty, use default value in DX API response
       // setCaseMessages(
       //   theCaseMessages || localizedVal('Thank you! The next step in this case has been routed appropriately.', localeCategory)
       // );
-    //  setHasCaseMessages(true);
+      //  setHasCaseMessages(true);
       setShowConfirm(true);
 
       // publish this "assignmentFinished" for mashup, need to get approved as a standard
@@ -276,7 +283,7 @@ export default function FlowContainer(props) {
       // setCheckSvg(Utils.getImageSrc('check', Utils.getSDKStaticConentUrl()));
     } else {
       // debugger;
-     // setHasCaseMessages(false);
+      // setHasCaseMessages(false);
       setShowConfirm(false);
     }
 
@@ -361,34 +368,32 @@ export default function FlowContainer(props) {
 
   return (
     <div id={buildName}>
-      {!bShowConfirm &&
-        !displayOnlyFA ? (
-            <Card>
-              <CardHeader
-                title={<Typography variant='h6'>{containerName}</Typography>}
-                subheader={`Task in ${caseId} \u2022 Priority ${urgency}`}
-                avatar={<Avatar >{operatorInitials}</Avatar>}
-              ></CardHeader>
-              {instructionText !== '' ? (
-                <Typography variant='caption'>{instructionText}</Typography>
-              ) : null}
-              <MuiPickersUtilsProvider utils={DayjsUtils}>
-                <Assignment getPConnect={getPConnect} itemKey={itemKey}>
-                  {arNewChildrenAsReact}
-                </Assignment>
-              </MuiPickersUtilsProvider>
-            </Card>
-          ) : (
-            <div>
-              {instructionText !== '' ? (
-                <Typography variant='caption'>{instructionText}</Typography>
-              ) : null}
-                <Assignment getPConnect={getPConnect} itemKey={itemKey}>
-                  {arNewChildrenAsReact}
-                </Assignment>
-            </div>
-          )
-      }
+      {!bShowConfirm && !displayOnlyFA ? (
+        <Card>
+          <CardHeader
+            title={<Typography variant='h6'>{containerName}</Typography>}
+            subheader={`Task in ${caseId} \u2022 Priority ${urgency}`}
+            avatar={<Avatar>{operatorInitials}</Avatar>}
+          ></CardHeader>
+          {instructionText !== '' ? (
+            <Typography variant='caption'>{instructionText}</Typography>
+          ) : null}
+          <MuiPickersUtilsProvider utils={DayjsUtils}>
+            <Assignment getPConnect={getPConnect} itemKey={itemKey}>
+              {arNewChildrenAsReact}
+            </Assignment>
+          </MuiPickersUtilsProvider>
+        </Card>
+      ) : (
+        <div>
+          {instructionText !== '' ? (
+            <Typography variant='caption'>{instructionText}</Typography>
+          ) : null}
+          <Assignment getPConnect={getPConnect} itemKey={itemKey}>
+            {arNewChildrenAsReact}
+          </Assignment>
+        </div>
+      )}
       {/* {bHasCaseMessages && (
         <div>
           <Alert severity='success'>{caseMessages}</Alert>

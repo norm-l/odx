@@ -22,7 +22,6 @@ import { triggerLogout } from '../../components/helpers/utils';
 import AppContext from './reuseables/AppContext';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
-// declare const myLoadMashup;
 declare const PCore: any;
 
 const ClaimPage: FunctionComponent<any> = () => {
@@ -79,8 +78,8 @@ const ClaimPage: FunctionComponent<any> = () => {
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
             {
               method: 'GET',
-              body: '',
-              headers: '',
+              body: {},
+              headers: {},
               withoutDefaultHeaders: false
             },
             ''
