@@ -10,6 +10,8 @@ The structure of an application repository should be a service level group conta
 
 Each branch in the repository will correspond to an environment in AWS, although deploying supporting infrastructure is optional. Care should be taken to remove infrastructure for temporary branches before removing the branch via a merge request or other mechanism as once the branch is removed the associated infrastructure cannot be managed via the pipelines.
 
+NOTE: Branch names and other configuration mappings are usually case sensitive.
+
 ### Production Environments
 
 These environments are pre-configured on these branch names and will be deployed to the production AWS account. Use of the Preproduction and Staging environments are optional and they can be deleted if not required. If any additional production environments are required they must be requested via CMDG.
@@ -20,7 +22,7 @@ These environments are pre-configured on these branch names and will be deployed
 
 ### NonProduction Environments
 
-The Development branch is the default branch for the nonprod AWS account. Any other branches created will be deployed to the nonprod AWS account. Custom branch names should be kept short to prevent issues with the pipeline as some dependent resources have name length constraints. Branch names should not contain special characters except for spaces and hyphens.
+The Development branch is the default branch for the nonprod AWS account. Any other branches created will be deployed to the nonprod AWS account. Custom branch names should be kept short to prevent issues with the pipeline as some dependent resources have name length constraints. Branch names MUST not contain special characters except for hyphens.
 
 * Development (default)
 * Any other branch name, e.g. dev-1 or feature-newbutton
@@ -45,6 +47,8 @@ The `destroy-infrastructure` job is optional, and will remove any infrastructure
 
 ## Deployment Configuration
 
+NOTE: Any additional routing or Pega side configuration is not part of this stack and will need to be managed separately.
+
 Exploring the configuration file:
 
 ```shell
@@ -55,7 +59,7 @@ Exploring the configuration file:
     # The Build_Command is the command which will be executed to perform the build in the pipeline
     "Build_Command": "npm run build:prod:ci"
   },
-  # This is the header for the environment, and must match the branch name
+  # This is the header for the environment, and must match the branch name (case sensitive)
   "Development": {
     # The high level environment configuration
     "Environment": {
@@ -103,3 +107,13 @@ Exploring the configuration file:
     }
   }
 ```
+
+## Infrastructure Configuration
+
+The EC2 instances built will use the ECS provided RHEL8.8 image and will have all mandatory software and security patches configured on boot, including Dynatrace SaaS monitoring in full-stack mode. The Production environment will be attached to Dynatrace Production, PreProduction and Staging will be attached to Dynatrace PreProduction, and any other environments will be attached to Dynatrace Nonproduction.
+
+### Dynatrace SaaS links:
+
+NonProduction: <https://ihb49563.apps.dynatrace.com>
+PreProduction: <https://kdv79045.apps.dynatrace.com>
+Production: <https://tey47616.apps.dynatrace.com>
