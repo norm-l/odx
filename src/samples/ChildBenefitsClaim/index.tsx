@@ -195,8 +195,8 @@ export default function ChildBenefitsClaim() {
 
   function closeContainer() {
     const pegaElem = document.getElementById('pega-part-of-page');
-    if(pegaElem){
-    pegaElem.style.display = 'none';
+    if (pegaElem) {
+      pegaElem.style.display = 'none';
     }
     displayUserPortal();
   }
@@ -475,7 +475,7 @@ export default function ChildBenefitsClaim() {
         });
 
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      
+
       initialRender(renderObj);
 
       operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
