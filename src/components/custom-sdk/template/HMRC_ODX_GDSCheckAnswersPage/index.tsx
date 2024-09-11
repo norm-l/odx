@@ -103,7 +103,8 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
   const getCYAStepId = (event, originalLink) => {
     interface ResponseType {
-      CurrentStepId: string;
+      CurrentStepId?: string;
+      CYAStepID?: string;
     }
     let stepIDCYA;
     const stepId = originalLink.getAttribute('data-step-id');
@@ -133,7 +134,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         options
       ) // @ts-ignore
       .then((pageData: ResponseType) => {
-        stepIDCYA = pageData?.CurrentStepId;
+        stepIDCYA = pageData?.CurrentStepId || pageData?.CYAStepID;
         if (stepIDCYA) {
           sessionStorage.setItem('stepIDCYA', stepIDCYA);
           sessionStorage.setItem('isEditMode', 'true');
