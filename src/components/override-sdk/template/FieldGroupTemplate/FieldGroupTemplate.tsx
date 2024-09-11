@@ -144,7 +144,10 @@ export default function Group(props) {
           index
         });
 
-        const arrayExclusiveOptions = [t('I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS')];
+        const arrayExclusiveOptions = [
+          t('I_DO_NOT_WORK_IN_ANY_OF_THESE_POSITIONS'),
+          t('I_DO_NOT_HAVE_ANOTHER_REASON_TO_SEND_A_TAX_RETURN')
+        ];
 
         if (arrayExclusiveOptions.includes(resolvedProps.caption.toLowerCase())) {
           exclusiveOptionPropName = childPConnect.getStateProps().value;
