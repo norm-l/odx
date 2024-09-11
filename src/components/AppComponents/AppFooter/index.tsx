@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import { Link } from 'react-router-dom';
 import AppContextEducation from './../../../samples/EducationStart/reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 import { useLocation } from 'react-router-dom';
@@ -7,14 +8,18 @@ import { useLocation } from 'react-router-dom';
 export default function AppFooter() {
   const { t } = useTranslation();
   const location = useLocation();
-  const { serviceParam, serviceName, appNameHeader } = useContext(AppContextEducation);
+  const { serviceParam, serviceName } = useContext(AppContextEducation);
 
   const searchParams = new URLSearchParams(location.search);
+   // Checking if the param values are valid
+  function getUrlParamsValue(paramKey: string) {
+    console.log(i18n.exists(searchParams.get(paramKey)), '111')
+    return i18n.exists(searchParams.get(paramKey)) ? searchParams.get(paramKey) : '';
+  }
 
   // Default for all services
+  const serviceNameUpdate = serviceName || getUrlParamsValue('serviceName') || 'CLAIM_CHILD_BENEFIT';
   const serviceParamUpdate = serviceParam || searchParams.get('serviceParam') || '463';
-  const appNameUpdate =  appNameHeader || searchParams.get('appname') || 'CLAIM_CHILD_BENEFIT';
-  const serviceNamePageTitle = serviceName || searchParams.get('serviceNamePageTitle') || 'CLAIM_CHILD_BENEFIT';
 
   return (
     <footer className='govuk-footer ' role='contentinfo'>
@@ -45,7 +50,7 @@ export default function AppFooter() {
               </li>
               <li className='govuk-footer__inline-list-item'>
                 <Link
-                  to={`/cookies?appname=${appNameUpdate}&serviceParam=${serviceParamUpdate}&serviceNamePageTitle=${serviceNamePageTitle}`}
+                  to={`/cookies?serviceName=${serviceNameUpdate}&serviceParam=${serviceParamUpdate}`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'
