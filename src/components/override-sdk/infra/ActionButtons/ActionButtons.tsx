@@ -28,8 +28,8 @@ export default function ActionButtons(props) {
     'caseInfo.assignments[0].actions[0]',
     contextWorkarea
   );
-  const isDeclarationPage = flowActionId?.toLowerCase().includes('declaration');
-  const isIntruptionPage = flowActionId?.toLowerCase().includes('checkdata');
+  const isDeclarationPage = flowActionId?.toLowerCase()?.includes('declaration');
+  const isIntruptionPage = flowActionId?.toLowerCase()?.includes('checkdata');
 
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {

@@ -505,8 +505,8 @@ export default function Assignment(props) {
   );
 
   const arrEduStartPagesForStepIds = ['declaration', 'checkdata'];
-  const isEduStartPagesForStepIdsExist = arrEduStartPagesForStepIds.includes(
-    currentFlowActionId.toLowerCase()
+  const isEduStartPagesForStepIdsExist = arrEduStartPagesForStepIds?.includes(
+    currentFlowActionId?.toLowerCase()
   );
 
   useEffect(() => {
