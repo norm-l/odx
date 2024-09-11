@@ -144,7 +144,7 @@ export default function TimeoutPopup(props) {
           {`${t('WE_WILL_DELETE_YOUR_CLAIM')} `}
           <span className='govuk-!-font-weight-bold'> {timeoutText()}</span>
           {timeoutState.countdownStart && (
-            <span className='govuk-visually-hidden' aria-live='polite'>
+            <span className='govuk-visually-hidden' aria-live='assertive'>
               {timeoutState.screenReaderCountdown}
             </span>
           )}
@@ -173,7 +173,7 @@ export default function TimeoutPopup(props) {
           {`${t('AUTOMATICALLY_CLOSE_IN')} `}
           <span className='govuk-!-font-weight-bold'>{timeoutText()}</span>
           {timeoutState.countdownStart && (
-            <span className='govuk-visually-hidden' aria-live='polite'>
+            <span className='govuk-visually-hidden' aria-live='assertive'>
               {timeoutState.screenReaderCountdown}
             </span>
           )}
