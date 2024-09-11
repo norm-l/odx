@@ -22,6 +22,11 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
   let divClass: string;
 
+  interface ResponseType {
+    CurrentStepId?: string;
+    CYAStepID?: string;
+  }
+
   const numCols = NumCols || '1';
   switch (numCols) {
     case '1':
@@ -102,10 +107,6 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   };
 
   const getCYAStepId = (event, originalLink) => {
-    interface ResponseType {
-      CurrentStepId?: string;
-      CYAStepID?: string;
-    }
     let stepIDCYA;
     const stepId = originalLink.getAttribute('data-step-id');
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
