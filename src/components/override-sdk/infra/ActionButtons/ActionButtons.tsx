@@ -16,6 +16,10 @@ export default function ActionButtons(props) {
   const _containerName = thePConn.getContainerName();
   const _context = thePConn.getContextName();
 
+  interface ResponseType {
+    CurrentStepId: string;
+  }
+
   const containerID = PCore.getContainerUtils()
     .getContainerAccessOrder(`${_context}/${_containerName}`)
     .at(-1);
@@ -42,9 +46,6 @@ export default function ActionButtons(props) {
 
   function navigateToCYA(event) {
     event.preventDefault();
-    interface ResponseType {
-      CurrentStepId: string;
-    }
 
     const options = {
       invalidateCache: true
