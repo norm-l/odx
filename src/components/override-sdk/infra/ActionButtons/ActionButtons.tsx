@@ -29,7 +29,7 @@ export default function ActionButtons(props) {
     contextWorkarea
   );
   const isDeclarationPage = flowActionId?.toLowerCase()?.includes('declaration');
-  const isIntruptionPage = flowActionId?.toLowerCase()?.includes('checkdata');
+  const isInterruptionPage = flowActionId?.toLowerCase()?.includes('checkdata');
 
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -81,7 +81,7 @@ export default function ActionButtons(props) {
     <>
       <div className='govuk-button-group govuk-!-padding-top-4'>
         {arMainButtons.map(mButton =>
-          mButton.name !== 'Hidden' && !isIntruptionPage ? (
+          mButton.name !== 'Hidden' && !isInterruptionPage ? (
             <Button
               variant='primary'
               onClick={e => {

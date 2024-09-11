@@ -88,6 +88,10 @@ export default function Assignment(props) {
     .getContainerAccessOrder(`${context}/${_containerName}`)
     .at(-1);
 
+  interface ResponseType {
+    CurrentStepId: string;
+  }
+
   // Register/Deregister this Pconnect Object to AssignmentPConn context value, for use in Portal scope
   useEffect(() => {
     setAssignmentPConnect(getPConnect());
@@ -511,10 +515,6 @@ export default function Assignment(props) {
 
   useEffect(() => {
     if (isEduStartPagesForStepIdsExist && isEduStartJourney()) {
-      interface ResponseType {
-        CurrentStepId: string;
-      }
-
       const options = {
         invalidateCache: true
       };
@@ -529,12 +529,12 @@ export default function Assignment(props) {
             ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
           },
           options
-        ) // @ts-ignore
+        )
         .then((pageData: ResponseType) => {
           const stepIDCYA = pageData?.CurrentStepId;
           if (stepIDCYA) {
             sessionStorage.setItem('stepIDCYA', stepIDCYA);
-            sessionStorage.setItem('isCommingFromEduStartPages', 'true');
+            sessionStorage.setItem('isComingFromEduStartPages', 'true');
           }
         })
         .catch(err => {

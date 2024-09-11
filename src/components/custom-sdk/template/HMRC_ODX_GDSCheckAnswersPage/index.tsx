@@ -83,10 +83,10 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   }
 
   useEffect(() => {
-    if (sessionStorage.getItem('isCommingFromEduStartPages') === 'true') {
+    if (sessionStorage.getItem('isComingFromEduStartPages') === 'true') {
       sessionStorage.setItem('isEditMode', 'true');
       sessionStorage.setItem('isComingFromPortal', 'false');
-      sessionStorage.setItem('isCommingFromEduStartPages', 'false');
+      sessionStorage.setItem('isComingFromEduStartPages', 'false');
     }
   });
 
