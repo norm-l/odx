@@ -82,12 +82,16 @@ export default function ActionButtons(props) {
     <>
       <div className='govuk-button-group govuk-!-padding-top-4'>
         {arMainButtons.map(mButton =>
-          mButton.name !== 'Hidden' && !isInterruptionPage ? (
+          mButton.name !== 'Hidden' ? (
             <Button
               variant='primary'
               onClick={e => {
                 e.target.blur();
-                _onButtonPress(mButton.jsAction, 'primary');
+                if (isInterruptionPage) {
+                  navigateToCYA(e);
+                } else {
+                  _onButtonPress(mButton.jsAction, 'primary');
+                }
               }}
               key={mButton.actionID}
               attributes={{ type: 'button' }}
@@ -96,17 +100,7 @@ export default function ActionButtons(props) {
                 ? t('SAVE_AND_CONTINUE')
                 : localizedVal(mButton.name, localeCategory)}
             </Button>
-          ) : (
-            <Button
-              variant='primary'
-              attributes={{ type: 'button' }}
-              onClick={e => {
-                navigateToCYA(e);
-              }}
-            >
-              {t('CONTINUE')}
-            </Button>
-          )
+          ) : null
         )}
         {isDeclarationPage && isCHBJourney() && (
           <Button
