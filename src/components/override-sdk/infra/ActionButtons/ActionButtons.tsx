@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { isCHBJourney } from '../../../helpers/utils';
+import { isCHBJourney, isEduStartJourney } from '../../../helpers/utils';
 
 export default function ActionButtons(props) {
   const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
@@ -15,12 +15,25 @@ export default function ActionButtons(props) {
   const thePConn = getPConnect();
   const _containerName = thePConn.getContainerName();
   const _context = thePConn.getContextName();
-  const caseInfo = thePConn.getDataObject().caseInfo;
-  const screenName = caseInfo?.assignments?.length > 0 ? caseInfo.assignments[0].name : '';
+
+  interface ResponseType {
+    CurrentStepId: string;
+  }
+
   const containerID = PCore.getContainerUtils()
     .getContainerAccessOrder(`${_context}/${_containerName}`)
     .at(-1);
-  const isDeclarationPage = screenName?.toLowerCase().includes('declaration');
+
+  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const flowActionId = PCore.getStoreValue(
+    '.ID',
+    'caseInfo.assignments[0].actions[0]',
+    contextWorkarea
+  );
+  const isDeclarationPage = flowActionId?.toLowerCase()?.includes('declaration');
+  const isInterruptionPage = flowActionId?.toLowerCase()?.includes('checkdata');
 
   const { t } = useTranslation();
   function _onButtonPress(sAction: string, sButtonType: string) {
@@ -29,6 +42,36 @@ export default function ActionButtons(props) {
   function navigateToTaskList(event) {
     event.preventDefault();
     thePConn.getActionsApi().navigateToStep(taskListStepId, containerID);
+  }
+
+  function navigateToCYA(event) {
+    event.preventDefault();
+
+    const options = {
+      invalidateCache: true
+    };
+
+    PCore.getDataPageUtils()
+      .getPageDataAsync(
+        'D_GetStepIdByApplicationAndAction',
+        'root',
+        {
+          FlowActionName: 'CheckYourAnswers',
+          CaseID: thePConn.getCaseSummary().content.pyID,
+          ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
+        },
+        options
+      ) // @ts-ignore
+      .then((pageData: ResponseType) => {
+        const stepIDCYA = pageData?.CurrentStepId;
+        if (stepIDCYA) {
+          thePConn.getActionsApi().navigateToStep(stepIDCYA, containerID);
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
   }
 
   useEffect(() => {
@@ -44,7 +87,11 @@ export default function ActionButtons(props) {
               variant='primary'
               onClick={e => {
                 e.target.blur();
-                _onButtonPress(mButton.jsAction, 'primary');
+                if (isInterruptionPage) {
+                  navigateToCYA(e);
+                } else {
+                  _onButtonPress(mButton.jsAction, 'primary');
+                }
               }}
               key={mButton.actionID}
               attributes={{ type: 'button' }}
@@ -66,6 +113,16 @@ export default function ActionButtons(props) {
             }}
           >
             {t('RETURN_TO_CHANGE_CLAIM')}
+          </Button>
+        )}
+        {isDeclarationPage && isEduStartJourney() && (
+          <Button
+            variant='link'
+            onClick={e => {
+              navigateToCYA(e);
+            }}
+          >
+            {t('RETURN_TO_CHANGE_ANSWERS')}
           </Button>
         )}
       </div>
