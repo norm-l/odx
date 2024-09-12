@@ -10,6 +10,7 @@ export default function TimeoutPopup(props) {
     milisecondsTilSignout,
     staySignedinHandler,
     signoutHandler,
+    userTimeoutDelete,
     isAuthorised,
     isConfirmationPage,
     staySignedInButtonText,
@@ -155,7 +156,7 @@ export default function TimeoutPopup(props) {
             {t('CONTINUE_CLAIM')}
           </Button>
 
-          <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={signoutHandler}>
+          <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={userTimeoutDelete}>
             {t('DELETE_YOUR_CLAIM')}
           </a>
         </div>

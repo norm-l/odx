@@ -549,9 +549,14 @@ export default function UnAuthChildBenefitsClaim() {
               sessionStorage.setItem('hasSessionTimedOut', 'true');
               clearTimer();
               deleteData();
-
-              setHasSessionTimedOut(false);
+              setHasSessionTimedOut(true);
             }
+          }}
+          userTimeoutDelete={() => {
+            sessionStorage.setItem('hasSessionTimedOut', 'false');
+            clearTimer();
+            deleteData();
+            setHasSessionTimedOut(false);
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}

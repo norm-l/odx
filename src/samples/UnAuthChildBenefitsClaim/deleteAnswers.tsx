@@ -22,7 +22,7 @@ export default function DeleteAnswers({ hasSessionTimedOut }) {
   return (
     <MainWrapper>
       <h1 className='govuk-heading-l'>
-        {sessionStorage.getItem('hasSessionTimedOut') === 'true' || !hasSessionTimedOut
+        {sessionStorage.getItem('hasSessionTimedOut') === 'false' || !hasSessionTimedOut
           ? t('YOU_DELETED_YOUR_CLAIM')
           : t('FOR_YOUR_SECURITY_WE_DELETED_YOUR_CLAIM')}
       </h1>
