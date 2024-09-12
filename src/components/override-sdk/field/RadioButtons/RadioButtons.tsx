@@ -9,6 +9,10 @@ import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function RadioButtons(props) {
+  console.log("REACT: Fired RadioButtons.tsx")
+const _fishCount = 0
+console.log("React: RadioButtons.tsx Fired, Fish Count, ", _fishCount)
+_fishCount +1;
   const {
     getPConnect,
     validatemessage,
@@ -23,12 +27,16 @@ export default function RadioButtons(props) {
     placeholder
   } = props;
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
+  const [theSelectedButton, setSelectedButton] = useState(value);
+
   let label = props.label;
 
   const { isOnlyField, overrideLabel } = useIsOnlyField(props.displayOrder);
   if (isOnlyField && !readOnly) label = overrideLabel.trim() ? overrideLabel : label;
 
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
+  const _browserLocal = sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en';
+  console.log("REACT: locailised value is ", localizedVal, "and session storage is ", _browserLocal)
 
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
   useEffect(() => {
@@ -40,7 +48,8 @@ export default function RadioButtons(props) {
   const className = thePConn.getCaseInfo().getClassName();
   // theOptions will be an array of JSON objects that are literally key/value pairs.
   //  Ex: [ {key: "Basic", value: "Basic"} ]
-  const theOptions = Utils.getOptionList(theConfigProps, thePConn.getDataObject());
+  //const theOptions = Utils.getOptionList(theConfigProps, thePConn.getDataObject());
+  const theOptions = Utils.getOptionList(theConfigProps, thePConn.getDataObject(''));
   const selectedOption = theOptions.find(option => option.key === value);
 
   let configProperty = thePConn.getRawMetadata()?.config?.value || '';
@@ -57,25 +66,41 @@ export default function RadioButtons(props) {
   const localeName = localeContext === 'datapage' ? metaData?.datasource?.name : configProperty;
   const localePath = localeContext === 'datapage' ? displayName : localeName;
 
+ console.log("REACT: pcon label name",thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName))
+ const _anchovy = thePConn.resolveConfigProps(props)
+ console.log("REACT: _anchovy", _anchovy)
   let displayValue = null;
   if (selectedOption && selectedOption.value) {
     displayValue = selectedOption.value;
   }
   const inprogressStatus = checkStatus();
+  const _koiCarplocalVals = thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName);
+  const _roachlocalVals = thePConn.getLocalizedValue(
+    displayValue,
+    localePath,
+    _koiCarplocalVals)
+    console.log("REACT: _koiCarplocalVals ",_koiCarplocalVals)
+    console.log("REACT: _roachVals",displayValue, props.label);
+    const _sharkLocal = sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en';
+    console.log("REACT: _sharkLocal value is ", localizedVal, "and session storage is ", _sharkLocal)
+    console.log("REACT: _skimmerVals", thePConn.getLocalizedValue(props.label))
 
   if (
     hasBeenWrapped &&
     configAlternateDesignSystem?.ShowChangeLink &&
     inprogressStatus === 'Open-InProgress'
   ) {
+    console.log("REACT: if has been wrapped fired!!")
     return (
       <GDSCheckAnswers
         label={props.label}
         value={thePConn.getLocalizedValue(
           displayValue,
           localePath,
-          thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+          _koiCarplocalVals
+          //thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
         )}
+  
         name={name}
         stepId={configAlternateDesignSystem.stepId}
         hiddenText={configAlternateDesignSystem.hiddenText}
@@ -92,14 +117,27 @@ export default function RadioButtons(props) {
       />
     );
   }
+  //log the value of language
+  console.log("REACT: language is ", sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en' )
+  //log the value of label, at the start of read only
+  const _nemo = PCore.getLocaleUtils().getLocaleValue.toString;
+  console.log("REACT: _nemo", _nemo);
+  const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
+    .getCaseInfo()
+    .getName()}`.toUpperCase();
+    console.log("REACT: Nemo LocalaleReference ",localeReference)
+  const _trout = thePConn.getLocalizedValue(props.label,"fields",localeReference);
+  console.log("REACT: _trout", _trout);
   if (readOnly) {
+    console.log("REACT: if read only fired!!")
     return (
       <ReadOnlyDisplay
         label={label}
         value={thePConn.getLocalizedValue(
           displayValue,
           localePath,
-          thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+          _koiCarplocalVals
+         // thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
         )}
       />
     );
@@ -108,11 +146,29 @@ export default function RadioButtons(props) {
   const extraProps = { testProps: { 'data-test-id': testId } };
   const actionsApi = thePConn.getActionsApi();
   const propName = thePConn.getStateProps().value;
+  
+      //checking value fro connection
+      const _shark = ""//actionsApi().getEnviromentInfo()
+      console.log("_shark!! ", _shark)
+      const _pike = thePConn.getLocalizedValue(props.label, localePath, thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName))
+      console.log("_PIKE!! ", _pike)
 
   const handleChange = event => {
     handleEvent(actionsApi, 'changeNblur', propName, event.target.value);
   };
+  
+  const handleBlur = event => {
+    thePConn.getValidationApi().validate(event.target.value, ''); // 2nd arg empty string until typedef marked correctly as optional
+  };
 
+  const forceFire = () => {
+    useEffect(() => {       
+        handleChange('changeNblur');
+    }, [])
+  };
+  const _pearch = thePConn.getLocalizedValue(props.label);
+  console.log("FINAL CALL OF PROPS.LABEL")
+  console.log("REACT: _pearch", _pearch);
   return (
     <GDSRadioButtons
       {...props}
@@ -126,7 +182,8 @@ export default function RadioButtons(props) {
           label: thePConn.getLocalizedValue(
             option.value,
             localePath,
-            thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
+            _koiCarplocalVals
+           // thePConn.getLocaleRuleNameFromKeys(localeClass, localeContext, localeName)
           )
         };
       })}

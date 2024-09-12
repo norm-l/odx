@@ -15,6 +15,7 @@ interface IOption {
 }
 
 export default function Dropdown(props) {
+  console.log("REACT: Fired DropDown.tsx")
   const {
     getPConnect,
     placeholder,

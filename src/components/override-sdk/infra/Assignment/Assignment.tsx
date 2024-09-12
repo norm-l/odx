@@ -27,6 +27,8 @@ import AppContextEducation from '../../../../samples/EducationStart/reuseables/A
 import AppContext from '../../../../samples/HighIncomeCase/reuseables/AppContext';
 import dayjs from 'dayjs';
 
+
+
 export interface ErrorMessageDetails {
   message: string;
   fieldId: string;
@@ -41,6 +43,7 @@ interface OrderedErrorMessage {
 
 declare const PCore: any;
 export default function Assignment(props) {
+  console.log("REACT: Fired infra-assignment.tsx")
   const { getPConnect, children, itemKey, isCreateStage } = props;
   const thePConn = getPConnect();
   const [arSecondaryButtons, setArSecondaryButtons] = useState([]);
@@ -114,6 +117,7 @@ export default function Assignment(props) {
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
   function initialLanguageCall() {
+    console.log('REACT: Initial Langiage Call Fired!!')
     const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
 
     const processActionPromise = thePConn.getActionsApi().openProcessAction(config[lang], {

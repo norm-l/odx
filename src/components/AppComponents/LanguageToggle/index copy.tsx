@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import 'dayjs/locale/cy';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
-//import { getPConnect } from '@pega/pcore-pconnect-typedefs';
-//import { _test  } from '../LanguageToggle/testInitialFunct';
-//import _test from "../LanguageToggle/testInitialFunct"
-
-console.log("REACT: language.index.tsx Fired")
+import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
+import PropTypes from 'prop-types';
 
 declare const PCore: any;
 
+// Get the Pconn
+
+const thePConn = getPConnect();
+//Get the actions API
+const actionsAPI = thePConn.getActionsApi();
+//get the current lanuage toggle
+const localized_Val = thePConn.getLocalizedValue;
+console.log('React: Language Tooggle -- Initial value ', localized_Val)
+
 const LanguageToggle = props => {
-  const { languageToggleCallback } = props;
+  const { languageToggleCallback, getPConnect } = props;
   const { i18n } = useTranslation();
   let lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
-  console.log("React: language toggle Fired")
-  console.log("React: language is ", lang)
   const [selectedLang, setSelectedLang] = useState(lang);
   const [resourcebundles, setResourceBundles] = useState([]);
+  
 
   const changeLanguage = e => {
     e.preventDefault();
@@ -28,9 +33,8 @@ const LanguageToggle = props => {
     dayjs.locale(lang);
     i18n.changeLanguage(lang).then(() => {
       setPageTitle();
-      console.log('REACT: language change languagetoggle.tsx')
-    //  _test(lang)
     });
+    
     if (typeof PCore !== 'undefined') {
       // Fetch Locale Reference names for data pages
       const datapageKeys = Object.keys(PCore.getDataPageUtils().datastore);
@@ -50,12 +54,19 @@ const LanguageToggle = props => {
       PCore.getEnvironmentInfo().setLocale(`${lang}_GB`);
       PCore.getLocaleUtils().resetLocaleStore();
       PCore.getLocaleUtils().loadLocaleResources(bundles);
-      
+      PCore.getLocaleUtils().resetLocaleStore();
+      PCore.getLocaleUtils().loadLocaleResources(bundles);
       PCore.getPubSubUtils().publish('languageToggleTriggered', { language: lang, localeRef: [] });
+      //Attempt at changing the lanuage based on the PConn
+     const localized__val = thePConn.getLocalizedValue;
+     console.log('React: Language Tooggle -- Second value ', localized__val)
+     const localeReference = `${getPConnect().getCaseInfo().getClassName()}!CASE!${getPConnect()
+      .getCaseInfo()
+      .getName()}`.toUpperCase();
+      console.log('React: Lanuage Toogle -- Local Reference -- ', localeReference)
     }
     if (languageToggleCallback) {
       languageToggleCallback(lang);
-
     }
   };
 

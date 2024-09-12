@@ -4,7 +4,7 @@ import { isUnAuthJourney } from '../../../helpers/utils';
 import { isHICBCJourney } from '../../../helpers/utils';
 
 import ActionButtons from '../ActionButtons';
-
+console.log("REACT: Fired infra-assignemntCard.tsx")
 export default function AssignmentCard(props) {
   const { children, actionButtons, onButtonPress, getPConnect } = props;
 

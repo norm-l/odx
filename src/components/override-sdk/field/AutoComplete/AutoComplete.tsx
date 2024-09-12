@@ -59,6 +59,7 @@ interface AutoCompleteProps extends PConnFieldProps {
 }
 
 export default function AutoComplete(props: AutoCompleteProps) {
+  console.log("REACT: Fired autoComplete.tsx")
   const {
     getPConnect,
     value = '',

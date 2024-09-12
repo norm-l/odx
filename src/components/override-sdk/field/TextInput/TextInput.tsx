@@ -10,6 +10,7 @@ import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import { checkStatus } from '../../../helpers/utils';
 
 export default function TextInput(props) {
+  console.log("REACT: Fired TextInput.tsx")
   const {
     getPConnect,
     value = '',

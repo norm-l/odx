@@ -27,6 +27,7 @@ const NO_HEADER_TEMPLATES = [
 ];
 
 export default function View(props) {
+  console.log("REACT: Fired infra-view.tsx")
   const { children, template, getPConnect, mode, visibility, name: pageName } = props;
   let { label, showLabel = false } = props;
 

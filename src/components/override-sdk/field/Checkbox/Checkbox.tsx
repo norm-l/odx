@@ -10,6 +10,7 @@ import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
+  console.log("REACT: Fired checkBox.tsx")
   const { OverrideLabelValue } = useContext(DefaultFormContext);
 
   const {

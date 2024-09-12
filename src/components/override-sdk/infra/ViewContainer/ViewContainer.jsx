@@ -14,6 +14,7 @@ import { isHICBCJourney } from '../../../helpers/utils';
 // is totally at your own risk.
 //
 export default function ViewContainer(props) {
+  console.log("REACT: Fired infra-ViewContainer.tsx")
   // const { getPConnect, children, routingInfo, name } = props;
   const { getPConnect, name, mode, limit, loadingInfo, routingInfo } = props;
   const { displayOnlyFA } = useContext(StoreContext);

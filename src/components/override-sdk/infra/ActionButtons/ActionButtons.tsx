@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { isCHBJourney, isEduStartJourney } from '../../../helpers/utils';
 
 export default function ActionButtons(props) {
+  console.log("REACT: Fired infra-actionButtons.tsx")
   const { arMainButtons, arSecondaryButtons, onButtonPress, isUnAuth, isHICBC, getPConnect } =
     props;
   const [isDisabled, setIsDisabled] = useState(false);

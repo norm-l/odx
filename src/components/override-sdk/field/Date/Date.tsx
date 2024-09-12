@@ -13,6 +13,7 @@ import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 import dayjs from 'dayjs';
 
 export default function Date(props) {
+  console.log("REACT: Fired date.tsx")
   const {
     getPConnect,
     value = '',

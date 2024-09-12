@@ -26,6 +26,7 @@ declare const PCore: any;
 //
 
 export default function FlowContainer(props) {
+  console.log("REACT: Fired infra-flowContainer.tsx")
   const pCoreConstants = PCore.getConstants();
   const PCoreVersion = PCore.getPCoreVersion();
 
