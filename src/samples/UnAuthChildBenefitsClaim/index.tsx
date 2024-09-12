@@ -82,13 +82,11 @@ export default function UnAuthChildBenefitsClaim() {
       PCore.getContainerUtils().closeContainerItem(activeContainer, { skipDirtyCheck: true });
     }
 
-    triggerLogout();
     setShowTimeoutModal(false);
     setShowStartPage(false);
     setShowPega(false);
     setShowResolutionScreen(false);
     setShowDeletePage(true);
-    sessionStorage.clear();
   }
 
   function startNow() {
@@ -365,7 +363,7 @@ export default function UnAuthChildBenefitsClaim() {
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
       PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      
+
       initialRender(renderObj);
 
       /* Functionality to set the device id in the header for use in CIP.
