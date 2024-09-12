@@ -55,7 +55,7 @@
   "WE_WILL_TELL_YOU_IN_28_DAYS": "Byddwn yn rhoi gwybod i chi cyn pen 28 diwrnod calendr os yw’ch cais wedi bod yn llwyddiannus.",
   "CONTINUE_CLAIM": "Parhau â’r hawliad",
   "CONTINUE_MY_REQUEST": "Parhau â’m cais",
-  "VIEW_MY_REQUEST": "Bwrw golwg dros fy ngheisiadau",
+  "VIEW_MY_REQUEST": "Bwrw golwg dros fy nghais",
   "CLAIMS_IN_PROGRESS": "Hawliadau ar y gweill",
   "SUBMITTED_CLAIMS": "Hawliadau wedi’u cyflwyno",
   "VIEW_CLAIM": "Bwrw golwg dros yr hawliad",
@@ -415,5 +415,7 @@
   "COB_PAGE_P1": "Gallwch ddefnyddio’r gwasanaeth hwn i newid i gyfrif banc, undeb credyd neu gymdeithas adeiladu newydd heb fod angen rif rôl.",
   "COB_PAGE_P2": "Os nad ydych yn hawlio Budd-dal Plant ar hyd o bryd, gallwch ",
   "COB_PAGE_MAKE_A_CLAIM": "wneud hawliad",
-  "COB_PAGE_P3": "Mae cwblhau’r gwasanaeth hwn yn cymryd tua 5 munud."
+  "COB_PAGE_P3": "Mae cwblhau’r gwasanaeth hwn yn cymryd tua 5 munud.",
+  "FOR": "ar gyfer",
+  "BORN_ON": "wedi'i eni ar"
 }
