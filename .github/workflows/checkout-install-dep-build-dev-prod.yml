@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,23 +22,25 @@ jobs:
         node-version: [18.13]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: "finnp/create-file-action@master"
+      - uses: actions/checkout@v4
+      - uses: 'finnp/create-file-action@master'
         env:
-          FILE_NAME: "constellation/lib_asset.json"
-          FILE_DATA: "{}"
-      - uses: "finnp/create-file-action@master"
+          FILE_NAME: 'constellation/lib_asset.json'
+          FILE_DATA: '{}'
+      - uses: 'finnp/create-file-action@master'
         env:
-          FILE_NAME: "constellation/bootstrap-shell.js"
-          FILE_DATA: "// placeholder for bootstrap-shell.js"
-      - uses: "finnp/create-file-action@master"
+          FILE_NAME: 'constellation/bootstrap-shell.js'
+          FILE_DATA: '// placeholder for bootstrap-shell.js'
+      - uses: 'finnp/create-file-action@master'
         env:
-          FILE_NAME: "constellation/constellation-core.placeholder.js"
-          FILE_DATA: "// placeholder for constellaiton-core.js"
+          FILE_NAME: 'constellation/constellation-core.placeholder.js'
+          FILE_DATA: '// placeholder for constellaiton-core.js'
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Lint checks
+        run: npm run lint
       - name: Install dependencies
         run: npm run build:dev:ci
       - name: Run build:dev
