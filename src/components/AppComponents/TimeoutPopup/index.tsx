@@ -70,12 +70,12 @@ export default function TimeoutPopup(props) {
           screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT');
           break;
         case false:
-          screenreadercontent = t('WE_WILL_DELETE_YOUR_ANSWERS');
+          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER');
           break;
         default:
       }
     } else {
-      screenreadercontent = t('AUTOMATICALLY_CLOSE_IN');
+      screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN');
     }
   }
 
