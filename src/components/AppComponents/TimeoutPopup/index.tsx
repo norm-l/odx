@@ -29,7 +29,7 @@ export default function TimeoutPopup(props) {
     timeRemaining: 60,
     screenReaderCountdown: ''
   };
-  let screenreadercontent;
+
   const reducer = (state, action) => {
     switch (action.type) {
       case 'START_COUNTDOWN':
