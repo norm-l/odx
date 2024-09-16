@@ -18,11 +18,6 @@ import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helper
 import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-import {
-  staySignedIn,
-  clearTimer,
-  initTimeout
-} from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
@@ -33,8 +28,31 @@ import {
 } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
-/* Set initial milisecondsTilSignout in case not in sdk */
+/* Time out modal functionality */
+let applicationTimeout = null;
+// Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
+
+let milisecondsTilWarning = 780 * 1000;
 let milisecondsTilSignout = 115 * 1000;
+
+// Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
+function initTimeoutUnauth(setShowTimeoutModal) {
+  clearTimeout(applicationTimeout);
+
+  applicationTimeout = setTimeout(() => {
+    setShowTimeoutModal(true);
+  }, milisecondsTilWarning);
+}
+
+// Sends 'ping' to pega to keep session alive and then initiates the timout
+function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
+  if (refreshSignin) {
+    PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root');
+  }
+  setShowTimeoutModal(false);
+  initTimeoutUnauth(setShowTimeoutModal);
+}
+/* ******************************* */
 
 export default function UnAuthChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -49,8 +67,6 @@ export default function UnAuthChildBenefitsClaim() {
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
-
-  const claimsListApi = 'D_ClaimantSubmittedChBCases';
 
   const { t } = useTranslation();
   const serviceName = t('CLAIM_CHILD_BENEFIT');
@@ -103,7 +119,6 @@ export default function UnAuthChildBenefitsClaim() {
         NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
       };
       if (sessionStorage.getItem('isRefreshFromDeleteScreen') === 'true') {
-        clearTimer();
         deleteData();
       } else if (sessionStorage.getItem('caseRefId')) {
         setShowResolutionScreen(true);
@@ -147,7 +162,7 @@ export default function UnAuthChildBenefitsClaim() {
   }
 
   function returnToPortalPage() {
-    staySignedIn(setShowTimeoutModal, claimsListApi, false);
+    staySignedIn(setShowTimeoutModal);
     resetAppDisplay();
     setShowStartPage(true);
     closeContainer();
@@ -199,7 +214,7 @@ export default function UnAuthChildBenefitsClaim() {
     PCore.getPubSubUtils().subscribe(
       'staySignedInOnConfirmationScreen',
       () => {
-        staySignedIn(setShowTimeoutModal, claimsListApi, deleteData, false, false, true);
+        staySignedIn(setShowTimeoutModal);
       },
       'staySignedInOnConfirmationScreen'
     );
@@ -352,22 +367,15 @@ export default function UnAuthChildBenefitsClaim() {
       // Fetches timeout length config
       getSdkConfig()
         .then(sdkConfig => {
+          if (sdkConfig.timeoutConfig.secondsTilWarning)
+            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
             milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() =>
-            staySignedIn(
-              setShowTimeoutModal,
-              claimsListApi,
-              deleteData,
-              false,
-              false,
-              bShowResolutionScreen
-            )
-          );
-          initTimeout(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
+          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+          initTimeoutUnauth(setShowTimeoutModal);
         });
 
       // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
@@ -514,21 +522,13 @@ export default function UnAuthChildBenefitsClaim() {
         <TimeoutPopup
           show={showTimeoutModal}
           staySignedinHandler={() => {
-            staySignedIn(
-              setShowTimeoutModal,
-              claimsListApi,
-              deleteData,
-              false,
-              true,
-              bShowResolutionScreen
-            );
+            staySignedIn(setShowTimeoutModal);
           }}
           signoutHandler={() => {
             if (bShowResolutionScreen) {
               triggerLogout();
             } else {
               sessionStorage.setItem('hasSessionTimedOut', 'true');
-              clearTimer();
               deleteData();
 
               setHasSessionTimedOut(false);
