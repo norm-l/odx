@@ -61,7 +61,7 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
         // if the journey is not authorized or from confirmation page , the claim data gets deleted
         deleteData();
         clearTimer();
-      } else if (!isUnAuthJourney) {
+      } else {
         // the logout case executes when entire timeout occurs after confirmation page or user clicks
         // exit survey link in pop after confirmation page
         triggerLogout();
