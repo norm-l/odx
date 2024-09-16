@@ -61,7 +61,7 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
         // if the journey is not authorized or from confirmation page , the claim data gets deleted
         deleteData();
         clearTimer();
-      } else {
+      } else if (!isUnAuthJourney) {
         // the logout case executes when entire timeout occurs after confirmation page or user clicks
         // exit survey link in pop after confirmation page
         triggerLogout();
@@ -81,11 +81,11 @@ export function staySignedIn(
 ) {
   const operatorId = {};
   if (refreshSignin && !!claimsListApi) {
-    if(isUnAuthJourney()) {
+    if (isUnAuthJourney()) {
       operatorId['OperatorId'] = 'Model_Unauth@ChB';
     }
     // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {...operatorId});
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', { ...operatorId });
   }
   setShowTimeoutModal(false);
   resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
