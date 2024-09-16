@@ -65,11 +65,25 @@ export default function TimeoutPopup(props) {
   }, [show]);
 
   useEffect(() => {
+    let screenreadercontent;
+    if (!isConfirmationPage) {
+      switch (isAuthorised) {
+        case true:
+          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT');
+          break;
+        case false:
+          screenreadercontent = t('WE_WILL_DELETE_YOUR_ANSWERS');
+          break;
+        default:
+      }
+    } else {
+      screenreadercontent = t('AUTOMATICALLY_CLOSE_IN');
+    }
     if (timeoutState.countdownStart) {
       if (timeoutState.timeRemaining === 60) {
         dispatch({
           type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
+          payload: `${screenreadercontent} ${t('1_MINUTE')}`
         });
       }
 
@@ -84,12 +98,24 @@ export default function TimeoutPopup(props) {
   }, [timeoutState.countdownStart, timeoutState.timeRemaining]);
 
   useEffect(() => {
+    let screenreadercontent;
+    if (!isConfirmationPage) {
+      switch (isAuthorised) {
+        case true:
+          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT');
+          break;
+        case false:
+          screenreadercontent = t('WE_WILL_DELETE_YOUR_ANSWERS');
+          break;
+        default:
+      }
+    } else {
+      screenreadercontent = t('AUTOMATICALLY_CLOSE_IN');
+    }
     if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-        payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
-          'SECONDS'
-        )}`
+        payload: `${screenreadercontent} ${timeoutState.timeRemaining} ${t('SECONDS')}`
       });
     }
   }, [timeoutState.timeRemaining]);
