@@ -57,7 +57,6 @@ export default function UnAuthChildBenefitsClaim() {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [serviceNotAvailable, setServiceNotAvailable] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
-  const [hasSessionTimedOut, setHasSessionTimedOut] = useState(true);
   const [showDeletePage, setShowDeletePage] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const history = useHistory();
@@ -522,7 +521,7 @@ export default function UnAuthChildBenefitsClaim() {
         <div id='pega-part-of-page'>
           <div id='pega-root'></div>
         </div>
-        {showDeletePage && <DeleteAnswers hasSessionTimedOut={hasSessionTimedOut} />}
+        {showDeletePage && <DeleteAnswers />}
       </>
     );
   };
@@ -549,14 +548,12 @@ export default function UnAuthChildBenefitsClaim() {
               sessionStorage.setItem('hasSessionTimedOut', 'true');
               clearTimer();
               deleteData();
-              setHasSessionTimedOut(true);
             }
           }}
           userTimeoutDelete={() => {
             sessionStorage.setItem('hasSessionTimedOut', 'false');
             clearTimer();
             deleteData();
-            setHasSessionTimedOut(false);
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
