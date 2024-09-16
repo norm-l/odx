@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
+import { updateBundles } from '../../components/helpers/utils';
 
 import {
   sdkIsLoggedIn,
@@ -195,8 +196,8 @@ export default function ChildBenefitsClaim() {
 
   function closeContainer() {
     const pegaElem = document.getElementById('pega-part-of-page');
-    if(pegaElem){
-    pegaElem.style.display = 'none';
+    if (pegaElem) {
+      pegaElem.style.display = 'none';
     }
     displayUserPortal();
   }
@@ -452,9 +453,9 @@ export default function ChildBenefitsClaim() {
   /**
    * kick off the application's portal that we're trying to serve up
    */
-  function startMashup() {
+  async function startMashup() {
     // NOTE: When loadMashup is complete, this will be called.
-    PCore.onPCoreReady(renderObj => {
+    PCore.onPCoreReady(async renderObj => {
       // Check that we're seeing the PCore version we expect
       compareSdkPCoreVersions();
       establishPCoreSubscriptions();
@@ -474,8 +475,10 @@ export default function ChildBenefitsClaim() {
           initTimeout(setShowTimeoutModal);
         });
 
-      PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      
+      const lang: string = sessionStorage.getItem('rsdk_locale') || 'en_GB';
+      PCore.getEnvironmentInfo().setLocale(lang);
+      await updateBundles(PCore, lang?.substring(0, 2));
+
       initialRender(renderObj);
 
       operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
@@ -555,9 +558,9 @@ export default function ChildBenefitsClaim() {
       loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
     });
 
-    document.addEventListener('SdkConstellationReady', () => {
+    document.addEventListener('SdkConstellationReady', async () => {
       // start the portal
-      startMashup();
+      await startMashup();
     });
 
     // Subscriptions can't be done until onPCoreReady.

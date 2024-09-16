@@ -29,7 +29,8 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 import {
   getServiceShutteredStatus,
   scrollToTop,
-  triggerLogout
+  triggerLogout,
+  updateBundles
 } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
@@ -340,9 +341,9 @@ export default function UnAuthChildBenefitsClaim() {
   /**
    * kick off the application's portal that we're trying to serve up
    */
-  function startMashup() {
+  async function startMashup() {
     // NOTE: When loadMashup is complete, this will be called.
-    PCore.onPCoreReady(renderObj => {
+    PCore.onPCoreReady(async renderObj => {
       // Check that we're seeing the PCore version we expect
       compareSdkPCoreVersions();
       establishPCoreSubscriptions();
@@ -361,9 +362,10 @@ export default function UnAuthChildBenefitsClaim() {
         )
       );
 
-      // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
-      PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-      
+      const lang: string = sessionStorage.getItem('rsdk_locale') || 'en_GB';
+      PCore.getEnvironmentInfo().setLocale(lang);
+      await updateBundles(PCore, lang?.substring(0, 2));
+
       initialRender(renderObj);
 
       /* Functionality to set the device id in the header for use in CIP.
@@ -385,7 +387,7 @@ export default function UnAuthChildBenefitsClaim() {
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
   }
 
-  function setIdsInHeaders(deviceID, externalID) {
+  async function setIdsInHeaders(deviceID, externalID) {
     setCookie('pegaodxdi', deviceID, 3650);
     setCookie('pegaodxei', externalID, 3650);
     const isDeviceIdSet = PCore.getRestClient()
@@ -396,7 +398,7 @@ export default function UnAuthChildBenefitsClaim() {
       .registerHeader('externalid', externalID);
     if (isDeviceIdSet && isExternalIdSet) {
       // start the portal
-      startMashup();
+      await startMashup();
     }
   }
 
@@ -411,7 +413,7 @@ export default function UnAuthChildBenefitsClaim() {
         .then(res => {
           deviceID = res.DeviceId;
           externalID = res.ExternalId;
-          setIdsInHeaders(deviceID, externalID);
+          return setIdsInHeaders(deviceID, externalID);
         });
     }
   }
