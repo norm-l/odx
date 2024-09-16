@@ -29,7 +29,7 @@ export default function TimeoutPopup(props) {
     timeRemaining: 60,
     screenReaderCountdown: ''
   };
-
+  let screenreadercontent;
   const reducer = (state, action) => {
     switch (action.type) {
       case 'START_COUNTDOWN':
@@ -63,9 +63,7 @@ export default function TimeoutPopup(props) {
       };
     }
   }, [show]);
-
-  useEffect(() => {
-    let screenreadercontent;
+  function screenReaderContentDisplay() {
     if (!isConfirmationPage) {
       switch (isAuthorised) {
         case true:
@@ -79,6 +77,10 @@ export default function TimeoutPopup(props) {
     } else {
       screenreadercontent = t('AUTOMATICALLY_CLOSE_IN');
     }
+  }
+
+  useEffect(() => {
+    screenReaderContentDisplay();
     if (timeoutState.countdownStart) {
       if (timeoutState.timeRemaining === 60) {
         dispatch({
@@ -98,20 +100,7 @@ export default function TimeoutPopup(props) {
   }, [timeoutState.countdownStart, timeoutState.timeRemaining]);
 
   useEffect(() => {
-    let screenreadercontent;
-    if (!isConfirmationPage) {
-      switch (isAuthorised) {
-        case true:
-          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT');
-          break;
-        case false:
-          screenreadercontent = t('WE_WILL_DELETE_YOUR_ANSWERS');
-          break;
-        default:
-      }
-    } else {
-      screenreadercontent = t('AUTOMATICALLY_CLOSE_IN');
-    }
+    screenReaderContentDisplay();
     if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
