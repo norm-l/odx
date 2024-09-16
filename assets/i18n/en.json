@@ -236,8 +236,8 @@
   "SECONDS": "seconds",
   "SECOND": "second",
   "FOR_YOUR_SECURITY": "For your security",
-  "WE_WILL_DELETE_YOUR_CLAIM": "We will delete your claim in",
-  "DELETE_YOUR_CLAIM": "Delete your claim",
+  "WE_WILL_DELETE_YOUR_ANSWERS": "We will delete your answers in",
+  "DELETE_YOUR_ANSWERS": "Delete your answers",
   "FOR_YOUR_SECURITY_WE_DELETED_YOUR_CLAIM": "For your security, we deleted your claim",
   "YOU_DELETED_YOUR_CLAIM": "You deleted your claim",
   "START_CLAIM_AGAIN": "Start claim again",
@@ -414,6 +414,7 @@
   "LOADING": "Loading",
   "ERROR": "Error",
   "RETURN_TO_CHANGE_CLAIM": "Return to change your claim",
+  "RETURN_TO_CHANGE_ANSWERS": "Return to change answers",
   "NO_ACTION": "No action",
 
   "COB_SERVICE_HEADING": "Change your Child Benefit payment details",

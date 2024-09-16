@@ -22,6 +22,11 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
 
   let divClass: string;
 
+  interface ResponseType {
+    CurrentStepId?: string;
+    CYAStepID?: string;
+  }
+
   const numCols = NumCols || '1';
   switch (numCols) {
     case '1':
@@ -82,21 +87,26 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       });
   }
 
+  useEffect(() => {
+    if (sessionStorage.getItem('isComingFromEduStartPages') === 'true') {
+      sessionStorage.setItem('isEditMode', 'true');
+      sessionStorage.setItem('isComingFromPortal', 'false');
+      sessionStorage.setItem('isComingFromEduStartPages', 'false');
+    }
+  });
+
   const getDataPageNameForCYAId = () => {
     switch (true) {
       case isCHBJourney():
         return 'D_GetCurrentCYAStepID';
       case isEduStartJourney():
-        return 'D_GetCYAStepIDByApplication';
+        return 'D_GetStepIdByApplicationAndAction';
       default:
-        return 'D_GetCYAStepIDByApplication';
+        return 'D_GetStepIdByApplicationAndAction';
     }
   };
 
   const getCYAStepId = (event, originalLink) => {
-    interface ResponseType {
-      CYAStepID: string;
-    }
     let stepIDCYA;
     const stepId = originalLink.getAttribute('data-step-id');
     const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
@@ -125,7 +135,7 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         options
       ) // @ts-ignore
       .then((pageData: ResponseType) => {
-        stepIDCYA = pageData?.CYAStepID;
+        stepIDCYA = pageData?.CurrentStepId || pageData?.CYAStepID;
         if (stepIDCYA) {
           sessionStorage.setItem('stepIDCYA', stepIDCYA);
           sessionStorage.setItem('isEditMode', 'true');
