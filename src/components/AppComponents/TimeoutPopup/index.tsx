@@ -65,19 +65,12 @@ export default function TimeoutPopup(props) {
   }, [show]);
   function screenReaderContentDisplay() {
     if (!isConfirmationPage) {
-      switch (isAuthorised) {
-        case true:
-          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT');
-          break;
-        case false:
-          screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER');
-          break;
-        default:
-      }
+      return isAuthorised
+        ? t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')
+        : t('FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER');
     } else {
-      screenreadercontent = t('FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN');
+      return t('FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN');
     }
-    return screenreadercontent;
   }
 
   useEffect(() => {
