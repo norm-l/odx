@@ -36,7 +36,7 @@ export default function DoYouWantToSignIn() {
   const radioOptions = [
     {
       value: 'yes',
-      label: t('YES')
+      label: `${t('YES')} ${t('OPENS_IN_NEW_TAB')}`
     },
     {
       value: 'no',
@@ -49,7 +49,7 @@ export default function DoYouWantToSignIn() {
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
       if (selectedOptionValue === 'yes') {
-        window.location.href = '/';
+        window.open('/');
       } else {
         history.push('/are-you-sure-to-continue-without-sign-in');
       }

@@ -32,7 +32,7 @@ export default function CheckOnClaim() {
   const radioOptions = [
     {
       value: 'viewmysavedorsubmittedclaims',
-      label: t('VIEW_MY_SAVED_OR_SUBMITTED_CLAIMS')
+      label: `${t('VIEW_MY_SAVED_OR_SUBMITTED_CLAIMS')} ${t('OPENS_IN_NEW_TAB')}`
     },
     {
       value: 'checkwhenicanexpectareply',
@@ -48,7 +48,7 @@ export default function CheckOnClaim() {
 
       switch (selectedOptionValue) {
         case 'viewmysavedorsubmittedclaims':
-          window.location.href = '/';
+          window.open('/');
           break;
         case 'checkwhenicanexpectareply':
           window.location.assign(
