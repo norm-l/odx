@@ -19,9 +19,9 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import {
-  initTimeout,
   staySignedIn,
-  clearTimer
+  clearTimer,
+  initTimeout
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import DeleteAnswers from './deleteAnswers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -33,6 +33,21 @@ import {
 } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
+/* Time out modal functionality */
+let applicationTimeout = null;
+// Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
+
+let milisecondsTilWarning = 780 * 1000;
+let milisecondsTilSignout = 115 * 1000;
+
+// Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
+function initTimeoutUnauth(setShowTimeoutModal) {
+  clearTimeout(applicationTimeout);
+
+  applicationTimeout = setTimeout(() => {
+    setShowTimeoutModal(true);
+  }, milisecondsTilWarning);
+}
 
 export default function UnAuthChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -348,6 +363,19 @@ export default function UnAuthChildBenefitsClaim() {
       establishPCoreSubscriptions();
 
       initTimeout(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
+      // Fetches timeout length config
+      getSdkConfig()
+        .then(sdkConfig => {
+          if (sdkConfig.timeoutConfig.secondsTilWarning)
+            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+          if (sdkConfig.timeoutConfig.secondsTilLogout)
+            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+        })
+        .finally(() => {
+          // Subscribe to any store change to reset timeout counter
+          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
+          initTimeoutUnauth(setShowTimeoutModal);
+        });
 
       // Subscribe to any store change to reset timeout counter
       PCore.getStore().subscribe(() =>
@@ -527,6 +555,7 @@ export default function UnAuthChildBenefitsClaim() {
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
+          milisecondsTilSignout={milisecondsTilSignout}
         />
       )}
       <AppHeader

@@ -114,6 +114,16 @@ export default function ClaimsList(props) {
     return DateFormatter.Date(date, { format: 'DD MMMM YYYY' });
   }
 
+  function appendHiddenChildDetails(childName: string, dob: Date) {
+    return childName && dob ? (
+      <span className='govuk-visually-hidden'>
+        {t('FOR')} {childName} {t('BORN_ON')} {dayjs(dob).format('DD MMM YYYY')}
+      </span>
+    ) : (
+      ''
+    );
+  }
+
   function renderChildDetails(claimItem) {
     return claimItem.children.map((child, index) => (
       <React.Fragment key={child?.firstName}>
@@ -175,7 +185,8 @@ export default function ClaimsList(props) {
             _rowClick(e, claimItem.rowDetails);
           }}
         >
-          {t(claimItem.actionButton)}
+          {t(claimItem.actionButton)}{' '}
+          {appendHiddenChildDetails(`${child?.firstName} ${child?.lastName}`, child?.dob)}
         </Button>
 
         {claimItem.viewDecisionNotice && (
@@ -187,7 +198,9 @@ export default function ClaimsList(props) {
               target='_blank'
               rel='noreferrer noopener'
             >
-              {t('VIEW_DECISION_NOTICE')} {t('OPENS_IN_NEW_TAB')}
+              {t('VIEW_DECISION_NOTICE')}{' '}
+              {appendHiddenChildDetails(`${child?.firstName} ${child?.lastName}`, child?.dob)}{' '}
+              {t('OPENS_IN_NEW_TAB')}{' '}
             </a>
           </div>
         )}

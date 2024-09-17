@@ -88,6 +88,10 @@ export default function Assignment(props) {
     .getContainerAccessOrder(`${context}/${_containerName}`)
     .at(-1);
 
+  interface ResponseType {
+    CurrentStepId: string;
+  }
+
   // Register/Deregister this Pconnect Object to AssignmentPConn context value, for use in Portal scope
   useEffect(() => {
     setAssignmentPConnect(getPConnect());
@@ -493,6 +497,52 @@ export default function Assignment(props) {
       setArSecondaryButtons(actionButtons.secondary);
     }
   }, [actionButtons]);
+
+  // This is for declaration and interruption page of education start as pega have limitation
+  const contextWorkarea = PCore.getContainerUtils().getActiveContainerItemName(
+    `${PCore.getConstants().APP.APP}/primary`
+  );
+  const currentFlowActionId = PCore.getStoreValue(
+    '.ID',
+    'caseInfo.assignments[0].actions[0]',
+    contextWorkarea
+  );
+
+  const arrEduStartPagesForStepIds = ['declaration', 'checkdata'];
+  const isEduStartPagesForStepIdsExist = arrEduStartPagesForStepIds?.includes(
+    currentFlowActionId?.toLowerCase()
+  );
+
+  useEffect(() => {
+    if (isEduStartPagesForStepIdsExist && isEduStartJourney()) {
+      const options = {
+        invalidateCache: true
+      };
+
+      PCore.getDataPageUtils()
+        .getPageDataAsync(
+          'D_GetStepIdByApplicationAndAction',
+          'root',
+          {
+            FlowActionName: currentFlowActionId,
+            CaseID: thePConn.getCaseSummary().content.pyID,
+            ...(isEduStartJourney() && { ApplicationName: 'EDStart' })
+          },
+          options
+        )
+        .then((pageData: ResponseType) => {
+          const stepIDCYA = pageData?.CurrentStepId;
+          if (stepIDCYA) {
+            sessionStorage.setItem('stepIDCYA', stepIDCYA);
+            sessionStorage.setItem('isComingFromEduStartPages', 'true');
+          }
+        })
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        });
+    }
+  }, [isEduStartPagesForStepIdsExist]);
 
   function renderAssignmentCard() {
     return (

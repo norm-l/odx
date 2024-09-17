@@ -55,7 +55,7 @@
   "WE_WILL_TELL_YOU_IN_28_DAYS": "Byddwn yn rhoi gwybod i chi cyn pen 28 diwrnod calendr os yw’ch cais wedi bod yn llwyddiannus.",
   "CONTINUE_CLAIM": "Parhau â’r hawliad",
   "CONTINUE_MY_REQUEST": "Parhau â’m cais",
-  "VIEW_MY_REQUEST": "Bwrw golwg dros fy ngheisiadau",
+  "VIEW_MY_REQUEST": "Bwrw golwg dros fy nghais",
   "CLAIMS_IN_PROGRESS": "Hawliadau ar y gweill",
   "SUBMITTED_CLAIMS": "Hawliadau wedi’u cyflwyno",
   "VIEW_CLAIM": "Bwrw golwg dros yr hawliad",
@@ -229,13 +229,15 @@
   "YOU_ARE_ABOUT_TO_SIGN_OUT": "Rydych ar fin allgofnodi",
   "YOURE_ABOUT_TO_BE_SIGNED_OUT": "Rydych ar fin cael eich allgofnodi",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "Er eich diogelwch, byddwn yn eich allgofnodi cyn pen",
+  "FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER": "Er eich diogelwch, byddwn yn dileu’ch atebion cyn pen ",
+  "FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN": "Er eich diogelwch, bydd y dudalen hon yn cau’n awtomatig mewn",
   "2_MINUTES": "2 o funudau",
   "1_MINUTE": "1 o funudau",
   "SECONDS": "o eiliadau",
   "SECOND": "o eiliadau",
   "FOR_YOUR_SECURITY": "Er eich diogelwch",
-  "WE_WILL_DELETE_YOUR_CLAIM": "Byddwn yn dileu’ch hawliad ymhen",
-  "DELETE_YOUR_CLAIM": "Dileu eich hawliad",
+  "WE_WILL_DELETE_YOUR_ANSWERS": "Byddwn yn dileu’ch atebion cyn pen",
+  "DELETE_YOUR_ANSWERS": "Dileu’ch atebion",
   "FOR_YOUR_SECURITY_WE_DELETED_YOUR_CLAIM": "Er eich diogelwch, rydym wedi dileu eich hawliad",
   "YOU_DELETED_YOUR_CLAIM": "Gwnaethoch ddileu eich hawliad",
   "START_CLAIM_AGAIN": "Dechrau hawliad eto",
@@ -407,6 +409,7 @@
   "LOADING": "Llwytho",
   "ERROR": "Gwall",
   "RETURN_TO_CHANGE_CLAIM": "Dychwelyd i newid eich hawliad",
+  "RETURN_TO_CHANGE_ANSWERS": "Dychwelyd i newid eich atebion",
   "NO_ACTION": "No action",
 
   "COB_SERVICE_HEADING": "Newid eich manylion taliadau Budd-dal Plant",
@@ -415,5 +418,7 @@
   "COB_PAGE_P1": "Gallwch ddefnyddio’r gwasanaeth hwn i newid i gyfrif banc, undeb credyd neu gymdeithas adeiladu newydd heb fod angen rif rôl.",
   "COB_PAGE_P2": "Os nad ydych yn hawlio Budd-dal Plant ar hyd o bryd, gallwch ",
   "COB_PAGE_MAKE_A_CLAIM": "wneud hawliad",
-  "COB_PAGE_P3": "Mae cwblhau’r gwasanaeth hwn yn cymryd tua 5 munud."
+  "COB_PAGE_P3": "Mae cwblhau’r gwasanaeth hwn yn cymryd tua 5 munud.",
+  "FOR": "ar gyfer",
+  "BORN_ON": "wedi'i eni ar"
 }

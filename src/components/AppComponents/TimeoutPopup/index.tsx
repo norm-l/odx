@@ -63,13 +63,22 @@ export default function TimeoutPopup(props) {
       };
     }
   }, [show]);
+  function screenReaderContentDisplay() {
+    if (!isConfirmationPage) {
+      return isAuthorised
+        ? t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')
+        : t('FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER');
+    } else {
+      return t('FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN');
+    }
+  }
 
   useEffect(() => {
     if (timeoutState.countdownStart) {
       if (timeoutState.timeRemaining === 60) {
         dispatch({
           type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
+          payload: `${screenReaderContentDisplay()} ${t('1_MINUTE')}`
         });
       }
 
@@ -87,15 +96,13 @@ export default function TimeoutPopup(props) {
     if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-        payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
-          'SECONDS'
-        )}`
+        payload: `${screenReaderContentDisplay()} ${timeoutState.timeRemaining} ${t('SECONDS')}`
       });
     }
   }, [timeoutState.timeRemaining]);
 
   useEffect(() => {
-    if (isAuthorised && timeoutState.timeRemaining === 0) {
+    if (timeoutState.timeRemaining === 0) {
       const signoutHandlerTimeout = setTimeout(() => {
         signoutHandler();
       }, 1000);
@@ -104,7 +111,7 @@ export default function TimeoutPopup(props) {
         clearTimeout(signoutHandlerTimeout);
       };
     }
-  }, [isAuthorised, timeoutState.timeRemaining]);
+  }, [timeoutState.timeRemaining]);
 
   useEffect(() => {
     if (show) {
@@ -141,8 +148,13 @@ export default function TimeoutPopup(props) {
         </h1>
 
         <p className='govuk-body'>
-          {t('WE_WILL_DELETE_YOUR_CLAIM')}
-          <span className='govuk-!-font-weight-bold'> {t('2_MINUTES')}.</span>
+          {`${t('WE_WILL_DELETE_YOUR_ANSWERS')} `}
+          <span className='govuk-!-font-weight-bold'> {timeoutText()}</span>
+          {timeoutState.countdownStart && (
+            <span className='govuk-visually-hidden' aria-live='assertive'>
+              {timeoutState.screenReaderCountdown}
+            </span>
+          )}
         </p>
 
         <div className='govuk-button-group govuk-!-padding-top-4'>
@@ -151,7 +163,7 @@ export default function TimeoutPopup(props) {
           </Button>
 
           <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={signoutHandler}>
-            {t('DELETE_YOUR_CLAIM')}
+            {t('DELETE_YOUR_ANSWERS')}
           </a>
         </div>
       </div>
@@ -165,8 +177,13 @@ export default function TimeoutPopup(props) {
         </h1>
 
         <p className='govuk-body'>
-          {t('AUTOMATICALLY_CLOSE_IN')}
-          <span className='govuk-!-font-weight-bold'> {t('2_MINUTES')}.</span>
+          {`${t('AUTOMATICALLY_CLOSE_IN')} `}
+          <span className='govuk-!-font-weight-bold'>{timeoutText()}</span>
+          {timeoutState.countdownStart && (
+            <span className='govuk-visually-hidden' aria-live='assertive'>
+              {timeoutState.screenReaderCountdown}
+            </span>
+          )}
         </p>
 
         <div className='govuk-button-group govuk-!-padding-top-4'>
