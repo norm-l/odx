@@ -45,10 +45,9 @@ function initTimeoutUnauth(setShowTimeoutModal) {
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
-function staySignedIn(setShowTimeoutModal, refreshSignin = true) {
-  if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root');
-  }
+function staySignedIn(setShowTimeoutModal) {
+  PCore.getDataPageUtils().getDataAsync('D_ClaimantSubmittedChBCases', 'root');
+
   setShowTimeoutModal(false);
   initTimeoutUnauth(setShowTimeoutModal);
 }
