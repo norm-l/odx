@@ -21,6 +21,7 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
+import AskHMRC from './AskHMRC';
 import RegistrationDetails from '../../components/templates/RegistrationDetails';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
@@ -568,12 +569,15 @@ export default function SaReg() {
           {showUserPortal && (
             <UserPortal showPortalBanner={showPortalBanner} isLogout={isLogout}>
               {inprogressRegistration.length > 0 && (
-                <RegistrationDetails
-                  thePConn={pConn}
-                  data={inprogressRegistration}
-                  rowClickAction='OpenAssignment'
-                  buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
-                />
+                <>
+                  <RegistrationDetails
+                    thePConn={pConn}
+                    data={inprogressRegistration}
+                    rowClickAction='OpenAssignment'
+                    buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
+                  />
+                  <AskHMRC />
+                </>
               )}
             </UserPortal>
           )}

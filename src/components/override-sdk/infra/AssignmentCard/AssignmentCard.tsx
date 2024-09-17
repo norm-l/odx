@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import ActionButtons from '../ActionButtons';
-import { isSaveAndContinueButton } from '../../../helpers/utils';
 
 export default function AssignmentCard(props) {
   const { children, actionButtons, onButtonPress } = props;
@@ -29,7 +28,6 @@ export default function AssignmentCard(props) {
           arMainButtons={arMainButtons}
           arSecondaryButtons={arSecondaryButtons}
           onButtonPress={buttonPress}
-          isSaveAndContinueButton={isSaveAndContinueButton()}
         ></ActionButtons>
       )}
     </>
