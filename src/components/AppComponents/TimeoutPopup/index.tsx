@@ -163,13 +163,8 @@ export default function TimeoutPopup(props) {
             {t('CONTINUE_CLAIM')}
           </Button>
 
-<<<<<<< HEAD
-          <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={userTimeoutDelete}>
-            {t('DELETE_YOUR_CLAIM')}
-=======
           <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={signoutHandler}>
             {t('DELETE_YOUR_ANSWERS')}
->>>>>>> main
           </a>
         </div>
       </div>
