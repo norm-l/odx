@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import NotificationBanner from '../../components/BaseComponents/NotificationBanner/NotificationBanner';
-import AskHMRC from './AskHMRC';
 
 export default function UserPortal(props) {
   const { children, showPortalBanner, isLogout } = props;
@@ -27,7 +26,6 @@ export default function UserPortal(props) {
             {/* SA Registration */}
             <div className='govuk-grid-column-two-thirds'>
               <>{children}</>
-              <AskHMRC />
             </div>
           </div>
         </div>
