@@ -64,13 +64,22 @@ export default function TimeoutPopup(props) {
       };
     }
   }, [show]);
+  function screenReaderContentDisplay() {
+    if (!isConfirmationPage) {
+      return isAuthorised
+        ? t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')
+        : t('FOR_YOUR_SECURITY_WE_WILL_DELETE_YOUR_ANSWER');
+    } else {
+      return t('FOR_YOUR_SECURITY_WE_WILL_AUTOMATICALLY_CLOSE_IN');
+    }
+  }
 
   useEffect(() => {
     if (timeoutState.countdownStart) {
       if (timeoutState.timeRemaining === 60) {
         dispatch({
           type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-          payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${t('1_MINUTE')}`
+          payload: `${screenReaderContentDisplay()} ${t('1_MINUTE')}`
         });
       }
 
@@ -88,9 +97,7 @@ export default function TimeoutPopup(props) {
     if (timeoutState.timeRemaining < 60 && timeoutState.timeRemaining % 20 === 0) {
       dispatch({
         type: 'UPDATE_SCREEN_READER_COUNTDOWN',
-        payload: `${t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')} ${timeoutState.timeRemaining} ${t(
-          'SECONDS'
-        )}`
+        payload: `${screenReaderContentDisplay()} ${timeoutState.timeRemaining} ${t('SECONDS')}`
       });
     }
   }, [timeoutState.timeRemaining]);
@@ -142,10 +149,10 @@ export default function TimeoutPopup(props) {
         </h1>
 
         <p className='govuk-body'>
-          {`${t('WE_WILL_DELETE_YOUR_CLAIM')} `}
+          {`${t('WE_WILL_DELETE_YOUR_ANSWERS')} `}
           <span className='govuk-!-font-weight-bold'> {timeoutText()}</span>
           {timeoutState.countdownStart && (
-            <span className='govuk-visually-hidden' aria-live='polite'>
+            <span className='govuk-visually-hidden' aria-live='assertive'>
               {timeoutState.screenReaderCountdown}
             </span>
           )}
@@ -156,8 +163,13 @@ export default function TimeoutPopup(props) {
             {t('CONTINUE_CLAIM')}
           </Button>
 
+<<<<<<< HEAD
           <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={userTimeoutDelete}>
             {t('DELETE_YOUR_CLAIM')}
+=======
+          <a id='modal-staysignin-btn' className='govuk-link' href='#' onClick={signoutHandler}>
+            {t('DELETE_YOUR_ANSWERS')}
+>>>>>>> main
           </a>
         </div>
       </div>
@@ -174,7 +186,7 @@ export default function TimeoutPopup(props) {
           {`${t('AUTOMATICALLY_CLOSE_IN')} `}
           <span className='govuk-!-font-weight-bold'>{timeoutText()}</span>
           {timeoutState.countdownStart && (
-            <span className='govuk-visually-hidden' aria-live='polite'>
+            <span className='govuk-visually-hidden' aria-live='assertive'>
               {timeoutState.screenReaderCountdown}
             </span>
           )}

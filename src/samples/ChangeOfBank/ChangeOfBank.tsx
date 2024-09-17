@@ -17,6 +17,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { useStartMashup } from '../HighIncomeCase/reuseables/PegaSetup';
 import StartPage from './StartPage';
 import SummaryPage from '../../components/AppComponents/SummaryPage';
+import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 export default function ChangeOfBank() {
   const history = useHistory();
@@ -39,12 +40,12 @@ export default function ChangeOfBank() {
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   };
 
-  const { showPega, setShowPega, caseId, showResolutionPage } = useStartMashup(
+  const { showPega, setShowPega, caseId, showResolutionPage, assignmentPConn} = useStartMashup(
     setAuthType,
     onRedirectDone,
     {
       appBacklinkProps: {}
-    }
+    },
   );
 
   useEffect(() => {
@@ -128,6 +129,10 @@ export default function ChangeOfBank() {
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
           appname={t('COB_SERVICE_HEADING')}
           handleSignout={handleSignout}
+          languageToggleCallback={toggleNotificationProcess(
+            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
+            assignmentPConn
+          )}
         />
         <TimeoutPopup
           show={showTimeoutModal}
