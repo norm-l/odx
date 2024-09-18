@@ -41,7 +41,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
     },
     {
       value: 'no',
-      label: `${t('NO')}, ${t('I_WANT_TO_SIGN_IN')}`
+      label: `${t('NO')}, ${t('I_WANT_TO_SIGN_IN')} ${t('OPENS_IN_NEW_TAB')}`
     }
   ];
 
@@ -63,7 +63,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
           }
         });
       } else {
-        window.location.href = '/';
+        window.open('/');
       }
     } else {
       setErrorMsg(t('SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN'));
