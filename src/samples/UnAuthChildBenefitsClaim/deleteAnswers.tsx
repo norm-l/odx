@@ -4,7 +4,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import Button from '../../components/BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
 
-export default function DeleteAnswers({ hasSessionTimedOut }) {
+export default function DeleteAnswers() {
   const { t } = useTranslation();
   const history = useHistory();
   const redirectChoseClaim = () => {
@@ -22,7 +22,7 @@ export default function DeleteAnswers({ hasSessionTimedOut }) {
   return (
     <MainWrapper>
       <h1 className='govuk-heading-l'>
-        {sessionStorage.getItem('hasSessionTimedOut') === 'true' || !hasSessionTimedOut
+        {sessionStorage.getItem('hasSessionTimedOut') === 'false'
           ? t('YOU_DELETED_YOUR_CLAIM')
           : t('FOR_YOUR_SECURITY_WE_DELETED_YOUR_CLAIM')}
       </h1>

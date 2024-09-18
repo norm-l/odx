@@ -10,6 +10,7 @@ export default function TimeoutPopup(props) {
     milisecondsTilSignout,
     staySignedinHandler,
     signoutHandler,
+    userTimeoutDelete,
     isAuthorised,
     isConfirmationPage,
     staySignedInButtonText,
