@@ -44,7 +44,7 @@ const HighIncomeCase: FunctionComponent<any> = () => {
     setPageTitle();
     return (
       <>
-        <AppHeader appname={t('HICBC_APP_NAME')} hasLanguageToggle={false} />
+        <AppHeader appname={t('HICBC_APP_NAME')} hasLanguageToggle={false} betafeedbackurl={null} />
         <div className='govuk-width-container'>
           <MainWrapper showPageNotWorkingLink={false}>
             <h1 className='govuk-heading-l'>{t('SHUTTER_SERVICE_UNAVAILABLE')}</h1>

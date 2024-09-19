@@ -21,7 +21,6 @@ import {
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import { useStartMashup } from './reuseables/PegaSetup';
 import { useHistory } from 'react-router-dom';
-import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 const EducationStartCase: FunctionComponent<any> = () => {
   const { t } = useTranslation();
@@ -280,7 +279,8 @@ const EducationStartCase: FunctionComponent<any> = () => {
       });
     } else if (serviceNotAvailable) {
       setCurrentDisplay('servicenotavailable');
-    } else if (containerClosed) { // Back link action for submitted cases
+    } else if (containerClosed) {
+      // Back link action for submitted cases
       setShowPortalBanner(false);
       setCurrentDisplay('landingpage');
     } else {
@@ -432,11 +432,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
           handleSignout={handleSignout}
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
-          isPegaApp={showPega}
-          languageToggleCallback={toggleNotificationProcess(
-            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-            assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
-          )}
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
 
@@ -501,11 +496,6 @@ const EducationStartCase: FunctionComponent<any> = () => {
           handleSignout={handleSignout}
           appname={t('EDUCATION_START')}
           hasLanguageToggle={showLanguageToggleState}
-          isPegaApp={showPega}
-          languageToggleCallback={toggleNotificationProcess(
-            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-            assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
-          )}
           betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
         />
         <div className='govuk-width-container'>

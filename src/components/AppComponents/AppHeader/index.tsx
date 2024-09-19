@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useHMRCExternalLinks from '../../helpers/hooks/HMRCExternalLinks';
 import LanguageToggle from '../LanguageToggle';
 
-export default function AppHeader(props) {
-  const { handleSignout, appname, hasLanguageToggle, languageToggleCallback } = props;
+export default function AppHeader({ handleSignout = null, appname, hasLanguageToggle }) {
   const { t } = useTranslation();
   const { referrerURL, hmrcURL } = useHMRCExternalLinks();
 
@@ -73,7 +72,7 @@ export default function AppHeader(props) {
               </span>
             </p>
           </div>
-          {hasLanguageToggle && <LanguageToggle languageToggleCallback={languageToggleCallback} />}
+          {hasLanguageToggle && <LanguageToggle />}
         </div>
       </header>
     </>

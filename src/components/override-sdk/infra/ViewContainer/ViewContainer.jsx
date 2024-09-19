@@ -78,6 +78,7 @@ export default function ViewContainer(props) {
     }
     const dispatchObject = prepareDispatchObject();
     setDispatchObjState({
+      ...dispatchObjState,
       dispatchObject,
       // PCore is defined in pxBootstrapShell - eventually will be exported in place of constellationCore
       visible: !PCore.checkIfSemanticURL(),

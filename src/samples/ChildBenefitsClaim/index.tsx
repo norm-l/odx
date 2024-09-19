@@ -1,5 +1,5 @@
 // @ts-nocheck - TypeScript type checking to be added soon
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -30,8 +30,8 @@ import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helper
 import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import { LanguageContext } from '../../context/LangauageContext';
 
 declare const myLoadMashup: any;
 
@@ -261,6 +261,16 @@ export default function ChildBenefitsClaim() {
         assignmentFinished();
       },
       'assignmentFinished'
+    );
+
+    PCore.getPubSubUtils().subscribe(
+      'languageToggleTriggered',
+      ({ language }) => {
+        console.log('Language event triggered and picked up>>>>>>', language);
+        PCore.getEnvironmentInfo().setLocale(language);
+        console.log('ENV CORE::::', PCore.getEnvironmentInfo().getLocale());
+      },
+      'languagehaschanged'
     );
     PCore.getPubSubUtils().subscribe(
       'assignmentFinishedOnTaskListClicked',
@@ -666,11 +676,6 @@ export default function ChildBenefitsClaim() {
         handleSignout={handleSignout}
         appname={t('CLAIM_CHILD_BENEFIT')}
         hasLanguageToggle
-        isPegaApp={bShowPega}
-        languageToggleCallback={toggleNotificationProcess(
-          { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn
-        )}
       />
       <div className='govuk-width-container'>
         {serviceNotAvailable ? (

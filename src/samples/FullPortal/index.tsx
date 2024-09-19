@@ -52,6 +52,7 @@ export default function FullPortal() {
 
   // from react_root.js with some modifications
   function RootComponent(props) {
+    console.log('ROOT COMPONENT _ FULL PORTALa');
     // const { portalTarget, styleSheetTarget } = props;
     const PegaConnectObj = createPConnectComponent();
 

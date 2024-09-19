@@ -2,9 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageToggle from '../../../components/AppComponents/LanguageToggle';
 
-export default function AppHeader(props) {
-  const { handleSignout, appname, hasLanguageToggle, languageToggleCallback, betafeedbackurl} = props;
-  const { t } = useTranslation();  
+export default function AppHeader({
+  handleSignout = null,
+  appname,
+  hasLanguageToggle,
+  betafeedbackurl
+}) {
+  const { t } = useTranslation();
 
   return (
     <>
@@ -55,24 +59,22 @@ export default function AppHeader(props) {
           </div>
         </div>
         <div className='govuk-width-container'>
-          {  betafeedbackurl &&  (<div className='govuk-phase-banner'>
+          {betafeedbackurl && (
+            <div className='govuk-phase-banner'>
               <p className='govuk-phase-banner__content'>
                 <strong className='govuk-tag govuk-phase-banner__content__tag'>{t('BETA')}</strong>
                 <span className='govuk-phase-banner__text'>
                   {t('NEW_SERVICE')} - {t('BANNER_FEEDBACK_1')}&nbsp;
-                  <a
-                    className='govuk-link'
-                    href={betafeedbackurl}
-                  >
+                  <a className='govuk-link' href={betafeedbackurl}>
                     {t('BANNER_FEEDBACK_LINK')}
                   </a>
                   &nbsp;
                   {t('BANNER_FEEDBACK_2')}.
                 </span>
               </p>
-            </div>)
-          }
-          {hasLanguageToggle && <LanguageToggle languageToggleCallback={languageToggleCallback} />}
+            </div>
+          )}
+          {hasLanguageToggle && <LanguageToggle />}
         </div>
       </header>
     </>

@@ -110,7 +110,7 @@ export default function Assignment(props) {
     } else {
       setIsChildSummaryScreen(false);
     }
-  });
+  }, []);
 
   // Sets the language for the texts and emails if the user changes the language before opening an existing claim.
   function initialLanguageCall() {

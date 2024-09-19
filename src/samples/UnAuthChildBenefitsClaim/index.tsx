@@ -560,15 +560,7 @@ export default function UnAuthChildBenefitsClaim() {
           milisecondsTilSignout={milisecondsTilSignout}
         />
       )}
-      <AppHeader
-        appname={t('CLAIM_CHILD_BENEFIT')}
-        hasLanguageToggle
-        isPegaApp={bShowPega}
-        languageToggleCallback={toggleNotificationProcess(
-          { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn
-        )}
-      />
+      <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle />
       <div className='govuk-width-container'>
         {serviceNotAvailable ? (
           <ServiceNotAvailable returnToPortalPage={returnToPortalPage} />

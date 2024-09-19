@@ -65,7 +65,7 @@ export default function CheckOnClaim() {
 
   return (
     <>
-      <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle isPegaApp={false} />
+      <AppHeader appname={t('CLAIM_CHILD_BENEFIT')} hasLanguageToggle />
       <div className='govuk-width-container'>
         <Button
           variant='backlink'

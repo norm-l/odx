@@ -20,7 +20,6 @@ import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLin
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { triggerLogout } from '../../components/helpers/utils';
 import AppContext from './reuseables/AppContext';
-import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 
 // declare const myLoadMashup;
 declare const PCore: any;
@@ -231,11 +230,6 @@ const ClaimPage: FunctionComponent<any> = () => {
         handleSignout={handleSignout}
         appname={t('HICBC_APP_NAME')}
         hasLanguageToggle={showLanguageToggle}
-        isPegaApp={showPega}
-        languageToggleCallback={toggleNotificationProcess(
-          { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-          assignmentPConn
-        )}
         betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=463&referrerUrl=${window.location}`}
       />
       <div className='govuk-width-container'>

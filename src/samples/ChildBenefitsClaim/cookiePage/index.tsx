@@ -19,12 +19,12 @@ export default function CookiePage() {
   const appNameHeader = searchParams.get('appname');
   const serviceNamePageTitle = searchParams.get('serviceNamePageTitle');
   const serviceParam = searchParams.get('serviceParam');
-  
+
   registerServiceName(t(serviceNamePageTitle));
 
   return (
     <>
-      <AppHeader appname={t(appNameHeader)} hasLanguageToggle isPegaApp={false} />
+      <AppHeader appname={t(appNameHeader)} hasLanguageToggle />
       <div className='govuk-width-container'>
         <MainWrapper serviceParam={serviceParam}>
           <h1 className='govuk-heading-l'>{t('COOKIES')}</h1>
