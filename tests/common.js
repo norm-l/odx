@@ -1,37 +1,22 @@
-/* eslint-disable no-undef */
+import { config } from './config';
 
-const Login = async (username, password, page) => {
-  await page.locator('#txtUserID').type(username);
-  await page.locator('#txtPassword').type(password);
-  await page.locator('#submit_row .loginButton').click();
+// Define a common function to perform login and redirection
+const login = async page => {
+  // Log all redirect URLs
+  page.on('response', response => {
+    if (response.status() >= 300 && response.status() < 400) {
+      console.log('Redirected to:', response.headers.location); // eslint-disable-line no-console
+    }
+  });
+  // Wait for the final URL
+  await page.waitForURL(/https:\/\/test-www\.tax\.service\.gov\.uk\/api-test-login\//);
+  // Fill in username and password fields
+  await page.fill('#userId', config.apps.paye.iabd.username);
+  await page.fill('#password', config.apps.paye.iabd.password);
+  // Click the "Sign in" button
+  await page.click('#submit');
+  // Wait for navigation to happen after login
+  await page.waitForURL(config.baseUrl);
 };
 
-const getAttributes = async element => {
-  const attributes = await element.evaluate(async ele => ele.getAttributeNames());
-  return attributes;
-};
-
-const getFormattedDate = date => {
-  if (!date) {
-    return date;
-  }
-  const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()
-  ).toString().padStart(2, '0')}${date.getFullYear()}`;
-  return formattedDate;
-};
-
-const getFutureDate = () => {
-  const today = new Date();
-  // const theLocale = Intl.DateTimeFormat().resolvedOptions().locale;
-  // add 2 days to today
-  const futureDate = new Date(today.setDate(today.getDate() + 2));
-  // Need to get leading zeroes on single digit months and 4 digit year
-  const formattedFuturedate = getFormattedDate(futureDate);
-  return formattedFuturedate;
-};
-
-module.exports = {
-  Login,
-  getAttributes,
-  getFutureDate
-};
+export default login;
