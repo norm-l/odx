@@ -33,21 +33,6 @@ import {
 } from '../../components/helpers/utils';
 
 declare const myLoadMashup: Function;
-/* Time out modal functionality */
-// let applicationTimeout = null;
-// // Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
-
-// let milisecondsTilWarning = 780 * 1000;
-// let milisecondsTilSignout = 115 * 1000;
-
-// // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
-// function initTimeoutUnauth(setShowTimeoutModal) {
-//   clearTimeout(applicationTimeout);
-
-//   applicationTimeout = setTimeout(() => {
-//     setShowTimeoutModal(true);
-//   }, milisecondsTilWarning);
-// }
 
 export default function UnAuthChildBenefitsClaim() {
   const [pConn, setPConn] = useState<any>(null);
@@ -365,25 +350,9 @@ export default function UnAuthChildBenefitsClaim() {
       initTimeout(setShowTimeoutModal, deleteData, false, bShowResolutionScreen);
       // Fetches timeout length config
       getSdkConfig().then(sdkConfig => {
-        // if (sdkConfig.timeoutConfig.secondsTilWarning)
-        //  milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
         if (sdkConfig.timeoutConfig.secondsTilLogout)
           setMilisecondsTilSignout(sdkConfig.timeoutConfig.secondsTilLogout * 1000);
       });
-      // .finally(() => {
-      //   // Subscribe to any store change to reset timeout counter
-      //   PCore.getStore().subscribe(() =>
-      //     staySignedIn(
-      //       setShowTimeoutModal,
-      //       claimsListApi,
-      //       deleteData,
-      //       false,
-      //       false,
-      //       bShowResolutionScreen
-      //     )
-      //   );
-      //   initTimeout(setShowTimeoutModal);
-      // });
 
       // Subscribe to any store change to reset timeout counter
       PCore.getStore().subscribe(() =>
