@@ -543,19 +543,19 @@ const Cessation: FunctionComponent<any> = () => {
                                   {t('DATE_CREATED')}
                                 </dt>
                                 <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                                  {'20/09/2024'}
+                                  20/09/2024
                                 </dd>
                                 <dd className='govuk-summary-list__value govuk-!-width-one-third'>
                                   <strong
                                     className={`govuk-tag govuk-tag--${'dataItem.status.tagColour'}`}
                                   >
-                                    {'dummy text'}
+                                    dummy text
                                   </strong>
                                 </dd>
                               </div>
                             </dl>
 
-                            {'dummy actionButton'}
+                            dummy actionButton
                           </>
                         </div>
                       </div>
