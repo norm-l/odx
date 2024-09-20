@@ -13,7 +13,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const history = useHistory();
   const { pathname } = history.location;
 
-  console.log('111');
   const onRedirectDone = () => {
     history.replace(pathname, { replace: true });
     // appName and mainRedirect params have to be same as earlier invocation
@@ -23,7 +22,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   if (!sdkIsLoggedIn()) {
     getSdkConfig().then(sdkConfig => {
       const sdkConfigAuth = sdkConfig.authConfig;
-      // setAuthType(sdkConfigAuth.authService);
       if (!sdkConfigAuth.mashupClientId && sdkConfigAuth.customAuthType === 'Basic') {
         // Service package to use custom auth with Basic
         const sB64 = window.btoa(

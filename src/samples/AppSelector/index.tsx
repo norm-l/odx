@@ -7,7 +7,7 @@ import Registration from '../Registration/index';
 import CookiePage from '../Registration/cookiePage/index';
 import Accessibility from '../Registration/AccessibilityPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
-import ProtectedRoute from '../ProtectedRoute';
+import ProtectedRoute from '../../components/HOC/ProtectedRoute';
 import Cessation from '../Cessation';
 
 const AppSelector = () => {
