@@ -21,7 +21,6 @@
   },
   "ignorePatterns": ["node_modules", "packages/*/lib", "!.storybook", ".storybook/public"],
   "rules": {
-
     // Prettier recommends running separately from a linter.
     // https://prettier.io/docs/en/integrating-with-linters.html#notes
     "prettier/prettier": "off",
@@ -72,9 +71,9 @@
 
     "sonarjs/prefer-immediate-return": "off",
 
-    "@typescript-eslint/dot-notation": "off",       // prefer warn but needs different parserOptions
-    "@typescript-eslint/naming-convention": "off",  // prefer warn but needs different parserOptions
-    "@typescript-eslint/ban-types": "off",   // also, see override below
+    "@typescript-eslint/dot-notation": "off", // prefer warn but needs different parserOptions
+    "@typescript-eslint/naming-convention": "off", // prefer warn but needs different parserOptions
+    "@typescript-eslint/ban-types": "off", // also, see override below
 
     //
     // Initial release: set to error
@@ -136,9 +135,8 @@
     "prefer-template": "error",
     "vars-on-top": "error",
 
-    "no-use-before-define": "off",    // doc for @typescript-eslint/no-use-before-define says to turn off the base implementation
+    "no-use-before-define": "off", // doc for @typescript-eslint/no-use-before-define says to turn off the base implementation
     "@typescript-eslint/no-use-before-define": "error"
-
   },
   "overrides": [
     {
@@ -184,8 +182,7 @@
     },
     {
       "files": "*.@(js|jsx|ts|tsx|mdx)",
-      "rules": {
-      }
+      "rules": {}
     },
     {
       "files": ".storybook/*.js",
@@ -197,5 +194,8 @@
         "import/prefer-default-export": ["off"]
       }
     }
-  ]
+  ],
+  "env": {
+    "jest": true
+  }
 }
