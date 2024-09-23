@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { createContext, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import setPageTitle from '../components/helpers/setPageTitleHelpers';
 import i18n from '../config/i18n';
 
@@ -7,7 +7,7 @@ interface iLanguageContext {
   currentLanguage: string;
   setCurrentLanguage: Dispatch<SetStateAction<string>>;
   // eslint-disable-next-line no-unused-vars
-  toggleNotificationProcess: (lang: string, PConnectObject: any) => Promise<void>;
+  toggleNotificationProcess: (lang: string, PConnectObject: any) => Promise<any>;
 }
 
 export const LanguageContext = createContext<iLanguageContext>(undefined);
@@ -17,7 +17,7 @@ const LanguageContextProvider = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState(currentLang);
   const [pegaBundles, setPegaBundles] = useState([]);
 
-  function toggleNotificationProcess(lang, PConnectObject: any): Promise<void> {
+  function toggleNotificationProcess(lang, PConnectObject: any): Promise<any> {
     console.log('TOGGLE toggleNotificationProcess >>>>> ', lang);
     const config = { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' };
     if (config[lang] && PConnectObject) {
@@ -28,7 +28,7 @@ const LanguageContextProvider = ({ children }) => {
     }
   }
 
-  async function updatePegaLanguage() {
+  async function getPegaBundles() {
     // Fetch Locale Reference names for data pages
     const datapageKeys = Object.keys(PCore.getDataPageUtils().datastore);
     const dataPageBundleNames = datapageKeys.map(dpageName => {
@@ -54,8 +54,8 @@ const LanguageContextProvider = ({ children }) => {
     const AssignmentID = PCore.getStoreValue('.assignments[0].ID', '.caseInfo', activeWorkarea);
 
     if (AssignmentID) {
-      const newBundles = await PCore.getRestClient()
-        .invokeRestApi(
+      if (currentLanguage !== 'en') {
+        const newBundlesResponse = await PCore.getRestClient().invokeRestApi(
           'openAssignment',
           {
             body: {},
@@ -64,31 +64,16 @@ const LanguageContextProvider = ({ children }) => {
             queryPayload: { assignmentID: AssignmentID }
           },
           activeWorkarea
-        )
-        .then(data => {
-          return data.data.uiResources.localeReferences;
-        });
-
-      PCore.getEnvironmentInfo().setLocale(`${currentLanguage}_GB`);
-
-      const allBundles = [...bundles, ...dataPageBundleNames, ...newBundles];
-      setPegaBundles(allBundles);
+        );
+        const newBundles = newBundlesResponse.data.uiResources.localeReferences;
+        return [...newBundles, ...bundles, ...dataPageBundleNames];
+      } else {
+        return [...bundles, ...dataPageBundleNames];
+      }
+    } else {
+      console.log('No asdsigment id');
     }
   }
-
-  useEffect(() => {
-    /// this updates the bundles when the state changes
-    if (typeof PCore !== 'undefined') {
-      PCore.getEnvironmentInfo().setLocale(`${currentLanguage}_GB`);
-      PCore.getLocaleUtils().resetLocaleStore();
-      PCore.getLocaleUtils().loadLocaleResources(pegaBundles);
-
-      PCore.getPubSubUtils().publish('languageToggleTriggered', {
-        language: currentLanguage,
-        localeRef: []
-      });
-    }
-  }, [pegaBundles]);
 
   useEffect(() => {
     // this is updating when the language changes...
@@ -97,11 +82,29 @@ const LanguageContextProvider = ({ children }) => {
     i18n.changeLanguage(currentLanguage);
     document.documentElement.lang = currentLanguage;
     setPageTitle();
+
     if (typeof PCore !== 'undefined') {
-      updatePegaLanguage();
-      console.log('PCORE has been UPDATED>>>>>>>');
+      getPegaBundles().then(bundles => {
+        console.log('before');
+        console.log(bundles);
+        console.log('locale:', PCore.getEnvironmentInfo().locale);
+        console.log('storage:', PCore.getLocaleUtils().localeStore);
+
+        PCore.getEnvironmentInfo().setLocale(`${currentLanguage}_GB`); // set local so that the load is correct
+        PCore.getLocaleUtils().resetLocaleStore();
+        PCore.getLocaleUtils().loadLocaleResources(bundles);
+
+        console.log('AFTER');
+        console.log('locale:', PCore.getEnvironmentInfo().locale);
+        console.log('storage:', PCore.getLocaleUtils().localeStore);
+
+        PCore.getPubSubUtils().publish('languageToggleTriggered', {
+          language: currentLanguage,
+          localeRef: bundles
+        });
+      });
     } else {
-      console.log('NO PCORE YET>>>>>>>');
+      console.log('can not load bundles');
     }
   }, [currentLanguage]);
 

@@ -1,10 +1,8 @@
 // @ts-nocheck - TypeScript type checking to be added soon
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { render } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
-import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
 import {
   sdkIsLoggedIn,
@@ -31,6 +29,7 @@ import localSdkComponentMap from '../../../sdk-local-component-map';
 import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import RootComponent from '../../components/RootComponent';
 import { LanguageContext } from '../../context/LangauageContext';
 
 declare const myLoadMashup: any;
@@ -77,6 +76,9 @@ export default function ChildBenefitsClaim() {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [isCreateCaseBlocked, setIsCreateCaseBlocked] = useState(false);
+
+  const { pegaBundles, toggleNotificationProcess, currentLanguage } = useContext(LanguageContext);
+  const pegaReference = useRef(false);
 
   const history = useHistory();
 
@@ -265,10 +267,12 @@ export default function ChildBenefitsClaim() {
 
     PCore.getPubSubUtils().subscribe(
       'languageToggleTriggered',
-      ({ language }) => {
+      ({ language, localeRef }) => {
         console.log('Language event triggered and picked up>>>>>>', language);
-        PCore.getEnvironmentInfo().setLocale(language);
-        console.log('ENV CORE::::', PCore.getEnvironmentInfo().getLocale());
+        toggleNotificationProcess(language, assignmentPConn);
+        PCore.getLocaleUtils().resetLocaleStore();
+        PCore.getLocaleUtils().loadLocaleResources(localeRef);
+        console.log('When language is toogled the ref is', pegaReference.current);
       },
       'languagehaschanged'
     );
@@ -387,34 +391,6 @@ export default function ChildBenefitsClaim() {
     }
   }, [bShowAppName]);
 
-  // from react_root.js with some modifications
-  function RootComponent(props) {
-    const PegaConnectObj = createPConnectComponent();
-    const thePConnObj = <PegaConnectObj {...props} />;
-
-    // NOTE: For Embedded mode, we add in displayOnlyFA and isMashup to our React context
-    // so the values are available to any component that may need it.
-    const theComp = (
-      <StoreContext.Provider
-        value={{
-          store: PCore.getStore(),
-          displayOnlyFA: true,
-          isMashup: true,
-          setAssignmentPConnect: setAssignmentPConn
-        }}
-      >
-        {thePConnObj}
-      </StoreContext.Provider>
-    );
-
-    return theComp;
-  }
-
-  /**
-   * Callback from onPCoreReady that's called once the top-level render object
-   * is ready to be rendered
-   * @param inRenderObj the initial, top-level PConnect object to render
-   */
   function initialRender(inRenderObj) {
     // loadMashup does its own thing so we don't need to do much/anything here
     // // modified from react_root.js render
@@ -438,25 +414,18 @@ export default function ChildBenefitsClaim() {
       target = portalTarget;
     }
 
-    // Note: RootComponent is just a function (declared below)
-    const Component: any = RootComponent;
-
-    if (componentName) {
-      Component.displayName = componentName;
-    }
-
-    const theComponent = (
-      <Component {...props} portalTarget={portalTarget} styleSheetTarget={styleSheetTarget} />
-    );
-
     // Initial render of component passed in (which should be a RootContainer)
-    render(<React.Fragment>{theComponent}</React.Fragment>, target);
-
-    /* const root = render(target); // createRoot(container!) if you use TypeScript
-    root.render(<>{theComponent}</>); */
-
-    // Initial render to show that we have a PConnect and can render in the target location
-    // render( <div>EmbeddedTopLevel initialRender in {domContainerID} with PConn of {componentName}</div>, target);
+    render(
+      <RootComponent
+        {...props}
+        ref={pegaReference}
+        portalTarget={portalTarget}
+        styleSheetTarget={styleSheetTarget}
+        displayName={componentName}
+        setAssignmentPConn={setAssignmentPConn}
+      />,
+      target
+    );
   }
 
   /**
@@ -529,7 +498,6 @@ export default function ChildBenefitsClaim() {
 
     // load the Mashup and handle the onPCoreEntry response that establishes the
     //  top level Pega root element (likely a RootContainer)
-
     myLoadMashup('pega-root', false); // this is defined in bootstrap shell that's been loaded already
   }
 
@@ -580,11 +548,11 @@ export default function ChildBenefitsClaim() {
         'cancelAssignment'
       );
       PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.ASSIGNMENT_OPENED,
         'continueAssignment'
       );
       PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
+        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.CASE_OPENED,
         'continueCase'
       );
 
@@ -614,10 +582,6 @@ export default function ChildBenefitsClaim() {
     staySignedIn(setShowTimeoutModal);
   };
 
-  const checkShuttered = (status: boolean) => {
-    setShutterServicePage(status);
-  };
-
   const renderContent = () => {
     return shutterServicePage ? (
       <ShutterServicePage />
@@ -642,7 +606,6 @@ export default function ChildBenefitsClaim() {
                 title={t('CLAIMS_IN_PROGRESS')}
                 rowClickAction='OpenAssignment'
                 buttonContent={t('CONTINUE_CLAIM')}
-                caseId={caseId}
               />
             )}
 
@@ -653,7 +616,6 @@ export default function ChildBenefitsClaim() {
                 title={t('SUBMITTED_CLAIMS')}
                 rowClickAction='OpenCase'
                 buttonContent={t('VIEW_CLAIM')}
-                checkShuttered={checkShuttered}
               />
             )}
           </UserPortal>
@@ -684,7 +646,9 @@ export default function ChildBenefitsClaim() {
           renderContent()
         )}
 
-        {bShowResolutionScreen && <ConfirmationPage caseId={caseId} isUnAuth={false} />}
+        {bShowResolutionScreen && (
+          <ConfirmationPage caseId={caseId} isUnAuth={false} caseStatus={null} />
+        )}
       </div>
 
       <LogoutPopup
