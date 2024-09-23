@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../BaseComponents/MainWrapper';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
-import AskHMRC from '../../../samples/SaReg/AskHMRC';
+import AskHMRC from '../../../samples/Registration/AskHMRC';
 
 export default function ApiServiceNotAvailable() {
   const { t } = useTranslation();
