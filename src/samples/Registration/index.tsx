@@ -1,7 +1,6 @@
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
@@ -9,8 +8,6 @@ import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react
 
 import {
   sdkIsLoggedIn,
-  loginIfNecessary,
-  sdkSetAuthHeader,
   getSdkConfig
 } from '@pega/auth/lib/sdk-auth-manager';
 
@@ -67,7 +64,7 @@ function staySignedIn(setShowTimeoutModal, setIsLogout, refreshSignin = true) {
 }
 /* ******************************* */
 
-export default function SaReg() {
+export default function Registration() {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(false);
@@ -85,7 +82,6 @@ export default function SaReg() {
   const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
   const [isSoleTrader, setIsSoleTrader] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-  const history = useHistory();
   const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'SA';
@@ -135,13 +131,6 @@ export default function SaReg() {
   useEffect(() => {
     setPageTitle();
   }, [showUserPortal, bShowPega, bShowResolutionScreen, serviceName]);
-
-  function doRedirectDone() {
-    history.replace('/');
-    // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-  }
-
   function createCase() {
     displayPega();
 
@@ -476,35 +465,6 @@ export default function SaReg() {
 
   // One time (initialization) subscriptions and related unsubscribe
   useEffect(() => {
-    getSdkConfig().then(sdkConfig => {
-      const sdkConfigAuth = sdkConfig.authConfig;
-      if (!sdkConfigAuth.mashupClientId && sdkConfigAuth.customAuthType === 'Basic') {
-        // Service package to use custom auth with Basic
-        const sB64 = window.btoa(
-          `${sdkConfigAuth.mashupUserIdentifier}:${window.atob(sdkConfigAuth.mashupPassword)}`
-        );
-        sdkSetAuthHeader(`Basic ${sB64}`);
-      }
-
-      if (!sdkConfigAuth.mashupClientId && sdkConfigAuth.customAuthType === 'BasicTO') {
-        const now = new Date();
-        const expTime = new Date(now.getTime() + 5 * 60 * 1000);
-        let sISOTime = `${expTime.toISOString().split('.')[0]}Z`;
-        const regex = /[-:]/g;
-        sISOTime = sISOTime.replace(regex, '');
-        // Service package to use custom auth with Basic
-        const sB64 = window.btoa(
-          `${sdkConfigAuth.mashupUserIdentifier}:${window.atob(
-            sdkConfigAuth.mashupPassword
-          )}:${sISOTime}`
-        );
-        sdkSetAuthHeader(`Basic ${sB64}`);
-      }
-
-      // Login if needed, without doing an initial main window redirect
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
-    });
-
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       startMashup();

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
-import SAReg from '../SaReg/index';
-import CookiePage from '../SaReg/cookiePage/index';
-import Accessibility from '../SaReg/AccessibilityPage';
+import Registration from '../Registration/index';
+import CookiePage from '../Registration/cookiePage/index';
+import Accessibility from '../Registration/AccessibilityPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import ProtectedRoute from '../../components/HOC/ProtectedRoute';
+import Cessation from '../Cessation';
 
 const AppSelector = () => {
   const [i18nloaded, seti18nloaded] = useState(false);
@@ -35,7 +37,11 @@ const AppSelector = () => {
 
   return !i18nloaded ? null : (
     <Switch>
-      <Route exact path='/' component={SAReg} />
+      <Route exact path='/' render={()=> <Redirect to='/registration' />} />
+      <ProtectedRoute path='/registration' component={Registration} />
+      <ProtectedRoute path='/cessation' component={Cessation} />
+
+      {/* Public Routes */}
       <Route path='/cookies' component={CookiePage} />
       <Route path='/accessibility' component={Accessibility} />
     </Switch>
