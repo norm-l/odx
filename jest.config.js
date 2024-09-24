@@ -1,11 +1,13 @@
 // eslint-disable-next-line strict
 module.exports = {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>/tests/unit/', '<rootDir>/tests'],
+  roots: ['<rootDir>/src'],
   preset: 'ts-jest',
   transform: {
     '^.+\\.(t|j)sx?$': 'ts-jest'
   },
-  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
-  coverageDirectory: "tests/coverage"
+  testMatch: ['**/?(*.)+(test).[jt]s?(x)'],
+  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
+  coverageDirectory: 'tests/coverage',
+  transformIgnorePatterns: ['node_modules/(?!@pega)']
 };

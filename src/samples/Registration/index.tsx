@@ -1,7 +1,6 @@
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
@@ -80,7 +79,6 @@ export default function Registration() {
   const [showAlreadyRegisteredUserMessage, setShowAlreadyRegisteredUserMessage] = useState(false);
   const [isSoleTrader, setIsSoleTrader] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-  const history = useHistory();
   const { t } = useTranslation();
   // This needs to be changed in future when we handle the shutter for multiple service, for now this one's for single service
   const featureID = 'SA';

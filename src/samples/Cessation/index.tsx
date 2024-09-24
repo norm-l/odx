@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState, useEffect, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
-import { getSdkConfig, loginIfNecessary } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
-import { checkStatus, triggerLogout } from '../../components/helpers/utils';
+import { triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
@@ -16,18 +16,17 @@ import {
   staySignedIn
 } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 
-import { useHistory } from 'react-router-dom';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import AppHeader from '../../components/AppComponents/AppHeader';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 import { useStartMashup } from '../../reuseables/PegaSetup';
-import AppContextEducation from '../../reuseables/AppContextEducation';
 import Landing from '../../components/AppComponents/Landing/Landing';
+import AppContext from '../../reuseables/AppContext';
 
 const Cessation: FunctionComponent<any> = () => {
   const { t } = useTranslation();
 
-  const educationStartParam = 'claim-child-benefit';
+  const serviceParam = 'claim-child-benefit';
   // Adding hardcoded value as key to sort translation issue.
   const serviceNameAndHeader = 'LEAVE_SELF_ASSESSMENT';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
@@ -35,11 +34,11 @@ const Cessation: FunctionComponent<any> = () => {
   const summaryPageRef = useRef<HTMLDivElement>(null);
 
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
-  const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
+  // const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
   const [startClaimClicked, setStartClaimClicked] = useState(false);
   const [shuttered, setShuttered] = useState(null);
   const [pCoreReady, setPCoreReady] = useState(false);
-  const { showLanguageToggle } = useContext(AppContextEducation);
+  const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
   const setAuthType = useState('gg')[1];
   const [currentDisplay, setCurrentDisplay] = useState<
@@ -58,11 +57,10 @@ const Cessation: FunctionComponent<any> = () => {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showPortalBanner, setShowPortalBanner] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [pConnect, setPconnect] = useState(null);
-  const [isLogout, setIsLogout] = useState(false);
 
   const { hmrcURL } = useHMRCExternalLinks();
-  const history = useHistory();
 
   registerServiceName(t('LEAVE_SELF_ASSESSMENT'));
 
@@ -70,17 +68,11 @@ const Cessation: FunctionComponent<any> = () => {
     initTimeout(setShowTimeoutModal, false, true, false);
   }, []);
 
-  function doRedirectDone() {
-    history.replace('/education/start');
-    // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
-  }
-
   const {
     showPega,
     setShowPega,
     showResolutionPage,
-    setShutterServicePage,
+    // setShutterServicePage,
     caseId,
     shutterServicePage,
     serviceNotAvailable,
@@ -88,9 +80,9 @@ const Cessation: FunctionComponent<any> = () => {
     assignmentCancelled,
     setAssignmentCancelled,
     containerClosed
-  } = useStartMashup(setAuthType, doRedirectDone, {
+  } = useStartMashup(setAuthType, {
     appBacklinkProps: {},
-    serviceParam: educationStartParam,
+    serviceParam,
     serviceName: serviceNameAndHeader,
     appNameHeader: serviceNameAndHeader
   });
@@ -123,6 +115,7 @@ const Cessation: FunctionComponent<any> = () => {
     );
   };
 
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   function returnToPortalPage() {
     sessionStorage.setItem('assignmentFinishedFlag', 'false');
     setShowSignoutModal(false);
@@ -142,38 +135,23 @@ const Cessation: FunctionComponent<any> = () => {
     );
   }
 
-  const handleStartCliam = e => {
-    e.preventDefault();
-    setShowPega(true);
-    setShowLandingPage(false);
-    setStartClaimClicked(true);
+  // Todo: Need to be added soon
+  // const handleStartCliam = e => {
+  //   e.preventDefault();
+  //   setShowPega(true);
+  //   setShowLandingPage(false);
+  //   setStartClaimClicked(true);
 
-    sessionStorage.setItem('isComingFromPortal', 'true');
-    sessionStorage.setItem('isEditMode', 'true');
-    sessionStorage.removeItem('stepIDCYA');
-  };
+  //   sessionStorage.setItem('isComingFromPortal', 'true');
+  //   sessionStorage.setItem('isEditMode', 'true');
+  //   sessionStorage.removeItem('stepIDCYA');
+  // };
 
   /* ***
    * Application specific PCore subscriptions
    *
    * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
    */
-
-  // TODO - This function will be removed with US-13518 implementation.
-  function removeHmrcLink() {
-    if (checkStatus() === 'Open-InProgress') {
-      const hmrcLink = document.querySelector(
-        '[href="https://www.tax.service.gov.uk/ask-hmrc/chat/child-benefit"]'
-      );
-      const breakTag = document.querySelectorAll('br');
-
-      if (hmrcLink || breakTag.length) {
-        hmrcLink?.remove();
-        breakTag[0]?.remove();
-        breakTag[1]?.remove();
-      }
-    }
-  }
 
   function closeContainer() {
     if (PCore.getContainerUtils().getActiveContainerItemName('app/primary')) {
@@ -184,7 +162,9 @@ const Cessation: FunctionComponent<any> = () => {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   function returnedToPortal(showBanner = false) {
+    // Todo: This will be parameterized
     closeContainer();
     setShowPega(false);
     setCurrentDisplay('landingpage');
@@ -212,7 +192,7 @@ const Cessation: FunctionComponent<any> = () => {
       if (targetId === 'homepage') {
         e.preventDefault();
         returnedToPortal(false);
-        setShowPortalPageDefault(true);
+        // setShowPortalPageDefault(true);
       }
     }
 
@@ -326,11 +306,6 @@ const Cessation: FunctionComponent<any> = () => {
       PCore.onPCoreReady(() => {
         if (!pCoreReady) {
           setPCoreReady(true);
-          PCore?.getPubSubUtils().subscribe(
-            'CustomAssignmentFinished',
-            removeHmrcLink,
-            'CustomAssignmentFinished'
-          );
           PCore.getPubSubUtils().subscribe(
             PCore.getConstants().PUB_SUB_EVENTS.CONTAINER_EVENTS.CLOSE_CONTAINER_ITEM,
             () => {
@@ -395,14 +370,14 @@ const Cessation: FunctionComponent<any> = () => {
 
   useEffect(() => {
     getSdkConfig().then(config => {
-      setShowLanguageToggleState(config?.educationStartConfig?.showLanguageToggle);
+      setShowLanguageToggleState(config?.cessationConfig?.showLanguageToggle);
     });
   }, []);
 
   useEffect(() => {
     getSdkConfig().then(config => {
-      if (config.educationStartConfig?.shutterService) {
-        setShuttered(config.educationStartConfig.shutterService);
+      if (config.cessationConfig?.shutterService) {
+        setShuttered(config.cessationConfig.shutterService);
       } else {
         setShuttered(false);
       }
@@ -460,11 +435,11 @@ const Cessation: FunctionComponent<any> = () => {
     );
   } else {
     return (
-      <AppContextEducation.Provider
+      <AppContext.Provider
         value={{
           appBacklinkProps: {},
           showLanguageToggle,
-          serviceParam: educationStartParam,
+          serviceParam,
           serviceName: serviceNameAndHeader,
           appNameHeader: serviceNameAndHeader
         }}
@@ -481,9 +456,7 @@ const Cessation: FunctionComponent<any> = () => {
               currentDisplay === 'resolutionpage'
             )
           }
-          signoutHandler={() => {
-            triggerLogout(setIsLogout);
-          }}
+          signoutHandler={triggerLogout}
           isAuthorised={false}
           staySignedInButtonText={t('STAY_SIGNED_IN')}
           signoutButtonText={t('SIGN-OUT')}
@@ -518,12 +491,12 @@ const Cessation: FunctionComponent<any> = () => {
           ) : (
             <>
               <div id='pega-part-of-page'>
-                <div id='pega-root' className='education-start'></div>
+                <div id='pega-root' className='pega-cessation'></div>
               </div>
               {currentDisplay === 'landingpage' && (
                 <Landing
                   showPortalBanner={showPortalBanner}
-                  isLogout={isLogout}
+                  isLogout={false}
                   pConn={pConnect}
                   inProgressCaseCountEndPoint={'D_RegistrantWorkAssignmentSACases'}
                   creatCaseEndpoint={'HMRC-SA-Work-Registration'}
@@ -556,7 +529,7 @@ const Cessation: FunctionComponent<any> = () => {
           <p className='govuk-body'>{t('TO_SAVE_YOUR_PROGRESS')}</p>
         </LogoutPopup>
         <AppFooter />
-      </AppContextEducation.Provider>
+      </AppContext.Provider>
     );
   }
 };
