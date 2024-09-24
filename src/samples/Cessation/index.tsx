@@ -22,6 +22,7 @@ import AppHeader from '../../components/AppComponents/AppHeader';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 import { useStartMashup } from '../../reuseables/PegaSetup';
 import AppContextEducation from '../../reuseables/AppContextEducation';
+import Landing from '../../components/AppComponents/Landing/Landing';
 
 const Cessation: FunctionComponent<any> = () => {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ const Cessation: FunctionComponent<any> = () => {
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
+  const [isLogout, setIsLogout] = useState(false);
 
   const { hmrcURL } = useHMRCExternalLinks();
   const history = useHistory();
@@ -479,7 +481,9 @@ const Cessation: FunctionComponent<any> = () => {
               currentDisplay === 'resolutionpage'
             )
           }
-          signoutHandler={triggerLogout}
+          signoutHandler={() => {
+            triggerLogout(setIsLogout);
+          }}
           isAuthorised={false}
           staySignedInButtonText={t('STAY_SIGNED_IN')}
           signoutButtonText={t('SIGN-OUT')}
@@ -517,51 +521,13 @@ const Cessation: FunctionComponent<any> = () => {
                 <div id='pega-root' className='education-start'></div>
               </div>
               {currentDisplay === 'landingpage' && (
-                // Todo: This is a dummy content
-                <>
-                  <main
-                    className={
-                      false ? 'govuk-main-wrapper visibility-hidden' : 'govuk-main-wrapper'
-                    }
-                    id='main-content'
-                    role='main'
-                  >
-                    
-                    <div className='govuk-grid-row'>
-                      <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>
-                        {/* SA Registration */}
-                        <div className='govuk-grid-column-two-thirds'>
-                          <>
-                            <div className='govuk-grid-row'>
-                              <div className='govuk-grid-column-two-thirds'>
-                                <h1 className='govuk-heading-l'>Heading will appear here</h1>
-                              </div>
-                            </div>
-                            <dl className='govuk-summary-list'>
-                              <div className='govuk-summary-list__row govuk-summary-list__row'>
-                                <dt className='govuk-summary-list__key govuk-!-width-one-third'>
-                                  {t('DATE_CREATED')}
-                                </dt>
-                                <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                                  20/09/2024
-                                </dd>
-                                <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                                  <strong
-                                    className={`govuk-tag govuk-tag--${'dataItem.status.tagColour'}`}
-                                  >
-                                    dummy text
-                                  </strong>
-                                </dd>
-                              </div>
-                            </dl>
-
-                            dummy actionButton
-                          </>
-                        </div>
-                      </div>
-                    </div>
-                  </main>
-                </>
+                <Landing
+                  showPortalBanner={showPortalBanner}
+                  isLogout={isLogout}
+                  pConn={pConnect}
+                  inProgressCaseCountEndPoint={'D_RegistrantWorkAssignmentSACases'}
+                  creatCaseEndpoint={'HMRC-SA-Work-Registration'}
+                ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage

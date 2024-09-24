@@ -21,7 +21,7 @@ import { ErrorMsgContext } from '../../../helpers/HMRCAppContext';
 import useServiceShuttered from '../../../helpers/hooks/useServiceShuttered';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import dayjs from 'dayjs';
-import AskHMRC from '../../../../samples/Registration/AskHMRC';
+import AskHMRC from '../../../../components/AppComponents/AskHMRC';
 
 export interface ErrorMessageDetails {
   message: string;

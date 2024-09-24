@@ -7,10 +7,7 @@ import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
-import {
-  sdkIsLoggedIn,
-  getSdkConfig
-} from '@pega/auth/lib/sdk-auth-manager';
+import { sdkIsLoggedIn, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import AppHeader from '../../components/AppComponents/AppHeader';
@@ -19,7 +16,7 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
-import AskHMRC from './AskHMRC';
+import AskHMRC from '../../components/AppComponents/AskHMRC';
 import RegistrationDetails from '../../components/templates/RegistrationDetails';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
