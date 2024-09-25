@@ -17,6 +17,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ChildBenefitHub from '../ChildBenefitHub/ChildBenefitHub';
 import ProofOfEntitlement from '../ProofOfEntitlement/ProofOfEntitlement';
 import ChangeOfBank from '../ChangeOfBank/ChangeOfBank';
+import mobileApp from '../AppSelector/mobileApp';
 
 const AppSelector = () => {
   const [i18nloaded, seti18nloaded] = useState(false);
@@ -64,6 +65,8 @@ const AppSelector = () => {
       <Route path='/sign-in-to-government-gateway' component={DoYouWantToSignIn} />
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
+
+      <Route path='/mobile-app' component={mobileApp} />
     </Switch>
   );
 };
