@@ -16,7 +16,7 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
 import AskHMRC from '../../components/AppComponents/AskHMRC';
-import RegistrationDetails from '../../components/templates/RegistrationDetails';
+import CaseDetails from '../../components/AppComponents/Landing/CaseDetails';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 
@@ -527,11 +527,12 @@ export default function Registration() {
             <UserPortal showPortalBanner={showPortalBanner} isLogout={isLogout}>
               {inprogressRegistration.length > 0 && (
                 <>
-                  <RegistrationDetails
+                  <CaseDetails
                     thePConn={pConn}
                     data={inprogressRegistration}
                     rowClickAction='OpenAssignment'
                     buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
+                    title={t('YOUR_REGISTRATION')}
                   />
                   <AskHMRC />
                 </>

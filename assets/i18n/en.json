@@ -101,7 +101,7 @@
   "SHUTTER_USE_SERVICE_LATER_MESSAGE": "You will be able to use the service later.",
   "PORTAL_WARNING_TEXT": "We saved your progress on",
   "PORTAL_WARNING_TEXT2": "and will store your information for 28 days.",
-  "PORTAL_NOTIFICATION_BANNER_CONTENT": "We saved your progress and will store your information for 28 days from the registration creation date.",
+  "SA_PORTAL_NOTIFICATION_BANNER_CONTENT": "We saved your progress and will store your information for 28 days from the registration creation date.",
   "YES": "Yes",
   "NO": "No",
   "CONTINUE": "Continue",
@@ -230,5 +230,9 @@
   "IF_STILL_NEED_TO_SPEAK": " if you still need to speak to someone.",
 
   "*** Cessation Journey": "Translation will come here ***",
-  "LEAVE_SELF_ASSESSMENT": "Leave Self Assessment"
+
+  "LEAVE_SELF_ASSESSMENT": "Leave Self Assessment",
+  "YOUR_REQUEST": "Your request",
+  "CONTINUE_YOUR_REQUEST": "Continue your request",
+  "CES_PORTAL_NOTIFICATION_BANNER_CONTENT": "We saved your progress and will store your information for 28 days from the saved date."
 }

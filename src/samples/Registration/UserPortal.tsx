@@ -19,7 +19,7 @@ export default function UserPortal(props) {
         role='main'
       >
         {showPortalBanner && (
-          <NotificationBanner content={t('PORTAL_NOTIFICATION_BANNER_CONTENT')} />
+          <NotificationBanner content={t('SA_PORTAL_NOTIFICATION_BANNER_CONTENT')} />
         )}
         <div className='govuk-grid-row'>
           <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>

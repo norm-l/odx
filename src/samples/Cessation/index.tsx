@@ -20,7 +20,7 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 import AppHeader from '../../components/AppComponents/AppHeader';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 import { useStartMashup } from '../../reuseables/PegaSetup';
-import Landing from '../../components/AppComponents/Landing/Landing';
+import Landing from '../../components/AppComponents/Landing';
 import AppContext from '../../reuseables/AppContext';
 
 const Cessation: FunctionComponent<any> = () => {
@@ -57,7 +57,6 @@ const Cessation: FunctionComponent<any> = () => {
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showPortalBanner, setShowPortalBanner] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [pConnect, setPconnect] = useState(null);
 
   const { hmrcURL } = useHMRCExternalLinks();
@@ -162,7 +161,6 @@ const Cessation: FunctionComponent<any> = () => {
     }
   }
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   function returnedToPortal(showBanner = false) {
     // Todo: This will be parameterized
     closeContainer();
@@ -498,8 +496,11 @@ const Cessation: FunctionComponent<any> = () => {
                   showPortalBanner={showPortalBanner}
                   isLogout={false}
                   pConn={pConnect}
-                  inProgressCaseCountEndPoint={'D_RegistrantWorkAssignmentSACases'}
-                  creatCaseEndpoint={'HMRC-SA-Work-Registration'}
+                  inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
+                  creatCaseEndpoint='HMRC-SA-Work-Registration'
+                  buttonContent={t('CONTINUE_YOUR_REQUEST')}
+                  title={t('YOUR_REQUEST')}
+                  bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
                 ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (
