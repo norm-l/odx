@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
@@ -17,9 +17,19 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ChildBenefitHub from '../ChildBenefitHub/ChildBenefitHub';
 import ProofOfEntitlement from '../ProofOfEntitlement/ProofOfEntitlement';
 import ChangeOfBank from '../ChangeOfBank/ChangeOfBank';
-import mobileApp from '../AppSelector/mobileApp';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 const AppSelector = () => {
+  const [mobileAppURL, setMobileAppURL] = useState<string | null>(null);
+
+  getSdkConfig().then(sdkConfig => {
+    setMobileAppURL(sdkConfig.mobileApp.mobileAppURL);
+    // eslint-disable-next-line no-console
+    console.log('Mobile App URL:', mobileAppURL);
+    // eslint-disable-next-line no-console
+    console.log('sdkConfig:', sdkConfig);
+  });
+
   const [i18nloaded, seti18nloaded] = useState(false);
 
   useEffect(() => {
@@ -66,7 +76,7 @@ const AppSelector = () => {
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
 
-      <Route path='/mobile-app' component={mobileApp} />
+      <Redirect from='/mobile-app' to={mobileAppURL} />
     </Switch>
   );
 };
