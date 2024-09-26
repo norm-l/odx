@@ -20,6 +20,7 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 import AppHeader from '../../components/AppComponents/AppHeader';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 import { useStartMashup } from '../../reuseables/PegaSetup';
+import Landing from '../../components/AppComponents/Landing';
 import AppContext from '../../reuseables/AppContext';
 
 const Cessation: FunctionComponent<any> = () => {
@@ -55,8 +56,7 @@ const Cessation: FunctionComponent<any> = () => {
   });
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
-  // const [showPortalBanner, setShowPortalBanner] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
 
   const { hmrcURL } = useHMRCExternalLinks();
@@ -161,12 +161,12 @@ const Cessation: FunctionComponent<any> = () => {
     }
   }
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  function returnedToPortal(showBanner = false) { // Todo: This will be parameterized 
+  function returnedToPortal(showBanner = false) {
+    // Todo: This will be parameterized
     closeContainer();
     setShowPega(false);
     setCurrentDisplay('landingpage');
-    // setShowPortalBanner(showBanner);
+    setShowPortalBanner(showBanner);
     setAssignmentCancelled(false);
     setStartClaimClicked(false);
     setSummaryPageContent({
@@ -261,7 +261,7 @@ const Cessation: FunctionComponent<any> = () => {
       setCurrentDisplay('servicenotavailable');
     } else if (containerClosed) {
       // Back link action for submitted cases
-      // setShowPortalBanner(false);
+      setShowPortalBanner(false);
       setCurrentDisplay('landingpage');
     } else {
       setCurrentDisplay('loading');
@@ -492,53 +492,16 @@ const Cessation: FunctionComponent<any> = () => {
                 <div id='pega-root' className='pega-cessation'></div>
               </div>
               {currentDisplay === 'landingpage' && (
-                // Todo: This is a dummy content
-                <>
-                  <main
-                    className={
-                      // Todo: Handle dynamically
-                      // eslint-disable-next-line no-constant-condition
-                      false ? 'govuk-main-wrapper visibility-hidden' : 'govuk-main-wrapper'
-                    }
-                    id='main-content'
-                    role='main'
-                  >
-                    
-                    <div className='govuk-grid-row'>
-                      <div className='govuk-grid-column-full govuk-prototype-kit-common-templates-mainstream-guide-body govuk-!-padding-right-0 govuk-!-padding-left-0'>
-                        {/* SA Registration */}
-                        <div className='govuk-grid-column-two-thirds'>
-                          <>
-                            <div className='govuk-grid-row'>
-                              <div className='govuk-grid-column-two-thirds'>
-                                <h1 className='govuk-heading-l'>Heading will appear here</h1>
-                              </div>
-                            </div>
-                            <dl className='govuk-summary-list'>
-                              <div className='govuk-summary-list__row govuk-summary-list__row'>
-                                <dt className='govuk-summary-list__key govuk-!-width-one-third'>
-                                  {t('DATE_CREATED')}
-                                </dt>
-                                <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                                  20/09/2024
-                                </dd>
-                                <dd className='govuk-summary-list__value govuk-!-width-one-third'>
-                                  <strong
-                                    className={`govuk-tag govuk-tag--${'dataItem.status.tagColour'}`}
-                                  >
-                                    dummy text
-                                  </strong>
-                                </dd>
-                              </div>
-                            </dl>
-
-                            dummy actionButton
-                          </>
-                        </div>
-                      </div>
-                    </div>
-                  </main>
-                </>
+                <Landing
+                  showPortalBanner={showPortalBanner}
+                  isLogout={false}
+                  pConn={pConnect}
+                  inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
+                  creatCaseEndpoint='HMRC-SA-Work-Registration'
+                  buttonContent={t('CONTINUE_YOUR_REQUEST')}
+                  title={t('YOUR_REQUEST')}
+                  bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
+                ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (
                 <SummaryPage

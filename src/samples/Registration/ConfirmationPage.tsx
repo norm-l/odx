@@ -4,7 +4,7 @@ import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import useServiceShuttered from '../../components/helpers/hooks/useServiceShuttered';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
-import AskHMRC from './AskHMRC';
+import AskHMRC from '../../components/AppComponents/AskHMRC';
 
 const ConfirmationPage = ({ isSoleTrader }) => {
   const { t } = useTranslation();

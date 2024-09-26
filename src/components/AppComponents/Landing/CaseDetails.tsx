@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../../../components/BaseComponents/Button/Button';
+import Button from '../../BaseComponents/Button/Button';
 import PropTypes from 'prop-types';
 import { scrollToTop } from '../../helpers/utils';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +7,10 @@ import dayjs from 'dayjs';
 
 declare const PCore: any;
 
-export default function RegistrationDetails(props) {
-  const { thePConn, data, rowClickAction, buttonContent } = props;
+export default function CaseDetails(props) {
+  const { thePConn, data, rowClickAction, buttonContent, title } = props;
   const { t } = useTranslation();
-  const [registration, setRegistration] = useState([]);
+  const [caseDetail, setCaseDetail] = useState([]);
 
   const statusMapping = status => {
     switch (status) {
@@ -54,8 +54,8 @@ export default function RegistrationDetails(props) {
     }
   }
 
-  function getSARegistraion() {
-    const registrationData = [];
+  function getCaseDetail() {
+    const caseDetailData = [];
     data.forEach(item => {
       const dataItem = {
         SARegRef: item.pyID,
@@ -75,23 +75,23 @@ export default function RegistrationDetails(props) {
         ),
         status: statusMapping(item.pyStatusWork)
       };
-      registrationData.push(dataItem);
+      caseDetailData.push(dataItem);
     });
-    return registrationData;
+    return caseDetailData;
   }
 
   useEffect(() => {
-    setRegistration([...getSARegistraion()]);
+    setCaseDetail([...getCaseDetail()]);
   }, [data, buttonContent]);
 
   return (
     <>
       <div className='govuk-grid-row'>
         <div className='govuk-grid-column-two-thirds'>
-          <h1 className='govuk-heading-l'>{t('YOUR_REGISTRATION')}</h1>
+          <h1 className='govuk-heading-l'>{title}</h1>
         </div>
       </div>
-      {registration.map(dataItem => (
+      {caseDetail.map(dataItem => (
         <React.Fragment key={dataItem.SARegRef}>
           <dl className='govuk-summary-list'>
             <div className='govuk-summary-list__row govuk-summary-list__row'>
@@ -116,9 +116,10 @@ export default function RegistrationDetails(props) {
   );
 }
 
-RegistrationDetails.propTypes = {
+CaseDetails.propTypes = {
   thePConn: PropTypes.object,
   data: PropTypes.array,
   rowClickAction: PropTypes.oneOf(['OpenAssignment']),
-  buttonContent: PropTypes.string
+  buttonContent: PropTypes.string,
+  title: PropTypes.string
 };
