@@ -9,6 +9,7 @@ import Accessibility from '../Registration/AccessibilityPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ProtectedRoute from '../../components/HOC/ProtectedRoute';
 import Cessation from '../Cessation';
+import AppWrapper from '../../components/AppComponents/AppWrapper';
 
 const AppSelector = () => {
   const [i18nloaded, seti18nloaded] = useState(false);
@@ -37,13 +38,29 @@ const AppSelector = () => {
 
   return !i18nloaded ? null : (
     <Switch>
-      <Route exact path='/' render={()=> <Redirect to='/registration' />} />
-      <ProtectedRoute path='/registration' component={Registration} />
-      <ProtectedRoute path='/cessation' component={Cessation} />
-
-      {/* Public Routes */}
-      <Route path='/cookies' component={CookiePage} />
-      <Route path='/accessibility' component={Accessibility} />
+      
+        <Route exact path='/' render={() => <Redirect to='/registration' />} />
+        <ProtectedRoute exact path='/registration' component={Registration} />
+        <ProtectedRoute exact path='/cessation' component={Cessation} />
+        {/* Public Routes */}
+        <Route
+          exact
+          path='/:parent/cookies'
+          render={props => (
+            <AppWrapper {...props}>
+              <CookiePage />
+            </AppWrapper>
+          )}
+        />
+        <Route
+          exact
+          path='/:parent/accessibility'
+          render={props => (
+            <AppWrapper {...props}>
+              <Accessibility />
+            </AppWrapper>
+          )}
+        />
     </Switch>
   );
 };

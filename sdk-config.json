@@ -33,6 +33,14 @@
       "pyCaseManager7"
     ]
   },
+  "applicationConfig": {
+    "cessation": {
+      "serviceName": "LEAVE_SELF_ASSESSMENT"
+    },
+    "registration": {
+      "serviceName": "REGISTER_FOR_SELF_ASSESSMENT"
+    }
+  },
   "timeoutConfig": {
     "secondsTilWarning": 780,
     "secondsTilLogout": 115

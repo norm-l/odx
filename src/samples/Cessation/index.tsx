@@ -36,7 +36,6 @@ const Cessation: FunctionComponent<any> = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   // const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
   const [startClaimClicked, setStartClaimClicked] = useState(false);
-  const [shuttered, setShuttered] = useState(null);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -114,26 +113,6 @@ const Cessation: FunctionComponent<any> = () => {
     );
   };
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  function returnToPortalPage() {
-    sessionStorage.setItem('assignmentFinishedFlag', 'false');
-    setShowSignoutModal(false);
-    staySignedIn(
-      setShowTimeoutModal,
-      claimsListApi,
-      null,
-      false,
-      true,
-      currentDisplay === 'resolutionpage'
-    );
-    setCurrentDisplay('loading');
-    setShowLandingPage(true);
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
-  }
-
   // Todo: Need to be added soon
   // const handleStartCliam = e => {
   //   e.preventDefault();
@@ -145,12 +124,6 @@ const Cessation: FunctionComponent<any> = () => {
   //   sessionStorage.setItem('isEditMode', 'true');
   //   sessionStorage.removeItem('stepIDCYA');
   // };
-
-  /* ***
-   * Application specific PCore subscriptions
-   *
-   * TODO Can this be made into a tidy helper? including its own clean up? A custom hook perhaps
-   */
 
   function closeContainer() {
     if (PCore.getContainerUtils().getActiveContainerItemName('app/primary')) {
@@ -372,19 +345,10 @@ const Cessation: FunctionComponent<any> = () => {
     });
   }, []);
 
-  useEffect(() => {
-    getSdkConfig().then(config => {
-      if (config.cessationConfig?.shutterService) {
-        setShuttered(config.cessationConfig.shutterService);
-      } else {
-        setShuttered(false);
-      }
-    });
-  }, []);
-
-  if (shuttered === null) {
-    return null;
-  } else if (currentDisplay === 'servicenotavailable') {
+  // if (shuttered === null) {
+  //   return null;
+  // } else
+  if (currentDisplay === 'servicenotavailable') {
     return (
       <>
         <AppHeader
@@ -395,38 +359,6 @@ const Cessation: FunctionComponent<any> = () => {
         />
         <div className='govuk-width-container'>
           <ApiServiceNotAvailable />
-        </div>
-        <AppFooter />
-      </>
-    );
-  } else if (shuttered) {
-    setPageTitle();
-    return (
-      <>
-        <AppHeader
-          handleSignout={handleSignout}
-          appname={t('LEAVE_SELF_ASSESSMENT')}
-          hasLanguageToggle={showLanguageToggleState}
-          isPegaApp={showPega}
-          languageToggleCallback={toggleNotificationProcess(
-            { en: 'SwitchLanguageToEnglish', cy: 'SwitchLanguageToWelsh' },
-            assignmentPConnect?.getDataObject()?.caseInfo ? assignmentPConnect : null
-          )}
-          betafeedbackurl={`${hmrcURL}contact/beta-feedback?service=claim-child-benefit-frontend&backUrl=/fill-online/claim-child-benefit/recently-claimed-child-benefit`}
-        />
-
-        <div className='govuk-width-container'>
-          <MainWrapper showPageNotWorkingLink={false}>
-            <h1 className='govuk-heading-l'>Sorry, the service is unavailable</h1>
-            <p className='govuk-body'>Try again later.</p>
-            <p className='govuk-body'>
-              You can return to{' '}
-              <a className='govuk-link' href='https://www.gov.uk/child-benefit'>
-                Child Benefit guidance
-              </a>
-              .
-            </p>
-          </MainWrapper>
         </div>
         <AppFooter />
       </>
