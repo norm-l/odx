@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 declare const PCore: any;
 
 export default function CaseDetails(props) {
-  const { thePConn, data, rowClickAction, buttonContent, title } = props;
+  const { thePConn, data, rowClickAction, buttonContent, title, handleCaseContinue } = props;
   const { t } = useTranslation();
   const [caseDetail, setCaseDetail] = useState([]);
 
@@ -49,6 +49,7 @@ export default function CaseDetails(props) {
         .openAssignment(pyAssignmentID, target, openAssignmentOptions)
         .then(() => {
           scrollToTop();
+          handleCaseContinue();
         })
         .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
     }
@@ -60,8 +61,6 @@ export default function CaseDetails(props) {
       const dataItem = {
         SARegRef: item.pyID,
         dateCreated: dayjs(item.pxCreateDateTime).format('DD MMMM YYYY'),
-        dateUpdated: item.pxUpdateDateTime,
-        registrantAdded: item.SARegistration.Registrant.pyFirstName !== null,
         actionButton: (
           <Button
             attributes={{ className: '' }}
@@ -121,5 +120,6 @@ CaseDetails.propTypes = {
   data: PropTypes.array,
   rowClickAction: PropTypes.oneOf(['OpenAssignment']),
   buttonContent: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  handleCaseContinue: PropTypes.func
 };

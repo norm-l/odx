@@ -14,7 +14,8 @@ export default function Landing(props) {
     creatCaseEndpoint,
     buttonContent,
     title,
-    bannerContent
+    bannerContent,
+    handleCaseContinue
   } = props;
   const [inprogressCaseDetail, setInprogressCaseDetail] = useState([]);
   const [loadingInProgressCaseDetail, setLoadingInProgressCaseDetail] = useState(true);
@@ -37,7 +38,14 @@ export default function Landing(props) {
     const context = pConn.getContextName();
 
     PCore.getDataPageUtils()
-      .getDataAsync(inProgressCaseCountEndPoint, context, {}, {}, {}, {})
+      .getDataAsync(
+        inProgressCaseCountEndPoint,
+        context,
+        { CaseType: 'HMRC-SA-Work-Cessation' },
+        {},
+        {},
+        {}
+      )
       // @ts-ignore
       .then(resp => {
         if (!resp.resultCount) {
@@ -55,7 +63,7 @@ export default function Landing(props) {
   useEffect(() => {
     setPageTitle();
     fetchInProgressCaseDetailData();
-  }, []);
+  }, [showPortalBanner]);
 
   return (
     !loadingInProgressCaseDetail &&
@@ -80,6 +88,7 @@ export default function Landing(props) {
                         rowClickAction='OpenAssignment'
                         buttonContent={buttonContent}
                         title={title}
+                        handleCaseContinue={handleCaseContinue}
                       />
                       <AskHMRC />
                     </>

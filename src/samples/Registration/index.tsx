@@ -188,7 +188,9 @@ export default function Registration() {
     let inProgressRegData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
-      .getDataAsync('D_RegistrantWorkAssignmentSACases', 'root')
+      .getDataAsync('D_RegistrantWorkAssignmentSACases', 'root', {
+        CaseType: 'HMRC-SA-Work-Registration'
+      })
       .then(resp => {
         if (!resp.resultCount) {
           createCase();
@@ -508,6 +510,10 @@ export default function Registration() {
     staySignedIn(setShowTimeoutModal, setIsLogout);
   };
 
+  const handleCaseContinue = () => {
+    setShowUserPortal(false);
+  };
+
   const renderContent = () => {
     if (serviceNotAvailable) {
       return <ApiServiceNotAvailable />;
@@ -533,6 +539,7 @@ export default function Registration() {
                     rowClickAction='OpenAssignment'
                     buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
                     title={t('YOUR_REGISTRATION')}
+                    handleCaseContinue={handleCaseContinue}
                   />
                   <AskHMRC />
                 </>

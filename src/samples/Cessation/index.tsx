@@ -113,6 +113,30 @@ const Cessation: FunctionComponent<any> = () => {
     );
   };
 
+  const handleCaseContinue = () => {
+    setShowLandingPage(false);
+  };
+
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  function returnToPortalPage() {
+    sessionStorage.setItem('assignmentFinishedFlag', 'false');
+    setShowSignoutModal(false);
+    staySignedIn(
+      setShowTimeoutModal,
+      claimsListApi,
+      null,
+      false,
+      true,
+      currentDisplay === 'resolutionpage'
+    );
+    setCurrentDisplay('loading');
+    setShowLandingPage(true);
+    PCore.getContainerUtils().closeContainerItem(
+      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
+      { skipDirtyCheck: true }
+    );
+  }
+
   // Todo: Need to be added soon
   // const handleStartCliam = e => {
   //   e.preventDefault();
@@ -424,15 +448,27 @@ const Cessation: FunctionComponent<any> = () => {
                 <div id='pega-root' className='pega-cessation'></div>
               </div>
               {currentDisplay === 'landingpage' && (
+                // <Landing
+                //   showPortalBanner={showPortalBanner}
+                //   isLogout={false}
+                //   pConn={pConnect}
+                //   inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
+                //   creatCaseEndpoint='HMRC-SA-Work-Registration'
+                //   buttonContent={t('CONTINUE_YOUR_REQUEST')}
+                //   title={t('YOUR_REQUEST')}
+                //   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
+                //   handleCaseContinue={handleCaseContinue}
+                // ></Landing>
                 <Landing
                   showPortalBanner={showPortalBanner}
                   isLogout={false}
                   pConn={pConnect}
                   inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
-                  creatCaseEndpoint='HMRC-SA-Work-Registration'
+                  creatCaseEndpoint='HMRC-SA-Work-Cessation'
                   buttonContent={t('CONTINUE_YOUR_REQUEST')}
                   title={t('YOUR_REQUEST')}
                   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
+                  handleCaseContinue={handleCaseContinue}
                 ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (
