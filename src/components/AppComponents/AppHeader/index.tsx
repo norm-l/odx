@@ -6,7 +6,8 @@ import LanguageToggle from '../LanguageToggle';
 export default function AppHeader(props) {
   const { handleSignout, appname, hasLanguageToggle, languageToggleCallback } = props;
   const { t } = useTranslation();
-  const { referrerURL, hmrcURL } = useHMRCExternalLinks();
+  const { hmrcURL } = useHMRCExternalLinks();
+  const pathname = window.location.href;
 
   return (
     <>
@@ -64,7 +65,7 @@ export default function AppHeader(props) {
                 {t('NEW_SERVICE')} - {t('BANNER_FEEDBACK_1')}&nbsp;
                 <a
                   className='govuk-link'
-                  href={`${hmrcURL}contact/beta-feedback?service=427&referrerUrl=${referrerURL}`}
+                  href={`${hmrcURL}contact/beta-feedback?service=427&referrerUrl=${pathname}`}
                   target='_blank'
                   rel='noreferrer'
                 >

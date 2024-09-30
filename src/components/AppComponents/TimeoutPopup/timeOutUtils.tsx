@@ -47,7 +47,7 @@ export const initTimeout = async (
   }, milisecondsTilWarning);
 };
 
-export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
+export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage, setIsLogout) => {
   // TODO - isAuthorised to be replaced by caseType from pega
   // Fetches timeout length config
   clearTimeout(applicationTimeout);
@@ -64,26 +64,27 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
       } else {
         // the logout case executes when entire timeout occurs after confirmation page or user clicks
         // exit survey link in pop after confirmation page
-        triggerLogout(true); // Todo: move code from registration journey
+        triggerLogout(setIsLogout);
       }
     }, milisecondsTilSignout);
   }, milisecondsTilWarning);
 };
 
-// Sends 'ping' to pega to keep session alive and then initiates the timeout
 export function staySignedIn(
   setShowTimeoutModal,
   claimsListApi,
   deleteData = null,
   isAuthorised = false,
   refreshSignin = true,
-  isConfirmationPage = false
+  isConfirmationPage = false,
+  caseListApiParams= {},
+  setIsLogout
 ) {
-  const operatorId = {};
   if (refreshSignin && !!claimsListApi) {
     // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {...operatorId});
+    // Sends 'ping' to pega to keep session alive and then initiates the timeout
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {...caseListApiParams});
   }
   setShowTimeoutModal(false);
-  resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);
+  resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage, setIsLogout);
 }

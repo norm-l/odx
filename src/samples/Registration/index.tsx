@@ -495,7 +495,8 @@ export default function Registration() {
     };
   }, []);
 
-  function handleSignout() {
+  function handleSignout(e) {
+    e.preventDefault();
     if (bShowPega) {
       setShowSignoutModal(true);
     } else {
@@ -556,10 +557,10 @@ export default function Registration() {
       <TimeoutPopup
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal, setIsLogout)}
-        signoutHandler={() => {
+        signoutHandler={(e) => {
+          e.preventDefault();
           triggerLogout(setIsLogout);
         }}
-        isAuthorised
       />
 
       <AppHeader

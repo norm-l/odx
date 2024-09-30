@@ -377,7 +377,7 @@ export function startMashup(
 }
 
 // One time (initialization) subscriptions and related unsubscribe
-export const useStartMashup = (setAuthType, _AppContextValues: AppContextValues) => {
+export const useStartMashup = (_AppContextValues: AppContextValues) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);

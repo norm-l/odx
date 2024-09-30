@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState, useEffect, useContext, useRef } fro
 import { useTranslation } from 'react-i18next';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
-import MainWrapper from '../../components/BaseComponents/MainWrapper';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import { triggerLogout } from '../../components/helpers/utils';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
@@ -29,10 +28,9 @@ const Cessation: FunctionComponent<any> = () => {
   const serviceParam = 'claim-child-benefit';
   // Adding hardcoded value as key to sort translation issue.
   const serviceNameAndHeader = 'LEAVE_SELF_ASSESSMENT';
-  const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
   const inProgressCaseCountEndPoint = 'D_RegistrantWorkAssignmentSACases';
   const creatCaseApi = 'HMRC-SA-Work-Cessation';
-  const caseListApiParam = { CaseType: 'HMRC-SA-Work-Cessation' };
+  const caseListApiParams = { CaseType: 'HMRC-SA-Work-Cessation' };
 
   const summaryPageRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +40,6 @@ const Cessation: FunctionComponent<any> = () => {
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
-  const setAuthType = useState('gg')[1];
   const [currentDisplay, setCurrentDisplay] = useState<
     | 'pegapage'
     | 'resolutionpage'
@@ -60,6 +57,7 @@ const Cessation: FunctionComponent<any> = () => {
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
+  const [isLogout, setIsLogout] = useState(false);
 
   const { hmrcURL } = useHMRCExternalLinks();
 
@@ -81,7 +79,7 @@ const Cessation: FunctionComponent<any> = () => {
     assignmentCancelled,
     setAssignmentCancelled,
     containerClosed
-  } = useStartMashup(setAuthType, {
+  } = useStartMashup({
     appBacklinkProps: {},
     serviceParam,
     serviceName: serviceNameAndHeader,
@@ -94,11 +92,12 @@ const Cessation: FunctionComponent<any> = () => {
     }
   }, [assignmentPConnect]);
 
-  function handleSignout() {
+  function handleSignout(e) {
+    e.preventDefault();
     if (currentDisplay === 'pegapage') {
       setShowSignoutModal(true);
     } else {
-      triggerLogout(true); // Todo: handle with state as per registration journey
+      triggerLogout(setIsLogout);
     }
   }
 
@@ -108,11 +107,13 @@ const Cessation: FunctionComponent<any> = () => {
     // Extends manual signout popup 'stay signed in' to reset the automatic timeout timer also
     staySignedIn(
       setShowTimeoutModal,
-      claimsListApi,
+      inProgressCaseCountEndPoint,
       null,
       false,
       true,
-      currentDisplay === 'resolutionpage'
+      currentDisplay === 'resolutionpage',
+      caseListApiParams,
+      setIsLogout
     );
   };
 
@@ -126,11 +127,13 @@ const Cessation: FunctionComponent<any> = () => {
     setShowSignoutModal(false);
     staySignedIn(
       setShowTimeoutModal,
-      claimsListApi,
+      inProgressCaseCountEndPoint,
       null,
       false,
       true,
-      currentDisplay === 'resolutionpage'
+      currentDisplay === 'resolutionpage',
+      caseListApiParams,
+      setIsLogout
     );
     setCurrentDisplay('loading');
     setShowLandingPage(true);
@@ -279,26 +282,6 @@ const Cessation: FunctionComponent<any> = () => {
   ]);
 
   useEffect(() => {
-    if (showPega && pCoreReady && startClaimClicked) {
-      sessionStorage.setItem('assignmentFinishedFlag', 'false');
-      let startingFields = {};
-      startingFields = {
-        NotificationLanguage: sessionStorage.getItem('rsdk_locale')?.slice(0, 2) || 'en'
-      };
-
-      PCore.getMashupApi().createCase(
-        'HMRC-ChB-Work-EducationStart',
-        PCore.getConstants().APP.APP,
-        {
-          startingFields,
-          pageName: '',
-          channelName: ''
-        }
-      );
-    }
-  }, [pCoreReady, showPega, startClaimClicked]);
-
-  useEffect(() => {
     document.addEventListener('SdkConstellationReady', () => {
       PCore.onPCoreReady(() => {
         if (!pCoreReady) {
@@ -342,7 +325,16 @@ const Cessation: FunctionComponent<any> = () => {
     });
     settingTimer();
     PCore.getStore().subscribe(() =>
-      staySignedIn(setShowTimeoutModal, '', null, false, true, currentDisplay === 'resolutionpage')
+      staySignedIn(
+        setShowTimeoutModal,
+        '',
+        null,
+        false,
+        true,
+        currentDisplay === 'resolutionpage',
+        caseListApiParams,
+        setIsLogout
+      )
     );
 
     PCore?.getPubSubUtils().subscribe(
@@ -405,31 +397,20 @@ const Cessation: FunctionComponent<any> = () => {
           staySignedinHandler={() =>
             staySignedIn(
               setShowTimeoutModal,
-              claimsListApi,
+              inProgressCaseCountEndPoint,
               null,
               false,
               true,
-              currentDisplay === 'resolutionpage'
+              currentDisplay === 'resolutionpage',
+              caseListApiParams,
+              setIsLogout
             )
           }
-          signoutHandler={triggerLogout}
-          isAuthorised={false}
-          staySignedInButtonText={t('STAY_SIGNED_IN')}
-          signoutButtonText={t('SIGN-OUT')}
-        >
-          <h1 id='hmrc-timeout-heading' className='govuk-heading-m push--top'>
-            {t('YOURE_ABOUT_TO_BE_SIGNED_OUT')}
-          </h1>
-          <p className='govuk-body hmrc-timeout-dialog__message'>
-            {' '}
-            {/* Todo Aria-hidden will be added back with US-13474 implementation */}
-            {t('FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT')}{' '}
-            <span id='hmrc-timeout-countdown' className='hmrc-timeout-dialog__countdown'>
-              {t('2_MINUTES')}
-            </span>
-            .
-          </p>
-        </TimeoutPopup>
+          signoutHandler={e => {
+            e.preventDefault();
+            triggerLogout(setIsLogout);
+          }}
+        />
         <AppHeader
           handleSignout={handleSignout}
           appname={t('LEAVE_SELF_ASSESSMENT')}
@@ -447,12 +428,15 @@ const Cessation: FunctionComponent<any> = () => {
           ) : (
             <>
               <div id='pega-part-of-page'>
-                <div id='pega-root' className='pega-cessation'></div>
+                <div
+                  id='pega-root'
+                  className={`pega-cessation ${isLogout ? 'visibility-hidden' : ''}`}
+                ></div>
               </div>
               {currentDisplay === 'landingpage' && (
                 <Landing
                   showPortalBanner={showPortalBanner}
-                  isLogout={false}
+                  isLogout={isLogout}
                   pConn={pConnect}
                   inProgressCaseCountEndPoint={inProgressCaseCountEndPoint}
                   creatCaseEndpoint={creatCaseApi}
@@ -460,7 +444,7 @@ const Cessation: FunctionComponent<any> = () => {
                   title={t('YOUR_REQUEST')}
                   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
                   handleCaseContinue={handleCaseContinue}
-                  caseListApiParam={caseListApiParam}
+                  caseListApiParams={caseListApiParams}
                 ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (
@@ -475,20 +459,15 @@ const Cessation: FunctionComponent<any> = () => {
             </>
           )}
         </div>
+
         <LogoutPopup
           show={showSignoutModal && !showTimeoutModal}
           hideModal={() => setShowSignoutModal(false)}
-          handleSignoutModal={triggerLogout}
+          handleSignoutModal={() => {
+            triggerLogout(setIsLogout);
+          }}
           handleStaySignIn={handleStaySignIn}
-          staySignedInButtonText={t('STAY_SIGNED_IN')}
-          signoutButtonText={t('SIGN-OUT')}
-        >
-          <h1 id='govuk-timeout-heading' className='govuk-heading-m push--top'>
-            {t('YOU_ARE_ABOUT_TO_SIGN_OUT')}
-          </h1>
-          <p className='govuk-body'>{t('YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS')}</p>
-          <p className='govuk-body'>{t('TO_SAVE_YOUR_PROGRESS')}</p>
-        </LogoutPopup>
+        />
         <AppFooter />
       </AppContext.Provider>
     );

@@ -41,6 +41,9 @@
       "serviceName": "REGISTER_FOR_SELF_ASSESSMENT"
     }
   },
+  "cessationConfig": {
+    "showLanguageToggle": true
+  },
   "timeoutConfig": {
     "secondsTilWarning": 780,
     "secondsTilLogout": 115
