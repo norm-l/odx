@@ -496,17 +496,6 @@ const Cessation: FunctionComponent<any> = () => {
                 <div id='pega-root' className='pega-cessation'></div>
               </div>
               {currentDisplay === 'landingpage' && (
-                // <Landing
-                //   showPortalBanner={showPortalBanner}
-                //   isLogout={false}
-                //   pConn={pConnect}
-                //   inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
-                //   creatCaseEndpoint='HMRC-SA-Work-Registration'
-                //   buttonContent={t('CONTINUE_YOUR_REQUEST')}
-                //   title={t('YOUR_REQUEST')}
-                //   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
-                //   handleCaseContinue={handleCaseContinue}
-                // ></Landing>
                 <Landing
                   showPortalBanner={showPortalBanner}
                   isLogout={false}
