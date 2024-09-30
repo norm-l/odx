@@ -30,6 +30,9 @@ const Cessation: FunctionComponent<any> = () => {
   // Adding hardcoded value as key to sort translation issue.
   const serviceNameAndHeader = 'LEAVE_SELF_ASSESSMENT';
   const claimsListApi = 'D_ClaimantWorkAssignmentEdStartCases';
+  const inProgressCaseCountEndPoint = 'D_RegistrantWorkAssignmentSACases';
+  const creatCaseApi = 'HMRC-SA-Work-Cessation';
+  const caseListApiParam = { CaseType: 'HMRC-SA-Work-Cessation' };
 
   const summaryPageRef = useRef<HTMLDivElement>(null);
 
@@ -166,7 +169,6 @@ const Cessation: FunctionComponent<any> = () => {
   }
 
   function returnedToPortal(showBanner = false) {
-    // Todo: This will be parameterized
     closeContainer();
     setShowPega(false);
     setCurrentDisplay('landingpage');
@@ -500,12 +502,13 @@ const Cessation: FunctionComponent<any> = () => {
                   showPortalBanner={showPortalBanner}
                   isLogout={false}
                   pConn={pConnect}
-                  inProgressCaseCountEndPoint='D_RegistrantWorkAssignmentSACases'
-                  creatCaseEndpoint='HMRC-SA-Work-Cessation'
+                  inProgressCaseCountEndPoint={inProgressCaseCountEndPoint}
+                  creatCaseEndpoint={creatCaseApi}
                   buttonContent={t('CONTINUE_YOUR_REQUEST')}
                   title={t('YOUR_REQUEST')}
                   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
                   handleCaseContinue={handleCaseContinue}
+                  caseListApiParam={caseListApiParam}
                 ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (

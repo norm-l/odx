@@ -15,7 +15,8 @@ export default function Landing(props) {
     buttonContent,
     title,
     bannerContent,
-    handleCaseContinue
+    handleCaseContinue,
+    caseListApiParam
   } = props;
   const [inprogressCaseDetail, setInprogressCaseDetail] = useState([]);
   const [loadingInProgressCaseDetail, setLoadingInProgressCaseDetail] = useState(true);
@@ -38,14 +39,8 @@ export default function Landing(props) {
     const context = pConn.getContextName();
 
     PCore.getDataPageUtils()
-      .getDataAsync(
-        inProgressCaseCountEndPoint,
-        context,
-        { CaseType: 'HMRC-SA-Work-Cessation' },
-        {},
-        {},
-        {}
-      )
+      // @ts-ignore
+      .getDataAsync(inProgressCaseCountEndPoint, context, { ...caseListApiParam })
       // @ts-ignore
       .then(resp => {
         if (!resp.resultCount) {
