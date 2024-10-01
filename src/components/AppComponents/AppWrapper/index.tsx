@@ -16,9 +16,12 @@ export default function AppWrapper({ children, match }) {
     getSdkConfig().then(sdkConfig => {
       const { serviceName: name } = sdkConfig.applicationConfig[parent];
       setServiceName(name);
-      registerServiceName(t(name));
     });
   }, []);
+
+  useEffect(() => {
+    registerServiceName(t(serviceName));
+  }, [serviceName]);
 
   return (
     <>
