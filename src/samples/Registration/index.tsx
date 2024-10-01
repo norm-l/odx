@@ -6,10 +6,7 @@ import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 
-import {
-  sdkIsLoggedIn,
-  getSdkConfig
-} from '@pega/auth/lib/sdk-auth-manager';
+import { sdkIsLoggedIn, getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
 import AppHeader from '../../components/AppComponents/AppHeader';
@@ -18,8 +15,8 @@ import LogoutPopup from '../../components/AppComponents/LogoutPopup';
 
 import ConfirmationPage from './ConfirmationPage';
 import UserPortal from './UserPortal';
-import AskHMRC from './AskHMRC';
-import RegistrationDetails from '../../components/templates/RegistrationDetails';
+import AskHMRC from '../../components/AppComponents/AskHMRC';
+import CaseDetails from '../../components/AppComponents/Landing/CaseDetails';
 import setPageTitle, { registerServiceName } from '../../components/helpers/setPageTitleHelpers';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 
@@ -191,7 +188,9 @@ export default function Registration() {
     let inProgressRegData: any = [];
     // @ts-ignore
     PCore.getDataPageUtils()
-      .getDataAsync('D_RegistrantWorkAssignmentSACases', 'root')
+      .getDataAsync('D_RegistrantWorkAssignmentSACases', 'root', {
+        CaseType: 'HMRC-SA-Work-Registration'
+      })
       .then(resp => {
         if (!resp.resultCount) {
           createCase();
@@ -511,6 +510,10 @@ export default function Registration() {
     staySignedIn(setShowTimeoutModal, setIsLogout);
   };
 
+  const handleCaseContinue = () => {
+    setShowUserPortal(false);
+  };
+
   const renderContent = () => {
     if (serviceNotAvailable) {
       return <ApiServiceNotAvailable />;
@@ -530,11 +533,13 @@ export default function Registration() {
             <UserPortal showPortalBanner={showPortalBanner} isLogout={isLogout}>
               {inprogressRegistration.length > 0 && (
                 <>
-                  <RegistrationDetails
+                  <CaseDetails
                     thePConn={pConn}
                     data={inprogressRegistration}
                     rowClickAction='OpenAssignment'
                     buttonContent={t('CONTINUE_YOUR_REGISTRATION')}
+                    title={t('YOUR_REGISTRATION')}
+                    handleCaseContinue={handleCaseContinue}
                   />
                   <AskHMRC />
                 </>
