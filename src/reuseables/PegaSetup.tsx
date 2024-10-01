@@ -69,7 +69,7 @@ export function establishPCoreSubscriptions({
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
     setContainerClosed(false);
-    if(assignmentFinishedFlag !== 'true') {
+    if (assignmentFinishedFlag !== 'true') {
       if (status === 'Resolved-Discarded') {
         setServiceNotAvailable(true);
         PCore.getContainerUtils().closeContainerItem(context);
@@ -82,7 +82,7 @@ export function establishPCoreSubscriptions({
       } else {
         showResolutionScreen();
       }
-    } 
+    }
   }
 
   async function customAssignmentFinished() {
@@ -318,7 +318,7 @@ export function startMashup(
 
     // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
     PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-    
+
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
 
     /* Functionality to set the device id in the header for use in CIP.
@@ -339,7 +339,7 @@ export function startMashup(
         setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
         PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
       });
-    }    
+    }
   });
 
   // Initialize the SdkComponentMap (local and pega-provided)
@@ -377,10 +377,7 @@ export function startMashup(
 }
 
 // One time (initialization) subscriptions and related unsubscribe
-export const useStartMashup = (
-  setAuthType,
-  _AppContextValues: AppContextValues
-) => {
+export const useStartMashup = (setAuthType, _AppContextValues: AppContextValues) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
@@ -392,7 +389,6 @@ export const useStartMashup = (
   const [containerClosed, setContainerClosed] = useState(false);
 
   useEffect(() => {
-
     document.addEventListener('SdkConstellationReady', () => {
       // start the portal
       if (!assignmentPConnect) {
