@@ -35,8 +35,6 @@ const Cessation: FunctionComponent<any> = () => {
   const summaryPageRef = useRef<HTMLDivElement>(null);
 
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
-  // const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
-  const [startClaimClicked, setStartClaimClicked] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -143,18 +141,6 @@ const Cessation: FunctionComponent<any> = () => {
     );
   }
 
-  // Todo: Need to be added soon
-  // const handleStartCliam = e => {
-  //   e.preventDefault();
-  //   setShowPega(true);
-  //   setShowLandingPage(false);
-  //   setStartClaimClicked(true);
-
-  //   sessionStorage.setItem('isComingFromPortal', 'true');
-  //   sessionStorage.setItem('isEditMode', 'true');
-  //   sessionStorage.removeItem('stepIDCYA');
-  // };
-
   function closeContainer() {
     if (PCore.getContainerUtils().getActiveContainerItemName('app/primary')) {
       PCore.getContainerUtils().closeContainerItem(
@@ -170,7 +156,6 @@ const Cessation: FunctionComponent<any> = () => {
     setCurrentDisplay('landingpage');
     setShowPortalBanner(showBanner);
     setAssignmentCancelled(false);
-    setStartClaimClicked(false);
     setSummaryPageContent({
       content: null,
       title: null,
