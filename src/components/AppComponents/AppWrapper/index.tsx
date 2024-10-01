@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MainWrapper from '../../BaseComponents/MainWrapper';
 import AppFooter from '../AppFooter';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
-import { registerServiceName } from '../../helpers/setPageTitleHelpers';
+import setPageTitle, { registerServiceName } from '../../helpers/setPageTitleHelpers';
 
 export default function AppWrapper({ children, match }) {
   const { parent } = match.params;
@@ -21,6 +21,7 @@ export default function AppWrapper({ children, match }) {
 
   useEffect(() => {
     registerServiceName(t(serviceName));
+    setPageTitle();
   }, [serviceName]);
 
   return (
