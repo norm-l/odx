@@ -141,10 +141,7 @@ export default function ChildBenefitsClaim() {
   useEffect(() => {
     if (submittedClaims[0]?.HideBeginClaimSubmitted === true) {
       setShowBeginNewClaimButton(true);
-    } else if (
-      submittedClaims[0]?.HideBeginClaimSubmitted === false ||
-      submittedClaims[0]?.HideBeginClaimSubmitted === null
-    ) {
+    } else {
       setShowBeginNewClaimButton(false);
     }
   });
