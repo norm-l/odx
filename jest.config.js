@@ -9,5 +9,6 @@ module.exports = {
   testMatch: ['**/?(*.)+(test).[jt]s?(x)'],
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
   coverageDirectory: 'tests/coverage',
-  transformIgnorePatterns: ['node_modules/(?!@pega)']
+  transformIgnorePatterns: ['node_modules/(?!@pega)'],
+  moduleNameMapper: { '\\.scss$': '<rootDir>/empty-module.js' }
 };
