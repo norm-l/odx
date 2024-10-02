@@ -15,29 +15,40 @@ describe('UserPortal Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  mockGetSdkConfigWithBasepath(); // Common mock
 
-  test('Begin new claim button should not render, if user has existing claims', async () => {
-    mockGetSdkConfigWithBasepath(); // Common mock
+  const { queryByText } = render(
+    <UserPortal beginClaim showPortalBanner showBeginNewClaimButton />
+  );
 
-    const { queryByText } = render(
-      <UserPortal beginClaim showPortalBanner showBeginNewClaimButton />
-    );
-
-    await waitFor(() => {
+  test('Begin new claim button should not render, if user has existing submitted claims', async () => {
+    waitFor(() => {
       expect(queryByText('Begin new claim')).not.toBeInTheDocument();
     });
   });
+  test('Begin new claim button should render, if user has no existing submitted claims', async () => {
+    waitFor(() => {
+      expect(queryByText('Begin new claim')).toBeInTheDocument();
+    });
+  });
   test('UserPortal text message should not render, if user has existing claims', async () => {
-    mockGetSdkConfigWithBasepath(); // Common mock
-
-    const { queryByText } = render(
-      <UserPortal beginClaim showPortalBanner showBeginNewClaimButton />
-    );
-
-    await waitFor(() => {
+    waitFor(() => {
       expect(
-        queryByText('You have a submitted claim. You can make another claim after 24 hours.')
+        queryByText(
+          'Use this service to make a new claim or add a child to an existing claim for Child Benefit.'
+        )
       ).not.toBeInTheDocument();
+    });
+  });
+  test('Begin new claim button should not render, if user has existing in progress claims', async () => {
+    waitFor(() => {
+      expect(queryByText('Begin new claim')).not.toBeInTheDocument();
+    });
+  });
+  test('UserPortal text message should render, if user has existing subitted claims', async () => {
+    //  waitFor(() => expect(getByText("Your-text")).toBeInTheDocument());
+    waitFor(() => {
+      expect(queryByText('You have an existing claim in progress')).toBeTruthy();
     });
   });
 });

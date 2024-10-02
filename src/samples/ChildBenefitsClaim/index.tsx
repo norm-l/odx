@@ -132,6 +132,8 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [showBeginNewClaimButton, setShowBeginNewClaimButton] = useState(false);
+  const [beginNewClaimButtonForInProgressClaims, setBeginNewClaimButtonForInProgressClaims] =
+    useState(false);
 
   function doRedirectDone() {
     history.replace('/');
@@ -144,7 +146,15 @@ export default function ChildBenefitsClaim() {
     } else {
       setShowBeginNewClaimButton(false);
     }
-  });
+  }, [submittedClaims]);
+
+  useEffect(() => {
+    if (inprogressClaims[0]?.HideBeginClaimInProgress === true) {
+      setBeginNewClaimButtonForInProgressClaims(true);
+    } else {
+      setBeginNewClaimButtonForInProgressClaims(false);
+    }
+  }, [inprogressClaims]);
 
   function createCase() {
     displayPega();
@@ -636,6 +646,7 @@ export default function ChildBenefitsClaim() {
             beginClaim={beginClaim}
             showPortalBanner={showPortalBanner}
             showBeginNewClaimButton={showBeginNewClaimButton}
+            beginNewClaimButtonForInProgressClaims={beginNewClaimButtonForInProgressClaims}
           >
             {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
               <ClaimsList
