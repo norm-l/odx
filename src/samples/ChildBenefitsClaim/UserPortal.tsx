@@ -6,7 +6,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import NotificationBanner from '../../components/BaseComponents/NotificationBanner/NotificationBanner';
 
 export default function UserPortal(props) {
-  const { beginClaim, children, showPortalBanner } = props;
+  const { beginClaim, children, showPortalBanner, showBeginNewClaimButton } = props;
   const { t } = useTranslation();
   const { referrerURL, hmrcURL } = useHMRCExternalLinks();
 
@@ -49,12 +49,29 @@ export default function UserPortal(props) {
                 <h2 className='govuk-heading-m' id='subsection-title'>
                   {t('MAKE_A_CLAIM')}
                 </h2>
-                <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
-                <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
-
-                <Button attributes={{ className: 'govuk' }} onClick={beginClaim} variant='start'>
-                  {t('BEGIN_NEW_CLAIM')}
-                </Button>
+                {showBeginNewClaimButton ? (
+                  <div className='govuk-warning-text'>
+                    <span className='govuk-warning-text__icon' aria-hidden='true'>
+                      !
+                    </span>
+                    <strong className='govuk-warning-text__text'>
+                      <span className='govuk-visually-hidden'>{t('WARNING')}</span>
+                      {t('MAKE_A_CLAIM_AFTER_24_HRS')}
+                    </strong>
+                  </div>
+                ) : (
+                  <>
+                    <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
+                    <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
+                    <Button
+                      attributes={{ className: 'govuk' }}
+                      onClick={beginClaim}
+                      variant='start'
+                    >
+                      {t('BEGIN_NEW_CLAIM')}
+                    </Button>
+                  </>
+                )}
               </>
               <>
                 <h2 className='govuk-heading-m' id='subsection-title'>

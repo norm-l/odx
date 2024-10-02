@@ -35,6 +35,7 @@
   "ONLINE": "Ar-lein",
   "ASK_HMRC_ONLINE": "Gofyn i CThEF ar-lein",
   "WE_MAY_CALL_YOU": "Mae’n bosibl y byddwn yn eich ffonio am eich hawliad os oes gennych broblem.",
+  "MAKE_A_CLAIM_AFTER_24_HRS": "Rydych wedi cyflwyno hawliad. Gallwch wneud hawliad arall ar ôl 24 awr",
   "BEGIN_NEW_CLAIM": "Dechrau hawliad newydd",
 
   "APPLICATION_RECEIVED": "Cais am Fudd-dal Plant wedi dod i law",
