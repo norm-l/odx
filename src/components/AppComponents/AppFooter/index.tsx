@@ -6,7 +6,7 @@ export default function
 AppFooter(props) {
   const match = useRouteMatch();
   const  { baseurl } = props;
-  const pageUrl = baseurl || `${match.url}`;
+  const pageUrl = baseurl || `${match.path}`;
 
   const { t } = useTranslation();
 
@@ -19,7 +19,7 @@ AppFooter(props) {
             <ul className='govuk-footer__inline-list'>
               <li className='govuk-footer__inline-list-item'>
                 <a
-                  href={`${pageUrl}cookies`}
+                  href={`${pageUrl}-cookies`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'
@@ -30,7 +30,7 @@ AppFooter(props) {
               </li>
               <li className='govuk-footer__inline-list-item'>
                 <a
-                  href={`${pageUrl}accessibility`}
+                  href={`${pageUrl}-accessibility`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'

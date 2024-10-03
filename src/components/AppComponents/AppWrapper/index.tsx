@@ -29,7 +29,7 @@ export default function AppWrapper({ children, baseurl }) {
       <div className='govuk-width-container'>
         <MainWrapper showPageNotWorkingLink={false}>{children}</MainWrapper>
       </div>
-      <AppFooter baseurl={`/${baseurl}/`} />
+      <AppFooter baseurl={`${baseurl}`} />
     </>
   );
 }
