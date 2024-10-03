@@ -10,7 +10,7 @@ export default function UserPortal(props) {
     beginClaim,
     children,
     showPortalBanner,
-    showBeginNewClaimButton,
+    beginNewClaimButtonForSubmittedClaims,
     beginNewClaimButtonForInProgressClaims
   } = props;
   const { t } = useTranslation();
@@ -56,7 +56,10 @@ export default function UserPortal(props) {
                   {t('MAKE_A_CLAIM')}
                 </h2>
                 {(() => {
-                  if (showBeginNewClaimButton && beginNewClaimButtonForInProgressClaims) {
+                  if (
+                    beginNewClaimButtonForSubmittedClaims &&
+                    beginNewClaimButtonForInProgressClaims
+                  ) {
                     return (
                       <>
                         <div className='govuk-warning-text'>
@@ -76,7 +79,7 @@ export default function UserPortal(props) {
                         </>
                       </>
                     );
-                  } else if (showBeginNewClaimButton) {
+                  } else if (beginNewClaimButtonForSubmittedClaims) {
                     return (
                       <div className='govuk-warning-text'>
                         <span className='govuk-warning-text__icon' aria-hidden='true'>

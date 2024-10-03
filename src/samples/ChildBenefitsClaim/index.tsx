@@ -131,7 +131,8 @@ export default function ChildBenefitsClaim() {
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
-  const [showBeginNewClaimButton, setShowBeginNewClaimButton] = useState(false);
+  const [beginNewClaimButtonForSubmittedClaims, setBeginNewClaimButtonForSubmittedClaims] =
+    useState(false);
   const [beginNewClaimButtonForInProgressClaims, setBeginNewClaimButtonForInProgressClaims] =
     useState(false);
 
@@ -142,9 +143,9 @@ export default function ChildBenefitsClaim() {
   }
   useEffect(() => {
     if (submittedClaims[0]?.HideBeginClaimSubmitted === true) {
-      setShowBeginNewClaimButton(true);
+      setBeginNewClaimButtonForSubmittedClaims(true);
     } else {
-      setShowBeginNewClaimButton(false);
+      setBeginNewClaimButtonForSubmittedClaims(false);
     }
   }, [submittedClaims]);
 
@@ -645,7 +646,7 @@ export default function ChildBenefitsClaim() {
           <UserPortal
             beginClaim={beginClaim}
             showPortalBanner={showPortalBanner}
-            showBeginNewClaimButton={showBeginNewClaimButton}
+            beginNewClaimButtonForSubmittedClaims={beginNewClaimButtonForSubmittedClaims}
             beginNewClaimButtonForInProgressClaims={beginNewClaimButtonForInProgressClaims}
           >
             {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
