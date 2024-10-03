@@ -244,9 +244,9 @@ export function startMashup(
     /* getSdkConfig()
         .then(sdkConfig => {
           if (sdkConfig.timeoutConfig.secondsTilWarning)
-            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+            millisecondsTillWarning= sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
-            millisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+            millisecondsTillSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
           if (sdkConfig.timeoutConfig.secondsTillStartNowUnblocked)
             secondsTillStartNowUnblocked =
               sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000;

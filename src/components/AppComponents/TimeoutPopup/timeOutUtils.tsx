@@ -2,15 +2,15 @@ import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import { isUnAuthJourney, triggerLogout } from '../../helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../helpers/constants';
 
-let milisecondsTilWarning = TIMEOUT_13_MINUTES;
-let millisecondsTilSignout = TIMEOUT_115_SECONDS;
+let millisecondsTillWarning = TIMEOUT_13_MINUTES;
+let millisecondsTillSignout = TIMEOUT_115_SECONDS;
 
 export const settingTimer = async () => {
   const sdkConfig = await getSdkConfig();
   if (sdkConfig.timeoutConfig.secondsTilWarning)
-    milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+    millisecondsTillWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
   if (sdkConfig.timeoutConfig.secondsTilLogout)
-    millisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+    millisecondsTillSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
 };
 
 let applicationTimeout = null;
@@ -44,8 +44,8 @@ export const initTimeout = async (
         clearTimer();
         // session ends and deleteData() (pega)
       }
-    }, millisecondsTilSignout);
-  }, milisecondsTilWarning);
+    }, millisecondsTillSignout);
+  }, millisecondsTillWarning);
 };
 
 export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfirmationPage) => {
@@ -67,8 +67,8 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
         // exit survey link in pop after confirmation page
         triggerLogout();
       }
-    }, millisecondsTilSignout);
-  }, milisecondsTilWarning);
+    }, millisecondsTillSignout);
+  }, millisecondsTillWarning);
 };
 
 // Sends 'ping' to pega to keep session alive and then initiates the timeout

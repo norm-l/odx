@@ -45,7 +45,7 @@ export default function UnAuthChildBenefitsClaim() {
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [showDeletePage, setShowDeletePage] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
-  const [millisecondsTilSignout, setmillisecondsTilSignout] = useState(TIMEOUT_115_SECONDS);
+  const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
@@ -352,7 +352,7 @@ export default function UnAuthChildBenefitsClaim() {
       // Fetches timeout length config
       getSdkConfig().then(sdkConfig => {
         if (sdkConfig.timeoutConfig.secondsTilLogout)
-          setmillisecondsTilSignout(sdkConfig.timeoutConfig.secondsTilLogout * 1000);
+          setmillisecondsTillSignout(sdkConfig.timeoutConfig.secondsTilLogout * 1000);
       });
 
       // Subscribe to any store change to reset timeout counter
@@ -536,7 +536,7 @@ export default function UnAuthChildBenefitsClaim() {
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
-          millisecondsTilSignout={millisecondsTilSignout}
+          millisecondsTillSignout={millisecondsTillSignout}
         />
       )}
       <AppHeader

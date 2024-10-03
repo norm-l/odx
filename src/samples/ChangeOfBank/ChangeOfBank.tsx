@@ -22,7 +22,7 @@ import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 export default function ChangeOfBank() {
   const history = useHistory();
-  const [millisecondsTilSignout, setMillisecondsTilSignout] = useState(TIMEOUT_115_SECONDS);
+  const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [summaryPageContent, setSummaryPageContent] = useState<any>({
@@ -64,7 +64,7 @@ export default function ChangeOfBank() {
     if (showResolutionPage) {
       getSdkConfig().then(config => {
         if (config.timeoutConfig.secondsTilLogout) {
-          setMillisecondsTilSignout(config.timeoutConfig.secondsTilLogout * 1000);
+          setmillisecondsTillSignout(config.timeoutConfig.secondsTilLogout * 1000);
         }
 
         PCore.getRestClient()
@@ -154,7 +154,7 @@ export default function ChangeOfBank() {
           isAuthorised
           signoutButtonText={t('SIGN-OUT')}
           staySignedInButtonText={t('STAY_SIGNED_IN')}
-          millisecondsTilSignout={millisecondsTilSignout}
+          millisecondsTillSignout={millisecondsTillSignout}
         />
         <div className='govuk-width-container'>
           {!showPega && <StartPage handleStartCOB={handleStartCOB} />}
