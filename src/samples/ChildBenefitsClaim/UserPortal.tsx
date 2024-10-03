@@ -91,7 +91,8 @@ export default function UserPortal(props) {
                   } else if (beginNewClaimButtonForInProgressClaims) {
                     return (
                       <>
-                        <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
+                        <p className='govuk-body'>{t('HAVE_EXISTING_CLAIM_IN_PROGRESS')}</p>
+                        <p className='govuk-body'>{t('CANNOT_START_A_NEW_CLAIM')}</p>
                         <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
                       </>
                     );
