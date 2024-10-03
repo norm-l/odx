@@ -35,10 +35,6 @@ const Cessation: FunctionComponent<any> = () => {
   const summaryPageRef = useRef<HTMLDivElement>(null);
 
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
-<<<<<<< HEAD
-  // const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
-=======
->>>>>>> 2171d6b5e6e3e136b466f8fd54de880c55eccc2c
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -121,7 +117,7 @@ const Cessation: FunctionComponent<any> = () => {
 
   const handleCaseContinue = () => {
     setShowLandingPage(false);
-  };  
+  };
 
   function closeContainer() {
     if (PCore.getContainerUtils().getActiveContainerItemName('app/primary')) {
