@@ -6,8 +6,7 @@ import AppFooter from '../AppFooter';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import setPageTitle, { registerServiceName } from '../../helpers/setPageTitleHelpers';
 
-export default function AppWrapper({ children, match }) {
-  const { baseurl } = match.params;
+export default function AppWrapper({ children, baseurl }) {
   const { t } = useTranslation();
 
   const [serviceName, setServiceName] = useState('');
@@ -34,4 +33,3 @@ export default function AppWrapper({ children, match }) {
     </>
   );
 }
-

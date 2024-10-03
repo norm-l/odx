@@ -42,9 +42,9 @@ const AppSelector = () => {
       {/* Public Routes */}
       <Route
         exact
-        path='/:baseurl/cookies'
-          render={props => {
-            return (<AppWrapper {...props}>
+        path='/registration/cookies'
+          render={() => {
+            return (<AppWrapper baseurl='registration' >
               <CookiePage />
             </AppWrapper>)
           }}
@@ -52,13 +52,33 @@ const AppSelector = () => {
       />
       <Route
         exact
-        path='/:baseurl/accessibility'
-          render={props => (
-            <AppWrapper {...props}>
+        path='/registration/accessibility'
+          render={() => (
+            <AppWrapper baseurl='registration'>
               <Accessibility />
             </AppWrapper>
           )}
       />
+      <Route
+        exact
+        path='/cessation/cookies'
+          render={() => {
+            return (<AppWrapper baseurl='cessation'>
+              <CookiePage />
+            </AppWrapper>)
+          }}
+
+      />
+      <Route
+        exact
+        path='/cessation/accessibility'
+          render={() => (
+            <AppWrapper baseurl='cessation'>
+              <Accessibility />
+            </AppWrapper>
+          )}
+      />
+
       {/* Private Routes */}
       <ProtectedRoute exact path='/registration' component={Registration} />
       <ProtectedRoute exact path='/cessation' component={Cessation} />

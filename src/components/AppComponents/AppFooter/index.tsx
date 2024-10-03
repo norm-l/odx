@@ -6,7 +6,7 @@ export default function
 AppFooter(props) {
   const match = useRouteMatch();
   const  { baseurl } = props;
-  const pageUrl = baseurl || `${match.url}/`;
+  const pageUrl = baseurl || `${match.url}`;
 
   const { t } = useTranslation();
 
