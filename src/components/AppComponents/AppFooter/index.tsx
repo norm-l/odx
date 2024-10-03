@@ -1,8 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 
-export default function AppFooter() {
+export default function 
+AppFooter(props) {
+  const match = useRouteMatch();
+  const  { baseurl } = props;
+  const pageUrl = baseurl || `${match.path.replace('/', '')}`;
+
   const { t } = useTranslation();
 
   return (
@@ -13,26 +18,26 @@ export default function AppFooter() {
             <h2 className='govuk-visually-hidden'>{t('SUPPORT_LINKS')}</h2>
             <ul className='govuk-footer__inline-list'>
               <li className='govuk-footer__inline-list-item'>
-                <Link
-                  to='/cookies'
+                <a
+                  href={`${pageUrl}-cookies`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'
                 >
                   {t('COOKIES')}
                   <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
-                </Link>
+                </a>
               </li>
               <li className='govuk-footer__inline-list-item'>
-                <Link
-                  to='/accessibility'
+                <a
+                  href={`${pageUrl}-accessibility`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'
                 >
                   {t('ACCESSIBILITY')}
                   <span className='govuk-visually-hidden'>{t('OPENS_IN_NEW_TAB')}</span>
-                </Link>
+                </a>
               </li>
               <li className='govuk-footer__inline-list-item'>
                 <a

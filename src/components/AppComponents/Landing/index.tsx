@@ -16,7 +16,7 @@ export default function Landing(props) {
     title,
     bannerContent,
     handleCaseContinue,
-    caseListApiParam
+    caseListApiParams
   } = props;
   const [inprogressCaseDetail, setInprogressCaseDetail] = useState([]);
   const [loadingInProgressCaseDetail, setLoadingInProgressCaseDetail] = useState(true);
@@ -40,7 +40,7 @@ export default function Landing(props) {
 
     PCore.getDataPageUtils()
       // @ts-ignore
-      .getDataAsync(inProgressCaseCountEndPoint, context, { ...caseListApiParam })
+      .getDataAsync(inProgressCaseCountEndPoint, context, { ...caseListApiParams })
       // @ts-ignore
       .then(resp => {
         if (!resp.resultCount) {
@@ -65,7 +65,7 @@ export default function Landing(props) {
     inprogressCaseDetail.length > 0 && (
       <>
         <main
-          className={isLogout ? 'govuk-main-wrapper visibility-hidden' : 'govuk-main-wrapper'}
+          className={`govuk-main-wrapper ${isLogout ? 'visibility-hidden' : ''}`}
           id='main-content'
           role='main'
         >

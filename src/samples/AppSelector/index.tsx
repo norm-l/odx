@@ -9,6 +9,7 @@ import Accessibility from '../Registration/AccessibilityPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ProtectedRoute from '../../components/HOC/ProtectedRoute';
 import Cessation from '../Cessation';
+import AppWrapper from '../../components/AppComponents/AppWrapper';
 
 const AppSelector = () => {
   const [i18nloaded, seti18nloaded] = useState(false);
@@ -37,13 +38,51 @@ const AppSelector = () => {
 
   return !i18nloaded ? null : (
     <Switch>
-      <Route exact path='/' render={()=> <Redirect to='/registration' />} />
-      <ProtectedRoute path='/registration' component={Registration} />
-      <ProtectedRoute path='/cessation' component={Cessation} />
-
+      <Route exact path='/' render={() => <Redirect to='/registration' />} />
+      {/* Private Routes */}
+      <ProtectedRoute exact path='/registration' component={Registration} />
+      <ProtectedRoute exact path='/cessation' component={Cessation} />
       {/* Public Routes */}
-      <Route path='/cookies' component={CookiePage} />
-      <Route path='/accessibility' component={Accessibility} />
+      <Route
+        exact
+        path='/registration-cookies'
+          render={() => {
+            return (<AppWrapper baseurl='registration' >
+              <CookiePage />
+            </AppWrapper>)
+          }}
+
+      />
+      <Route
+        exact
+        path='/registration-accessibility'
+          render={() => (
+            <AppWrapper baseurl='registration'>
+              <Accessibility />
+            </AppWrapper>
+          )}
+      />
+      <Route
+        exact
+        path='/cessation-cookies'
+          render={() => {
+            return (<AppWrapper baseurl='cessation'>
+              <CookiePage />
+            </AppWrapper>)
+          }}
+
+      />
+      <Route
+        exact
+        path='/cessation-accessibility'
+          render={() => (
+            <AppWrapper baseurl='cessation'>
+              <Accessibility />
+            </AppWrapper>
+          )}
+      />
+
+      
     </Switch>
   );
 };
