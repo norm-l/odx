@@ -18,9 +18,11 @@ import { useStartMashup } from '../HighIncomeCase/reuseables/PegaSetup';
 import StartPage from './StartPage';
 import SummaryPage from '../../components/AppComponents/SummaryPage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
+import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 export default function ChangeOfBank() {
   const history = useHistory();
+  const [millisecondsTilSignout, setMillisecondsTilSignout] = useState(TIMEOUT_115_SECONDS);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [showSignoutModal, setShowSignoutModal] = useState(false);
   const [summaryPageContent, setSummaryPageContent] = useState<any>({
@@ -40,12 +42,12 @@ export default function ChangeOfBank() {
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   };
 
-  const { showPega, setShowPega, caseId, showResolutionPage, assignmentPConn} = useStartMashup(
+  const { showPega, setShowPega, caseId, showResolutionPage, assignmentPConn } = useStartMashup(
     setAuthType,
     onRedirectDone,
     {
       appBacklinkProps: {}
-    },
+    }
   );
 
   useEffect(() => {
@@ -61,6 +63,10 @@ export default function ChangeOfBank() {
   useEffect(() => {
     if (showResolutionPage) {
       getSdkConfig().then(config => {
+        if (config.timeoutConfig.secondsTilLogout) {
+          setMillisecondsTilSignout(config.timeoutConfig.secondsTilLogout * 1000);
+        }
+
         PCore.getRestClient()
           .invokeCustomRestApi(
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
@@ -148,6 +154,7 @@ export default function ChangeOfBank() {
           isAuthorised
           signoutButtonText={t('SIGN-OUT')}
           staySignedInButtonText={t('STAY_SIGNED_IN')}
+          millisecondsTilSignout={millisecondsTilSignout}
         />
         <div className='govuk-width-container'>
           {!showPega && <StartPage handleStartCOB={handleStartCOB} />}

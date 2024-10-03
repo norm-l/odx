@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export default function TimeoutPopup(props) {
   const {
     show,
-    milisecondsTilSignout,
+    millisecondsTilSignout,
     staySignedinHandler,
     signoutHandler,
     userTimeoutDelete,
@@ -54,7 +54,7 @@ export default function TimeoutPopup(props) {
       dispatch({ type: 'START_COUNTDOWN', payload: false });
     } else {
       // Start the countdown only if show is true
-      const milisecondsTilCountdown = milisecondsTilSignout - 60000;
+      const milisecondsTilCountdown = millisecondsTilSignout - 60000;
       const countdownTimeout = setTimeout(() => {
         dispatch({ type: 'START_COUNTDOWN', payload: true });
       }, milisecondsTilCountdown);
@@ -260,7 +260,7 @@ export default function TimeoutPopup(props) {
 
 TimeoutPopup.propTypes = {
   show: PropTypes.bool,
-  milisecondsTilSignout: PropTypes.number,
+  millisecondsTilSignout: PropTypes.number,
   staySignedinHandler: PropTypes.func,
   signoutHandler: PropTypes.func,
   isAuthorised: PropTypes.bool,

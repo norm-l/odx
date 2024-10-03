@@ -1,15 +1,16 @@
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import { isUnAuthJourney, triggerLogout } from '../../helpers/utils';
+import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../helpers/constants';
 
-let milisecondsTilWarning = 780 * 1000;
-let milisecondsTilSignout = 115 * 1000;
+let milisecondsTilWarning = TIMEOUT_13_MINUTES;
+let millisecondsTilSignout = TIMEOUT_115_SECONDS;
 
 export const settingTimer = async () => {
   const sdkConfig = await getSdkConfig();
   if (sdkConfig.timeoutConfig.secondsTilWarning)
     milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
   if (sdkConfig.timeoutConfig.secondsTilLogout)
-    milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+    millisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
 };
 
 let applicationTimeout = null;
@@ -43,7 +44,7 @@ export const initTimeout = async (
         clearTimer();
         // session ends and deleteData() (pega)
       }
-    }, milisecondsTilSignout);
+    }, millisecondsTilSignout);
   }, milisecondsTilWarning);
 };
 
@@ -66,7 +67,7 @@ export const resetTimeout = (showTimeoutModal, deleteData, isAuthorised, isConfi
         // exit survey link in pop after confirmation page
         triggerLogout();
       }
-    }, milisecondsTilSignout);
+    }, millisecondsTilSignout);
   }, milisecondsTilWarning);
 };
 
@@ -81,11 +82,11 @@ export function staySignedIn(
 ) {
   const operatorId = {};
   if (refreshSignin && !!claimsListApi) {
-    if(isUnAuthJourney()) {
+    if (isUnAuthJourney()) {
       operatorId['OperatorId'] = 'Model_Unauth@ChB';
     }
     // @ts-ignore
-    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', {...operatorId});
+    PCore.getDataPageUtils().getDataAsync(claimsListApi, 'root', { ...operatorId });
   }
   setShowTimeoutModal(false);
   resetTimeout(setShowTimeoutModal, deleteData, isAuthorised, isConfirmationPage);

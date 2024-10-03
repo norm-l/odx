@@ -32,14 +32,15 @@ import { checkCookie, setCookie } from '../../components/helpers/cookie';
 import ShutterServicePage from '../../components/AppComponents/ShutterServicePage';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
+import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
 
 declare const myLoadMashup: any;
 
 /* Time out modal functionality */
 let applicationTimeout = null;
 // Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
-let milisecondsTilSignout = 115 * 1000;
-let milisecondsTilWarning = 780 * 1000;
+let millisecondsTilSignout = TIMEOUT_115_SECONDS;
+let milisecondsTilWarning = TIMEOUT_13_MINUTES;
 
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
 function initTimeout(setShowTimeoutModal) {
@@ -466,7 +467,7 @@ export default function ChildBenefitsClaim() {
           if (sdkConfig.timeoutConfig.secondsTilWarning)
             milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
-            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+            millisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
@@ -658,7 +659,7 @@ export default function ChildBenefitsClaim() {
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal)}
         signoutHandler={() => triggerLogout()}
-        milisecondsTilSignout={milisecondsTilSignout}
+        millisecondsTilSignout={millisecondsTilSignout}
         isAuthorised
       />
 

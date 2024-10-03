@@ -31,6 +31,7 @@ import {
   scrollToTop,
   triggerLogout
 } from '../../components/helpers/utils';
+import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 declare const myLoadMashup: Function;
 
@@ -44,7 +45,7 @@ export default function UnAuthChildBenefitsClaim() {
   const [shutterServicePage, setShutterServicePage] = useState(false);
   const [showDeletePage, setShowDeletePage] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
-  const [milisecondsTilSignout, setMilisecondsTilSignout] = useState(115 * 1000);
+  const [millisecondsTilSignout, setmillisecondsTilSignout] = useState(TIMEOUT_115_SECONDS);
   const history = useHistory();
   const [caseId, setCaseId] = useState('');
 
@@ -351,7 +352,7 @@ export default function UnAuthChildBenefitsClaim() {
       // Fetches timeout length config
       getSdkConfig().then(sdkConfig => {
         if (sdkConfig.timeoutConfig.secondsTilLogout)
-          setMilisecondsTilSignout(sdkConfig.timeoutConfig.secondsTilLogout * 1000);
+          setmillisecondsTilSignout(sdkConfig.timeoutConfig.secondsTilLogout * 1000);
       });
 
       // Subscribe to any store change to reset timeout counter
@@ -535,7 +536,7 @@ export default function UnAuthChildBenefitsClaim() {
           }}
           isAuthorised={false}
           isConfirmationPage={bShowResolutionScreen}
-          milisecondsTilSignout={milisecondsTilSignout}
+          millisecondsTilSignout={millisecondsTilSignout}
         />
       )}
       <AppHeader
