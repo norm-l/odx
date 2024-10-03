@@ -1,14 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 
-export default function AppFooter(props) {
-  let { pageUrl } = props;
-  if (!pageUrl) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { pathname } = useLocation();
-    pageUrl =  pathname;
-  }
+export default function 
+AppFooter(props) {
+  const match = useRouteMatch();
+  const  { baseurl } = props;
+  const pageUrl = baseurl || `${match.path.replace('/', '')}`;
 
   const { t } = useTranslation();
 
@@ -21,7 +19,7 @@ export default function AppFooter(props) {
             <ul className='govuk-footer__inline-list'>
               <li className='govuk-footer__inline-list-item'>
                 <a
-                  href={`${pageUrl}/cookies`}
+                  href={`${pageUrl}-cookies`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'
@@ -32,7 +30,7 @@ export default function AppFooter(props) {
               </li>
               <li className='govuk-footer__inline-list-item'>
                 <a
-                  href={`${pageUrl}/accessibility`}
+                  href={`${pageUrl}-accessibility`}
                   className='govuk-footer__link'
                   target='_blank'
                   rel='noreferrer noopener'

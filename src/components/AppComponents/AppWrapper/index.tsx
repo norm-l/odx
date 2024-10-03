@@ -6,15 +6,14 @@ import AppFooter from '../AppFooter';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import setPageTitle, { registerServiceName } from '../../helpers/setPageTitleHelpers';
 
-export default function AppWrapper({ children, match }) {
-  const { parent } = match.params;
+export default function AppWrapper({ children, baseurl }) {
   const { t } = useTranslation();
 
   const [serviceName, setServiceName] = useState('');
 
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
-      const { serviceName: name } = sdkConfig.applicationConfig[parent];
+      const { serviceName: name } = sdkConfig.applicationConfig[baseurl];
       setServiceName(name);
     });
   }, []);
@@ -30,7 +29,7 @@ export default function AppWrapper({ children, match }) {
       <div className='govuk-width-container'>
         <MainWrapper showPageNotWorkingLink={false}>{children}</MainWrapper>
       </div>
-      <AppFooter pageUrl={parent} />
+      <AppFooter baseurl={`${baseurl}`} />
     </>
   );
 }

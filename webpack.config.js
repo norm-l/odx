@@ -62,7 +62,7 @@ module.exports = (env, argv) => {
         {
           from: './assets/css/*',
           to: './'
-        }, 
+        },
         {
           from: './node_modules/tinymce',
           to: './tinymce'

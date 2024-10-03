@@ -38,29 +38,51 @@ const AppSelector = () => {
 
   return !i18nloaded ? null : (
     <Switch>
-      
-        <Route exact path='/' render={() => <Redirect to='/registration' />} />
-        <ProtectedRoute exact path='/registration' component={Registration} />
-        <ProtectedRoute exact path='/cessation' component={Cessation} />
-        {/* Public Routes */}
-        <Route
-          exact
-          path='/:parent/cookies'
-          render={props => (
-            <AppWrapper {...props}>
+      <Route exact path='/' render={() => <Redirect to='/registration' />} />
+      {/* Private Routes */}
+      <ProtectedRoute exact path='/registration' component={Registration} />
+      <ProtectedRoute exact path='/cessation' component={Cessation} />
+      {/* Public Routes */}
+      <Route
+        exact
+        path='/registration-cookies'
+          render={() => {
+            return (<AppWrapper baseurl='registration' >
               <CookiePage />
-            </AppWrapper>
-          )}
-        />
-        <Route
-          exact
-          path='/:parent/accessibility'
-          render={props => (
-            <AppWrapper {...props}>
+            </AppWrapper>)
+          }}
+
+      />
+      <Route
+        exact
+        path='/registration-accessibility'
+          render={() => (
+            <AppWrapper baseurl='registration'>
               <Accessibility />
             </AppWrapper>
           )}
-        />
+      />
+      <Route
+        exact
+        path='/cessation-cookies'
+          render={() => {
+            return (<AppWrapper baseurl='cessation'>
+              <CookiePage />
+            </AppWrapper>)
+          }}
+
+      />
+      <Route
+        exact
+        path='/cessation-accessibility'
+          render={() => (
+            <AppWrapper baseurl='cessation'>
+              <Accessibility />
+            </AppWrapper>
+          )}
+      />
+
+      
     </Switch>
   );
 };
