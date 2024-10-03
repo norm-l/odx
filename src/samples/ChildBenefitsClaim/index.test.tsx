@@ -46,7 +46,6 @@ describe('UserPortal Component', () => {
     });
   });
   test('UserPortal text message should render, if user has existing subitted claims', async () => {
-    //  waitFor(() => expect(getByText("Your-text")).toBeInTheDocument());
     waitFor(() => {
       expect(queryByText('You have an existing claim in progress')).toBeTruthy();
     });
