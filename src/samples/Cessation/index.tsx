@@ -36,7 +36,6 @@ const Cessation: FunctionComponent<any> = () => {
 
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   // const [showPortalPageDefault, setShowPortalPageDefault] = useState<boolean>(false);
-  const [startClaimClicked, setStartClaimClicked] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const { showLanguageToggle } = useContext(AppContext);
   const [showLanguageToggleState, setShowLanguageToggleState] = useState(showLanguageToggle);
@@ -121,28 +120,6 @@ const Cessation: FunctionComponent<any> = () => {
     setShowLandingPage(false);
   };
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  function returnToPortalPage() {
-    sessionStorage.setItem('assignmentFinishedFlag', 'false');
-    setShowSignoutModal(false);
-    staySignedIn(
-      setShowTimeoutModal,
-      inProgressCaseCountEndPoint,
-      null,
-      false,
-      true,
-      currentDisplay === 'resolutionpage',
-      caseListApiParams,
-      setIsLogout
-    );
-    setCurrentDisplay('loading');
-    setShowLandingPage(true);
-    PCore.getContainerUtils().closeContainerItem(
-      PCore.getContainerUtils().getActiveContainerItemContext('app/primary'),
-      { skipDirtyCheck: true }
-    );
-  }
-
   // Todo: Need to be added soon
   // const handleStartCliam = e => {
   //   e.preventDefault();
@@ -170,7 +147,6 @@ const Cessation: FunctionComponent<any> = () => {
     setCurrentDisplay('landingpage');
     setShowPortalBanner(showBanner);
     setAssignmentCancelled(false);
-    setStartClaimClicked(false);
     setSummaryPageContent({
       content: null,
       title: null,
@@ -210,7 +186,7 @@ const Cessation: FunctionComponent<any> = () => {
   useEffect(() => {
     if (shutterServicePage) {
       setCurrentDisplay('shutterpage');
-    } else if (showLandingPage && pCoreReady) {
+    } else if (showLandingPage && pCoreReady && !showResolutionPage) {
       setCurrentDisplay('landingpage');
     } else if (showPega) {
       setCurrentDisplay('pegapage');
@@ -221,6 +197,7 @@ const Cessation: FunctionComponent<any> = () => {
         banner: null
       });
       setCurrentDisplay('resolutionpage');
+      setShowPega(false);
       getSdkConfig().then(config => {
         PCore.getRestClient()
           .invokeCustomRestApi(
@@ -452,7 +429,6 @@ const Cessation: FunctionComponent<any> = () => {
                   summaryContent={summaryPageContent?.Content}
                   summaryTitle={summaryPageContent?.Title}
                   summaryBanner={summaryPageContent?.Banner}
-                  backlinkProps={{}}
                   ref={summaryPageRef}
                 />
               )}
