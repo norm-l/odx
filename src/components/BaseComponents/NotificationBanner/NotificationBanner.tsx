@@ -20,10 +20,7 @@ export default function NotificationBanner(props) {
         </h2>
       </div>
       <div className='govuk-notification-banner__content'>
-        <p className='govuk-notification-banner__heading'>
-          {/* {t('NOTIFICATION_BANNER_CONTENT')} */}
-          {content}
-        </p>
+        <p className='govuk-notification-banner__heading'>{content}</p>
       </div>
     </div>
   );
