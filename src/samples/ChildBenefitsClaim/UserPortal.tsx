@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import Button from '../../components/BaseComponents/Button/Button';
+
 import { useTranslation } from 'react-i18next';
 import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLinks';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import NotificationBanner from '../../components/BaseComponents/NotificationBanner/NotificationBanner';
+import ExistingInprogressClaimsContent from './ExistingInprogressClaimsContent';
+import ExistingSubmittedClaimsContent from './ExistingSubmittedClaimsContent';
+import NewClaimContent from './NewClaimContent';
 
 export default function UserPortal(props) {
   const {
@@ -21,6 +24,23 @@ export default function UserPortal(props) {
     sessionStorage.setItem('isTasklistScreen', 'false');
   }, []);
 
+  function hideShowBeginNewClaim() {
+    if (beginNewClaimButtonForSubmittedClaims && beginNewClaimButtonForInProgressClaims) {
+      return (
+        <>
+          <ExistingSubmittedClaimsContent />
+
+          <ExistingInprogressClaimsContent />
+        </>
+      );
+    } else if (beginNewClaimButtonForSubmittedClaims) {
+      return <ExistingSubmittedClaimsContent />;
+    } else if (beginNewClaimButtonForInProgressClaims) {
+      return <ExistingInprogressClaimsContent />;
+    } else {
+      return <NewClaimContent beginClaim={beginClaim} />;
+    }
+  }
   return (
     <>
       <main className='govuk-main-wrapper' id='main-content' role='main'>
@@ -55,66 +75,8 @@ export default function UserPortal(props) {
                 <h2 className='govuk-heading-m' id='subsection-title'>
                   {t('MAKE_A_CLAIM')}
                 </h2>
-                {(() => {
-                  if (
-                    beginNewClaimButtonForSubmittedClaims &&
-                    beginNewClaimButtonForInProgressClaims
-                  ) {
-                    return (
-                      <>
-                        <div className='govuk-warning-text'>
-                          <span className='govuk-warning-text__icon' aria-hidden='true'>
-                            !
-                          </span>
-                          <strong className='govuk-warning-text__text'>
-                            <span className='govuk-visually-hidden'>{t('WARNING')}</span>
-                            {t('MAKE_A_CLAIM_AFTER_24_HRS')}
-                          </strong>
-                        </div>
 
-                        <>
-                          <p className='govuk-body'>{t('HAVE_EXISTING_CLAIM_IN_PROGRESS')}</p>
-                          <p className='govuk-body'>{t('CANNOT_START_A_NEW_CLAIM')}</p>
-                          <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
-                        </>
-                      </>
-                    );
-                  } else if (beginNewClaimButtonForSubmittedClaims) {
-                    return (
-                      <div className='govuk-warning-text'>
-                        <span className='govuk-warning-text__icon' aria-hidden='true'>
-                          !
-                        </span>
-                        <strong className='govuk-warning-text__text'>
-                          <span className='govuk-visually-hidden'>{t('WARNING')}</span>
-                          {t('MAKE_A_CLAIM_AFTER_24_HRS')}
-                        </strong>
-                      </div>
-                    );
-                  } else if (beginNewClaimButtonForInProgressClaims) {
-                    return (
-                      <>
-                        <p className='govuk-body'>{t('HAVE_EXISTING_CLAIM_IN_PROGRESS')}</p>
-                        <p className='govuk-body'>{t('CANNOT_START_A_NEW_CLAIM')}</p>
-                        <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <p className='govuk-body'>{t('USE_THIS_SERVICE')}</p>
-                        <p className='govuk-body'>{t('WE_MAY_CALL_YOU')}</p>
-                        <Button
-                          attributes={{ className: 'govuk' }}
-                          onClick={beginClaim}
-                          variant='start'
-                        >
-                          {t('BEGIN_NEW_CLAIM')}
-                        </Button>
-                      </>
-                    );
-                  }
-                })()}
+                {hideShowBeginNewClaim()}
               </>
               <>
                 <h2 className='govuk-heading-m' id='subsection-title'>
