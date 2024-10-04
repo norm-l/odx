@@ -81,15 +81,8 @@ export function establishPCoreSubscriptions({
         );
       } else {
         showResolutionScreen();
+        setShowPega(false);
       }
-    }
-  }
-
-  async function customAssignmentFinished() {
-    const sdkConfig = await getSdkConfig();
-    setContainerClosed(false);
-    if (sdkConfig.showResolutionStatuses?.includes(checkStatus())) {
-      showResolutionScreen();
     }
   }
 
@@ -98,6 +91,14 @@ export function establishPCoreSubscriptions({
     handleServiceNotAvailable,
     'handleServiceNotAvailableOnAssignmentFinished'
   );
+
+  async function customAssignmentFinished() {
+    const sdkConfig = await getSdkConfig();
+    setContainerClosed(false);
+    if (sdkConfig.showResolutionStatuses?.includes(checkStatus())) {
+      showResolutionScreen();
+    }
+  }
 
   PCore.getPubSubUtils().subscribe('CustomAssignmentFinished', customAssignmentFinished);
 
