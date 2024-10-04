@@ -132,9 +132,9 @@ export default function ChildBenefitsClaim() {
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
   const [beginNewClaimButtonForSubmittedClaims, setBeginNewClaimButtonForSubmittedClaims] =
-    useState(undefined);
+    useState(false);
   const [beginNewClaimButtonForInProgressClaims, setBeginNewClaimButtonForInProgressClaims] =
-    useState(undefined);
+    useState(false);
 
   function doRedirectDone() {
     history.replace('/');
