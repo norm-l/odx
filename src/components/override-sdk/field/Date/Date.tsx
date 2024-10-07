@@ -129,7 +129,7 @@ export default function Date(props) {
     return (
       <GDSCheckAnswers
         label={props.label}
-        value={dayjs(value).format('DD MM YYYY')}
+        value={dayjs(value).format('D MMMM YYYY')}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
         getPConnect={getPConnect}
@@ -146,7 +146,7 @@ export default function Date(props) {
   }
 
   if (readOnly) {
-    return <ReadOnlyDisplay label={label} value={dayjs(value).format('DD MM YYYY')} />;
+    return <ReadOnlyDisplay label={label} value={dayjs(value).format('D MMMM YYYY')} />;
   }
 
   const extraProps = { testProps: { 'data-test-id': testId } };
