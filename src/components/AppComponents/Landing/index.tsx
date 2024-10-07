@@ -24,10 +24,6 @@ export default function Landing(props) {
   function createCase() {
     PCore.getMashupApi()
       .createCase(creatCaseEndpoint, PCore.getConstants().APP.APP)
-      // @ts-ignore
-      .then(() => {
-        checkStatus();
-      });
   }
 
   // Calls data page to fetch in progress caseDetail,
