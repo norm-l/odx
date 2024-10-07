@@ -132,12 +132,31 @@ export default function ChildBenefitsClaim() {
 
   const [inprogressClaims, setInprogressClaims] = useState([]);
   const [submittedClaims, setSubmittedClaims] = useState([]);
+  const [beginNewClaimButtonForSubmittedClaims, setBeginNewClaimButtonForSubmittedClaims] =
+    useState(false);
+  const [beginNewClaimButtonForInProgressClaims, setBeginNewClaimButtonForInProgressClaims] =
+    useState(false);
 
   function doRedirectDone() {
     history.replace('/');
     // appName and mainRedirect params have to be same as earlier invocation
     loginIfNecessary({ appName: 'embedded', mainRedirect: true });
   }
+  useEffect(() => {
+    if (submittedClaims[0]?.HideBeginClaimSubmitted === true) {
+      setBeginNewClaimButtonForSubmittedClaims(true);
+    } else {
+      setBeginNewClaimButtonForSubmittedClaims(false);
+    }
+  }, [submittedClaims]);
+
+  useEffect(() => {
+    if (inprogressClaims[0]?.HideBeginClaimInProgress === true) {
+      setBeginNewClaimButtonForInProgressClaims(true);
+    } else {
+      setBeginNewClaimButtonForInProgressClaims(false);
+    }
+  }, [inprogressClaims]);
 
   function createCase() {
     displayPega();
@@ -625,7 +644,12 @@ export default function ChildBenefitsClaim() {
           />
         )}
         {showUserPortal && (
-          <UserPortal beginClaim={beginClaim} showPortalBanner={showPortalBanner}>
+          <UserPortal
+            beginClaim={beginClaim}
+            showPortalBanner={showPortalBanner}
+            beginNewClaimButtonForSubmittedClaims={beginNewClaimButtonForSubmittedClaims}
+            beginNewClaimButtonForInProgressClaims={beginNewClaimButtonForInProgressClaims}
+          >
             {!loadinginProgressClaims && inprogressClaims.length !== 0 && (
               <ClaimsList
                 thePConn={pConn}
