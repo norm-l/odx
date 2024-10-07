@@ -76,7 +76,7 @@ export function establishPCoreSubscriptions({
     );
     const status = PCore.getStoreValue('.pyStatusWork', 'caseInfo.content', context);
     setContainerClosed(false);
-    if(assignmentFinishedFlag !== 'true') {
+    if (assignmentFinishedFlag !== 'true') {
       if (status === 'Resolved-Discarded') {
         setServiceNotAvailable(true);
         PCore.getContainerUtils().closeContainerItem(context);
@@ -89,7 +89,7 @@ export function establishPCoreSubscriptions({
       } else {
         showResolutionScreen();
       }
-    } 
+    }
   }
 
   async function customAssignmentFinished() {
@@ -302,30 +302,10 @@ export function startMashup(
       setAssignmentCancelled,
       setContainerClosed
     });
-    // PM!! setShowAppName(true);
-
-    // Fetches timeout length config
-    // PM!!
-    /* getSdkConfig()
-        .then(sdkConfig => {
-          if (sdkConfig.timeoutConfig.secondsTilWarning)
-            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
-          if (sdkConfig.timeoutConfig.secondsTilLogout)
-            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
-          if (sdkConfig.timeoutConfig.secondsTillStartNowUnblocked)
-            secondsTillStartNowUnblocked =
-              sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000;
-        })
-        .finally(() => {
-          // Subscribe to any store change to reset timeout counter
-          PCore.getStore().subscribe(() => staySignedIn(setShowTimeoutModal, false));
-          initTimeout(setShowTimeoutModal);
-        });
-        */
 
     // TODO : Consider refactoring 'en_GB' reference as this may need to be set elsewhere
     PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-    
+
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
 
     /* Functionality to set the device id in the header for use in CIP.
@@ -346,7 +326,7 @@ export function startMashup(
         setCookie(COOKIE_PEGAODXDI, deviceID, 3650);
         PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
       });
-    }    
+    }
   });
 
   // Initialize the SdkComponentMap (local and pega-provided)
