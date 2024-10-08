@@ -17,8 +17,19 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ChildBenefitHub from '../ChildBenefitHub/ChildBenefitHub';
 import ProofOfEntitlement from '../ProofOfEntitlement/ProofOfEntitlement';
 import ChangeOfBank from '../ChangeOfBank/ChangeOfBank';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 const AppSelector = () => {
+  const [mobileAppURL, setMobileAppURL] = useState<string | null>(null);
+
+  getSdkConfig().then(sdkConfig => {
+    setMobileAppURL(sdkConfig.mobileApp.mobileAppURL);
+    // eslint-disable-next-line no-console
+    console.log('Mobile App URL:', mobileAppURL);
+    // eslint-disable-next-line no-console
+    console.log('sdkConfig:', sdkConfig);
+  });
+
   const [i18nloaded, seti18nloaded] = useState(false);
 
   useEffect(() => {
