@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
@@ -75,8 +75,6 @@ const AppSelector = () => {
       <Route path='/sign-in-to-government-gateway' component={DoYouWantToSignIn} />
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
-
-      <Redirect from='/mobile-app' to={mobileAppURL} />
     </Switch>
   );
 };
