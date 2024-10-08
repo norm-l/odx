@@ -244,9 +244,9 @@ export function startMashup(
     /* getSdkConfig()
         .then(sdkConfig => {
           if (sdkConfig.timeoutConfig.secondsTilWarning)
-            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+            millisecondsTillWarning= sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
-            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+            millisecondsTillSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
           if (sdkConfig.timeoutConfig.secondsTillStartNowUnblocked)
             secondsTillStartNowUnblocked =
               sdkConfig.timeoutConfig.secondsTillStartNowUnblocked * 1000;
@@ -259,7 +259,7 @@ export function startMashup(
         */
 
     PCore.getEnvironmentInfo().setLocale(sessionStorage.getItem('rsdk_locale') || 'en_GB');
-    
+
     initialRender(renderObj, setAssignmentPConnect, _AppContextValues);
 
     // PM!! operatorId = PCore.getEnvironmentInfo().getOperatorIdentifier();
@@ -283,16 +283,6 @@ export function startMashup(
         PCore.getRestClient().getHeaderProcessor().registerHeader('deviceid', deviceID);
       });
     }
-
-    // PM!! setLoadingSubmittedClaims(true);
-    // @ts-ignore
-    /* PCore.getDataPageUtils()
-        .getDataAsync('D_ClaimantSubmittedChBCases', 'root', { OperatorId: operatorId })
-        .then(resp => {
-          setSubmittedClaims(resp.data.slice(0, 10));
-        })
-        .finally(() => setLoadingSubmittedClaims(false));
-      fetchInProgressClaimsData(); */
   });
 
   // Initialize the SdkComponentMap (local and pega-provided)
@@ -301,27 +291,6 @@ export function startMashup(
     // eslint-disable-next-line no-console
     console.log(`SdkComponentMap initialized`);
   });
-
-  // @ts-ignore
-  /* const dpagePromise = PCore.getDataPageUtils()
-      .getPageDataAsync('D_ShutterLookup', 'root', {
-        FeatureID: 'highincome',
-        FeatureType: 'highincome'
-      }) as Promise<any>;
-      dpagePromise.then(resp => {
-        const isShuttered = resp.Shuttered;
-        if (isShuttered) {
-          setShutterServicePage(true);
-          // PM!! resetAppDisplay();
-        } else {
-          setShutterServicePage(false);
-          // PM!!  displayUserPortal();
-        }
-      })
-      .catch(err => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }); */
 
   // load the Mashup and handle the onPCoreEntry response that establishes the
   //  top level Pega root element (likely a RootContainer)
@@ -380,10 +349,6 @@ export const useStartMashup = (
       );
     });
 
-    /* document.addEventListener('SdkLoggedOut', () => {
-      window.location.href = 'https://www.gov.uk/government/organisations/hm-revenue-customs';
-    }); */
-
     // Subscriptions can't be done until onPCoreReady.
     //  So we subscribe there. But unsubscribe when this
     //  component is unmounted (in function returned from this effect)
@@ -394,29 +359,15 @@ export const useStartMashup = (
         'cancelAssignment'
       );
     };
-    // PM!!
-    /*
-    return function cleanupSubscriptions() {
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
-        'cancelAssignment'
-      );
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.ASSIGNMENT_OPENED,
-        'continueAssignment'
-      );
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.CASE_OPENED,
-        'continueCase'
-      );
-
-      PCore?.getPubSubUtils().unsubscribe('closeContainer');
-      PCore?.getPubSubUtils().unsubscribe(
-        PCore.getConstants().PUB_SUB_EVENTS.CASE_EVENTS.END_OF_ASSIGNMENT_PROCESSING,
-        'assignmentFinished'
-      );
-    }; */
   }, []);
 
-  return { showPega, setShowPega, showResolutionPage, setShowResolutionPage, caseId, caseStatus, assignmentPConn };
+  return {
+    showPega,
+    setShowPega,
+    showResolutionPage,
+    setShowResolutionPage,
+    caseId,
+    caseStatus,
+    assignmentPConn
+  };
 };
