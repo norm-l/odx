@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
 import NotificationBanner from '../../BaseComponents/NotificationBanner/NotificationBanner';
 import CaseDetails from './CaseDetails';
-import { checkStatus } from '../../helpers/utils';
 import AskHMRC from '../AskHMRC';
 
 export default function Landing(props) {
@@ -22,12 +21,7 @@ export default function Landing(props) {
   const [loadingInProgressCaseDetail, setLoadingInProgressCaseDetail] = useState(true);
 
   function createCase() {
-    PCore.getMashupApi()
-      .createCase(creatCaseEndpoint, PCore.getConstants().APP.APP)
-      // @ts-ignore
-      .then(() => {
-        checkStatus();
-      });
+    PCore.getMashupApi().createCase(creatCaseEndpoint, PCore.getConstants().APP.APP);
   }
 
   // Calls data page to fetch in progress caseDetail,
