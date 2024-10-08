@@ -116,6 +116,14 @@ export default function ClaimsList(props) {
       });
   };
 
+  function handleRemove(e, caseIdForRemoval) {
+    e.preventDefault();
+    thePConn.getActionsApi().openProcessAction('RemoveClaim', {
+      caseID: caseIdForRemoval,
+      type: 'Case'
+    });
+  }
+
   function getClaims() {
     const claimsData = [];
     data.forEach(item => {
@@ -136,6 +144,11 @@ export default function ClaimsList(props) {
             >
               {buttonContent}
             </Button>
+            <div className='govuk-body'>
+              <a className='govuk-link' href='' onClick={e => handleRemove(e, item.pzInsKey)}>
+                Remove Claim
+              </a>
+            </div>
             {item.Claim.ShowPrintSlip && (
               <div className='govuk-body'>
                 <a
