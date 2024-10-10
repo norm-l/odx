@@ -126,6 +126,7 @@
   "CAPITALGAINSTAXDATE": "Mae’n rhaid i’r dyddiad y gwnaethoch werthu rhywbeth yr oedd angen i chi dalu Treth Enillion Cyfalaf arno am y tro cyntaf",
   "UNTAXEDINCOMEDATE": "Mae’n rhaid i’r dyddiad y gwnaethoch ddechrau cael incwm arall",
   "SELFEMPENDDATE" : "The date you stopped working for yourself",
+  "ITRENDDATE": "When did you stop needing to send a tax return",
 
   "WHAT_HAPPENS_NEXT": "Yr hyn sy’n digwydd nesaf",
   "YOU_WILL_GET_A_MESSAGE_TO_CONFIRM": "Os gwnaethech roi manylion cyswllt, byddwch yn cael neges i gadarnhau bod eich cofrestriad wedi dod i law.",
