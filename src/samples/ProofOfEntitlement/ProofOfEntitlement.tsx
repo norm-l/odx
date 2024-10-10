@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { loginIfNecessary, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig, loginIfNecessary, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
 import AppHeader from '../HighIncomeCase/reuseables/AppHeader';
 import AppFooter from '../../components/AppComponents/AppFooter';
 import ReadOnlyDisplay from '../../components/BaseComponents/ReadOnlyDisplay/ReadOnlyDisplay';
@@ -16,6 +16,7 @@ import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
 import LoadingSpinner from '../../components/helpers/LoadingSpinner/LoadingSpinner';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
+import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -25,7 +26,7 @@ export default function ProofOfEntitlement() {
   const [showNoAward, setShowNoAward] = useState(false);
   const [showProblemWithService, setShowProblemWithService] = useState(false);
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
-  // const [b64PDFstring, setB64PDFstring] = useState(false);
+  const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
   const [pageContentReady, setPageContentReady] = useState(false);
 
   const { hmrcURL } = useHMRCExternalLinks();
@@ -64,6 +65,11 @@ export default function ProofOfEntitlement() {
     document.addEventListener('SdkConstellationReady', () => {
       myLoadMashup('pega-root', false);
       PCore.onPCoreReady(() => {
+        getSdkConfig().then(config => {
+          if (config.timeoutConfig.secondsTilLogout) {
+            setmillisecondsTillSignout(config.timeoutConfig.secondsTilLogout * 1000);
+          }
+        });
         PCore.getDataPageUtils()
           .getPageDataAsync('D_GetChBEntitlement', 'root', {
             NINO: PCore.getEnvironmentInfo().getOperatorIdentifier()
@@ -110,6 +116,7 @@ export default function ProofOfEntitlement() {
         isAuthorised
         signoutButtonText={t('SIGN-OUT')}
         staySignedInButtonText={t('STAY_SIGNED_IN')}
+        millisecondsTillSignout={millisecondsTillSignout}
       />
       {(pageContentReady && (
         <div className='govuk-width-container' id='poe-page'>
