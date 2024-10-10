@@ -2,9 +2,21 @@ import React, { useEffect, useCallback, useReducer } from 'react';
 import Modal from '../../BaseComponents/Modal/Modal';
 import Button from '../../BaseComponents/Button/Button';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 
-export default function TimeoutPopup(props) {
+interface TimeoutPopupPropTypes {
+  show: boolean;
+  millisecondsTillSignout?: number;
+  staySignedinHandler: () => void;
+  signoutHandler: () => void;
+  isAuthorised: boolean;
+  staySignedInButtonText: string;
+  signoutButtonText: string;
+  children?: any;
+  isConfirmationPage?: boolean;
+  userTimeoutDelete?: () => void;
+}
+
+export default function TimeoutPopup(props: TimeoutPopupPropTypes) {
   const {
     show,
     millisecondsTillSignout,
@@ -257,15 +269,3 @@ export default function TimeoutPopup(props) {
     </Modal>
   );
 }
-
-TimeoutPopup.propTypes = {
-  show: PropTypes.bool,
-  millisecondsTillSignout: PropTypes.number,
-  staySignedinHandler: PropTypes.func,
-  signoutHandler: PropTypes.func,
-  isAuthorised: PropTypes.bool,
-  staySignedInButtonText: PropTypes.string,
-  signoutButtonText: PropTypes.string,
-  children: PropTypes.any,
-  isConfirmationPage: PropTypes.bool
-};
