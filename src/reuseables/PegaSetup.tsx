@@ -281,7 +281,8 @@ export function startMashup(
     setAssignmentCancelled,
     setContainerClosed
   },
-  _AppContextValues: AppContextValues
+  _AppContextValues: AppContextValues,
+  checkDefaultShutteringEnabled: boolean
 ) {
   // NOTE: When loadMashup is complete, this will be called.
   PCore.onPCoreReady(renderObj => {
@@ -370,7 +371,7 @@ export function startMashup(
         // eslint-disable-next-line no-console
         console.error(err);
       }); */
-  checkShutterService({ setShutterServicePage });
+  if (checkDefaultShutteringEnabled) checkShutterService({ setShutterServicePage });
 
   // load the Mashup and handle the onPCoreEntry response that establishes the
   //  top level Pega root element (likely a RootContainer)
@@ -378,7 +379,10 @@ export function startMashup(
 }
 
 // One time (initialization) subscriptions and related unsubscribe
-export const useStartMashup = (_AppContextValues: AppContextValues) => {
+export const useStartMashup = (
+  _AppContextValues: AppContextValues,
+  checkDefaultShutteringEnabled = true
+) => {
   const [showPega, setShowPega] = useState(false);
   const [showResolutionPage, setShowResolutionPage] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
@@ -405,7 +409,8 @@ export const useStartMashup = (_AppContextValues: AppContextValues) => {
             setAssignmentCancelled,
             setContainerClosed
           },
-          _AppContextValues
+          _AppContextValues,
+          checkDefaultShutteringEnabled
         );
       }
     });

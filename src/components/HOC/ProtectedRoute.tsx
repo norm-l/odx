@@ -50,7 +50,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     });
   }
   return (
-    <Route {...rest} render={(props: React.JSX.IntrinsicAttributes) => <Component {...props} />} />
+    <Route
+      {...rest}
+      render={(props: any) => <Component {...props} journeyName={rest.journeyName} />}
+    />
   );
 };
 

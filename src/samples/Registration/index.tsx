@@ -1,5 +1,5 @@
 // @ts-nocheck - TypeScript type checking to be added soon
-import React, { useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +29,7 @@ import { triggerLogout, checkStatus } from '../../components/helpers/utils';
 import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
 import AlreadyRegisteredUserMessage from './AlreadyRegisteredUserMessage';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
+import { setJourneyName } from '../../components/helpers/journeyRegistry';
 
 declare const myLoadMashup: any;
 /* Time out modal functionality */
@@ -61,7 +62,7 @@ function staySignedIn(setShowTimeoutModal, setIsLogout, refreshSignin = true) {
 }
 /* ******************************* */
 
-export default function Registration() {
+const Registration: FunctionComponent<any> = ({ journeyName }) => {
   const [pConn, setPConn] = useState<any>(null);
   const [bShowPega, setShowPega] = useState(false);
   const [showUserPortal, setShowUserPortal] = useState(false);
@@ -125,6 +126,8 @@ export default function Registration() {
 
   const serviceName = t('REGISTER_FOR_SELF_ASSESSMENT');
   registerServiceName(serviceName);
+  setJourneyName(journeyName);
+
   useEffect(() => {
     setPageTitle();
   }, [showUserPortal, bShowPega, bShowResolutionScreen, serviceName]);
@@ -557,7 +560,7 @@ export default function Registration() {
       <TimeoutPopup
         show={showTimeoutModal}
         staySignedinHandler={() => staySignedIn(setShowTimeoutModal, setIsLogout)}
-        signoutHandler={(e) => {
+        signoutHandler={e => {
           e.preventDefault();
           triggerLogout(setIsLogout);
         }}
@@ -589,4 +592,6 @@ export default function Registration() {
       <AppFooter />
     </>
   );
-}
+};
+
+export default Registration;
