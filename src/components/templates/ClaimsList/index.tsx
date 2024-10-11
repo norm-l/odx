@@ -9,7 +9,16 @@ import WarningText from '../../BaseComponents/WarningText/WarningText';
 declare const PCore: any;
 
 export default function ClaimsList(props) {
-  const { thePConn, data, title, rowClickAction, buttonContent, caseId, checkShuttered } = props;
+  const {
+    thePConn,
+    data,
+    title,
+    rowClickAction,
+    buttonContent,
+    caseId,
+    checkShuttered,
+    showRemoveOption
+  } = props;
   const { t } = useTranslation();
   const docIDForReturnSlip = 'CR0002';
   const locale = PCore.getEnvironmentInfo().locale.replaceAll('-', '_');
@@ -116,12 +125,26 @@ export default function ClaimsList(props) {
       });
   };
 
-  function handleRemove(e, caseIdForRemoval) {
+  // function handleRemoveProcess(e, caseIdForRemoval) {
+  //   e.preventDefault();
+  //   thePConn.getActionsApi().openProcessAction('RemoveClaim', {
+  //     caseID: caseIdForRemoval,
+  //     type: 'Case'
+  //   });
+  // }
+
+  function handleRemove(e, row: any) {
+    const { pzInsKey } = row;
+
+    const container = thePConn.getContainerName();
+    const target = `${PCore.getConstants().APP.APP}/${container}`;
+
     e.preventDefault();
-    thePConn.getActionsApi().openProcessAction('RemoveClaim', {
-      caseID: caseIdForRemoval,
-      type: 'Case'
-    });
+    PCore.getMashupApi()
+      .openCase(pzInsKey, target, { pageName: 'RemoveClaim' })
+      .then(() => {
+        scrollToTop();
+      });
   }
 
   function getClaims() {
@@ -144,11 +167,24 @@ export default function ClaimsList(props) {
             >
               {buttonContent}
             </Button>
-            <div className='govuk-body'>
-              <a className='govuk-link' href='' onClick={e => handleRemove(e, item.pzInsKey)}>
-                Remove Claim
-              </a>
-            </div>
+            {showRemoveOption && (
+              <>
+                {/* <div className='govuk-body'>
+                  <a
+                    className='govuk-link'
+                    href=''
+                    onClick={e => handleRemoveProcess(e, item.pzInsKey)}
+                  >
+                    Remove Claim
+                  </a>
+                </div> */}
+                <div className='govuk-body'>
+                  <a className='govuk-link' href='' onClick={e => handleRemove(e, item)}>
+                    Remove Claim
+                  </a>
+                </div>
+              </>
+            )}
             {item.Claim.ShowPrintSlip && (
               <div className='govuk-body'>
                 <a
@@ -264,6 +300,7 @@ export default function ClaimsList(props) {
           </dl>
 
           {claimItem.actionButton}
+          {claimItem.removeClaim}
           <hr
             className='govuk-section-break govuk-section-break--xl govuk-section-break--visible'
             aria-hidden='true'
@@ -278,6 +315,6 @@ ClaimsList.propTypes = {
   thePConn: PropTypes.object,
   data: PropTypes.array,
   title: PropTypes.string,
-  rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment']),
+  rowClickAction: PropTypes.oneOf(['OpenCase', 'OpenAssignment', 'RemoveClaim']),
   buttonContent: PropTypes.string
 };
