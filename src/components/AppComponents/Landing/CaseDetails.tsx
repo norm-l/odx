@@ -39,7 +39,10 @@ export default function CaseDetails(props) {
   async function _rowClick(row: any) {
     const { pyAssignmentID } = row;
 
-    const container = thePConn.getContainerName();
+    // const container = thePConn.getContainerName();
+    const container = 'primary';
+    // Todo: Pega constellation is expecting primary case only.
+    // Research is in progress to keep it dynamic
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
     if (rowClickAction === 'OpenAssignment') {
