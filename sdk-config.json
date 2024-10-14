@@ -47,5 +47,6 @@
   "timeoutConfig": {
     "secondsTilWarning": 780,
     "secondsTilLogout": 115
-  }
+  },
+  "showResolutionStatuses": ["Pending-ManualReview", "Pending-CurrentYearCaseReview"]
 }

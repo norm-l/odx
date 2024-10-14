@@ -1,4 +1,6 @@
 import { getSdkConfig, logout } from '@pega/auth/lib/sdk-auth-manager';
+import apiConfig from './constants';
+import { getJourneyName } from './journeyRegistry';
 
 export const scrollToTop = () => {
   const position = document.getElementById('#main-content')?.offsetTop || 0;
@@ -32,7 +34,9 @@ export const getServiceShutteredStatus = async (): Promise<boolean> => {
     const urlConfig = new URL(
       `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/data_views/D_ShutterLookup`
     ).href;
-    const featureID = 'SA';
+
+    const featureID = apiConfig[getJourneyName()].shuttering.featureID;
+
     const featureType = 'Service';
 
     const parameters = new URLSearchParams(
