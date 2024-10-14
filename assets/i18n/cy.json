@@ -10,6 +10,7 @@
   "DATE_CREATED": "Dyddiad a grëwyd",
 
   "YOU_ARE_ABOUT_TO_SIGNOUT": "Rydych ar fin allgofnodi",
+  "YOURE_ABOUT_TO_BE_SIGNED_OUT": "Rydych ar fin cael eich allgofnodi",
   "YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS": "Mae angen i chi gadw eich cynnydd o hyd. Os byddwch yn allgofnodi heb ei gadw, byddwch yn colli’ch cynnydd.",
   "TO_SAVE_YOUR_PROGRESS": "I gadw eich cynnydd, dewiswch y cysylltiad ‘Cadw a dod yn ôl yn nes ymlaen’.",
   "SIGN-OUT": "Allgofnodi",
@@ -86,6 +87,9 @@
   "YOU_ARE_ABOUT_TO_SIGN_OUT": "Rydych ar fin allgofnodi",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "Er eich diogelwch, byddwn yn eich allgofnodi cyn pen",
   "2_MINUTES": "2 o funudau",
+  "1_MINUTE": "1 o funudau",
+  "SECONDS": "o eiliadau",
+  "SECOND": "o eiliadau",
   "FOR_YOUR_SECURITY": "Er eich diogelwch",
   "WE_WILL_DELETE_YOUR_REGISTRATION": "Byddwn yn dileu eich Hunanasesiad",
   "DELETE_YOUR_REGISTRATION": "Dileu eich Hunanasesiad",
