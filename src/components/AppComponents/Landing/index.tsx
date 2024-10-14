@@ -15,7 +15,7 @@ export default function Landing(props) {
     buttonContent,
     title,
     bannerContent,
-    handleCaseContinue,
+    handleCaseStart,
     caseListApiParams,
     setShutterServicePage
   } = props;
@@ -24,6 +24,7 @@ export default function Landing(props) {
 
   function createCase() {
     PCore.getMashupApi().createCase(creatCaseEndpoint, PCore.getConstants().APP.APP);
+    handleCaseStart();
   }
 
   // Calls data page to fetch in progress caseDetail,
@@ -91,7 +92,7 @@ export default function Landing(props) {
                         rowClickAction='OpenAssignment'
                         buttonContent={buttonContent}
                         title={title}
-                        handleCaseContinue={handleCaseContinue}
+                        handleCaseStart={handleCaseStart}
                       />
                       <AskHMRC />
                     </>

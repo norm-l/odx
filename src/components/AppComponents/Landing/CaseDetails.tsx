@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 declare const PCore: any;
 
 export default function CaseDetails(props) {
-  const { thePConn, data, rowClickAction, buttonContent, title, handleCaseContinue } = props;
+  const { thePConn, data, rowClickAction, buttonContent, title, handleCaseStart } = props;
   const { t } = useTranslation();
   const [caseDetail, setCaseDetail] = useState([]);
 
@@ -52,7 +52,7 @@ export default function CaseDetails(props) {
         .openAssignment(pyAssignmentID, target, openAssignmentOptions)
         .then(() => {
           scrollToTop();
-          handleCaseContinue();
+          handleCaseStart();
         })
         .catch((err: Error) => console.log('Error : ', err)); // eslint-disable-line no-console
     }
@@ -124,5 +124,5 @@ CaseDetails.propTypes = {
   rowClickAction: PropTypes.oneOf(['OpenAssignment']),
   buttonContent: PropTypes.string,
   title: PropTypes.string,
-  handleCaseContinue: PropTypes.func
+  handleCaseStart: PropTypes.func
 };
