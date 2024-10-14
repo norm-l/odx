@@ -120,8 +120,9 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
     );
   };
 
-  const handleCaseContinue = () => {
+  const handleCaseStart = () => {
     setShowLandingPage(false);
+    setShowPega(true);
   };
 
   function closeContainer() {
@@ -408,7 +409,7 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
                   buttonContent={t('CONTINUE_YOUR_REQUEST')}
                   title={t('YOUR_REQUEST')}
                   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
-                  handleCaseContinue={handleCaseContinue}
+                  handleCaseStart={handleCaseStart}
                   caseListApiParams={caseListApiParams}
                   setShutterServicePage={setShutterServicePage}
                 ></Landing>
