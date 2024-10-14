@@ -8,10 +8,6 @@
     "../src/components/helpers/formatters/ParsedHtml.tsx",
     "../src/components/helpers/hooks/QuestionDisplayHooks.ts",
     "../src/components/helpers/HMRCAppContext.tsx"
-    // "../src/components/override-sdk/**/**/*.ts",
-    // "../src/components/override-sdk/**/**/*.tsx",
-    // "../src/components/override-sdk/**/**/*.js",
-    // "../src/components/override-sdk/**/**/*.jsx"
   ],
   "exclude": [
     "node_modules",

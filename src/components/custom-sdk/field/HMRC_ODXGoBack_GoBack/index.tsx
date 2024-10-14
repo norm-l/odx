@@ -40,42 +40,6 @@ export default function HmrcOdxGoBackGoBack(props: HmrcOdxGoBackGoBackProps) {
     handleEvent(actionsApi, 'changeNblur', propName, isChecked.toString());
   };
 
-  // const activeWorkarea =
-  //   PCore.getContainerUtils().getActiveContainerItemName(`app/primary_1/workarea`);
-
-  // const AssignmentID = PCore.getStoreValue('.assignments[0].ID', '.caseInfo', activeWorkarea);
-
-  // let MyGoBack;
-
-  // PCore.getRestClient()
-  //   .invokeRestApi(
-  //     'openAssignment',
-  //     {
-  //       queryPayload: {
-  //         assignmentID: AssignmentID
-  //       },
-  //       body: null,
-  //       cancelTokenSource: null,
-  //       headers: {}
-  //     },
-  //     activeWorkarea
-  //   )
-  //   .then(data => {
-  //     MyGoBack = data.data.uiResources.resources.fields.GoBack;
-  //     console.log(MyGoBack);
-
-  //     // Remove the back link if MyGoBack has a value
-  //     if (!MyGoBack) {
-  //       const existingBackLink = document.getElementById('dynamic-back-link');
-  //       if (existingBackLink) {
-  //         existingBackLink.remove();
-  //       }
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-
   useEffect(() => {
     const assignmentDiv = document.getElementById('Assignment');
     const mainContent = document.getElementById('main-content');
@@ -89,7 +53,6 @@ export default function HmrcOdxGoBackGoBack(props: HmrcOdxGoBackGoBackProps) {
       backLink.className = 'govuk-back-link';
       backLink.innerText = t('BACK');
       backLink.id = 'dynamic-back-link';
-      // backLink.tabIndex = -1; // Set tabIndex here
 
       backLink.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();

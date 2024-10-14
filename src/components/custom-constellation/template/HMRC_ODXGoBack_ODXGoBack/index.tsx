@@ -22,8 +22,6 @@ function HmrcOdxGoBackOdxGoBack(props: HmrcOdxGoBackOdxGoBackProps) {
 
   const nCols = parseInt(NumCols, 10);
 
-  // console.log(`Rendering ${getPConnect()?.getComponentName()} with ${template} with ${children?.length} Region(s)`);
-
   return (
     <StyledHmrcOdxGoBackOdxGoBackWrapper>
     <FieldGroup name={propsToUse.showLabel ? propsToUse.label : ''}>
