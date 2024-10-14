@@ -21,8 +21,9 @@ import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServi
 import { useStartMashup } from '../../reuseables/PegaSetup';
 import Landing from '../../components/AppComponents/Landing';
 import AppContext from '../../reuseables/AppContext';
+import { setJourneyName } from '../../components/helpers/journeyRegistry';
 
-const Cessation: FunctionComponent<any> = () => {
+const Cessation: FunctionComponent<any> = ({ journeyName }) => {
   const { t } = useTranslation();
 
   const serviceParam = 'claim-child-benefit';
@@ -56,10 +57,13 @@ const Cessation: FunctionComponent<any> = () => {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [pConnect, setPconnect] = useState(null);
   const [isLogout, setIsLogout] = useState(false);
+  const [shutterServicePage, setShutterServicePage] = useState(false);
 
   const { hmrcURL } = useHMRCExternalLinks();
+  const checkDefaultShutteringEnabled = false;
 
   registerServiceName(t('LEAVE_SELF_ASSESSMENT'));
+  setJourneyName(journeyName);
 
   useEffect(() => {
     initTimeout(setShowTimeoutModal, false, true, false);
@@ -69,20 +73,21 @@ const Cessation: FunctionComponent<any> = () => {
     showPega,
     setShowPega,
     showResolutionPage,
-    // setShutterServicePage,
     caseId,
-    shutterServicePage,
     serviceNotAvailable,
     assignmentPConnect,
     assignmentCancelled,
     setAssignmentCancelled,
     containerClosed
-  } = useStartMashup({
-    appBacklinkProps: {},
-    serviceParam,
-    serviceName: serviceNameAndHeader,
-    appNameHeader: serviceNameAndHeader
-  });
+  } = useStartMashup(
+    {
+      appBacklinkProps: {},
+      serviceParam,
+      serviceName: serviceNameAndHeader,
+      appNameHeader: serviceNameAndHeader
+    },
+    checkDefaultShutteringEnabled
+  );
 
   useEffect(() => {
     if (assignmentPConnect) {
@@ -174,7 +179,7 @@ const Cessation: FunctionComponent<any> = () => {
   useEffect(() => {
     if (shutterServicePage) {
       setCurrentDisplay('shutterpage');
-    } else if (showLandingPage && pCoreReady && !showResolutionPage) {
+    } else if (showLandingPage && pCoreReady && !showResolutionPage && !shutterServicePage) {
       setCurrentDisplay('landingpage');
     } else if (showPega) {
       setCurrentDisplay('pegapage');
@@ -406,6 +411,7 @@ const Cessation: FunctionComponent<any> = () => {
                   bannerContent={t('CES_PORTAL_NOTIFICATION_BANNER_CONTENT')}
                   handleCaseStart={handleCaseStart}
                   caseListApiParams={caseListApiParams}
+                  setShutterServicePage={setShutterServicePage}
                 ></Landing>
               )}
               {currentDisplay === 'resolutionpage' && (

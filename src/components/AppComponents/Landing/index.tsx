@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import setPageTitle from '../../helpers/setPageTitleHelpers';
 import NotificationBanner from '../../BaseComponents/NotificationBanner/NotificationBanner';
 import CaseDetails from './CaseDetails';
+import { getServiceShutteredStatus } from '../../helpers/utils';
 import AskHMRC from '../AskHMRC';
 
 export default function Landing(props) {
@@ -15,7 +16,8 @@ export default function Landing(props) {
     title,
     bannerContent,
     handleCaseStart,
-    caseListApiParams
+    caseListApiParams,
+    setShutterServicePage
   } = props;
   const [inprogressCaseDetail, setInprogressCaseDetail] = useState([]);
   const [loadingInProgressCaseDetail, setLoadingInProgressCaseDetail] = useState(true);
@@ -50,9 +52,21 @@ export default function Landing(props) {
     sessionStorage.setItem('assignmentFinishedFlag', 'false');
   }
 
+  async function checkShutterService() {
+    try {
+      const status = await getServiceShutteredStatus();
+      if (!status) fetchInProgressCaseDetailData();
+      setShutterServicePage(status);
+    } catch (error) {
+      setShutterServicePage(false);
+      // Handle error appropriately, e.g., log it or show a notification
+      console.error('Error setting shutter status:', error); // eslint-disable-line
+    }
+  }
+
   useEffect(() => {
     setPageTitle();
-    fetchInProgressCaseDetailData();
+    checkShutterService();
   }, [showPortalBanner]);
 
   return (

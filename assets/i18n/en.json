@@ -126,6 +126,7 @@
   "CAPITALGAINSTAXDATE": "When you first sold something you needed to pay Capital Gains Tax on",
   "UNTAXEDINCOMEDATE": "When you started getting other income",
   "SELFEMPENDDATE" : "The date you stopped working for yourself",
+  "ITRENDDATE": "When did you stop needing to send a tax return",
 
   "WHAT_HAPPENS_NEXT": "What happens next",
   "YOU_WILL_GET_A_MESSAGE_TO_CONFIRM": "You’ll get a message to confirm that we’ve received your registration, if you provided contact details.",

@@ -40,49 +40,54 @@ const AppSelector = () => {
     <Switch>
       <Route exact path='/' render={() => <Redirect to='/registration' />} />
       {/* Private Routes */}
-      <ProtectedRoute exact path='/registration' component={Registration} />
-      <ProtectedRoute exact path='/cessation' component={Cessation} />
+      <ProtectedRoute
+        exact
+        path='/registration'
+        journeyName='registration'
+        component={Registration}
+      />
+      <ProtectedRoute exact path='/cessation' journeyName='cessation' component={Cessation} />
       {/* Public Routes */}
       <Route
         exact
         path='/registration-cookies'
-          render={() => {
-            return (<AppWrapper baseurl='registration' >
+        render={() => {
+          return (
+            <AppWrapper baseurl='registration'>
               <CookiePage />
-            </AppWrapper>)
-          }}
-
+            </AppWrapper>
+          );
+        }}
       />
       <Route
         exact
         path='/registration-accessibility'
-          render={() => (
-            <AppWrapper baseurl='registration'>
-              <Accessibility />
-            </AppWrapper>
-          )}
+        render={() => (
+          <AppWrapper baseurl='registration'>
+            <Accessibility />
+          </AppWrapper>
+        )}
       />
       <Route
         exact
         path='/cessation-cookies'
-          render={() => {
-            return (<AppWrapper baseurl='cessation'>
+        render={() => {
+          return (
+            <AppWrapper baseurl='cessation'>
               <CookiePage />
-            </AppWrapper>)
-          }}
-
+            </AppWrapper>
+          );
+        }}
       />
       <Route
         exact
         path='/cessation-accessibility'
-          render={() => (
-            <AppWrapper baseurl='cessation'>
-              <Accessibility />
-            </AppWrapper>
-          )}
+        render={() => (
+          <AppWrapper baseurl='cessation'>
+            <Accessibility />
+          </AppWrapper>
+        )}
       />
-
-      
     </Switch>
   );
 };
