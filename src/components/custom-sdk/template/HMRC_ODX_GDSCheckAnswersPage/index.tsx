@@ -6,6 +6,7 @@ import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
 
+
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
   NumCols?: string;
@@ -125,58 +126,36 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
       dfChildrenContainerRef.current.appendChild(fragment);
     }
   }
-  let hasAutocompleteLoaded = window.sessionStorage.getItem('hasAutocompleteLoaded');
 
-  const checkChildren = () => {
-    const container = dfChildrenContainerRef.current;
-    const summaryListElement = container?.querySelector('.govuk-summary-list');
-
-    if (summaryListElement) {
-      let htmlContent = '';
-      Array.from(container.children).forEach(child => {
-        if (child instanceof HTMLElement) {
-          if (child.tagName === 'H2' || child.tagName === 'H3') {
-            htmlContent += child.outerHTML;
-          } else {
-            htmlContent += child.innerHTML;
-          }
-        }
-      });
-
-      updateHTML(htmlContent);
-    } else {
-      // Retry until a child with the class "govuk-summary-list" is rendered
-      requestAnimationFrame(checkChildren);
-    }
-  };
-
-  function CYARendering() {
-    if (dfChildrenContainerRef.current) {
-       hasAutocompleteLoaded = window.sessionStorage.getItem('hasAutocompleteLoaded');
-      if (hasAutocompleteLoaded === 'true') {
-        window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
-        PCore.getPubSubUtils().subscribe(
-          'rerenderCYA',
-          () => {
-            window.sessionStorage.setItem('hasAutocompleteLoaded', 'false');
-            checkChildren();
-            PCore?.getPubSubUtils().unsubscribe('rerenderCYA', '');
-          },
-          'rerenderCYA'
-        );
-      } else {
-        setTimeout(() => {
-          checkChildren();
-        }, 2000);
-      }
-    }
-  }
   useEffect(() => {
-    CYARendering();
+    if (dfChildrenContainerRef.current) {
+      const checkChildren = () => {
+        const container = dfChildrenContainerRef.current;
+        const summaryListElement = container?.querySelector('.govuk-summary-list');
 
-    setTimeout(() => {
-      checkChildren();
-    }, 2000);
+        if (summaryListElement) {
+          let htmlContent = '';
+          Array.from(container.children).forEach(child => {
+            if (child instanceof HTMLElement) {
+              // if (child.tagName === 'H2' || child.tagName === 'H3') {
+                // htmlContent += child.outerHTML;
+              // // } else {
+                htmlContent += child.innerHTML;
+              // }
+            }
+          });
+
+          updateHTML(htmlContent);
+        } else {
+          // Retry until a child with the class "govuk-summary-list" is rendered
+          requestAnimationFrame(checkChildren);
+        }
+      };
+      // Added timeout to fix rendering issue, will remove this once enhancement story related to autocomplete value implemented
+      setTimeout(() => {
+        checkChildren();
+      }, 500);
+    }
   }, [dfChildren]);
 
   return (

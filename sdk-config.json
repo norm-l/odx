@@ -33,44 +33,6 @@
       "pyCaseManager7"
     ]
   },
-  "dxcbConfig": {
-    "publishAccess": {
-      "rulesetName": "DX-CustomComponents_Branch_IanDX",
-      "rulesetVersion": "01-01-01",
-      "sourceOfComponents": "Server",
-      "devBuild": false,
-      "clientId": "12782580023870311851",
-      "clientSecret_comment": "Needed only when using 'passwordCreds' or 'clientCreds' grantType",
-      "clientSecret": "245FD48917E0CFDA20BA08337A0410A5",
-      "grantType_comment": "Preferred is 'authCode' as it works for public registrations (no clientSecret)",
-      "grantType": "passwordCreds",
-      "redirectUri": "https://localhost:4010/",
-      "cert_and_key_comment": "Path to SSL certificate file and SSL key file to use when starting local HTTPS server",
-      "cert_and_key_comment2": "Needed only when using 'authCode' grantType and redirectUri begins with 'https://localhost'",
-      "cert": "./keys/sdk-r.crt",
-      "key": "./keys/sdk-r.key",
-      "user_and_password_comment": "Useful primarily when using 'passwordCreds' grantType",
-      "user": "ian@DXComponents",
-      "password": "W1tchK!ngOfAngmar"
-    },
-
-    "componentDefaults": {
-      "organization": "HMRC",
-      "library": "ODX",
-      "version": "0.0.1",
-      "type": "",
-      "subtype": "",
-      "description": "",
-      "icon": "",
-      "lintAction": "show"
-    },
-
-    "componentTemplates": {
-      "componentTemplates_comment": "Optional paths for location of custom or override templates.",
-      "customTemplatesPath": "",
-      "overrideTemplatesPath": ""
-    }
-  },
   "applicationConfig": {
     "cessation": {
       "serviceName": "LEAVE_SELF_ASSESSMENT"
