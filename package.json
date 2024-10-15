@@ -78,6 +78,7 @@
     "material-ui-phone-number": "^2.2.6",
     "react": "^16.14.0",
     "react-datepicker": "^4.8.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^16.13.1",
     "react-i18next": "^13.2.2",
     "react-redux": "^7.2.4",
