@@ -137,11 +137,11 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           let htmlContent = '';
           Array.from(container.children).forEach(child => {
             if (child instanceof HTMLElement) {
-              // if (child.tagName === 'H2' || child.tagName === 'H3') {
-                // htmlContent += child.outerHTML;
-              // // } else {
+              if (child.tagName === 'H2' || child.tagName === 'H3') {
+                htmlContent += child.outerHTML;
+              } else {
                 htmlContent += child.innerHTML;
-              // }
+              }
             }
           });
 
