@@ -125,14 +125,6 @@ export default function ClaimsList(props) {
       });
   };
 
-  // function handleRemoveProcess(e, caseIdForRemoval) {
-  //   e.preventDefault();
-  //   thePConn.getActionsApi().openProcessAction('RemoveClaim', {
-  //     caseID: caseIdForRemoval,
-  //     type: 'Case'
-  //   });
-  // }
-
   function handleRemove(e, row: any) {
     const { pzInsKey } = row;
 
@@ -169,15 +161,6 @@ export default function ClaimsList(props) {
             </Button>
             {showRemoveOption && (
               <>
-                {/* <div className='govuk-body'>
-                  <a
-                    className='govuk-link'
-                    href=''
-                    onClick={e => handleRemoveProcess(e, item.pzInsKey)}
-                  >
-                    Remove Claim
-                  </a>
-                </div> */}
                 <div className='govuk-body'>
                   <a className='govuk-link' href='' onClick={e => handleRemove(e, item)}>
                     Remove Claim

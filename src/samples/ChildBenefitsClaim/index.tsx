@@ -34,6 +34,7 @@ import toggleNotificationProcess from '../../components/helpers/toggleNotificati
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
 import Button from '../../components/BaseComponents/Button/Button';
+import RemoveClaim from '../../components/AppComponents/RemoveClaim';
 
 declare const myLoadMashup: any;
 
@@ -79,6 +80,7 @@ export default function ChildBenefitsClaim() {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [isCreateCaseBlocked, setIsCreateCaseBlocked] = useState(false);
+  const [viewName, setViewName] = useState('');
 
   const history = useHistory();
 
@@ -629,32 +631,6 @@ export default function ChildBenefitsClaim() {
     setShutterServicePage(status);
   };
 
-  function handleRemoveProcess() {
-    const url = 'https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2';
-    const container = PCore.getContainerUtils().getActiveContainerItemName('app/primary');
-
-    const processUrl = PCore.getStoreValue(
-      '.href',
-      'caseInfo.availableProcesses[0].links.add',
-      container
-    );
-
-    const { invokeCustomRestApi } = PCore.getRestClient();
-    invokeCustomRestApi(`${url}${processUrl}`, {
-      method: 'POST',
-      body: {},
-      headers: {}
-    })
-      .then(() => {
-        console.log('Removed Case Successfully');
-        window.location.reload();
-      })
-      .catch(error => {
-        // handle the error
-        console.log(error);
-      });
-  }
-
   const renderContent = () => {
     return shutterServicePage ? (
       <ShutterServicePage />
@@ -701,11 +677,7 @@ export default function ChildBenefitsClaim() {
             )}
           </UserPortal>
         )}
-        <div className='govuk-button-group govuk-!-padding-top-4'>
-          <Button type='button' onClick={() => handleRemoveProcess()}>
-            Remove Claim
-          </Button>
-        </div>
+        <RemoveClaim />
       </>
     );
   };
