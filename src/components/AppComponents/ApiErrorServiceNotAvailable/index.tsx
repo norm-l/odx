@@ -13,19 +13,21 @@ export default function ApiServiceNotAvailable() {
   return (
     <MainWrapper showPageNotWorkingLink={false}>
       <h1 className='govuk-heading-l'>{t('SORRY_SERVICE_NOT_AVAILABLE')}</h1>
-      <p>{t('YOU_WILL_USE_SERVICE_LATER')}</p>
-      <p>
-        {t('FIND_OUT_HOW_TO')}
-        <a
-          target='_blank'
-          rel='noreferrer noopener'
-          href='https://www.gov.uk/government/organisations/hm-revenue-customs/contact/self-assessment'
-          className='govuk-link'
-        >
-          {t('CONTACT_HRMC_ABOUT_SA')}
-        </a>
-        {t('IF_STILL_NEED_TO_SPEAK')}
-      </p>
+      <div className='govuk-body'>
+        <p>{t('YOU_WILL_USE_SERVICE_LATER')}</p>
+        <p>
+          {t('FIND_OUT_HOW_TO')}
+          <a
+            target='_blank'
+            rel='noreferrer noopener'
+            href='https://www.gov.uk/government/organisations/hm-revenue-customs/contact/self-assessment'
+            className='govuk-link'
+          >
+            {t('CONTACT_HRMC_ABOUT_SA')}
+          </a>
+          {t('IF_STILL_NEED_TO_SPEAK')}
+        </p>
+      </div>
       <AskHMRC />
     </MainWrapper>
   );

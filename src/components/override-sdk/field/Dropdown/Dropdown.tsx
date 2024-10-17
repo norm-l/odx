@@ -97,6 +97,7 @@ export default function Dropdown(props) {
         )}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
         getPConnect={getPConnect}
         required={false}
         disabled={false}

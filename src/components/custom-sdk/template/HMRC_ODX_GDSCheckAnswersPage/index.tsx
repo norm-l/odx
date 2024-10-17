@@ -6,6 +6,7 @@ import './DefaultForm.css';
 
 import StyledHmrcOdxGdsCheckAnswersPageWrapper from './styles';
 
+
 interface HmrcOdxGdsCheckAnswersPageProps extends PConnProps {
   // If any, enter additional props that only exist on this componentName
   NumCols?: string;
@@ -48,33 +49,17 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
   // Create a ref to the mainer rendering container
   const dfChildrenContainerRef = useRef(null);
 
-  // function getSummaryListRows(htmlString) {
-  //   const parser = new DOMParser();
-  //   const doc = parser.parseFromString(htmlString, 'text/html');
-  //   const summaryListRows = doc.querySelectorAll('div.govuk-summary-list__row, h2');
-  //   return Array.from(summaryListRows);
-  // }
-
   const pConn = getPConnect();
-  const actions = pConn.getActionsApi();
+  // const actions = pConn.getActionsApi();
   const containerItemID = pConn.getContextName();
 
   function navigateToStep(event, stepId) {
     event.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log('navigation', stepId);
-    const navigateToStepPromise = actions.navigateToStep(stepId, containerItemID);
+    const initialValue = '';
+    const isImplicit = false;
+    getPConnect().setValue('.NextStep', stepId, initialValue, isImplicit);
+    getPConnect().getActionsApi().finishAssignment(containerItemID);
 
-    navigateToStepPromise
-      .then(() => {
-        //  navigate to step success handling
-        console.log('navigation successful'); // eslint-disable-line
-      })
-      .catch(error => {
-        // navigate to step failure handling
-        // eslint-disable-next-line no-console
-        console.log('Change link Navigation failed', error);
-      });
   }
 
   function updateHTML(htmlContent) {
@@ -99,12 +84,14 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
         const isCsV = (elem.children[1] as HTMLElement).dataset.isCsv;
         if (isCsV === 'true') {
           const csvItems = (elem as HTMLElement).children[1].textContent.split(',');
-          (elem as HTMLElement).children[1].innerHTML = '';
-          csvItems.forEach(item => {
-            const textNode = document.createTextNode(item.trim());
-            (elem as HTMLElement).children[1].appendChild(textNode);
-            (elem as HTMLElement).children[1].appendChild(document.createElement('br'));
-          });
+          if (csvItems.length > 1) {
+            (elem as HTMLElement).children[1].innerHTML = '';
+            csvItems.forEach(item => {
+              const textNode = document.createTextNode(item.trim());
+              (elem as HTMLElement).children[1].appendChild(textNode);
+              (elem as HTMLElement).children[1].appendChild(document.createElement('br'));
+            });
+          }
         }
         if (!openDL) {
           openDL = true;
@@ -150,7 +137,11 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           let htmlContent = '';
           Array.from(container.children).forEach(child => {
             if (child instanceof HTMLElement) {
-              htmlContent += child.innerHTML;
+              if (child.tagName === 'H2' || child.tagName === 'H3') {
+                htmlContent += child.outerHTML;
+              } else {
+                htmlContent += child.innerHTML;
+              }
             }
           });
 
@@ -160,8 +151,10 @@ export default function HmrcOdxGdsCheckAnswersPage(props: HmrcOdxGdsCheckAnswers
           requestAnimationFrame(checkChildren);
         }
       };
-
-      checkChildren();
+      // Added timeout to fix rendering issue, will remove this once enhancement story related to autocomplete value implemented
+      setTimeout(() => {
+        checkChildren();
+      }, 500);
     }
   }, [dfChildren]);
 
