@@ -6,6 +6,7 @@ import i18n from 'i18next';
 import Registration from '../Registration/index';
 import CookiePage from '../Registration/cookiePage/index';
 import Accessibility from '../Registration/AccessibilityPage';
+import AccessibilityCessation from '../Cessation/AccessibilityPage';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ProtectedRoute from '../../components/HOC/ProtectedRoute';
 import Cessation from '../Cessation';
@@ -84,7 +85,7 @@ const AppSelector = () => {
         path='/cessation-accessibility'
         render={() => (
           <AppWrapper baseurl='cessation'>
-            <Accessibility />
+            <AccessibilityCessation />
           </AppWrapper>
         )}
       />
