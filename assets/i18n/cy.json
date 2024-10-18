@@ -129,7 +129,7 @@
   "HIBCDATE": "Mae’n rhaid i’r dyddiad y daethoch yn agored i’r Tâl Treth Budd-dal Plant Incwm Uchel",
   "CAPITALGAINSTAXDATE": "Mae’n rhaid i’r dyddiad y gwnaethoch werthu rhywbeth yr oedd angen i chi dalu Treth Enillion Cyfalaf arno am y tro cyntaf",
   "UNTAXEDINCOMEDATE": "Mae’n rhaid i’r dyddiad y gwnaethoch ddechrau cael incwm arall",
-  "SELFEMPENDDATE" : "The date you stopped working for yourself",
+  "SELFEMPENDDATE": "The date you stopped working for yourself",
   "ITRENDDATE": "When did you stop needing to send a tax return",
 
   "WHAT_HAPPENS_NEXT": "Yr hyn sy’n digwydd nesaf",
@@ -156,10 +156,12 @@
   "USE_THIS_FORM_TO_CLAIM_CONTD": "addysg neu hyfforddiant cymeradwy",
 
   "ACCESSIBLITY_STATEMENT_FOR_CHB_SERVICE": " Datganiad hygyrchedd ar gyfer y gwasanaeth Hawlio Budd-dal Plant",
+  "ACCESSIBLITY_STATEMENT_FOR_CES_SERVICE": "Accessibility statement for Leave Self Assessment service",
   "THIS_AS_EXPLAINS_HOW": "Mae’r datganiad hygyrchedd hwn yn esbonio pa mor hygyrch yw’r gwasanaeth, beth i’w wneud os cewch anhawster wrth ei ddefnyddio, a sut i roi gwybod am broblemau hygyrchedd gyda’r gwasanaeth.",
   "THIS_SERVICE_IS_A_PART_GOVUK_WEBSITE": "Mae’r gwasanaeth hwn yn rhan o wefan ehangach GOV.UK. Mae ",
   "SEPARATE_AS_FOR_MAIN_GOVUK_WEBSITE": "datganiad hygyrchedd ar wahân ar gyfer prif wefan GOV.UK",
   "THIS_PAGE_CONTAINS_INFO_ABOUT_CHB_SERVICE": "Mae’r dudalen hon yn cynnwys gwybodaeth am y gwasanaeth Hawlio Budd-dal Plant, sydd ar gael yn ",
+  "THIS_PAGE_CONTAINS_INFO_ABOUT_CES_SERVICE": "This accessibility statement only contains information about the Leave Self Assessment service, available at ",
   "USING_THIS_SERVICE": "Defnyddio’r gwasanaeth hwn",
   "THIS_IS_RUN_BY_HMRC": "Darperir y gwasanaeth hwn gan Gyllid a Thollau EF (CThEF). Rydym am i gymaint o bobl â phosibl allu defnyddio’r gwasanaeth hwn. Mae hyn yn golygu y dylech allu:",
   "ACCESSIBILITY_LIST_1_0": "newid lliwiau, lefelau cyferbynnedd a ffontiau",

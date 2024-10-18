@@ -129,7 +129,7 @@
   "HIBCDATE": "When you became liable for the High Income Child Benefit Charge",
   "CAPITALGAINSTAXDATE": "When you first sold something you needed to pay Capital Gains Tax on",
   "UNTAXEDINCOMEDATE": "When you started getting other income",
-  "SELFEMPENDDATE" : "The date you stopped working for yourself",
+  "SELFEMPENDDATE": "The date you stopped working for yourself",
   "ITRENDDATE": "When did you stop needing to send a tax return",
 
   "WHAT_HAPPENS_NEXT": "What happens next",
@@ -157,9 +157,11 @@
 
   "ACCESSIBLITY_STATEMENT_FOR_CHB_SERVICE": "Accessibility statement for Claim Child Benefit service",
   "THIS_AS_EXPLAINS_HOW": "This accessibility statement explains how accessible this service is, what to do if you have difficulty using it, and how to report accessibility problems with the service.",
+  "ACCESSIBLITY_STATEMENT_FOR_CES_SERVICE": "Accessibility statement for Leave Self Assessment service",
   "THIS_SERVICE_IS_A_PART_GOVUK_WEBSITE": "This service is part of the wider GOV.UK website. There is a ",
   "SEPARATE_AS_FOR_MAIN_GOVUK_WEBSITE": "separate accessibility statement for the main GOV.UK website",
   "THIS_PAGE_CONTAINS_INFO_ABOUT_CHB_SERVICE": "This page only contains information about the Claim Child Benefit service, available at ",
+  "THIS_PAGE_CONTAINS_INFO_ABOUT_CES_SERVICE": "This accessibility statement only contains information about the Leave Self Assessment service, available at ",
   "USING_THIS_SERVICE": "Using this service",
   "THIS_IS_RUN_BY_HMRC": "This service is run by HM Revenue and Customs (HMRC). We want as many people as possible to be able to use this service. This means you should be able to:",
   "ACCESSIBILITY_LIST_1_0": "change colours, contrast levels and fonts",
@@ -197,8 +199,8 @@
   "DUE_TO_THESE_NONCOMPLIANCES": "due to the non-compliances listed below.",
   "HOW_WE_TESTED_THIS": "How we tested this service",
   "THIS_SERVICE_HAS_NOT_BEEN_TESTED": "The service has not been tested for compliance with WCAG 2.2 AA.",
-  "PREPARED_AND_LAST_UPDATED": "This page was prepared on 24 August 2023. It was last updated on 25 November 2023.",
-  "IT_HAS_NOT_BEEN_TESTED": "It has not been tested for compliance with WCAG 2.2 AA. The service will book a full accessibility audit by 1 February 2024.",
+  "PREPARED_AND_LAST_UPDATED": "This page was prepared on 4 October 2024.",
+  "IT_HAS_NOT_BEEN_TESTED": "It has not been tested for compliance with WCAG 2.2 AA. The service will book a full accessibility audit by 1 January 2025.",
 
   "CALL_HMRC_TO_REGISTER_FOR_SELF_ASSESSMENT": "Call HMRC to register for Self Assessment",
   "YOU_NEED_TO_BE_OLDER_THAN_15_YEARS_AND_9_MONTHS": "You need to be older than 15 years and 9 months to register for Self Assessment online.",
