@@ -55,7 +55,9 @@ function initTimeout(setShowTimeoutModal, setIsLogout) {
 // Sends 'ping' to pega to keep session alive and then initiates the timout
 function staySignedIn(setShowTimeoutModal, setIsLogout, refreshSignin = true) {
   if (refreshSignin) {
-    PCore.getDataPageUtils().getDataAsync('D_RegistrantWorkAssignmentSACases', 'root');
+    PCore.getDataPageUtils().getDataAsync('D_RegistrantWorkAssignmentSACases', 'root', {
+      CaseType: 'HMRC-SA-Work-Registration'
+    });
   }
   setShowTimeoutModal(false);
   initTimeout(setShowTimeoutModal, setIsLogout);
