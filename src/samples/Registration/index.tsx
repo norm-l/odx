@@ -30,14 +30,14 @@ import RegistrationAgeRestrictionInfo from './RegistrationAgeRestrictionInfo';
 import AlreadyRegisteredUserMessage from './AlreadyRegisteredUserMessage';
 import ApiServiceNotAvailable from '../../components/AppComponents/ApiErrorServiceNotAvailable';
 import { setJourneyName } from '../../components/helpers/journeyRegistry';
+import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
 
 declare const myLoadMashup: any;
 /* Time out modal functionality */
 let applicationTimeout = null;
 let signoutTimeout = null;
-// Sets default timeouts (13 mins for warning, 115 seconds for sign out after warning shows)
-let milisecondsTilSignout = 115 * 1000;
-let milisecondsTilWarning = 780 * 1000;
+let millisecondsTillSignout = TIMEOUT_115_SECONDS;
+let millisecondsTillWarning = TIMEOUT_13_MINUTES;
 
 // Clears any existing timeouts and starts the timeout for warning, after set time shows the modal and starts signout timer
 function initTimeout(setShowTimeoutModal, setIsLogout) {
@@ -48,8 +48,8 @@ function initTimeout(setShowTimeoutModal, setIsLogout) {
     setShowTimeoutModal(true);
     signoutTimeout = setTimeout(() => {
       triggerLogout(setIsLogout);
-    }, milisecondsTilSignout);
-  }, milisecondsTilWarning);
+    }, millisecondsTillSignout);
+  }, millisecondsTillWarning);
 }
 
 // Sends 'ping' to pega to keep session alive and then initiates the timout
@@ -393,9 +393,9 @@ const Registration: FunctionComponent<any> = ({ journeyName }) => {
       getSdkConfig()
         .then(sdkConfig => {
           if (sdkConfig.timeoutConfig.secondsTilWarning)
-            milisecondsTilWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
+            millisecondsTillWarning = sdkConfig.timeoutConfig.secondsTilWarning * 1000;
           if (sdkConfig.timeoutConfig.secondsTilLogout)
-            milisecondsTilSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
+            millisecondsTillSignout = sdkConfig.timeoutConfig.secondsTilLogout * 1000;
         })
         .finally(() => {
           // Subscribe to any store change to reset timeout counter
@@ -564,6 +564,7 @@ const Registration: FunctionComponent<any> = ({ journeyName }) => {
           e.preventDefault();
           triggerLogout(setIsLogout);
         }}
+        millisecondsTillSignout={millisecondsTillSignout}
       />
 
       <AppHeader
