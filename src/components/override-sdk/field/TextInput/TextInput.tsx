@@ -78,8 +78,9 @@ export default function TextInput(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
         hideLabel={false}
+        placeholder={placeholder}
       />
     );
   }

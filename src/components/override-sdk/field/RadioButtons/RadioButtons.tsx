@@ -19,7 +19,8 @@ export default function RadioButtons(props) {
     name,
     configAlternateDesignSystem,
     testId,
-    fieldMetadata
+    fieldMetadata,
+    placeholder
   } = props;
 
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
@@ -85,7 +86,8 @@ export default function RadioButtons(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );
