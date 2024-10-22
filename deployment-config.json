@@ -1,7 +1,8 @@
 {
   "Service": {
     "Subpath": "/services/service-name/path",
-    "Build_Command": "npm run build:prod:ci"
+    "Build_Command": "npm run build:prod:ci",
+    "Lint_Command": "npm run lint:pipeline"
   },
   "Development": {
     "Environment": {
@@ -10,11 +11,14 @@
       "Suffix": "/dev/"
     },
     "Infrastructure": {
-      "EC2_Type": "c5a.large"
+      "EC2_Type": "c5a.large",
+      "EC2_Minimum_Hosts" : "1",
+      "EC2_Maximum_Hosts" : "1"
     },
     "Build": {
       "SDK_Path": "sdk-configs/Development.json",
-      "sdkContentServerUrl": "https://internal.dxapi-nonprod.ns2n.corp.hmrc.gov.uk/services/service-name/path/dev/"
+      "sdkContentServerUrl": "https://internal.dxapi-nonprod.ns2n.corp.hmrc.gov.uk/services/service-name/path/dev/",
+      "Version": "x.xx.x"
     }
   },
   "Preproduction": {
@@ -24,27 +28,31 @@
       "Suffix": "/preprod/"
     },
     "Infrastructure": {
-      "EC2_Type": "c5a.large"
+      "EC2_Type": "c5a.large",
+      "EC2_Minimum_Hosts" : "1",
+      "EC2_Maximum_Hosts" : "1"
     },
     "Build": {
       "SDK_Path": "sdk-configs/Preproduction.json",
-      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/preprod/"
+      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/preprod/",
+      "Version": "x.xx.x"
     }
   },
   "Staging": {
     "Environment": {
-      "Type": "hpha-ec2",
+      "Type": "static-ec2",
       "Routing" : "internal",
       "Suffix": "/staging/"
     },
     "Infrastructure": {
       "EC2_Type": "c5a.large",
       "EC2_Minimum_Hosts" : "1",
-      "EC2_Maximum_Hosts" : "2"
+      "EC2_Maximum_Hosts" : "1"
     },
     "Build": {
-      "SDK_Path": "sdk-configs/Preproduction.json",
-      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/preprod/"
+      "SDK_Path": "sdk-configs/Staging.json",
+      "sdkContentServerUrl": "https://internal.dxapi-nonprod.ns2n.corp.hmrc.gov.uk/services/service-name/path/staging/",
+      "Version": "x.xx.x"
     }
   },
   "Production": {
@@ -60,7 +68,8 @@
     },
     "Build": {
       "SDK_Path": "sdk-configs/Production.json",
-      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/"
+      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/",
+      "Version": "x.xx.x"
     }
   }
 }
