@@ -335,13 +335,30 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
       setShowLanguageToggleState(config?.cessationConfig?.showLanguageToggle);
     });
   }, []);
-
-  // if (shuttered === null) {
-  //   return null;
-  // } else
+  
   if (currentDisplay === 'servicenotavailable') {
     return (
       <>
+        <TimeoutPopup
+          show={showTimeoutModal}
+          millisecondsTillSignout={millisecondsTillSignout}
+          staySignedinHandler={() =>
+            staySignedIn(
+              setShowTimeoutModal,
+              inProgressCaseCountEndPoint,
+              null,
+              false,
+              true,
+              false,
+              caseListApiParams,
+              setIsLogout
+            )
+          }
+          signoutHandler={e => {
+            e.preventDefault();
+            triggerLogout(setIsLogout);
+          }}
+        />
         <AppHeader
           appname={t('LEAVE_SELF_ASSESSMENT')}
           hasLanguageToggle={showLanguageToggleState}

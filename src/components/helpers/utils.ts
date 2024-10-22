@@ -129,7 +129,7 @@ export const triggerLogout = setIsLogout => {
   };
   const authService = authServiceList[authType];
 
-  setIsLogout(true);
+  setIsLogout(false);
 
   // If the container / case is opened then close the container on signout to prevent locking.
   const activeCase = PCore.getContainerUtils().getActiveContainerItemContext('app/primary');
