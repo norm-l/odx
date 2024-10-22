@@ -73,9 +73,10 @@ export default function AutoComplete(props: AutoCompleteProps) {
     hideLabel,
     displayOrder,
     configAlternateDesignSystem,
-    name
+    name,
+    placeholder
   } = props;
-  
+
   const { hasBeenWrapped } = useContext(ReadOnlyDefaultFormContext);
   const localizedVal = PCore.getLocaleUtils().getLocaleValue;
   const [errorMessage, setErrorMessage] = useState(localizedVal(validatemessage));
@@ -197,7 +198,7 @@ export default function AutoComplete(props: AutoCompleteProps) {
       e.preventDefault();
     }
   };
-  
+
   useEffect(() => {
     const element = document.getElementById(formattedPropertyName) as HTMLInputElement;
     const elementUl = document.getElementById(
@@ -247,7 +248,8 @@ export default function AutoComplete(props: AutoCompleteProps) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );
