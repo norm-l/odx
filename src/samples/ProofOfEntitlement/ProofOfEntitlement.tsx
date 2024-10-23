@@ -71,9 +71,7 @@ export default function ProofOfEntitlement() {
           }
         });
         PCore.getDataPageUtils()
-          .getPageDataAsync('D_GetChBEntitlement', 'root', {
-            NINO: PCore.getEnvironmentInfo().getOperatorIdentifier()
-          })
+          .getPageDataAsync('D_GetChBEntitlement', 'root')
           .then(result => {
             // If no claimant data in response, assume no award (or api error)
             if (result.IsAPIError) {
