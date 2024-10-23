@@ -2,7 +2,7 @@ import React from 'react';
 // import { useTranslation } from 'react-i18next';
 import Button from '../../BaseComponents/Button/Button';
 
-export default function RemoveClaim() {
+export default function RemoveClaim({ showRemovePage }) {
   function handleRemoveProcess() {
     const url = 'https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2';
     const container = PCore.getContainerUtils().getActiveContainerItemName('app/primary');
@@ -26,6 +26,7 @@ export default function RemoveClaim() {
     )
       .then(() => {
         console.log('Removed Case Successfully');
+        showRemovePage(false);
         window.location.reload();
       })
       .catch(error => {

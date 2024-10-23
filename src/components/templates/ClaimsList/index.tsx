@@ -17,7 +17,8 @@ export default function ClaimsList(props) {
     buttonContent,
     caseId,
     checkShuttered,
-    showRemoveOption
+    showRemoveOption,
+    showRemovePage
   } = props;
   const { t } = useTranslation();
   const docIDForReturnSlip = 'CR0002';
@@ -136,6 +137,7 @@ export default function ClaimsList(props) {
       .openCase(pzInsKey, target, { pageName: 'RemoveClaim' })
       .then(() => {
         scrollToTop();
+        showRemovePage(true);
       });
   }
 
