@@ -7,7 +7,7 @@
   "Development": {
     "Environment": {
       "Type": "static-ec2",
-      "Routing" : "internal",
+      "Routing" : "external",
       "Suffix": "/dev/"
     },
     "Infrastructure": {
@@ -17,14 +17,14 @@
     },
     "Build": {
       "SDK_Path": "sdk-configs/Development.json",
-      "sdkContentServerUrl": "https://internal.dxapi-nonprod.ns2n.corp.hmrc.gov.uk/services/service-name/path/dev/",
-      "Version": "x.xx.x"
+      "sdkContentServerUrl": "https://account-np.hmrc.gov.uk/services/service-name/path/dev/",
+      "Version": "1.0.0"
     }
   },
   "Staging": {
     "Environment": {
       "Type": "static-ec2",
-      "Routing" : "internal",
+      "Routing" : "external",
       "Suffix": "/staging/"
     },
     "Infrastructure": {
@@ -34,14 +34,14 @@
     },
     "Build": {
       "SDK_Path": "sdk-configs/Staging.json",
-      "sdkContentServerUrl": "https://internal.dxapi-nonprod.ns2n.corp.hmrc.gov.uk/services/service-name/path/staging/",
-      "Version": "x.xx.x"
+      "sdkContentServerUrl": "https://account.hmrc.gov.uk/services/service-name/path/staging/",
+      "Version": "1.0.0"
     }
   },  
   "Preproduction": {
     "Environment": {
-      "Type": "static-ec2",
-      "Routing" : "internal",
+      "Type": "hpha-ec2",
+      "Routing" : "external",
       "Suffix": "/preprod/"
     },
     "Infrastructure": {
@@ -51,14 +51,14 @@
     },
     "Build": {
       "SDK_Path": "sdk-configs/Preproduction.json",
-      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/preprod/",
-      "Version": "x.xx.x"
+      "sdkContentServerUrl": "https://account.hmrc.gov.uk/services/service-name/path/preprod/",
+      "Version": "1.0.0"
     }
   },
   "Production": {
     "Environment": {
       "Type": "hpha-ec2",
-      "Routing" : "internal",
+      "Routing" : "external",
       "Suffix": "/"
     },
     "Infrastructure": {
@@ -68,8 +68,8 @@
     },
     "Build": {
       "SDK_Path": "sdk-configs/Production.json",
-      "sdkContentServerUrl": "https://internal.dxapi-prod.ns2p.corp.hmrc.gov.uk/services/service-name/path/",
-      "Version": "x.xx.x"
+      "sdkContentServerUrl": "https://account.hmrc.gov.uk/services/service-name/path/",
+      "Version": "1.0.0"
     }
   }
 }
