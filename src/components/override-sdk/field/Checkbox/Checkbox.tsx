@@ -10,8 +10,16 @@ import GDSCheckAnswers from '../../../BaseComponents/CheckAnswer/index';
 import { ReadOnlyDefaultFormContext } from '../../../helpers/HMRCAppContext';
 
 export default function CheckboxComponent(props) {
-  const { getPConnect, inputProps, validatemessage, readOnly, value, configAlternateDesignSystem } =
-    props;
+  const {
+    getPConnect,
+    inputProps,
+    validatemessage,
+    readOnly,
+    value,
+    configAlternateDesignSystem,
+    helperText,
+    placeholder
+  } = props;
 
   const hintText = props.hintText || props.helperText;
   // let label = props.label;
@@ -73,6 +81,7 @@ export default function CheckboxComponent(props) {
         value={value ? props.trueLabel : props.falseLabel}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
         getPConnect={getPConnect}
         required={false}
         disabled={false}
@@ -80,7 +89,8 @@ export default function CheckboxComponent(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );
@@ -113,7 +123,7 @@ export default function CheckboxComponent(props) {
             item={{ checked: value, label: caption, readOnly: false, hintText }}
             index={index}
             name={name}
-            inputProps={...inputProps}
+            inputProps={{ ...inputProps }}
             onChange={evt => {
               handleChange(evt);
               exclusiveOptionChangeHandler();
@@ -126,7 +136,7 @@ export default function CheckboxComponent(props) {
           item={{ checked: value, label: caption, readOnly: false, hintText }}
           index={index}
           name={name}
-          inputProps={...inputProps}
+          inputProps={{ ...inputProps }}
           onChange={evt => {
             handleChange(evt);
             exclusiveOptionChangeHandler();

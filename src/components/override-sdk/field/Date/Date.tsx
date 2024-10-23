@@ -18,6 +18,7 @@ export default function Date(props) {
     value = '',
     validatemessage,
     helperText,
+    placeholder,
     readOnly,
     name,
     testId,
@@ -132,6 +133,7 @@ export default function Date(props) {
         value={dayjs(value).format('D MMMM YYYY')}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
         getPConnect={getPConnect}
         required={false}
         disabled={false}
@@ -139,7 +141,8 @@ export default function Date(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
+        placeholder={placeholder}
         hideLabel={false}
       />
     );

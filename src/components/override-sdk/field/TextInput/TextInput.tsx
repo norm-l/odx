@@ -70,6 +70,7 @@ export default function TextInput(props) {
         value={value}
         name={name}
         stepId={configAlternateDesignSystem.stepId}
+        hiddenText={configAlternateDesignSystem.hiddenText}
         getPConnect={getPConnect}
         required={false}
         disabled={false}
@@ -77,8 +78,9 @@ export default function TextInput(props) {
         onChange={undefined}
         readOnly={false}
         testId=''
-        helperText=''
+        helperText={helperText}
         hideLabel={false}
+        placeholder={placeholder}
       />
     );
   }

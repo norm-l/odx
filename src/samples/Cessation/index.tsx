@@ -22,6 +22,7 @@ import { useStartMashup } from '../../reuseables/PegaSetup';
 import Landing from '../../components/AppComponents/Landing';
 import AppContext from '../../reuseables/AppContext';
 import { setJourneyName } from '../../components/helpers/journeyRegistry';
+import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 const Cessation: FunctionComponent<any> = ({ journeyName }) => {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
   const [pConnect, setPconnect] = useState(null);
   const [isLogout, setIsLogout] = useState(false);
   const [shutterServicePage, setShutterServicePage] = useState(false);
+  const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
 
   const { hmrcURL } = useHMRCExternalLinks();
   const checkDefaultShutteringEnabled = false;
@@ -260,6 +262,11 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
             },
             'showStartPageOnCloseContainerItem'
           );
+          getSdkConfig().then(config => {
+            if (config.timeoutConfig.secondsTilLogout) {
+              setmillisecondsTillSignout(config.timeoutConfig.secondsTilLogout * 1000);
+            }
+          });
         }
       });
       settingTimer();
@@ -328,13 +335,30 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
       setShowLanguageToggleState(config?.cessationConfig?.showLanguageToggle);
     });
   }, []);
-
-  // if (shuttered === null) {
-  //   return null;
-  // } else
+  
   if (currentDisplay === 'servicenotavailable') {
     return (
       <>
+        <TimeoutPopup
+          show={showTimeoutModal}
+          millisecondsTillSignout={millisecondsTillSignout}
+          staySignedinHandler={() =>
+            staySignedIn(
+              setShowTimeoutModal,
+              inProgressCaseCountEndPoint,
+              null,
+              false,
+              true,
+              false,
+              caseListApiParams,
+              setIsLogout
+            )
+          }
+          signoutHandler={e => {
+            e.preventDefault();
+            triggerLogout(setIsLogout);
+          }}
+        />
         <AppHeader
           appname={t('LEAVE_SELF_ASSESSMENT')}
           hasLanguageToggle={showLanguageToggleState}
@@ -360,6 +384,7 @@ const Cessation: FunctionComponent<any> = ({ journeyName }) => {
       >
         <TimeoutPopup
           show={showTimeoutModal}
+          millisecondsTillSignout={millisecondsTillSignout}
           staySignedinHandler={() =>
             staySignedIn(
               setShowTimeoutModal,

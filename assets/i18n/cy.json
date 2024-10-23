@@ -10,6 +10,7 @@
   "DATE_CREATED": "Dyddiad a grëwyd",
 
   "YOU_ARE_ABOUT_TO_SIGNOUT": "Rydych ar fin allgofnodi",
+  "YOURE_ABOUT_TO_BE_SIGNED_OUT": "Rydych ar fin cael eich allgofnodi",
   "YOU_STILL_NEED_TO_SAVE_YOUR_PROGRESS": "Mae angen i chi gadw eich cynnydd o hyd. Os byddwch yn allgofnodi heb ei gadw, byddwch yn colli’ch cynnydd.",
   "TO_SAVE_YOUR_PROGRESS": "I gadw eich cynnydd, dewiswch y cysylltiad ‘Cadw a dod yn ôl yn nes ymlaen’.",
   "SIGN-OUT": "Allgofnodi",
@@ -86,6 +87,9 @@
   "YOU_ARE_ABOUT_TO_SIGN_OUT": "Rydych ar fin allgofnodi",
   "FOR_YOUR_SECURITY_WE_WILL_SIGN_YOU_OUT": "Er eich diogelwch, byddwn yn eich allgofnodi cyn pen",
   "2_MINUTES": "2 o funudau",
+  "1_MINUTE": "1 o funudau",
+  "SECONDS": "o eiliadau",
+  "SECOND": "o eiliadau",
   "FOR_YOUR_SECURITY": "Er eich diogelwch",
   "WE_WILL_DELETE_YOUR_REGISTRATION": "Byddwn yn dileu eich Hunanasesiad",
   "DELETE_YOUR_REGISTRATION": "Dileu eich Hunanasesiad",
@@ -152,10 +156,12 @@
   "USE_THIS_FORM_TO_CLAIM_CONTD": "addysg neu hyfforddiant cymeradwy",
 
   "ACCESSIBLITY_STATEMENT_FOR_CHB_SERVICE": " Datganiad hygyrchedd ar gyfer y gwasanaeth Hawlio Budd-dal Plant",
+  "ACCESSIBLITY_STATEMENT_FOR_CES_SERVICE": "Accessibility statement for Leave Self Assessment service",
   "THIS_AS_EXPLAINS_HOW": "Mae’r datganiad hygyrchedd hwn yn esbonio pa mor hygyrch yw’r gwasanaeth, beth i’w wneud os cewch anhawster wrth ei ddefnyddio, a sut i roi gwybod am broblemau hygyrchedd gyda’r gwasanaeth.",
   "THIS_SERVICE_IS_A_PART_GOVUK_WEBSITE": "Mae’r gwasanaeth hwn yn rhan o wefan ehangach GOV.UK. Mae ",
   "SEPARATE_AS_FOR_MAIN_GOVUK_WEBSITE": "datganiad hygyrchedd ar wahân ar gyfer prif wefan GOV.UK",
   "THIS_PAGE_CONTAINS_INFO_ABOUT_CHB_SERVICE": "Mae’r dudalen hon yn cynnwys gwybodaeth am y gwasanaeth Hawlio Budd-dal Plant, sydd ar gael yn ",
+  "THIS_PAGE_CONTAINS_INFO_ABOUT_CES_SERVICE": "This accessibility statement only contains information about the Leave Self Assessment service, available at ",
   "USING_THIS_SERVICE": "Defnyddio’r gwasanaeth hwn",
   "THIS_IS_RUN_BY_HMRC": "Darperir y gwasanaeth hwn gan Gyllid a Thollau EF (CThEF). Rydym am i gymaint o bobl â phosibl allu defnyddio’r gwasanaeth hwn. Mae hyn yn golygu y dylech allu:",
   "ACCESSIBILITY_LIST_1_0": "newid lliwiau, lefelau cyferbynnedd a ffontiau",
@@ -233,8 +239,8 @@
 
   "*** Cessation Journey": "Translation will come here ***",
 
-  "LEAVE_SELF_ASSESSMENT": "Leave Self Assessment",
-  "YOUR_REQUEST": "Your request",
-  "CONTINUE_YOUR_REQUEST": "Continue your request",
-  "CES_PORTAL_NOTIFICATION_BANNER_CONTENT": "We saved your progress and will store your information for 28 days from the saved date."
+  "LEAVE_SELF_ASSESSMENT": "Gadael Hunanasesiad",
+  "YOUR_REQUEST": "Eich cais",
+  "CONTINUE_YOUR_REQUEST": "Parhau â’ch cais",
+  "CES_PORTAL_NOTIFICATION_BANNER_CONTENT": "Gwnaethom gadw’ch cynnydd, a byddwn yn cadw’ch gwybodaeth am 28 diwrnod o’r dyddiad a gadwyd."
 }
