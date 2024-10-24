@@ -1,0 +1,52 @@
+{
+  "comment_sdk_config": "This is the configuration file for the React SDK",
+  "authConfig": {
+    "authConfig_comment": "Optional Full paths to Infinity server OAuth endpoints (Only needed if using custom OAuth service)",
+    "authConfig_comment2": "Optional attributes are: authorize, token, revoke, redirectUri, authService, silentTimeout, iframeLoginUI,",
+    "authConfig_comment3": "mashupAuthService, portalGrantType, mashupGrantType, tokenStorage",
+    "authService": "gg-sa-dev",
+    "tokenStorage": "none",
+    "mashupClient_comment": "Client ID and Client secret from the OAuth 2.0 Client Registration record used for mashup use case",
+    "mashupClient_comment2": "See SDK Guide for instructions on how to generate and obtain the proper values for the following entries",
+    "mashupClientId": "83398807851116275036",
+    "portalClientId_comment": "Client ID from the OAuth 2.0 Client Registration record used for portal use case",
+    "portalClientId": "83398807851116275036"
+  },
+  "serverConfig": {
+    "infinityRestServerUrl_comment": "Full path to Infinity REST server",
+    "infinityRestServerUrl": "https://journey-dt1.hmrc.gov.uk/prweb/",
+    "appAlias_comment": "appAlias of the application which operators will be accessing (e.g., MediaCo)",
+    "appAlias": "sa-dev",
+    "sdkContentServerUrl_comment": "If specified, the given URL will be used. If left blank, window.location.origin will be used.",
+    "sdkContentServerUrl": "http://localhost:3502/",
+    "sdkHmrcURL_comment": "Used for external links. For lower Env: https://www.staging.tax.service.gov.uk/ For Prod: https://www.tax.service.gov.uk/",
+    "sdkHmrcURL": "https://www.staging.tax.service.gov.uk/",
+    "appPortal_comment": "If specified, the given appPortal will be loaded. If left blank, the operator's default Portal is used. Ignored for Embedded use",
+    "appPortal": "",
+    "excludePortals_comment": "Array of specific portals to avoid attempting to load with SDK",
+    "excludePortals": [
+      "pxExpress",
+      "Developer",
+      "pxPredictionStudio",
+      "pxAdminStudio",
+      "pyCaseWorker",
+      "pyCaseManager7"
+    ]
+  },
+  "applicationConfig": {
+    "cessation": {
+      "serviceName": "LEAVE_SELF_ASSESSMENT"
+    },
+    "registration": {
+      "serviceName": "REGISTER_FOR_SELF_ASSESSMENT"
+    }
+  },
+  "cessationConfig": {
+    "showLanguageToggle": true
+  },
+  "timeoutConfig": {
+    "secondsTilWarning": 780,
+    "secondsTilLogout": 115
+  },
+  "showResolutionStatuses": ["Pending-ManualReview", "Pending-CurrentYearCaseReview"]
+}
