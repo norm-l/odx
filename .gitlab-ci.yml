@@ -1,0 +1,2 @@
+include:
+  - remote: 'https://gitlab.alm.corp.hmrc.gov.uk/cmdg-public-repos/pipeline-templates/odx-api-pipeline-templates/-/raw/Production/ci.yml'
