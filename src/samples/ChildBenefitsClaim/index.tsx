@@ -33,6 +33,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
+import RunTensCheck from '../../services/TensCheckService';
 
 declare const myLoadMashup: any;
 
@@ -227,7 +228,7 @@ export default function ChildBenefitsClaim() {
   function fetchInProgressClaimsData(isSaveComeBackClicked = false) {
     setLoadingInProgressClaims(true);
     let inProgressClaimsData: any = [];
-    // @ts-ignore
+
     PCore.getDataPageUtils()
       .getDataAsync('D_ClaimantWorkAssignmentChBCases', 'root')
       .then(resp => {
@@ -390,10 +391,11 @@ export default function ChildBenefitsClaim() {
     // If not logged in, we used to prompt for login. Now moved up to TopLevelApp
     // If logged in, make the Triple Play Options visible
 
-    if (!sdkIsLoggedIn()) {
-      // login();     // Login now handled at TopLevelApp
-    } else {
-      setShowUserPortal(true);
+    if (sdkIsLoggedIn()) {
+      RunTensCheck().then((tensCheckHasRan: boolean) => {
+        console.log('tensCheckHasRan', tensCheckHasRan);
+        setShowUserPortal(true);
+      });
     }
   }, [bShowAppName]);
 
@@ -572,11 +574,14 @@ export default function ChildBenefitsClaim() {
       }
 
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
+      loginIfNecessary({
+        appName: 'embedded',
+        mainRedirect: true,
+        redirectDoneCB: doRedirectDone
+      });
     });
 
     document.addEventListener('SdkConstellationReady', () => {
-      // start the portal
       startMashup();
     });
 
@@ -585,6 +590,9 @@ export default function ChildBenefitsClaim() {
     //  component is unmounted (in function returned from this effect)
 
     return function cleanupSubscriptions() {
+      document.removeEventListener('SdkConstellationReady', () => {
+        startMashup();
+      });
       PCore?.getPubSubUtils().unsubscribe(
         PCore.getConstants().PUB_SUB_EVENTS.EVENT_CANCEL,
         'cancelAssignment'
