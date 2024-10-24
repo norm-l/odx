@@ -16,6 +16,7 @@
     "clean": "echo \"cleaning...\" && npx shx --yes rm -rf ./dist/** ./node_modules",
     "clean:bundle": "echo \"cleaning bundle files...\" && npx shx --yes rm -f ./dist/*[0-9].bundle.js ./dist/*[0-9][0-9].bundle.js ./dist/*[0-9][0-9][0-9].bundle.js ./dist/*[0-9][0-9][0-9][0-9].bundle.js",
     "lint": "echo \"linting...\" && npx eslint \"src/**\"",
+    "pipeline:lint": "echo \"linting...\" && npm run _internal-install-sdk && npx eslint \"src/**\"",
     "lint-errors-only": "npx eslint \"src/**\" --quiet",
     "_comment_DXCB_commands": "The following are public commands to run the integrated DX Component Builder",
     "authenticate": "dx-component-builder-sdk authenticate",
