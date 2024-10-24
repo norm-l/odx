@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
 import { checkCookie, setCookie } from '../../../components/helpers/cookie';
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../../sdk-local-component-map';
@@ -17,6 +17,7 @@ import {
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
 import { checkStatus, getServiceShutteredStatus } from '../../../components/helpers/utils';
+import RunTensCheck from '../../../services/TensCheckService';
 
 declare const myLoadMashup: any;
 declare const PCore: any;
@@ -470,6 +471,15 @@ export const useStartMashup = (
       );
     }; */
   }, []);
+
+  useEffect(() => {
+    if (sdkIsLoggedIn()) {
+      RunTensCheck().then((tensCheckHasRan: boolean) => {
+        console.log('tensCheckHasRan', tensCheckHasRan);
+        setShowResolutionPage(true);
+      });
+    }
+  }, [showPega]);
 
   return {
     showPega,
