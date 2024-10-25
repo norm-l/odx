@@ -80,7 +80,7 @@ export default function UserPortal(props) {
               </>
               <>
                 <h2 className='govuk-heading-m' id='subsection-title'>
-                  {t('GET_HELP_ONLINE')}
+                  {t('ONLINE')}
                 </h2>
                 <p className='govuk-body'>
                   <a
