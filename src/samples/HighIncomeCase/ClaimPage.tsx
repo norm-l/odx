@@ -21,6 +21,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { triggerLogout } from '../../components/helpers/utils';
 import AppContext from './reuseables/AppContext';
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
+import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 
 // declare const myLoadMashup;
 declare const PCore: any;
@@ -30,6 +31,7 @@ const ClaimPage: FunctionComponent<any> = () => {
   const [shutterServicePage /* setShutterServicePage */] = useState(false);
   const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
+  const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
   const { showLanguageToggle } = useContext(AppContext);
 
   const setAuthType = useState('gg')[1];
@@ -74,6 +76,9 @@ const ClaimPage: FunctionComponent<any> = () => {
     } else if (showResolutionPage) {
       setCurrentDisplay('resolutionpage');
       getSdkConfig().then(config => {
+        if (config.timeoutConfig.secondsTilLogout) {
+          setmillisecondsTillSignout(config.timeoutConfig.secondsTilLogout * 1000);
+        }
         PCore.getRestClient()
           .invokeCustomRestApi(
             `${config.serverConfig.infinityRestServerUrl}/api/application/v2/cases/${caseId}?pageName=SubmissionSummary`,
@@ -225,6 +230,7 @@ const ClaimPage: FunctionComponent<any> = () => {
         isAuthorised
         signoutButtonText={t('SIGN-OUT')}
         staySignedInButtonText={t('STAY_SIGNED_IN')}
+        millisecondsTillSignout={millisecondsTillSignout}
       />
 
       <AppHeader
