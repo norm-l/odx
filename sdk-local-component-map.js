@@ -1,5 +1,5 @@
 // Statically load all "local" components that aren't yet in the npm package
-
+import React from 'react'
 import FieldCheckbox from './src/components/override-sdk/field/Checkbox/';
 import FieldTextInput from './src/components/override-sdk/field/TextInput/';
 import FieldDate from './src/components/override-sdk/field/Date/';
@@ -31,6 +31,9 @@ import HmrcOdxSectionBased from './src/components/custom-sdk/template/HMRC_ODX_s
 import RichText from './src/components/override-sdk/field/RichText/';
 import HmrcOdxGdsCheckAnswersPage from './src/components/custom-sdk/template/HMRC_ODX_GDSCheckAnswersPage/';
 import SimpleTableManual from './src/components/override-sdk/template/SimpleTableManual/';
+import AppHeader from './src/components/AppComponents/AppHeader';
+import AppFooter from './src/components/AppComponents/AppFooter';
+import { AppShell } from '@pega/cosmos-react-core';
 /*import end - DO NOT REMOVE*/
 
 // localSdkComponentMap is the JSON object where we'll store the components that are
@@ -67,7 +70,16 @@ const localSdkComponentMap = {
   HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate,
   HMRC_ODX_sectionBased: HmrcOdxSectionBased,
   HMRC_ODX_GDSCheckAnswersPage: HmrcOdxGdsCheckAnswersPage,
-  SimpleTableManual: SimpleTableManual
+  SimpleTableManual: SimpleTableManual,  
+  AppShell: (props) => {
+  return (<>
+    <AppHeader appname={props.portalName} hasLanguageToggle/>
+    <div class="govuk-width-container">
+            {props.children}
+          </div>
+    <AppFooter />
+  </>)
+  }
   /*map end - DO NOT REMOVE*/
 };
 

@@ -194,38 +194,8 @@ export default function CaseView(props) {
 
     if (!displayOnlyFA) {
       // show full portal
-      return (
-        <Grid container>
-          <Grid item xs={3}>
-          <div hidden={true} id="current-caseID">{currentCaseID}</div>
-          <Card className={classes.root} >
-            <CardHeader className={classes.caseViewHeader}
-              title={<Typography variant="h6" component="div">{PCore.getLocaleUtils().getLocaleValue(header, '', localeKey)}</Typography>}
-              subheader={<Typography variant="body1" component="div" id="caseId">{subheader}</Typography>}
-              avatar={
-                <Avatar className={classes.caseViewIconBox} variant="square">
-                  <img src={svgCase} className={classes.caseViewIconImage}/>
-                </Avatar>
-              }
-            />
-            {getActionButtonsHtml()}
-            <Divider />
-            {theSummaryRegion}
-            <Divider />
-            { vertTabInfo.length > 1 && <VerticalTabs tabconfig={vertTabInfo} />}
-          </Card>
-        </Grid>
-
-        <Grid item xs={6}>
-          {theStagesRegion}
-          {theTodoRegion}
-          { deferLoadInfo.length > 0 && <DeferLoad getPConnect={getPConnect} name={deferLoadInfo[activeVertTab].config.name } isTab />}
-        </Grid>
-
-        <Grid item xs={3}>
-          {theUtilitiesRegion}
-        </Grid>
-      </Grid>
+      return (          
+          <>{theTodoRegion}</>       
       )
     } else {
       // displayOnlyFA - only show the "todo" region

@@ -17,6 +17,7 @@ import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import ChildBenefitHub from '../ChildBenefitHub/ChildBenefitHub';
 import ProofOfEntitlement from '../ProofOfEntitlement/ProofOfEntitlement';
 import ChangeOfBank from '../ChangeOfBank/ChangeOfBank';
+import FullPortal from '../FullPortal';
 
 const AppSelector = () => {
   const [i18nloaded, seti18nloaded] = useState(false);
@@ -45,9 +46,11 @@ const AppSelector = () => {
   }, []);
 
   return !i18nloaded ? null : (
-    <Switch>
+    <FullPortal />
+    /*<Switch>
       <Route exact path='/' component={ChildBenefitsClaim} />
       <Route exact path='/ua' component={UnAuthChildBenefitsClaim} />
+      <Route path='/home' component={FullPortal} />
 
       <Route exact path='/home' component={ChildBenefitHub} />
       <Route exact path='/view-proof-entitlement' component={ProofOfEntitlement} />
@@ -64,7 +67,9 @@ const AppSelector = () => {
       <Route path='/sign-in-to-government-gateway' component={DoYouWantToSignIn} />
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
-    </Switch>
+
+      
+    </Switch>*/
   );
 };
 

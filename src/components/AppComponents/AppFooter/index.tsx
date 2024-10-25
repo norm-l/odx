@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function AppFooter() {
   const { t } = useTranslation();
-  const location = useLocation();
+  const location = { search: 'abc' } // useLocation();
   const { serviceParam, serviceName, appNameHeader } = useContext(AppContextEducation);
 
   const searchParams = new URLSearchParams(location.search);
@@ -33,26 +33,7 @@ export default function AppFooter() {
                   {t('PRIVACY')} {t('OPENS_IN_NEW_TAB')}
                 </a>
               </li>
-              <li className='govuk-footer__inline-list-item'>
-                <Link
-                  to='/accessibility'
-                  className='govuk-footer__link'
-                  target='_blank'
-                  rel='noreferrer noopener'
-                >
-                  {t('ACCESSIBILITY')} {t('OPENS_IN_NEW_TAB')}
-                </Link>
-              </li>
-              <li className='govuk-footer__inline-list-item'>
-                <Link
-                  to={`/cookies?appname=${appNameUpdate}&serviceParam=${serviceParamUpdate}&serviceNamePageTitle=${serviceNamePageTitle}`}
-                  className='govuk-footer__link'
-                  target='_blank'
-                  rel='noreferrer noopener'
-                >
-                  {t('COOKIES')} {t('OPENS_IN_NEW_TAB')}
-                </Link>
-              </li>
+              
               <li className='govuk-footer__inline-list-item'>
                 <a
                   className='govuk-footer__link'

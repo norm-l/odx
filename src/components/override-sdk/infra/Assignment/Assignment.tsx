@@ -93,9 +93,7 @@ export default function Assignment(props) {
   }
 
   // Register/Deregister this Pconnect Object to AssignmentPConn context value, for use in Portal scope
-  useEffect(() => {
-    setAssignmentPConnect(getPConnect());
-    return () => setAssignmentPConnect(null);
+  useEffect(() => {   
   }, []);
 
   useEffect(() => {

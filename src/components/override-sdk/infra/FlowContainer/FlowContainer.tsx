@@ -362,22 +362,10 @@ export default function FlowContainer(props) {
   return (
     <div id={buildName}>
       {!bShowConfirm &&
-        !displayOnlyFA ? (
-            <Card>
-              <CardHeader
-                title={<Typography variant='h6'>{containerName}</Typography>}
-                subheader={`Task in ${caseId} \u2022 Priority ${urgency}`}
-                avatar={<Avatar >{operatorInitials}</Avatar>}
-              ></CardHeader>
-              {instructionText !== '' ? (
-                <Typography variant='caption'>{instructionText}</Typography>
-              ) : null}
-              <MuiPickersUtilsProvider utils={DayjsUtils}>
-                <Assignment getPConnect={getPConnect} itemKey={itemKey}>
-                  {arNewChildrenAsReact}
-                </Assignment>
-              </MuiPickersUtilsProvider>
-            </Card>
+        !displayOnlyFA ? (           
+            <Assignment getPConnect={getPConnect} itemKey={itemKey}>
+              {arNewChildrenAsReact}
+            </Assignment>
           ) : (
             <div>
               {instructionText !== '' ? (

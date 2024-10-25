@@ -146,7 +146,7 @@ export default function ViewContainer(props) {
           Fragment,
           { key: theBuildName },
           <>
-            {!caseStatus.startsWith('Open') && !caseStatus.startsWith('New') && !isHICBC && (
+            {!caseStatus?.startsWith('Open') && !caseStatus?.startsWith('New') && !isHICBC && (
               <Button
                 variant='backlink'
                 onClick={e => {
