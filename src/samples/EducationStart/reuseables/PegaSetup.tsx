@@ -17,7 +17,7 @@ import {
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
 import { checkStatus, getServiceShutteredStatus } from '../../../components/helpers/utils';
-import RunTensCheck from '../../../services/TensCheckService';
+import CheckAuthAndRedirectIfTens from '../../../services/TensCheckService';
 
 declare const myLoadMashup: any;
 declare const PCore: any;
@@ -474,8 +474,7 @@ export const useStartMashup = (
 
   useEffect(() => {
     if (sdkIsLoggedIn()) {
-      RunTensCheck().then((tensCheckHasRan: boolean) => {
-        console.log('tensCheckHasRan', tensCheckHasRan);
+      CheckAuthAndRedirectIfTens().then(() => {
         setShowResolutionPage(true);
       });
     }

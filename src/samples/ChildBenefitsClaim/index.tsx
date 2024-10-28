@@ -33,7 +33,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
-import RunTensCheck from '../../services/TensCheckService';
+import CheckAuthAndRedirectIfTens from '../../services/TensCheckService';
 
 declare const myLoadMashup: any;
 
@@ -392,8 +392,7 @@ export default function ChildBenefitsClaim() {
     // If logged in, make the Triple Play Options visible
 
     if (sdkIsLoggedIn()) {
-      RunTensCheck().then((tensCheckHasRan: boolean) => {
-        console.log('tensCheckHasRan', tensCheckHasRan);
+      CheckAuthAndRedirectIfTens().then(() => {
         setShowUserPortal(true);
       });
     }

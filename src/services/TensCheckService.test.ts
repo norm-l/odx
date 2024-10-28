@@ -1,6 +1,6 @@
-import RunTensCheck from './TensCheckService';
+import CheckAuthAndRedirectIfTens from './TensCheckService';
 
-describe('RunTensCheck', () => {
+describe('CheckAuthAndRedirectIfTens', () => {
   const mockGetPageDataAsync = jest.fn();
   const mockRedirect = jest.fn();
   const currentPageURL = 'www.currentPageUrl.com';
@@ -24,25 +24,53 @@ describe('RunTensCheck', () => {
     jest.clearAllMocks(); // Clear mocks after each test
   });
 
-  test('should return true and redirect when IsNormalAuthentication is false', async () => {
+  test('should return true and redirect when IsNormalAuthentication is false and PostAuthAction is TENS', async () => {
     // Mock the response with IsNormalAuthentication === false
-    mockGetPageDataAsync.mockResolvedValue({ IsNormalAuthentication: false });
+    mockGetPageDataAsync.mockResolvedValue({
+      IsNormalAuthentication: false,
+      PostAuthAction: 'TENS'
+    });
 
-    const result: boolean = await RunTensCheck();
+    await CheckAuthAndRedirectIfTens();
 
-    expect(result).toBe(true);
     expect(mockRedirect).toHaveBeenCalledWith(
       `https://www.tax.service.gov.uk/protect-tax-info?redirectUrl=${currentPageURL}`
     );
   });
 
-  test('should return false when IsNormalAuthentication is true', async () => {
+  test('should return true and redirect when IsNormalAuthentication is false and PostAuthAction is not TENS', async () => {
+    // Mock the response with IsNormalAuthentication === false
+    mockGetPageDataAsync.mockResolvedValue({
+      IsNormalAuthentication: false,
+      PostAuthAction: 'Other'
+    });
+
+    await CheckAuthAndRedirectIfTens();
+
+    expect(mockRedirect).not.toHaveBeenCalled();
+  });
+
+  test('should return false when IsNormalAuthentication is true and PostAuthAction is not TENS', async () => {
     // Mock the response with IsNormalAuthentication === true
-    mockGetPageDataAsync.mockResolvedValue({ IsNormalAuthentication: true });
+    mockGetPageDataAsync.mockResolvedValue({
+      IsNormalAuthentication: true,
+      PostAuthAction: 'Other'
+    });
 
-    const result: boolean = await RunTensCheck();
+    await CheckAuthAndRedirectIfTens();
 
-    expect(result).toBe(false);
+    expect(mockRedirect).not.toHaveBeenCalled();
+  });
+
+  test('should return false when IsNormalAuthentication is true and PostAuthAction is TENS', async () => {
+    // Mock the response with IsNormalAuthentication === true
+    mockGetPageDataAsync.mockResolvedValue({
+      IsNormalAuthentication: true,
+      PostAuthAction: 'TENS'
+    });
+
+    await CheckAuthAndRedirectIfTens();
+
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 });
