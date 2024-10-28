@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import DateFormatter from '@pega/react-sdk-components/lib/components/helpers/formatters/Date';
 import { useTranslation } from 'react-i18next';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import RadioButtons from '../../BaseComponents/RadioButtons/RadioButtons';
 
-export default function RemoveClaim({ showRemovePage, claimId }) {
+export default function RemoveClaim({ showRemovePage, claimDetails }) {
+  const { id, createdDate } = claimDetails;
   const { t } = useTranslation();
+
+  const formattedCreatedDate = DateFormatter.Date(createdDate, { format: 'DD/MM/YYYY' });
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -27,7 +31,7 @@ export default function RemoveClaim({ showRemovePage, claimId }) {
       const selectedOptionValue = selectedOption.getAttribute('value');
       if (selectedOptionValue === 'yes') {
         const sdkConfig = await getSdkConfig();
-        const url = `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/cases/${claimId}/processes/RemoveClaim`;
+        const url = `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/cases/${id}/processes/RemoveClaim`;
 
         const { invokeCustomRestApi } = PCore.getRestClient();
         invokeCustomRestApi(
@@ -69,7 +73,7 @@ export default function RemoveClaim({ showRemovePage, claimId }) {
               <div className='govuk-summary-list__row'>
                 <dt className='govuk-summary-list__key'>Created date</dt>
                 {/* translate the created date */}
-                <dd className='govuk-summary-list__value'>23 October 2024</dd>
+                <dd className='govuk-summary-list__value'>{formattedCreatedDate}</dd>
               </div>
             </dl>
             <RadioButtons

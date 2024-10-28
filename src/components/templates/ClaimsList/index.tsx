@@ -127,13 +127,13 @@ export default function ClaimsList(props) {
   };
 
   function handleRemove(e, row: any) {
-    const { pzInsKey } = row;
+    const { pzInsKey, pxCreateDateTime } = row;
 
     const container = thePConn.getContainerName();
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
     e.preventDefault();
-    showRemovePage(true, pzInsKey);
+    showRemovePage(true, pzInsKey, pxCreateDateTime);
     // PCore.getMashupApi()
     //   .openCase(pzInsKey, target, { pageName: 'RemoveClaim' })
     //   .then(() => {

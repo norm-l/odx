@@ -82,7 +82,7 @@ export default function ChildBenefitsClaim() {
   const [isCreateCaseBlocked, setIsCreateCaseBlocked] = useState(false);
   const [viewName, setViewName] = useState('');
   const [isRemoveClaimPage, setIsRemoveClaimPage] = useState(false);
-  const [removeClaimId, setRemoveClaimId] = useState('');
+  const [removeClaimDetails, setRemoveClaimDetails] = useState({});
 
   const history = useHistory();
 
@@ -633,10 +633,10 @@ export default function ChildBenefitsClaim() {
     setShutterServicePage(status);
   };
 
-  const showRemovePage = (value, id) => {
+  const showRemovePage = (value, id, createdDate) => {
     setIsRemoveClaimPage(value);
     setShowUserPortal(false);
-    setRemoveClaimId(id);
+    setRemoveClaimDetails({ id, createdDate });
   };
 
   const renderContent = () => {
@@ -687,7 +687,7 @@ export default function ChildBenefitsClaim() {
           </UserPortal>
         )}
         {isRemoveClaimPage && (
-          <RemoveClaim showRemovePage={showRemovePage} claimId={removeClaimId} />
+          <RemoveClaim showRemovePage={showRemovePage} claimDetails={removeClaimDetails} />
         )}
       </>
     );
