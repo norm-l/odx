@@ -23,23 +23,11 @@ export default function RemoveClaim({ showRemovePage, claimId }) {
   async function handleRemoveProcess() {
     const selectedOption = document.querySelector('input[name="removeTheClaim"]:checked');
 
-    // https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2/cases/HMRC-CHB-WORK%20C-511029/processes/RemoveClaim
-
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
       if (selectedOptionValue === 'yes') {
         const sdkConfig = await getSdkConfig();
-        // const url = 'https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2';
         const url = `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/cases/${claimId}/processes/RemoveClaim`;
-        // console.log(url2);
-        // console.log(claimId);
-        // const container = PCore.getContainerUtils().getActiveContainerItemName('app/primary');
-
-        // const processUrl = PCore.getStoreValue(
-        //   '.href',
-        //   'caseInfo.availableProcesses[0].links.add',
-        //   container
-        // );
 
         const { invokeCustomRestApi } = PCore.getRestClient();
         invokeCustomRestApi(
