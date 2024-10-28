@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import RadioButtons from '../../BaseComponents/RadioButtons/RadioButtons';
 
-export default function RemoveClaim({ showRemovePage }) {
+export default function RemoveClaim({ showRemovePage, claimId }) {
   const { t } = useTranslation();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -23,23 +23,27 @@ export default function RemoveClaim({ showRemovePage }) {
   async function handleRemoveProcess() {
     const selectedOption = document.querySelector('input[name="removeTheClaim"]:checked');
 
+    // https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2/cases/HMRC-CHB-WORK%20C-511029/processes/RemoveClaim
+
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
       if (selectedOptionValue === 'yes') {
         const sdkConfig = await getSdkConfig();
-        const url = 'https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2';
-        // const url = `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}`;
-        const container = PCore.getContainerUtils().getActiveContainerItemName('app/primary');
+        // const url = 'https://journey-dt1.hmrc.gov.uk/prweb/app/chb-dev/api/application/v2';
+        const url = `${sdkConfig.serverConfig.infinityRestServerUrl}/app/${sdkConfig.serverConfig.appAlias}/api/application/v2/cases/${claimId}/processes/RemoveClaim`;
+        // console.log(url2);
+        // console.log(claimId);
+        // const container = PCore.getContainerUtils().getActiveContainerItemName('app/primary');
 
-        const processUrl = PCore.getStoreValue(
-          '.href',
-          'caseInfo.availableProcesses[0].links.add',
-          container
-        );
+        // const processUrl = PCore.getStoreValue(
+        //   '.href',
+        //   'caseInfo.availableProcesses[0].links.add',
+        //   container
+        // );
 
         const { invokeCustomRestApi } = PCore.getRestClient();
         invokeCustomRestApi(
-          `${url}${processUrl}`,
+          `${url}`,
           {
             method: 'POST',
             body: '',

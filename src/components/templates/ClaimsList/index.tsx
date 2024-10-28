@@ -133,12 +133,13 @@ export default function ClaimsList(props) {
     const target = `${PCore.getConstants().APP.APP}/${container}`;
 
     e.preventDefault();
-    PCore.getMashupApi()
-      .openCase(pzInsKey, target, { pageName: 'RemoveClaim' })
-      .then(() => {
-        scrollToTop();
-        showRemovePage(true);
-      });
+    showRemovePage(true, pzInsKey);
+    // PCore.getMashupApi()
+    //   .openCase(pzInsKey, target, { pageName: 'RemoveClaim' })
+    //   .then(() => {
+    //     scrollToTop();
+    //     showRemovePage(true);
+    //   });
   }
 
   function getClaims() {
