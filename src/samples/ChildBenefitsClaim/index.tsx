@@ -392,9 +392,8 @@ export default function ChildBenefitsClaim() {
     // If logged in, make the Triple Play Options visible
 
     if (sdkIsLoggedIn()) {
-      CheckAuthAndRedirectIfTens().then(() => {
-        setShowUserPortal(true);
-      });
+      CheckAuthAndRedirectIfTens();
+      setShowUserPortal(true);
     }
   }, [bShowAppName]);
 

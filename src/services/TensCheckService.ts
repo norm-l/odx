@@ -1,15 +1,22 @@
-interface PageDataResponse {
+interface DataPageResponse {
   IsNormalAuthentication: boolean;
   PostAuthAction: string;
 }
 
 async function CheckAuthAndRedirectIfTens(): Promise<void> {
-  const dataPage: Promise<PageDataResponse> = PCore.getDataPageUtils().getPageDataAsync(
+  if (localStorage.getItem('tensCheckCarriedOut') === 'true') {
+    // After the redirect from TENS
+    localStorage.removeItem('tensCheckCarriedOut');
+    return;
+  }
+
+  const dataPage: Promise<DataPageResponse> = PCore.getDataPageUtils().getPageDataAsync(
     'D_PostCitizenAuthAction',
     'root'
-  ) as Promise<PageDataResponse>;
-  const response: PageDataResponse = await dataPage;
-  if (response?.IsNormalAuthentication === false && response?.PostAuthAction === 'TENS') {
+  ) as Promise<DataPageResponse>;
+  const dataResponse: DataPageResponse = await dataPage;
+  if (dataResponse?.IsNormalAuthentication === false && dataResponse?.PostAuthAction === 'TENS') {
+    localStorage.setItem('tensCheckCarriedOut', 'true');
     const currentPage: string = window.location.href;
     window.location.replace(
       `https://www.tax.service.gov.uk/protect-tax-info?redirectUrl=${currentPage}`

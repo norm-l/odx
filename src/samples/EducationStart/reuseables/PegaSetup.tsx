@@ -474,9 +474,8 @@ export const useStartMashup = (
 
   useEffect(() => {
     if (sdkIsLoggedIn()) {
-      CheckAuthAndRedirectIfTens().then(() => {
-        setShowResolutionPage(true);
-      });
+      CheckAuthAndRedirectIfTens();
+      setShowResolutionPage(true);
     }
   }, [showPega]);
 
