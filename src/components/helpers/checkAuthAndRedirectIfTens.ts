@@ -3,7 +3,7 @@ interface DataPageResponse {
   PostAuthAction: string;
 }
 
-async function CheckAuthAndRedirectIfTens(): Promise<void> {
+async function checkAuthAndRedirectIfTens(): Promise<void> {
   if (localStorage.getItem('tensCheckCarriedOut') === 'true') {
     // After the redirect from TENS
     localStorage.removeItem('tensCheckCarriedOut');
@@ -24,4 +24,4 @@ async function CheckAuthAndRedirectIfTens(): Promise<void> {
   }
 }
 
-export default CheckAuthAndRedirectIfTens;
+export default checkAuthAndRedirectIfTens;

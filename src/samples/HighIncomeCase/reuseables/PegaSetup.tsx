@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import { checkCookie, setCookie } from '../../../components/helpers/cookie';
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../../sdk-local-component-map';
@@ -16,7 +16,7 @@ import {
   loginIfNecessary,
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
-import CheckAuthAndRedirectIfTens from '../../../services/TensCheckService';
+import checkAuthAndRedirectIfTens from '../../../components/helpers/checkAuthAndRedirectIfTens';
 
 declare const myLoadMashup: any;
 
@@ -235,6 +235,7 @@ export function startMashup(
 ) {
   // NOTE: When loadMashup is complete, this will be called.
   PCore.onPCoreReady(renderObj => {
+    checkAuthAndRedirectIfTens();
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
     establishPCoreSubscriptions({ setShowPega, setShowResolutionPage, setCaseId, setCaseStatus });
@@ -361,13 +362,6 @@ export const useStartMashup = (
       );
     };
   }, []);
-
-  useEffect(() => {
-    if (sdkIsLoggedIn()) {
-      CheckAuthAndRedirectIfTens();
-      setShowResolutionPage(true);
-    }
-  }, [showPega]);
 
   return {
     showPega,

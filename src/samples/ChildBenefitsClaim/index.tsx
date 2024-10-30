@@ -33,7 +33,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
-import CheckAuthAndRedirectIfTens from '../../services/TensCheckService';
+import { checkAuthAndRedirectIfTens } from '../../components/helpers';
 
 declare const myLoadMashup: any;
 
@@ -392,7 +392,6 @@ export default function ChildBenefitsClaim() {
     // If logged in, make the Triple Play Options visible
 
     if (sdkIsLoggedIn()) {
-      CheckAuthAndRedirectIfTens();
       setShowUserPortal(true);
     }
   }, [bShowAppName]);
@@ -475,6 +474,7 @@ export default function ChildBenefitsClaim() {
   function startMashup() {
     // NOTE: When loadMashup is complete, this will be called.
     PCore.onPCoreReady(renderObj => {
+      checkAuthAndRedirectIfTens();
       // Check that we're seeing the PCore version we expect
       compareSdkPCoreVersions();
       establishPCoreSubscriptions();

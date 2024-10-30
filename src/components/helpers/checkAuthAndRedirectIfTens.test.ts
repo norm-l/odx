@@ -1,6 +1,6 @@
-import CheckAuthAndRedirectIfTens from './TensCheckService';
+import checkAuthAndRedirectIfTens from './TensCheckService';
 
-describe('CheckAuthAndRedirectIfTens', () => {
+describe('checkAuthAndRedirectIfTens', () => {
   const mockGetPageDataAsync = jest.fn();
   const mockRedirect = jest.fn();
 
@@ -45,7 +45,7 @@ describe('CheckAuthAndRedirectIfTens', () => {
       });
       jest.spyOn(window.localStorage, 'setItem');
 
-      await CheckAuthAndRedirectIfTens();
+      await checkAuthAndRedirectIfTens();
 
       expect(mockSetItem).toHaveBeenCalled();
       expect(mockRedirect).toHaveBeenCalledWith(
@@ -61,7 +61,7 @@ describe('CheckAuthAndRedirectIfTens', () => {
       });
       mockGetItem.mockReturnValue('true');
 
-      await CheckAuthAndRedirectIfTens();
+      await checkAuthAndRedirectIfTens();
 
       expect(mockGetItem).toHaveBeenCalled();
       expect(mockRemoveItem).toHaveBeenCalled();
@@ -76,7 +76,7 @@ describe('CheckAuthAndRedirectIfTens', () => {
         PostAuthAction: 'Other'
       });
 
-      await CheckAuthAndRedirectIfTens();
+      await checkAuthAndRedirectIfTens();
 
       expect(mockRedirect).not.toHaveBeenCalled();
     });
@@ -87,7 +87,7 @@ describe('CheckAuthAndRedirectIfTens', () => {
         PostAuthAction: 'Other'
       });
 
-      await CheckAuthAndRedirectIfTens();
+      await checkAuthAndRedirectIfTens();
 
       expect(mockSetItem).not.toHaveBeenCalled();
       expect(mockRedirect).not.toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe('CheckAuthAndRedirectIfTens', () => {
         PostAuthAction: 'TENS'
       });
 
-      await CheckAuthAndRedirectIfTens();
+      await checkAuthAndRedirectIfTens();
 
       expect(mockRedirect).not.toHaveBeenCalled();
     });
