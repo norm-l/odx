@@ -33,7 +33,6 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
-import Button from '../../components/BaseComponents/Button/Button';
 import RemoveClaim from '../../components/AppComponents/RemoveClaim';
 
 declare const myLoadMashup: any;
@@ -80,7 +79,6 @@ export default function ChildBenefitsClaim() {
   const [showPortalBanner, setShowPortalBanner] = useState(false);
   const [assignmentPConn, setAssignmentPConn] = useState(null);
   const [isCreateCaseBlocked, setIsCreateCaseBlocked] = useState(false);
-  const [viewName, setViewName] = useState('');
   const [isRemoveClaimPage, setIsRemoveClaimPage] = useState(false);
   const [removeClaimDetails, setRemoveClaimDetails] = useState({});
 

@@ -7,10 +7,9 @@ import RadioButtons from '../../BaseComponents/RadioButtons/RadioButtons';
 export default function RemoveClaim({ showRemovePage, claimDetails }) {
   const { id, createdDate } = claimDetails;
   const { t } = useTranslation();
+  const [errorMsg, setErrorMsg] = useState('');
 
   const formattedCreatedDate = DateFormatter.Date(createdDate, { format: 'DD/MM/YYYY' });
-
-  const [errorMsg, setErrorMsg] = useState('');
 
   const radioOptions = [
     {
@@ -22,6 +21,9 @@ export default function RemoveClaim({ showRemovePage, claimDetails }) {
       label: `${t('NO')}`
     }
   ];
+
+  // Temporary error message to set
+  setErrorMsg('Please select an option');
 
   // Add user selection logic
   async function handleRemoveProcess() {
@@ -45,12 +47,11 @@ export default function RemoveClaim({ showRemovePage, claimDetails }) {
           ''
         )
           .then(() => {
-            console.log('Removed Case Successfully');
             showRemovePage(false);
             window.location.reload();
           })
           .catch(error => {
-            // handle the error
+            // eslint-disable-next-line no-console
             console.log(error);
           });
       } else {
@@ -83,7 +84,7 @@ export default function RemoveClaim({ showRemovePage, claimDetails }) {
               useSmallRadios
               options={radioOptions}
               label='Do you want to remove this claim?'
-              errorText=''
+              errorText={errorMsg}
             ></RadioButtons>
             <button
               className='govuk-button govuk-!-margin-top-30'
