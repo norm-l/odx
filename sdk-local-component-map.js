@@ -1,5 +1,5 @@
 // Statically load all "local" components that aren't yet in the npm package
-import React from 'react'
+import React from 'react';
 import FieldCheckbox from './src/components/override-sdk/field/Checkbox/';
 import FieldTextInput from './src/components/override-sdk/field/TextInput/';
 import FieldDate from './src/components/override-sdk/field/Date/';
@@ -70,15 +70,15 @@ const localSdkComponentMap = {
   HMRC_ODX_GDSTaskListTemplate: HmrcOdxGdsTaskListTemplate,
   HMRC_ODX_sectionBased: HmrcOdxSectionBased,
   HMRC_ODX_GDSCheckAnswersPage: HmrcOdxGdsCheckAnswersPage,
-  SimpleTableManual: SimpleTableManual,  
-  AppShell: (props) => {
-  return (<>
-    <AppHeader appname={props.portalName} hasLanguageToggle/>
-    <div class="govuk-width-container">
-            {props.children}
-          </div>
-    <AppFooter />
-  </>)
+  SimpleTableManual: SimpleTableManual,
+  AppShell: props => {
+    return (
+      <>
+        <AppHeader appname={props.portalName} hasLanguageToggle />
+        <div className='govuk-width-container'>{props.children}</div>
+        <AppFooter />
+      </>
+    );
   }
   /*map end - DO NOT REMOVE*/
 };

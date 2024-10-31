@@ -19,34 +19,32 @@ import ProofOfEntitlement from '../ProofOfEntitlement/ProofOfEntitlement';
 import ChangeOfBank from '../ChangeOfBank/ChangeOfBank';
 import FullPortal from '../FullPortal';
 
+i18n
+  .use(Backend)
+  .use(initReactI18next)
+  .init({
+    lng: sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en',
+
+    backend: {
+      loadPath: `assets/i18n/{{lng}}.json`
+    },
+    fallbackLng: 'en',
+    debug: false,
+    returnNull: false,
+    react: {
+      useSuspense: false
+    }
+  });
 const AppSelector = () => {
-  const [i18nloaded, seti18nloaded] = useState(false);
-
   useEffect(() => {
-    i18n
-      .use(Backend)
-      .use(initReactI18next)
-      .init({
-        lng: sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en',
-
-        backend: {
-          loadPath: `assets/i18n/{{lng}}.json`
-        },
-        fallbackLng: 'en',
-        debug: false,
-        returnNull: false,
-        react: {
-          useSuspense: false
-        }
-      })
-      .finally(() => {
-        seti18nloaded(true);
-        setPageTitle();
-      });
+    setPageTitle();
   }, []);
 
-  return !i18nloaded ? null : (
-    <FullPortal />
+  return (
+    <Switch>
+      <Route exact path='/' component={FullPortal} />
+      <Route path='/test' component={Accessibility} />
+    </Switch>
     /*<Switch>
       <Route exact path='/' component={ChildBenefitsClaim} />
       <Route exact path='/ua' component={UnAuthChildBenefitsClaim} />
