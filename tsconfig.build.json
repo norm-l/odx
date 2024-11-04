@@ -7,7 +7,6 @@
     "./src/components/**/*.jsx",
     "./src/samples/**/*.ts",
     "./src/samples/**/*.tsx",
-    "./src/services/*",
     "./node_modules/i18next-http-backend/cjs/index.js",
     "./node_modules/react-i18next/dist/commonjs/index.js",
     "./src/samples/HighIncomeCase/reuseables/AppContext.ts"

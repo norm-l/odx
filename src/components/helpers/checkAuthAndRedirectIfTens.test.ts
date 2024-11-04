@@ -1,4 +1,4 @@
-import checkAuthAndRedirectIfTens from './TensCheckService';
+import checkAuthAndRedirectIfTens from './checkAuthAndRedirectIfTens';
 
 describe('checkAuthAndRedirectIfTens', () => {
   const mockGetPageDataAsync = jest.fn();

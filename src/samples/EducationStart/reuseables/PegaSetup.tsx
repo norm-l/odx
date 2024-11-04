@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import { compareSdkPCoreVersions } from '@pega/react-sdk-components/lib/components/helpers/versionHelpers';
-import { getSdkConfig, sdkIsLoggedIn } from '@pega/auth/lib/sdk-auth-manager';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import { checkCookie, setCookie } from '../../../components/helpers/cookie';
 import { getSdkComponentMap } from '@pega/react-sdk-components/lib/bridge/helpers/sdk_component_map';
 import localSdkComponentMap from '../../../../sdk-local-component-map';

@@ -33,7 +33,7 @@ import ShutterServicePage from '../../components/AppComponents/ShutterServicePag
 import toggleNotificationProcess from '../../components/helpers/toggleNotificationLanguage';
 import { getServiceShutteredStatus, triggerLogout } from '../../components/helpers/utils';
 import { TIMEOUT_115_SECONDS, TIMEOUT_13_MINUTES } from '../../components/helpers/constants';
-import { checkAuthAndRedirectIfTens } from '../../components/helpers';
+import checkAuthAndRedirectIfTens from '../../components/helpers/checkAuthAndRedirectIfTens';
 
 declare const myLoadMashup: any;
 
