@@ -36,6 +36,7 @@ i18n
     }
   });
 const AppSelector = () => {
+  console.log('AppSelector has rendered');
   useEffect(() => {
     setPageTitle();
   }, []);

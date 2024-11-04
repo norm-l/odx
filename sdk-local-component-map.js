@@ -48,18 +48,11 @@ const localSdkComponentMap = {
   HMRC_ODX_MimicASentence: MimicASentence,
   RadioButtons: FieldRadioButtons,
   DefaultForm: TemplateDefaultForm,
-  Assignment: InfraAssignment,
-  AssignmentCard: InfraAssignmentCard,
-  ActionButtons: InfraActionButtons,
-  Assignment: InfraAssignment,
-  FlowContainer: InfraFlowContainer,
   HMRC_ODX_PhoneNumber: FieldPhone,
-  View: InfraView,
   CaseView: TemplateCaseView,
   Dropdown: FieldDropdown,
   Group: TemplateFieldGroupTemplate,
   Details: TemplateDetails,
-  ViewContainer: InfraViewContainer,
   RichText: RichText,
   HMRC_ODX_GDSInfoPanel: HmrcOdxGdsInfoPanel,
   HMRC_ODX_GDSSummaryCard: HmrcOdxGdsSummaryCard,
@@ -71,7 +64,17 @@ const localSdkComponentMap = {
   HMRC_ODX_sectionBased: HmrcOdxSectionBased,
   HMRC_ODX_GDSCheckAnswersPage: HmrcOdxGdsCheckAnswersPage,
   SimpleTableManual: SimpleTableManual,
+
+  // INFRA:
+  // AssignmentCard: InfraAssignmentCard,
+  // ActionButtons: InfraActionButtons,
+  // Assignment: InfraAssignment,
+  // FlowContainer: InfraFlowContainer,
+  // ViewContainer: InfraViewContainer,
+  // View: InfraView,
+
   AppShell: props => {
+    console.log('AppShell PROPS:', props);
     return (
       <>
         <AppHeader appname={props.portalName} hasLanguageToggle />

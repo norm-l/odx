@@ -46,7 +46,7 @@ export default function FullPortal() {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
       getSdkComponentMap(localSdkComponentMap).then((theComponentMap: any) => {
         // eslint-disable-next-line no-console
-        console.log(`SdkComponentMap initialized`);
+        console.log(`SdkComponentMap initialized`, theComponentMap);
 
         // Luke: must be set once the SdkComponentMap is initialized
         setRenderObject(renderObject);
@@ -85,7 +85,12 @@ export default function FullPortal() {
   function doRedirectDone() {
     history.push(window.location.pathname);
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'portal', mainRedirect: true });
+    loginIfNecessary({
+      appName: 'portal',
+      mainRedirect: true,
+      locale: sessionStorage.getItem('rsdk_locale')
+    });
+    // possibly add locale here too
   }
 
   // One time (initialization)

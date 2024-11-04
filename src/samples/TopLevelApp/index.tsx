@@ -4,7 +4,8 @@ import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 import AppSelector from '../AppSelector';
 
 const TopLevelApp = () => {
-  const [basepath, setBasepath] = useState('');  
+  console.log('TopLevelApp has rendered');
+  const [basepath, setBasepath] = useState('');
   useEffect(() => {
     getSdkConfig().then(sdkConfig => {
       const url = new URL(sdkConfig.serverConfig.sdkContentServerUrl);
@@ -12,11 +13,13 @@ const TopLevelApp = () => {
     });
   }, []);
 
-  return ( basepath &&
-    <BrowserRouter basename={basepath}>
-      <AppSelector/>
-    </BrowserRouter>
+  return (
+    basepath && (
+      <BrowserRouter basename={basepath}>
+        <AppSelector />
+      </BrowserRouter>
+    )
   );
-}
+};
 
 export default TopLevelApp;
