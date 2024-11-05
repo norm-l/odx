@@ -38,7 +38,7 @@ export default function ProofOfEntitlement() {
   const onRedirectDone = () => {
     history.replace('/view-proof-entitlement');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   };
   /* 
   const getPDFContent = () => {
@@ -60,7 +60,7 @@ export default function ProofOfEntitlement() {
 
   useEffect(() => {
     if (!sdkIsLoggedIn()) {
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: onRedirectDone });
     }
     document.addEventListener('SdkConstellationReady', () => {
       myLoadMashup('pega-root', false);

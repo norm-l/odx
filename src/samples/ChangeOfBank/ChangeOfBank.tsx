@@ -39,7 +39,7 @@ export default function ChangeOfBank() {
   const onRedirectDone = () => {
     history.replace('/change-of-bank');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   };
 
   const { showPega, setShowPega, caseId, showResolutionPage, assignmentPConn } = useStartMashup(
@@ -56,7 +56,7 @@ export default function ChangeOfBank() {
 
   useEffect(() => {
     if (!sdkIsLoggedIn()) {
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: onRedirectDone });
     }
   }, []);
 
