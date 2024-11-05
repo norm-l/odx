@@ -18,7 +18,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
   const history = useHistory();
   const lang = sessionStorage.getItem('rsdk_locale')?.substring(0, 2) || 'en';
   const translatedError = useTranslatedStaticPageError(
-    'SELECT_AN_OPTION_TO_SIGN_IN',
+    'SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN',
     lang,
     errorMsg
   );
@@ -37,11 +37,11 @@ export default function AreYouSureToContinueWithoutSignIn() {
   const radioOptions = [
     {
       value: 'yes',
-      label: `${t('YES_I_WANT_TO_SIGN_IN')}`
+      label: `${t('YES')}, ${t('I_WANT_TO_CONTINUE_WITHOUT_SIGN_IN')}`
     },
     {
       value: 'no',
-      label: `${t('NO_I_WANT_TO_CONTINUE_WITHOUT_SIGNING_IN')}`
+      label: `${t('NO')}, ${t('I_WANT_TO_SIGN_IN')}`
     }
   ];
 
@@ -51,7 +51,7 @@ export default function AreYouSureToContinueWithoutSignIn() {
     );
     if (selectedOption) {
       const selectedOptionValue = selectedOption.getAttribute('value');
-      if (selectedOptionValue === 'no') {
+      if (selectedOptionValue === 'yes') {
         getSdkConfig().then(sdkConfig => {
           if (sdkConfig?.isUnauthRouteToPega) {
             history.push('/ua');
@@ -66,13 +66,9 @@ export default function AreYouSureToContinueWithoutSignIn() {
         history.push('/');
       }
     } else {
-      setErrorMsg(t('SELECT_AN_OPTION_TO_SIGN_IN'));
+      setErrorMsg(t('SELECT_YES_IF_YOU_WANT_TO_CONTINUE_WO_SIGN_IN'));
     }
   }
-
-  const hintText = `<p class="govuk-body">${t(
-    'ITS_QUICKER_AND_EASIER_TO_CLAIM_CHILD_BENEFIT'
-  )}</p>`;
 
   return (
     <>
@@ -96,7 +92,6 @@ export default function AreYouSureToContinueWithoutSignIn() {
               value=''
               useSmallRadios
               options={radioOptions}
-              hintText={hintText}
               label={t('ARE_YOU_SURE_YOU_WANT_TO_CONTINUE_WO_SIGN_IN')}
               legendIsHeading
               errorText={translatedError}
