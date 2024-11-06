@@ -77,8 +77,15 @@ export default function ProofOfEntitlement() {
             if (result.IsAPIError) {
               setShowProblemWithService(true);
             } else if (!result.HasAward) {
-              setShowNoAward(true);
+              if (result.canAccess) {
+                // Award can still be viewed for 5 years after end date
+                setEntitlementData(result);
+              } else {
+                // Award ended over 5 years ago
+                setShowNoAward(true);
+              }
             } else {
+              // User has active child benefit
               setEntitlementData(result);
             }
             setPageContentReady(true);
