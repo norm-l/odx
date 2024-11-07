@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import AppContextEducation from './../../../samples/EducationStart/reuseables/AppContextEducation'; // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
 import { useLocation } from 'react-router-dom';
 import { CustomView, getUA } from 'react-device-detect';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 export default function AppFooter() {
   const { t } = useTranslation();
@@ -18,8 +19,27 @@ export default function AppFooter() {
   const serviceNamePageTitle =
     serviceName || searchParams.get('serviceNamePageTitle') || 'CLAIM_CHILD_BENEFIT';
 
+  const [mobileAppUA, setMobileAppUA] = useState<string | null>(null);
+
+  getSdkConfig()
+    .then(sdkConfig => {
+      if (sdkConfig && sdkConfig.mobileApp && sdkConfig.mobileApp.mobileAppUserAgent) {
+        setMobileAppUA(sdkConfig.mobileApp.mobileAppUserAgent);
+        // eslint-disable-next-line no-console
+        console.log('Mobile App UA:', sdkConfig.mobileApp.mobileAppUserAgent);
+      } else {
+        setMobileAppUA('/');
+        // eslint-disable-next-line no-console
+        console.error('Mobile App URL not found in sdkConfig');
+      }
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching SDK config:', error);
+    });
+
   return (
-    <CustomView condition={!getUA.toLocaleLowerCase().includes('hmrcnextgenconsumer')}>
+    <CustomView condition={!getUA.toLocaleLowerCase().includes(mobileAppUA)}>
       <footer className='govuk-footer ' role='contentinfo'>
         <div className='govuk-width-container '>
           <div className='govuk-footer__meta'>

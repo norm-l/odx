@@ -1,17 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useHMRCExternalLinks from '../../helpers/hooks/HMRCExternalLinks';
 import LanguageToggle from '../LanguageToggle';
 import { CustomView, getUA } from 'react-device-detect';
+import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 
 export default function AppHeader(props) {
   const { handleSignout, appname, hasLanguageToggle, languageToggleCallback } = props;
   const { t } = useTranslation();
   const { referrerURL, hmrcURL } = useHMRCExternalLinks();
+  const [mobileAppUA, setMobileAppUA] = useState<string | null>(null);
+
+  getSdkConfig()
+    .then(sdkConfig => {
+      if (sdkConfig && sdkConfig.mobileApp && sdkConfig.mobileApp.mobileAppUserAgent) {
+        setMobileAppUA(sdkConfig.mobileApp.mobileAppUserAgent);
+        // eslint-disable-next-line no-console
+        console.log('Mobile App UA:', sdkConfig.mobileApp.mobileAppUserAgent);
+      } else {
+        setMobileAppUA('/');
+        // eslint-disable-next-line no-console
+        console.error('Mobile App URL not found in sdkConfig');
+      }
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching SDK config:', error);
+    });
 
   return (
     <>
-      <CustomView condition={!getUA.toLocaleLowerCase().includes('hmrcnextgenconsumer')}>
+      <CustomView condition={!getUA.toLocaleLowerCase().includes(mobileAppUA)}>
         <a href='#main-content' className='govuk-skip-link' data-module='govuk-skip-link'>
           {t('SKIP_TO_MAIN')}
         </a>
