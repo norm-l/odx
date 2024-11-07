@@ -77,7 +77,7 @@ export default function ProofOfEntitlement() {
             if (result.IsAPIError) {
               setShowProblemWithService(true);
             } else if (!result.HasAward) {
-              if (result.canAccess) {
+              if (result.CanAccess) {
                 // Award can still be viewed for 5 years after end date
                 setEntitlementData(result);
               } else {
