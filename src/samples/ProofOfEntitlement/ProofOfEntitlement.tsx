@@ -271,7 +271,11 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )) || <LoadingSpinner bottomText={t('LOADING')} size='30px' />}
+      )) || (
+        <main className='govuk-main-wrapper govuk-main-wrapper--l' role='main' id='main-content'>
+          <LoadingSpinner bottomText={t('LOADING')} size='30px' />
+        </main>
+      )}
       <AppFooter />
     </>
   );
