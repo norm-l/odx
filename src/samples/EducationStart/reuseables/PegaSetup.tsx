@@ -17,6 +17,7 @@ import {
   sdkSetAuthHeader
 } from '@pega/auth/lib/sdk-auth-manager';
 import { checkStatus, getServiceShutteredStatus } from '../../../components/helpers/utils';
+import checkAuthAndRedirectIfTens from '../../../components/helpers/checkAuthAndRedirectIfTens';
 
 declare const myLoadMashup: any;
 declare const PCore: any;
@@ -291,6 +292,7 @@ export function startMashup(
 ) {
   // NOTE: When loadMashup is complete, this will be called.
   PCore.onPCoreReady(renderObj => {
+    checkAuthAndRedirectIfTens();
     // Check that we're seeing the PCore version we expect
     compareSdkPCoreVersions();
     establishPCoreSubscriptions({
