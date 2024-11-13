@@ -109,11 +109,12 @@ export default function CheckboxComponent(props) {
       )}
 
       {/* If its the declaration view then group the checkboxes separately so the error message is assigned correctly */}
-      {OverrideLabelValue.trim().toLowerCase() === 'declaration' || OverrideLabelValue.trim().toLowerCase() === 'datganiad' ? (
+      {OverrideLabelValue.trim().toLowerCase() === 'declaration' ||
+      OverrideLabelValue.trim().toLowerCase() === 'datganiad' ? (
         <div className={`govuk-form-group ${errorMessage ? 'govuk-form-group--error' : ''}`}>
           {errorMessage && (
             <p id={`${name}-error`} className='govuk-error-message'>
-              <span className='govuk-visually-hidden'>Error:</span>{' '}
+              <span className='govuk-visually-hidden'>{t('ERROR')}:</span>{' '}
               {removeRedundantString(errorMessage)}
             </p>
           )}

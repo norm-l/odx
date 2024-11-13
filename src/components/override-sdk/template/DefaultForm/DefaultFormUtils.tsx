@@ -1,5 +1,7 @@
 // How to add welsh translation to this file, for Opens in new tab and warning etc.
 
+import { useTranslation } from 'react-i18next';
+
 function replaceWarningText(finalText, textToBeReplaced, textToBeFormatted) {
   const textToBeInserted = `<div class="govuk-warning-text">
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>

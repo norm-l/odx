@@ -93,7 +93,7 @@ export default function FieldSet({
         )}
         {errMessage && (
           <p id={errorID} className='govuk-error-message'>
-            <span className='govuk-visually-hidden'>Error:</span>
+            <span className='govuk-visually-hidden'>{t('ERROR')}:</span>
             {errMessageToDisplay}
           </p>
         )}

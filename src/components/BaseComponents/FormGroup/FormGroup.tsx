@@ -67,7 +67,7 @@ export default function FormGroup({
       )}
       {errMessage && (
         <p id={makeErrorId(name)} className='govuk-error-message'>
-          <span className='govuk-visually-hidden'>Error:</span>
+          <span className='govuk-visually-hidden'>{t('ERROR')}:</span>
           {removeRedundantString(errMessage)}
         </p>
       )}
