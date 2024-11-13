@@ -77,8 +77,15 @@ export default function ProofOfEntitlement() {
             if (result.IsAPIError) {
               setShowProblemWithService(true);
             } else if (!result.HasAward) {
-              setShowNoAward(true);
+              if (result.CanAccess) {
+                // Award can still be viewed for 5 years after end date
+                setEntitlementData(result);
+              } else {
+                // Award ended over 5 years ago
+                setShowNoAward(true);
+              }
             } else {
+              // User has active child benefit
               setEntitlementData(result);
             }
             setPageContentReady(true);
@@ -264,7 +271,11 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )) || <LoadingSpinner bottomText={t('LOADING')} size='30px' />}
+      )) || (
+        <main className='govuk-main-wrapper govuk-main-wrapper--l' role='main' id='main-content'>
+          <LoadingSpinner bottomText={t('LOADING')} size='30px' />
+        </main>
+      )}
       <AppFooter />
     </>
   );

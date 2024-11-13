@@ -27,9 +27,8 @@ import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
 declare const PCore: any;
 
 const ClaimPage: FunctionComponent<any> = () => {
-  // const [bShowPega, setShowPega] = useState(false);
-  const [shutterServicePage /* setShutterServicePage */] = useState(false);
-  const [serviceNotAvailable /* setServiceNotAvailable */] = useState(false);
+  const [shutterServicePage] = useState(false);
+  const [serviceNotAvailable] = useState(false);
   const [pCoreReady, setPCoreReady] = useState(false);
   const [millisecondsTillSignout, setmillisecondsTillSignout] = useState(TIMEOUT_115_SECONDS);
   const { showLanguageToggle } = useContext(AppContext);
@@ -71,6 +70,7 @@ const ClaimPage: FunctionComponent<any> = () => {
   );
 
   useEffect(() => {
+    
     if (showPega) {
       setCurrentDisplay('pegapage');
     } else if (showResolutionPage) {
