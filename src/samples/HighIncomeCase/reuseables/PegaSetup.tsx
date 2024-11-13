@@ -340,7 +340,7 @@ export const useStartMashup = (
       }
 
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: onRedirectDone });
     });
 
     document.addEventListener('SdkConstellationReady', () => {

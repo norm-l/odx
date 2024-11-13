@@ -141,7 +141,7 @@ export default function ChildBenefitsClaim() {
   function doRedirectDone() {
     history.replace('/');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   }
   useEffect(() => {
     if (submittedClaims[0]?.HideBeginClaimSubmitted === true) {
@@ -573,7 +573,7 @@ export default function ChildBenefitsClaim() {
 
       // Login if needed, without doing an initial main window redirect
       loginIfNecessary({
-        appName: 'embedded',
+        appName: 'ChB',
         mainRedirect: true,
         redirectDoneCB: doRedirectDone
       });

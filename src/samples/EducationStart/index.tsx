@@ -72,7 +72,7 @@ const EducationStartCase: FunctionComponent<any> = () => {
   function doRedirectDone() {
     history.replace('/education/start');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   }
 
   const {
