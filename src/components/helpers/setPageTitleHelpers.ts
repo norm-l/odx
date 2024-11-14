@@ -14,6 +14,11 @@ export default function setPageTitle(errorProperty = false) {
   // set up an interval to keep checking until we have only one H1, and then set the page title with the remaining H1
   // This assumes we follow the best practice to only display one h1 on the page, and simply works around the 'gap' when our main
   // page updates to hide/show components.
+
+  // Reset page title to blank before setting it, this makes sure that when a user clicks back in the browser
+  // the title reflects the page and not the browser history
+  document.title = '';
+
   if (
     document.getElementsByTagName('h1').length > 1 ||
     document.getElementsByTagName('h1')[0] === undefined

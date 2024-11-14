@@ -1,7 +1,7 @@
 // @ts-nocheck - TypeScript type checking to be added soon
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import StoreContext from '@pega/react-sdk-components/lib/bridge/Context/StoreContext';
 import createPConnectComponent from '@pega/react-sdk-components/lib/bridge/react_pconnect';
@@ -160,16 +160,10 @@ export default function ChildBenefitsClaim() {
   }, [inprogressClaims]);
 
   // Reset the page title if user clicks the backbutton
-  // if 'showUserPortal' then set pageTitle to...
-  // Use the set page title helper?
-  // import { useLocation } from 'react-router-dom';
-  const location = useLocation();
 
   useEffect(() => {
     const handlePopState = () => {
-      if (location.pathname === '/') {
-        document.title = 'Test';
-      }
+      setPageTitle();
     };
 
     // Listen for popstate (back button) events to ensure the title stays consistent
@@ -179,7 +173,7 @@ export default function ChildBenefitsClaim() {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [location.pathname]);
+  }, []);
 
   function createCase() {
     displayPega();
