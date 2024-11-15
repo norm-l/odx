@@ -15,3 +15,25 @@ export const mockGetSdkConfigWithBasepath = () => {
   });
   return mockedGetSdkConfig;
 };
+
+// Mock mobile app URL
+export const mockGetSdkConfigMobileAppUrl = () => {
+  const mockedGetSdkConfig = mockGetSdkConfig();
+  mockedGetSdkConfig.mockResolvedValue({
+    mobileApp: {
+      mobileAppUrl: '/mobile-app' // Todo: Can be moved to env specific config.
+    }
+  });
+  return mockedGetSdkConfig;
+};
+
+// Mock mobile app URL
+export const mockGetSdkConfigMobileAppUA = () => {
+  const mockedGetSdkConfig = mockGetSdkConfig();
+  mockedGetSdkConfig.mockResolvedValue({
+    mobileApp: {
+      mobileAppUA: 'useragentstrtotest' // Todo: Can be moved to env specific config.
+    }
+  });
+  return mockedGetSdkConfig;
+};

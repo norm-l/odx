@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import i18n from 'i18next';
@@ -22,13 +22,22 @@ import { getSdkConfig } from '@pega/auth/lib/sdk-auth-manager';
 const AppSelector = () => {
   const [mobileAppURL, setMobileAppURL] = useState<string | null>(null);
 
-  getSdkConfig().then(sdkConfig => {
-    setMobileAppURL(sdkConfig.mobileApp.mobileAppURL);
-    // eslint-disable-next-line no-console
-    console.log('Mobile App URL:', mobileAppURL);
-    // eslint-disable-next-line no-console
-    console.log('sdkConfig:', sdkConfig);
-  });
+  getSdkConfig()
+    .then(sdkConfig => {
+      if (sdkConfig && sdkConfig.mobileApp && sdkConfig.mobileApp.mobileAppUrl) {
+        setMobileAppURL(sdkConfig.mobileApp.mobileAppUrl);
+        // eslint-disable-next-line no-console
+        console.log('Mobile App URL:', sdkConfig.mobileApp.mobileAppUrl);
+      } else {
+        setMobileAppURL('/');
+        // eslint-disable-next-line no-console
+        console.error('Mobile App URL not found in sdkConfig');
+      }
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching SDK config:', error);
+    });
 
   const [i18nloaded, seti18nloaded] = useState(false);
 
@@ -75,6 +84,8 @@ const AppSelector = () => {
       <Route path='/sign-in-to-government-gateway' component={DoYouWantToSignIn} />
       <Route path='/check-on-claim' component={CheckOnClaim} />
       <Route path='/recently-claimed-child-benefit' component={RecentlyClaimedChildBenefit} />
+
+      <Redirect from='/mobile-app' to={mobileAppURL} />
     </Switch>
   );
 };

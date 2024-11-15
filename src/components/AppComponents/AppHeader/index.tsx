@@ -13,14 +13,17 @@ export default function AppHeader(props) {
 
   getSdkConfig()
     .then(sdkConfig => {
-      if (sdkConfig && sdkConfig.mobileApp && sdkConfig.mobileApp.mobileAppUserAgent) {
+      if (
+        sdkConfig &&
+        sdkConfig.mobileApp &&
+        sdkConfig.mobileApp.mobileAppUserAgent &&
+        typeof getUA === 'string' &&
+        getUA
+      ) {
         setMobileAppUA(sdkConfig.mobileApp.mobileAppUserAgent);
-        // eslint-disable-next-line no-console
-        console.log('Mobile App UA:', sdkConfig.mobileApp.mobileAppUserAgent);
+        console.log(getUA, mobileAppUA);
       } else {
         setMobileAppUA('/');
-        // eslint-disable-next-line no-console
-        console.error('Mobile App URL not found in sdkConfig');
       }
     })
     .catch(error => {
