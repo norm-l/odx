@@ -60,7 +60,7 @@ const ClaimPage: FunctionComponent<any> = () => {
   function doRedirectDone() {
     history.replace('/hicbc/opt-in');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   }
 
   const { showPega, setShowPega, showResolutionPage, caseId, assignmentPConn } = useStartMashup(

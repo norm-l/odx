@@ -437,7 +437,7 @@ export default function EmbeddedTopLevel() {
       });
 
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary({ appName: 'embedded', mainRedirect: false });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: false });
     });
 
     // Subscriptions can't be done until onPCoreReady.

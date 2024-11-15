@@ -58,7 +58,7 @@ export default function UnAuthChildBenefitsClaim() {
   function doRedirectDone() {
     history.replace('/ua');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   }
 
   function resetAppDisplay() {
@@ -451,7 +451,7 @@ export default function UnAuthChildBenefitsClaim() {
         sdkSetAuthHeader(`Basic ${sB64}`);
       }
       // Login if needed, without doing an initial main window redirect
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: doRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: doRedirectDone });
     });
 
     document.addEventListener('SdkConstellationReady', () => {

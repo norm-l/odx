@@ -24,7 +24,7 @@ export default function ChildBenefitHub() {
   const onRedirectDone = () => {
     history.replace('/home');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ChildBenefitHub() {
 
   useEffect(() => {
     if (!sdkIsLoggedIn()) {
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: onRedirectDone });
     }
   }, []);
 

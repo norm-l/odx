@@ -14,9 +14,9 @@ import useHMRCExternalLinks from '../../components/helpers/hooks/HMRCExternalLin
 import { formatCurrency } from '../../components/helpers/utils';
 import TimeoutPopup from '../../components/AppComponents/TimeoutPopup';
 import { initTimeout } from '../../components/AppComponents/TimeoutPopup/timeOutUtils';
-import LoadingSpinner from '../../components/helpers/LoadingSpinner/LoadingSpinner';
 import setPageTitle from '../../components/helpers/setPageTitleHelpers';
 import { TIMEOUT_115_SECONDS } from '../../components/helpers/constants';
+import LoadingWrapper from '../../components/AppComponents/LoadingSpinner/LoadingWrapper';
 
 declare const PCore;
 declare const myLoadMashup: any;
@@ -38,7 +38,7 @@ export default function ProofOfEntitlement() {
   const onRedirectDone = () => {
     history.replace('/view-proof-entitlement');
     // appName and mainRedirect params have to be same as earlier invocation
-    loginIfNecessary({ appName: 'embedded', mainRedirect: true });
+    loginIfNecessary({ appName: 'ChB', mainRedirect: true });
   };
   /* 
   const getPDFContent = () => {
@@ -60,7 +60,7 @@ export default function ProofOfEntitlement() {
 
   useEffect(() => {
     if (!sdkIsLoggedIn()) {
-      loginIfNecessary({ appName: 'embedded', mainRedirect: true, redirectDoneCB: onRedirectDone });
+      loginIfNecessary({ appName: 'ChB', mainRedirect: true, redirectDoneCB: onRedirectDone });
     }
     document.addEventListener('SdkConstellationReady', () => {
       myLoadMashup('pega-root', false);
@@ -123,7 +123,10 @@ export default function ProofOfEntitlement() {
         staySignedInButtonText={t('STAY_SIGNED_IN')}
         millisecondsTillSignout={millisecondsTillSignout}
       />
-      {(pageContentReady && (
+      <LoadingWrapper
+        pageIsLoading={!pageContentReady}
+        spinnerProps={{ bottomText: t('LOADING'), size: '30px', label: t('LOADING') }}
+      >
         <div className='govuk-width-container' id='poe-page'>
           <MainWrapper>
             {entitlementData && (
@@ -271,7 +274,8 @@ export default function ProofOfEntitlement() {
             <br />
           </MainWrapper>
         </div>
-      )) || <LoadingSpinner bottomText={t('LOADING')} size='30px' />}
+      </LoadingWrapper>
+
       <AppFooter />
     </>
   );
