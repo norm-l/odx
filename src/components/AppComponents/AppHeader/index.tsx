@@ -13,15 +13,8 @@ export default function AppHeader(props) {
 
   getSdkConfig()
     .then(sdkConfig => {
-      if (
-        sdkConfig &&
-        sdkConfig.mobileApp &&
-        sdkConfig.mobileApp.mobileAppUserAgent &&
-        typeof getUA === 'string' &&
-        getUA
-      ) {
+      if (sdkConfig && sdkConfig.mobileApp && sdkConfig.mobileApp.mobileAppUserAgent && getUA) {
         setMobileAppUA(sdkConfig.mobileApp.mobileAppUserAgent);
-        console.log(getUA, mobileAppUA);
       } else {
         setMobileAppUA('/');
       }
