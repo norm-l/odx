@@ -50,7 +50,7 @@ export default function Assignment(props) {
   const { setAssignmentPConnect }: any = useContext(StoreContext);
   const { appBacklinkProps } = useContext(AppContext);
   const { appBacklinkProps: appBacklinkPropsEducation, serviceParam } =
-    useContext(AppContextEducation); // TODO: Once this code exposed to common folder, we will refer AppContext from reuseable components
+    useContext(AppContextEducation);
 
   const AssignmentCard = SdkComponentMap.getLocalComponentMap()['AssignmentCard']
     ? SdkComponentMap.getLocalComponentMap()['AssignmentCard']
